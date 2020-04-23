@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['messageprovider:status'] = 'Game status changes';
-$string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell game';
+$string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell Game';
 $string['mooduell:viewstatistics'] = 'View game statistics';
 $string['mooduell:viewstudentnames'] = 'View full names of participants';
 $string['pluginname'] = 'MooDuell';
@@ -34,6 +34,11 @@ $string['modulenameplural'] = 'MooDuells';
 $string['mooduellname'] = 'Name of the MooDuell game';
 $string['mooduellname_help'] = 'Choose a name for your game';
 $string['mooduellsettings'] = 'MooDuell settings';
+$string['mooduellfieldset'] = 'MooDuell settings';
+$string['createDemoQuizButton'] = 'Create Demo Quiz';
+$string['modulename_help'] = 'The MooDuell module helps you to create multiplayer quiz activities which then can be played using the MooDuell App.';
 $string['modulename'] = 'MooDuell';
 $string['modulename'] = 'MooDuell';
 $string['modulename'] = 'MooDuell';
+$string['modulename'] = 'MooDuell';
+
