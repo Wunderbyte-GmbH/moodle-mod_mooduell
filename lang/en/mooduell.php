@@ -35,10 +35,21 @@ $string['mooduellname'] = 'Name of the MooDuell game';
 $string['mooduellname_help'] = 'Choose a name for your game';
 $string['mooduellsettings'] = 'MooDuell settings';
 $string['mooduellfieldset'] = 'MooDuell settings';
-$string['createDemoQuizButton'] = 'Create Demo Quiz';
+$string['useFullNames'] = 'Use full names';
 $string['modulename_help'] = 'The MooDuell module helps you to create multiplayer quiz activities which then can be played using the MooDuell App.';
 $string['modulename'] = 'MooDuell';
-$string['modulename'] = 'MooDuell';
-$string['modulename'] = 'MooDuell';
+
+$string['countdown'] = 'Countdown';
+$string['nocountdown'] = 'No Countdown';
+$string['10seconds'] = '10 seconds';
+$string['20seconds'] = '20 seconds';
+$string['30seconds'] = '30 seconds';
+$string['60seconds'] = '60 seconds';
+$string['90seconds'] = '90 seconds';
+$string['120seconds'] = '120 seconds';
+
+$string['showContinueButton'] = 'Always show "Continue"-button';
+$string['showCorrectAnswer'] = 'Show correct answer';
+
 $string['modulename'] = 'MooDuell';
 
