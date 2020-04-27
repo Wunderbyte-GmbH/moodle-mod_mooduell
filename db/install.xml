@@ -8,7 +8,12 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the course this activity is part of."/>
+        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID of the quiz this mooduell instance is linked to. it may be null until we have actually created a link to a certain quiz"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the activity module instance"/>
+        <FIELD NAME="usefullnames" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Students can't see the full name of their peers (0), They can see the fullname, if Moodle configuration allows it (1)"/>
+        <FIELD NAME="showcontinuebutton" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Treat every question as a multi answer question, where we have to press 'continue' to register the answer (1) Register answer of single answer questions directy by pressing the answer button"/>
+        <FIELD NAME="showcorrectanswer" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="After wrongly answering a querstion, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
+        <FIELD NAME="usecountdown" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Do you want to use the countdown and how much time do your students have to answer a question?"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified."/>
         <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
@@ -18,6 +23,56 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
+    </TABLE>
+    <TABLE NAME="mooduell_game" COMMENT="Stores the mooduell game progress.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the course this activity is part of."/>
+        <FIELD NAME="playera" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the player who initiated the game."/>
+        <FIELD NAME="playerb" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the player who was challenged to this game"/>
+        <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the quiz "/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id of the attempt. We need it because it stores our question-layout"/>
+        <FIELD NAME="playeraquestionsequence" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Question sequence and the"/>
+        <FIELD NAME="playerbquestionsequence" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="After wrongly answering a querstion, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
+        <FIELD NAME="playeratime" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Do you want to use the countdown and how much time do your students have to answer a question?"/>
+        <FIELD NAME="playerbtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
+        <FIELD NAME="winnerid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
+        <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
+        <FIELD NAME="victorycoefficient" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was created."/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the intro field."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="mooduell_question_attempts" COMMENT="Each row here corresponds to an attempt at one question, as part of a question_usage. A question_attempt will have some question_attempt_steps">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="slot" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Used to number the questions in one attempt sequentially."/>
+        <FIELD NAME="behaviour" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the question behaviour that is managing this question attempt."/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The id of the question being attempted. Foreign key references question.id."/>
+        <FIELD NAME="variant" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="The variant of the qusetion being used."/>
+        <FIELD NAME="maxmark" TYPE="number" LENGTH="12" NOTNULL="true" SEQUENCE="false" DECIMALS="7" COMMENT="The grade this question is marked out of in this attempt."/>
+        <FIELD NAME="minfraction" TYPE="number" LENGTH="12" NOTNULL="true" SEQUENCE="false" DECIMALS="7" COMMENT="Some questions can award negative marks. This indicates the most negative mark that can be awarded, on the faction scale where the maximum positive mark is 1."/>
+        <FIELD NAME="maxfraction" TYPE="number" LENGTH="12" NOTNULL="true" DEFAULT="1" SEQUENCE="false" DECIMALS="7" COMMENT="Some questions can give fractions greater than 1. This indicates the greatest fraction that can be awarded."/>
+        <FIELD NAME="flagged" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether this question has been flagged within the attempt."/>
+        <FIELD NAME="questionsummary" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="If this question uses randomisation, it should set this field to summarise what random version the student actually saw. This is a human-readable textual summary of the student's response which might, for example, be used in a report."/>
+        <FIELD NAME="rightanswer" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="This is a human-readable textual summary of the right answer to this question. Might be used, for example on the quiz preview, to help people who are testing the question. Or might be used in reports."/>
+        <FIELD NAME="playeraresponsesummary" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="This is a textual summary of the student's response (basically what you would expect to in the Quiz responses report)."/>
+        <FIELD NAME="playerbresponsesummary" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="This is a textual summary of the student's response (basically what you would expect to in the Quiz responses report)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The time this record was last changed."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="behaviour" UNIQUE="false" FIELDS="behaviour" COMMENT="Required because we need to be able to determine efficiently which behaviours are in use."/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>
