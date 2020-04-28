@@ -71,10 +71,10 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
         $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
 
-        $mform->addElement('checkbox', 'useFullNames', get_string('useFullNames', 'mod_mooduell'));
-        $mform->addElement('checkbox', 'showContinueButton', get_string('showContinueButton', 'mod_mooduell'));
-        $mform->addElement('checkbox', 'showCorrectAnswer', get_string('showCorrectAnswer', 'mod_mooduell'));
-        $mform->addElement('select', 'type', get_string('countdown', 'mod_mooduell'), array(get_string('nocountdown', 'mod_mooduell'), get_string('10seconds', 'mod_mooduell'), get_string('20seconds', 'mod_mooduell'), get_string('30seconds', 'mod_mooduell'), get_string('60seconds', 'mod_mooduell'), get_string('90seconds', 'mod_mooduell'), get_string('120seconds', 'mod_mooduell')));
+        $mform->addElement('checkbox', 'usefullnames', get_string('useFullNames', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showContinueButton', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showCorrectAnswer', 'mod_mooduell'));
+        $mform->addElement('select', 'usecountdown', get_string('countdown', 'mod_mooduell'), array(get_string('nocountdown', 'mod_mooduell'), get_string('10seconds', 'mod_mooduell'), get_string('20seconds', 'mod_mooduell'), get_string('30seconds', 'mod_mooduell'), get_string('60seconds', 'mod_mooduell'), get_string('90seconds', 'mod_mooduell'), get_string('120seconds', 'mod_mooduell')));
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
