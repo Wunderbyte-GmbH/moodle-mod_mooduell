@@ -22,8 +22,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
+
+require_once("$CFG->dirroot/mod/mooduell/classes/mooduell.php");
+
+
+
+require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -61,5 +67,51 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
+
+
+$mooduell = new mod_mooduell\mooduell($moduleinstance->quizid, $course, $cm, $modulecontext);
+$mooduell_output = $mooduell->display();
+/* $mooduell_output = $mooduell->import_demo_quiz($moduleinstance->quizid); */
+
+echo "----<br>";
+print_r($cm->section);
+
+//print_r($id);
+echo "<br>Id: ";
+print_r($moduleinstance->id);
+echo "<br>showcorrectanswer: ";
+print_r($moduleinstance->showcorrectanswer);
+echo "<br>usecountdown: ";
+print_r($moduleinstance->usecountdown);
+echo "<br>quizid: ";
+print_r($moduleinstance->quizid);
+
+echo "<br> ->: ";
+echo "$mooduell_output wollte ich sagen. ";
+
+
+/*
+
+quiz-table in install.xml
+
+. write quiz id preferences 
+
+-  classes mod_mooduell.php (view datalynx)
+
+- moustache-template -> render -> daten
+
+//mooduell
+
+//mooduell
+
+
+- insert button
+
+
+
+
+
+*/
+
 
 echo $OUTPUT->footer();

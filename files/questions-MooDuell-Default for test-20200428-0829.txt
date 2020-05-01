@@ -1,0 +1,96 @@
+// question: 0  name: Switch category to $module$/top/Default for test
+$CATEGORY: $module$/top/Default for test
+
+
+// question: 5  name: Auf welcher/n Plattform/en kann MooDuell gespielt werden?
+::Auf welcher/n Plattform/en kann MooDuell gespielt werden?::[html]<p>Auf welcher/n Plattform/en kann MooDuell gespielt werden?<br></p><p><img src\="@@PLUGINFILE@@/leo_sunset.png" alt\="https\://pixabay.com/photos/snap-click-frame-compose-photo-839997/" width\="1280" height\="853" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~%50%<p>Android<br></p>
+	~%50%<p>iOS</p>
+	~%-50%<p>Web-Browser</p>
+	~%-50%<p>Spielautomaten</p>
+	~%-50%<p>Playstation</p>
+}
+
+
+// question: 86  name: Beim Betrieb von Mooduell fallen laufende Kosten für...
+::Beim Betrieb von Mooduell fallen laufende Kosten für...::[html]<p>Beim Betrieb von MooDuell fallen laufende Kosten an für...<br></p>{
+	=<p>.. die Lizenz.</p>
+	~<p>.. den extra Server.</p>
+	~<p>.. zusätzliche Updates.</p>
+	~<p>... die extra Aufbereitung des Contents.</p>
+}
+
+
+// question: 81  name: Bilder werden nur für Demos verwendet, die MooDuell kann nur Text anzeigen
+::Bilder werden nur für Demos verwendet, die MooDuell kann nur Text anzeigen::[html]<p>Bilder werden nur für Demos verwendet, MooDuell kann nur Text anzeigen.<br></p><p><img src\="@@PLUGINFILE@@/nature-3254564_1280.jpg?time\=1569315810709" alt\="" width\="640" height\="495" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	=Falsch
+	~<p>Wahr</p>
+}
+
+
+// question: 83  name: MooDuell ist ein
+::MooDuell ist ein::[html]<p>MooDuell ist ein innovatives Produkt, das den Spiel- und Lernspaß der Studierenden mit einfacher Wartbarkeit, geringen Kosten und höchster Sicherheit verbindet.<br></p><p>So ein innovatives Produkt kommt natürlich aus...</p><p><img src\="@@PLUGINFILE@@/food-3281137_1280.jpg" alt\="" width\="1280" height\="853" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~<p>... dem Silicon Valley.</p>
+	~<p>... Bangalore.<a href\="https\://en.wikipedia.org/wiki/Bangalore"></a></p><h3><div></div></h3><p></p>
+	~<p>... der Ukraine.</p>
+	=<p>... der Leopoldstadt.</p>
+}
+
+
+// question: 84  name: Um ein bestehendes Quiz für Mooduell freizuschalten oder ein neues Quiz für Mooduell anzulegen benötigt man ...
+::Um ein bestehendes Quiz für Mooduell freizuschalten oder ein neues Quiz für Mooduell anzulegen benötigt man ...::[html]<p>Um ein bestehendes Quiz für MooDuell freizuschalten oder ein neues Quiz anzulegen benötigt man ...<br></p>{
+	~<p>... Rechte als Student im Kurs.</p>
+	~<p>.. Rechte als Admin für die gesamte Moodle Instanz.</p>
+	=<p>.. Rechte als Teacher im Kurs.</p>
+}
+
+
+// question: 82  name: Wählen Sie alle FALSCHEN ANTWORTEN aus
+::Wählen Sie alle FALSCHEN ANTWORTEN aus::[html]<p>Was müssen Sie NICHT tun, wenn Sie Ihren Studierenden Mooduell anbieten wollen?</p><p><img src\="@@PLUGINFILE@@/gym-room-1180062_1280.jpg" alt\="" width\="1280" height\="848" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~%20%<p>Alle bestehenden User in ein neues System migrieren und sie um erneute Registrierung bitten.</p>
+	~%20%<p>Die Kursinhalte als .csv verschicken, damit die Inhalte extern aufbereitet und eingespielt werden.</p>
+	~%20%<p>Einen eigenen Server aufsetzen und warten.</p>
+	~%20%<p>Ein Moodle Plugin installieren.</p>
+	~%20%Zusätzlich zu den Standard Web APIs noch ein paar wenige weitere APIs freischalten.<br>
+}
+
+
+// question: 85  name: Warum ist Mooduell vom Sicherheitsaspekt die ideale Lösung für Ihre Institution?
+::Warum ist Mooduell vom Sicherheitsaspekt die ideale Lösung für Ihre Institution?::[html]<p>Warum ist MooDuell vom Sicherheitsaspekt die ideale Lösung für Ihre Institution?<br></p><p><img src\="@@PLUGINFILE@@/hacking-1685092_1280.jpg" alt\="" width\="1280" height\="959" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~<p>Weil die Wunderbyte Server den höchsten Sicherheitsanforderungen entsprechen.</p>
+	~<p>Weil Sie selbst eine außerordentlich fähige IT-Abteilung haben. die mit allen Problemen fertig wird.</p>
+	=<p>Weil bestehende Moodle Instanzen verwendet werden können und nur jene Schnittstellen notwendig sind, die meist ohnehin für die Moodle App freigeschalten sind.</p>
+	~<p>Weil MooDuell AES-256 verwendet..</p><p></p>
+}
+
+
+// question: 80  name: Welche Fragetypen von Moodle werdern derzeit von MooDuell unterstützt?
+::Welche Fragetypen von Moodle werdern derzeit von MooDuell unterstützt?::[html]<p>Welche Moodle-Fragetypen werden derzeit von MooDuell unterstützt?<br></p><p><img src\="@@PLUGINFILE@@/feedback-3709752_1280.jpg" alt\="https\://pixabay.com/photos/feedback-survey-nps-satisfaction-3709752/" width\="1280" height\="856" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~%33.33333%Multiple choice - Eine richtige Antwort
+	~%33.33333%<p>Multiple choice - Mehrere richtige Antworten<br></p>
+	~%33.33333%<p>Wahr/Falsch</p>
+	~%-33.33333%<p>Freitext</p>
+	~%-33.33333%<p>Numerisch</p>
+	~%-33.33333%<p>Lückentext</p>
+}
+
+
+// question: 79  name: Welchen neuen Server müssen Sie einrichten, um die MooDuell App laufen zu lassen?
+::Welchen neuen Server müssen Sie einrichten, um die MooDuell App laufen zu lassen?::[html]<p>Welchen neuen Server müssen Sie einrichten, um eine Moodle App laufen zu lassen?</p><p><img src\="@@PLUGINFILE@@/supercomputer-1782179_640.jpg?time\=1569308276199" alt\="" width\="640" height\="494" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	~<p>Apache Server mit PHP &amp; MySQL</p>
+	~<p>Oracle Server</p>
+	=<p>Keinen. MooDuell läuft ganz einfach auf ihrer bestehenden Moodle Instanz.</p>
+	~<p>Windows Server</p>
+	~<p>Cloud Server</p>
+}
+
+
+// question: 78  name: Wie heißt die Firma, die MooDuell entwickelt hat?
+::Wie heißt die Firma, die MooDuell entwickelt hat?::[html]<p>Wie heißt die Firma, die Mooduell entwickelt hat?<br></p><p><img src\="@@PLUGINFILE@@/wunderbyte_buch.png" alt\="" width\="1000" height\="619" role\="presentation" class\="img-responsive atto_image_button_text-bottom"><br></p>{
+	=<p>Wunderbyte GmbH</p>
+	~<p>Developing Knowledge Ag</p>
+	~<p>Lemon Labs</p>
+	~<p>Solid Code Kg<br></p>
+}
+
+
