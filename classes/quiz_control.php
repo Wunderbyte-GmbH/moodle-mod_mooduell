@@ -18,6 +18,7 @@ namespace mod_mooduell;
 use backup;
 use backup_controller;
 use restore_controller;
+use restore_controller_exception;
 use restore_ui;
 
 require_once("{$CFG->libdir}/filelib.php");
@@ -77,44 +78,32 @@ class quiz_control {
      * @throws \stored_file_creation_exception
      */
     public function import_demo_quiz() {
-        global $CFG, $USER;
+        global $CFG, $USER, $DB;
         //copy backup to file https://docs.moodle.org/dev/File_API
         //$folder = XX; // as found in: $CFG->dataroot . '/temp/backup/'
 
-        $from_zip_file = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
-        $tempdir = restore_controller::get_tempdir_name($this->mooduell->course->id, $USER->id);
-        $filepath = $CFG->backuptempdir . "/{$tempdir}/";
-        $fs = get_file_storage();
+        $backup_file = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
+        $tmpid = restore_controller::get_tempdir_name($this->mooduell->course->id, $USER->id);
+        $filepath = make_backup_temp_directory($tmpid);
+        if (!check_dir_exists($filepath, true, true)) {
+            throw new restore_controller_exception('cannot_create_backup_temp_dir');
+        }
+        $fp = get_file_packer('application/vnd.moodle.backup');
+        $files = $fp->extract_to_pathname($backup_file, $filepath);
+
         $file_record = array(
             'contextid' => $this->mooduell->context->id,
             'component' => 'mooduell',
             'filearea' => 'backup',
             'itemid' => 0,
-            'filepath' => $filepath,
+            'filepath' => "/",
             'filename' => "demoquiz.mbz",
             'timecreated' => time(),
             'timemodified' => time()
         );
-        $fs->delete_area_files($this->mooduell->context->id, 'mooduell', 'backup');
 
-        // TODO: Delete if after this is working?
-        if (!$fs->file_exists($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
-        $file_record['filepath'], $file_record['filename'])) {
-            $file = $fs->create_file_from_pathname($file_record, $from_zip_file);
-        } else {
-            $file = $fs->get_file($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
-                $file_record['filepath'], $file_record['filename']);
-        }
-        // $file->copy_content_to($CFG->backuptempdir . "/{$tempdir}/" . $file->get_filename());
-
-        // $fs->move_area_files_to_new_context();
-        // $file->copy_content_to($tempdir);
-
-        $fileexists = file_exists($file->get_filepath());
-
-        $rc = new restore_controller($tempdir, $this->mooduell->course->id, backup::INTERACTIVE_NO,
+        $rc = new restore_controller($tmpid, $this->mooduell->course->id, backup::INTERACTIVE_NO,
             backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
-        $rc->execute_precheck();
         //$rc = new restore_controller($backupid, $course->id,
         //backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
 
@@ -125,30 +114,47 @@ class quiz_control {
             $groupsetting->set_value(true);
         }
 
-        $cmcontext = $this->context;
         if (!$rc->execute_precheck()) {
-            $prequizcontrolcheckresults = $rc->get_precheck_results();
+            $precheckresults = $rc->get_precheck_results();
             if (is_array($precheckresults) && !empty($precheckresults['errors'])) {
                 if (empty($CFG->keeptempdirectoriesonbackup)) {
-                    fulldelete($backupbasepath);
+                    fulldelete($filepath);
                 }
             }
         }
 
         $rc->execute_plan();
 
-        // This is the way to create a new quiz
-        // list($module, $context, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, "quiz", $section);
+        $newcmid = null;
+        $tasks = $rc->get_plan()->get_tasks();
+        foreach ($tasks as $task) {
+            if (is_subclass_of($task, 'restore_activity_task')) {
+                $newcmid = $task->get_moduleid();
+                break;
+            }
+        }
 
-        // $mformclassname = 'mod_' . $module->name . '_mod_form';
-        // $mform = new $mformclassname($data, $cw->section, $cm, $course);
+        $rc->destroy();
 
-        // $mform->set_data($data);
+        if (empty($CFG->keeptempdirectoriesonbackup)) {
+            fulldelete($backupbasepath);
+        }
 
-        // add_moduleinfo($data, $course, $mform);
+        if ($newcmid) {
+            $section = $DB->get_record('course_sections',
+                array('id' => $this->mooduell->cm->section, 'course' => $this->mooduell->cm->course));
+            $modarray = explode(",", trim($section->sequence));
+            $cmindex = array_search($this->mooduell->cm->id, $modarray);
+            if ($cmindex !== false && $cmindex < count($modarray) - 1) {
+                $newcm = get_coursemodule_from_id($cm->modname, $newcmid, $cm->course);
+                moveto_module($newcm, $section, $modarray[$cmindex + 1]);
+            }
 
-        //add_moduleinfo()
-
-        return "moduleinfo <br>";
+            // Trigger course module created event. We can trigger the event only if we know the newcmid.
+            $newcm = get_fast_modinfo($cm->course)->get_cm($newcmid);
+            $event = \core\event\course_module_created::create_from_cm($newcm);
+            $event->trigger();
+        }
+        return $newcm;
     }
 }
