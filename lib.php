@@ -46,18 +46,15 @@ function mooduell_supports($feature) {
  * in mod_form.php) this function will create a new instance and return the id
  * number of the instance.
  *
- * @param object $moduleinstance An object from the form.
- * @param mod_mooduell_mod_form $mform The form.
- * @return int The id of the newly inserted record.
+ * @param stdClass $data
+ * @param mod_mooduell_mod_form|null $mform
+ * @return bool|int
+ * @throws dml_exception
  */
-function mooduell_add_instance($moduleinstance, $mform = null) {
-    global $DB;
-
-    $moduleinstance->timecreated = time();
-
-    $id = $DB->insert_record('mooduell', $moduleinstance);
-
-    return $id;
+function mooduell_add_instance(stdClass $data, mod_mooduell_mod_form $mform = null) {
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/mooduell/classes/mooduell.php');
+    return \mod_mooduell\mooduell::add_instance($data, $mform);
 }
 
 /**

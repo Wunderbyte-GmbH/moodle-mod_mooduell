@@ -24,180 +24,153 @@
 
 
 namespace mod_mooduell;
-
-use backup;
-use backup_controller;
-use course_request;
+use coding_exception;
+use dml_exception;
+use event\course_module_viewed;
 use moodle_exception;
-use restore_controller;
 
 defined('MOODLE_INTERNAL') || die();
-
-require_once("$CFG->dirroot/course/lib.php");
-require_once("$CFG->dirroot/course/modlib.php");
-require_once("$CFG->dirroot/mod/quiz/mod_form.php");
-
-require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
-require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
-require_once($CFG->libdir . '/filelib.php');
-
 
 /**
  * Class mooduell
  *
  * @package mod_mooduell
  */
-class mooduell
-{
-
+class mooduell {
 
     /**
-     * @var stdClass fieldset record of mooduell instance
+     * @var stdClass|null fieldset record of mooduell instance
      */
-    public $data = null;
-    public $quizid = null;
+    public $settings = null;
 
+    /**
+     * @var bool|false|mixed|stdClass|null course object
+     */
     public $course = null;
+
+    /**
+     * @var stdClass|null course module
+     */
     public $cm = null;
+
+    /**
+     * @var stdClass|null context
+     */
     public $context = null;
 
-
-    protected $_currentview = null;
-
-    public function __construct($quizid, $course, $cm, $context)
-    {
-
+    /**
+     * Mooduell constructor. Fetches MooDuell settings from DB.
+     *
+     * @param int $id course module id
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public function __construct(int $id = 0) {
         global $DB;
 
-        //we check if wee have a record
-        if (!$this->data = $DB->get_records('mooduell', null, '', 'id, usefullnames')) {
-            throw new moodle_exception(
-                'invalidmooduell',
-                'mooduell',
-                null,
-                null,
-                "mooduell id:"
-            );
+        if (!$this->cm = get_coursemodule_from_id('mooduell', $id)) {
+            throw new moodle_exception('invalidcoursemodule ' . $id, 'mooduell', null, null,
+                "Course module id: $id");
         }
 
-        $this->course = $course;
-        $this->cm = $cm;
-        $this->context = $context;
+        $this->course = get_course($this->cm->course);
 
-
-        //with no quizid, we create the demo quiz right away
-        if (!$quizid) {
-            $this->import_demo_quiz($course, $cm->section);
+        if (!$this->settings = $DB->get_record('mooduell', array('id' => $this->cm->instance))) {
+            throw new moodle_exception('invalidmooduell', 'mooduell', null, null,
+                "Mooduell id: {$this->cm->instance}");
         }
-
-
-
-        //print_r($this->data);
-        return $this->data;
+        $this->context = context_module::instance($this->cm->id);
     }
-
 
     /**
-     * 
-     * 
+     * Get MooDuell object by instanceid (id of mooduell table)
+     *
+     * @param $instanceid
+     * @return mod_mooduell\mooduell
+     * @throws coding_exception
      */
-    public function import_demo_quiz($course, $section)
-    {
-        global $CFG;
-        global $USER;
-
-        //copy backup to file https://docs.moodle.org/dev/File_API
-        //$folder = XX; // as found in: $CFG->dataroot . '/temp/backup/'
-
-
-
-        $from_zip_file = $CFG->dirroot . '/mod/mooduell/files/backup_mooduell_demo_quiz.mbz';
-
-        $backuptempdir = $CFG->backuptempdir . '/';
-        
-        $fs = get_file_storage();
-        $file_record = array(
-            'contextid' => $this->context->id, 'component' => 'quiz', 'filearea' => 'backup',
-            'itemid' => 0, 'filepath' => $backuptempdir, 'filename' => "backup_mooduell_demo_quiz.mbz",
-            'timecreated' => time(), 'timemodified' => time()
-        );
-        
-        $file = $fs->create_file_from_pathname($file_record, $from_zip_file);
-
-        
-        
-        $fileexists = file_exists($file->get_filepath());
-
-        $rc = new restore_controller("backup_mooduell_demo_quiz.mbz", $this->course->id, backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id,backup::TARGET_CURRENT_ADDING);
-        //$rc = new restore_controller($backupid, $course->id,
-        //backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
-
-        // Make sure that the restore_general_groups setting is always enabled when duplicating an activity.
-        $plan = $rc->get_plan();
-        $groupsetting = $plan->get_setting('groups');
-        if (empty($groupsetting->get_value())) {
-            $groupsetting->set_value(true);
-        }
-
-        $cmcontext = $this->context;
-        if (!$rc->execute_precheck()) {
-            $precheckresults = $rc->get_precheck_results();
-            if (is_array($precheckresults) && !empty($precheckresults['errors'])) {
-                if (empty($CFG->keeptempdirectoriesonbackup)) {
-                    fulldelete($backupbasepath);
-                }
-            }
-        }
-
-        $rc->execute_plan();
-
-
-
-
-
-        // This is the way to create a new quiz
-        // list($module, $context, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, "quiz", $section);
-
-        // $mformclassname = 'mod_' . $module->name . '_mod_form';
-        // $mform = new $mformclassname($data, $cw->section, $cm, $course);
-
-        // $mform->set_data($data);
-
-        // add_moduleinfo($data, $course, $mform);
-
-        //add_moduleinfo()
-
-
-        return "moduleinfo <br>";
+    public static function get_mooduell_by_instance(int $instanceid) {
+        $cm = get_coursemodule_from_instance('mooduell', $instanceid);
+        return new mod_mooduell\mooduell($instanceid, $cm->id);
     }
 
-    public function display()
-    {
-
-        if (!$this->quizid) {
-
-
-
-
-
-
-            return "we had not quiz Id, we created a new one";
-        } else {
-            return "quizid is $this->quizid";
+    /**
+     * Get the html of the view page.
+     *
+     * @param bool $inline Display without header and footer?
+     * @return string
+     */
+    public function display(bool $inline = false) {
+        global $OUTPUT;
+        $out = '';
+        if (!$inline) {
+            $out .= $OUTPUT->header();
         }
+
+        // TODO: Replace with content.
+        $out .= "This is the content";
+
+        if (!$inline) {
+            $out .= $OUTPUT->footer();
+        }
+        return $out;
+    }
+
+    /**
+     * Set base params for page and trigger module viewed event.
+     *
+     * @throws coding_exception
+     */
+    public function setup_page(){
+        global $PAGE;
+        $event = course_module_viewed::create(array(
+            'objectid' => $this->cm->instance,
+            'context' => $this->context
+        ));
+        $event->add_record_snapshot('course', $this->course);
+        $event->add_record_snapshot('mooduell', $this->settings);
+        $event->trigger();
+
+        $PAGE->set_url('/mod/mooduell/view.php', array('id' => $this->cm->id));
+        $PAGE->set_title(format_string($this->settings->name));
+        $PAGE->set_heading(format_string($this->course->fullname));
+        $PAGE->set_context($this->context);
+    }
+
+    /**
+     * Create a mooduell instance.
+     *
+     * @param stdClass $formdata
+     * @param \mod_mooduell_mod_form $mform
+     * @return bool|int
+     * @throws dml_exception
+     */
+    public static function add_instance(stdClass $formdata) {
+        global $DB;
+
+        // Add the database record.
+        $data = new stdClass();
+        $data->name = $formdata->name;
+        $data->timemodified = time();
+        $data->timecreated = time();
+        $data->course = $formdata->course;
+        $data->courseid = $formdata->course;
+        $data->intro = $formdata->intro;
+        $data->introformat = $formdata->introformat;
+        $data->countdown = $formdata->countdown;
+        $data->usefullnames = $formdata->usefullnames;
+        $data->showcontinuebutton = $formdata->showcontinuebutton;
+        $data->showcorrectanswer = $formdata->showcorrectanswer;
+        $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0 ) ? $formdata->quizid : null;
+
+        return $DB->insert_record('mooduell', $data);
     }
 }
-
-
-
-
-
 
 // For more information about the Events API, please visit:
 // https://docs.moodle.org/dev/Event_2
 
-
-/* roadmap 
+/* roadmap
 
 We have the following choice:
 

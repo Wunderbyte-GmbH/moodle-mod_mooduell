@@ -60,24 +60,29 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addHelpButton('name', 'mooduellname', 'mod_mooduell');
 
         // Adding the standard "intro" and "introformat" fields.
-        if ($CFG->branch >= 29) {
-            $this->standard_intro_elements();
-        } else {
-            $this->add_intro_editor();
-        }
+        $this->standard_intro_elements();
 
-        // Adding the rest of mod_mooduell settings, spreading all them into this fieldset
+        // Add standard elements.
+        $this->standard_coursemodule_elements();
+
+        // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
         $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
 
-        $mform->addElement('checkbox', 'usefullnames', get_string('useFullNames', 'mod_mooduell'));
-        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showContinueButton', 'mod_mooduell'));
-        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showCorrectAnswer', 'mod_mooduell'));
-        $mform->addElement('select', 'usecountdown', get_string('countdown', 'mod_mooduell'), array(get_string('nocountdown', 'mod_mooduell'), get_string('10seconds', 'mod_mooduell'), get_string('20seconds', 'mod_mooduell'), get_string('30seconds', 'mod_mooduell'), get_string('60seconds', 'mod_mooduell'), get_string('90seconds', 'mod_mooduell'), get_string('120seconds', 'mod_mooduell')));
-
-        // Add standard elements.
-        $this->standard_coursemodule_elements();
+        $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
+        $options = [
+            0 => get_string('nocountdown', 'mod_mooduell'),
+            10 => get_string('xseconds', 'mod_mooduell', 10),
+            20 => get_string('xseconds', 'mod_mooduell', 20),
+            30 => get_string('xeconds', 'mod_mooduell', 30),
+            60 => get_string('xseconds', 'mod_mooduell', 60),
+            90 => get_string('xseconds', 'mod_mooduell', 90),
+            120 => get_string('xseconds', 'mod_mooduell', 120)
+        ];
+        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $options);
 
         // Add standard buttons.
         $this->add_action_buttons();
