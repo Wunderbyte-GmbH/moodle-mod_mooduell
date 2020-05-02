@@ -77,7 +77,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             0 => get_string('nocountdown', 'mod_mooduell'),
             10 => get_string('xseconds', 'mod_mooduell', 10),
             20 => get_string('xseconds', 'mod_mooduell', 20),
-            30 => get_string('xeconds', 'mod_mooduell', 30),
+            30 => get_string('xseconds', 'mod_mooduell', 30),
             60 => get_string('xseconds', 'mod_mooduell', 60),
             90 => get_string('xseconds', 'mod_mooduell', 90),
             120 => get_string('xseconds', 'mod_mooduell', 120)

@@ -26,8 +26,9 @@
 namespace mod_mooduell;
 use coding_exception;
 use dml_exception;
-use event\course_module_viewed;
 use moodle_exception;
+use stdClass;
+use context_module;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -86,12 +87,12 @@ class mooduell {
      * Get MooDuell object by instanceid (id of mooduell table)
      *
      * @param $instanceid
-     * @return mod_mooduell\mooduell
+     * @return mooduell
      * @throws coding_exception
      */
     public static function get_mooduell_by_instance(int $instanceid) {
         $cm = get_coursemodule_from_instance('mooduell', $instanceid);
-        return new mod_mooduell\mooduell($instanceid, $cm->id);
+        return new mooduell($cm->id);
     }
 
     /**
@@ -123,7 +124,7 @@ class mooduell {
      */
     public function setup_page(){
         global $PAGE;
-        $event = course_module_viewed::create(array(
+        $event = event\course_module_viewed::create(array(
             'objectid' => $this->cm->instance,
             'context' => $this->context
         ));

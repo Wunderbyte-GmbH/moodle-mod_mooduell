@@ -22,6 +22,8 @@ use restore_controller;
 require_once("{$CFG->libdir}/filelib.php");
 require_once("{$CFG->dirroot}/mod/quiz/mod_form.php");
 require_once("{$CFG->dirroot}/course/modlib.php");
+require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
+require_once($CFG->libdir . '/filelib.php');
 
 class quiz_control {
 
@@ -80,20 +82,32 @@ class quiz_control {
 
         $from_zip_file = $CFG->dirroot . '/mod/mooduell/files/backup_mooduell_demo_quiz.mbz';
 
-        $backuptempdir = $CFG->backuptempdir . '/';
+        $tempdir = $CFG->tempdir . '/';
 
         $fs = get_file_storage();
         $file_record = array(
-            'contextid' => $this->context->id, 'component' => 'mooduell', 'filearea' => 'backup',
-            'itemid' => 0, 'filepath' => $backuptempdir, 'filename' => "backup_mooduell_demo_quiz.mbz",
-            'timecreated' => time(), 'timemodified' => time()
+            'contextid' => $this->mooduell->context->id,
+            'component' => 'mooduell',
+            'filearea' => 'backup',
+            'itemid' => 0,
+            'filepath' => "/",
+            'filename' => "backup_mooduell_demo_quiz.mbz",
+            'timecreated' => time(),
+            'timemodified' => time()
         );
-
-        $file = $fs->create_file_from_pathname($file_record, $from_zip_file);
+        // TODO: Delete if after this is working?
+        if (!$fs->file_exists($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
+        $file_record['filepath'], $file_record['filename'])) {
+            $file = $fs->create_file_from_pathname($file_record, $from_zip_file);
+        } else {
+            $file = $fs->get_file($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
+                $file_record['filepath'], $file_record['filename']);
+        }
+        $backupid = $file->get_contenthash();
 
         $fileexists = file_exists($file->get_filepath());
 
-        $rc = new restore_controller("backup_mooduell_demo_quiz.mbz", $this->course->id, backup::INTERACTIVE_NO,
+        $rc = new restore_controller("$backupid", $this->mooduell->course->id, backup::INTERACTIVE_NO,
             backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
         //$rc = new restore_controller($backupid, $course->id,
         //backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);

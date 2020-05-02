@@ -54,7 +54,7 @@ function mooduell_supports($feature) {
 function mooduell_add_instance(stdClass $data, mod_mooduell_mod_form $mform = null) {
     global $CFG;
     require_once($CFG->dirroot . '/mod/mooduell/classes/mooduell.php');
-    return \mod_mooduell\mooduell::add_instance($data, $mform);
+    return \mod_mooduell\mooduell::add_instance($data);
 }
 
 /**
