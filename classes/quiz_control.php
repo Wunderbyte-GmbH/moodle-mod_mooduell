@@ -18,6 +18,7 @@ namespace mod_mooduell;
 use backup;
 use backup_controller;
 use restore_controller;
+use restore_ui;
 
 require_once("{$CFG->libdir}/filelib.php");
 require_once("{$CFG->dirroot}/mod/quiz/mod_form.php");
@@ -80,21 +81,22 @@ class quiz_control {
         //copy backup to file https://docs.moodle.org/dev/File_API
         //$folder = XX; // as found in: $CFG->dataroot . '/temp/backup/'
 
-        $from_zip_file = $CFG->dirroot . '/mod/mooduell/files/backup_mooduell_demo_quiz.mbz';
-
-        $tempdir = $CFG->tempdir . '/';
-
+        $from_zip_file = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
+        $tempdir = restore_controller::get_tempdir_name($this->mooduell->course->id, $USER->id);
+        $filepath = $CFG->backuptempdir . "/{$tempdir}/";
         $fs = get_file_storage();
         $file_record = array(
             'contextid' => $this->mooduell->context->id,
             'component' => 'mooduell',
             'filearea' => 'backup',
             'itemid' => 0,
-            'filepath' => "/",
-            'filename' => "backup_mooduell_demo_quiz.mbz",
+            'filepath' => $filepath,
+            'filename' => "demoquiz.mbz",
             'timecreated' => time(),
             'timemodified' => time()
         );
+        $fs->delete_area_files($this->mooduell->context->id, 'mooduell', 'backup');
+
         // TODO: Delete if after this is working?
         if (!$fs->file_exists($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
         $file_record['filepath'], $file_record['filename'])) {
@@ -103,12 +105,16 @@ class quiz_control {
             $file = $fs->get_file($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'],
                 $file_record['filepath'], $file_record['filename']);
         }
-        $backupid = $file->get_contenthash();
+        // $file->copy_content_to($CFG->backuptempdir . "/{$tempdir}/" . $file->get_filename());
+
+        // $fs->move_area_files_to_new_context();
+        // $file->copy_content_to($tempdir);
 
         $fileexists = file_exists($file->get_filepath());
 
-        $rc = new restore_controller("$backupid", $this->mooduell->course->id, backup::INTERACTIVE_NO,
+        $rc = new restore_controller($tempdir, $this->mooduell->course->id, backup::INTERACTIVE_NO,
             backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
+        $rc->execute_precheck();
         //$rc = new restore_controller($backupid, $course->id,
         //backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
 
