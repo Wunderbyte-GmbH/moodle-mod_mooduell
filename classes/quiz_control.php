@@ -16,16 +16,14 @@
 
 namespace mod_mooduell;
 use backup;
-use backup_controller;
 use restore_controller;
 use restore_controller_exception;
-use restore_ui;
 
 require_once("{$CFG->libdir}/filelib.php");
 require_once("{$CFG->dirroot}/mod/quiz/mod_form.php");
 require_once("{$CFG->dirroot}/course/modlib.php");
-require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
-require_once($CFG->libdir . '/filelib.php');
+require_once("{$CFG->dirroot}/backup/util/includes/restore_includes.php");
+require_once("{$CFG->dirroot}/filelib.php");
 
 class quiz_control {
 
@@ -79,8 +77,6 @@ class quiz_control {
      */
     public function import_demo_quiz() {
         global $CFG, $USER, $DB;
-        //copy backup to file https://docs.moodle.org/dev/File_API
-        //$folder = XX; // as found in: $CFG->dataroot . '/temp/backup/'
 
         $backup_file = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
         $tmpid = restore_controller::get_tempdir_name($this->mooduell->course->id, $USER->id);
@@ -89,23 +85,10 @@ class quiz_control {
             throw new restore_controller_exception('cannot_create_backup_temp_dir');
         }
         $fp = get_file_packer('application/vnd.moodle.backup');
-        $files = $fp->extract_to_pathname($backup_file, $filepath);
-
-        $file_record = array(
-            'contextid' => $this->mooduell->context->id,
-            'component' => 'mooduell',
-            'filearea' => 'backup',
-            'itemid' => 0,
-            'filepath' => "/",
-            'filename' => "demoquiz.mbz",
-            'timecreated' => time(),
-            'timemodified' => time()
-        );
+        $fp->extract_to_pathname($backup_file, $filepath);
 
         $rc = new restore_controller($tmpid, $this->mooduell->course->id, backup::INTERACTIVE_NO,
             backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
-        //$rc = new restore_controller($backupid, $course->id,
-        //backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
 
         // Make sure that the restore_general_groups setting is always enabled when duplicating an activity.
         $plan = $rc->get_plan();
@@ -124,7 +107,6 @@ class quiz_control {
         }
 
         $rc->execute_plan();
-
         $newcmid = null;
         $tasks = $rc->get_plan()->get_tasks();
         foreach ($tasks as $task) {
@@ -137,7 +119,7 @@ class quiz_control {
         $rc->destroy();
 
         if (empty($CFG->keeptempdirectoriesonbackup)) {
-            fulldelete($backupbasepath);
+            fulldelete($filepath);
         }
 
         if ($newcmid) {
@@ -146,12 +128,12 @@ class quiz_control {
             $modarray = explode(",", trim($section->sequence));
             $cmindex = array_search($this->mooduell->cm->id, $modarray);
             if ($cmindex !== false && $cmindex < count($modarray) - 1) {
-                $newcm = get_coursemodule_from_id($cm->modname, $newcmid, $cm->course);
+                $newcm = get_coursemodule_from_id('quiz', $newcmid, $this->mooduell->cm->course);
                 moveto_module($newcm, $section, $modarray[$cmindex + 1]);
             }
 
             // Trigger course module created event. We can trigger the event only if we know the newcmid.
-            $newcm = get_fast_modinfo($cm->course)->get_cm($newcmid);
+            $newcm = get_fast_modinfo($this->mooduell->cm->course)->get_cm($newcmid);
             $event = \core\event\course_module_created::create_from_cm($newcm);
             $event->trigger();
         }
