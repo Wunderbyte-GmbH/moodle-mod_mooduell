@@ -23,7 +23,7 @@ require_once("{$CFG->libdir}/filelib.php");
 require_once("{$CFG->dirroot}/mod/quiz/mod_form.php");
 require_once("{$CFG->dirroot}/course/modlib.php");
 require_once("{$CFG->dirroot}/backup/util/includes/restore_includes.php");
-require_once("{$CFG->dirroot}/filelib.php");
+//require_once("{$CFG->dirroot}/filelib.php");
 
 class quiz_control {
 
