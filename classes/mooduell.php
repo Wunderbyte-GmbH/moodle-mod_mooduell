@@ -159,9 +159,9 @@ class mooduell {
         $data->intro = $formdata->intro;
         $data->introformat = $formdata->introformat;
         $data->countdown = $formdata->countdown;
-        $data->usefullnames = $formdata->usefullnames;
-        $data->showcontinuebutton = $formdata->showcontinuebutton;
-        $data->showcorrectanswer = $formdata->showcorrectanswer;
+        $data->usefullnames = isset($formdata->usefullnames) ? $formdata->usefullnames : 0;
+        $data->showcontinuebutton = isset($formdata->showcontinuebutton) ? $formdata->showcontinuebutton : 0;
+        $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;
         $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0 ) ? $formdata->quizid : null;
 
         return $DB->insert_record('mooduell', $data);
