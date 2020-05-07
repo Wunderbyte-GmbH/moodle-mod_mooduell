@@ -24,6 +24,7 @@
 
 use mod_mooduell\mooduell;
 use mod_mooduell\quiz_control;
+use mod_mooduell\game_control;
 
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
@@ -37,8 +38,10 @@ require_login($mooduell->course, true, $mooduell->cm);
 $mooduell->setup_page();
 
 // For testing only. TODO: Remove after test.
-$quizimporter = new quiz_control($mooduell);
-$quizimporter->import_demo_quiz();
+// $gamecontroler = new game_control($mooduell);
+// $gamecontroler->start_new_game(8);
+//$quizimporter->import_demo_quiz();
+
 
 echo $mooduell->display();
 
