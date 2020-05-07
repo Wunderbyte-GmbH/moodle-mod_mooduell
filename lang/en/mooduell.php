@@ -43,8 +43,8 @@ $string['countdown'] = 'Countdown';
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';
 
-$string['showcontinuebutton'] = 'Always show "Continue"-button';
+$string['showcontinuebutton'] = 'Show "Continue"-button';
 $string['showcorrectanswer'] = 'Show correct answer';
 
-$string['modulename'] = 'MooDuell';
-
+$string['pluginadministration'] = 'Plugin Administration';
+$string['questionscategory'] = 'Category for random questions';
