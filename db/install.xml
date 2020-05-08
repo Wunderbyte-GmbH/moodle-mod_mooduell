@@ -45,6 +45,19 @@
         <KEY NAME="fk_winnerid" TYPE="foreign" FIELDS="winnerid" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
+    <TABLE NAME="mooduell_categories" COMMENT="Stores categories from which to chose the random questions of this MooDuell instance.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
+        <FIELD NAME="category" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of category in the question_categories table"/>
+        <FIELD NAME="weight" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Weight of the Questions from 0 to 100. If there are more than one categories linked to one moodle instance, the number of questions from one category are determined by the weight given."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+        <KEY NAME="fk_category" TYPE="foreign" FIELDS="category" REFTABLE="question_categories" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
     <TABLE NAME="mooduell_question_attempts" COMMENT="Each row here corresponds to an attempt at one question, as part of a question_usage. A question_attempt will have some question_attempt_steps">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>

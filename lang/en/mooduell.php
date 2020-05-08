@@ -49,3 +49,4 @@ $string['showcorrectanswer'] = 'Show correct answer';
 $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Category for random question';
 $string['questionscategorygroup'] = 'Categories for random questions';
+$string['nocategories'] = 'There are not categories added yet';

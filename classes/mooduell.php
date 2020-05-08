@@ -144,23 +144,19 @@ class mooduell {
 
         //write categories to categories table
 
-        
+        if (isset($formdata->categoriesgroup)) {
+            foreach ($formdata->categoriesgroup as $category) {
 
-        foreach ($formdata->categoriesgroup as $category) {
-
-            $data = new stdClass();
-            $data->mooduellid = $mooduellid;
-            $data->category = $category->category;
-            $data->weight = 100;
-
-            $DB->insert_record('mooduell_categories', $data);
-
-
+                $data = new stdClass();
+                $data->mooduellid = $mooduellid;
+                $data->category = $category;
+                $data->weight = 100;
+    
+                $DB->insert_record('mooduell_categories', $data);
+    
+            }
         }
         
-
-
-
         return null;
     }
 
@@ -205,8 +201,6 @@ class mooduell {
         $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0 ) ? $formdata->quizid : null;
 
         $mooduellid = $DB->insert_record('mooduell', $data);
-
-        
 
         //add postprocess function
 
