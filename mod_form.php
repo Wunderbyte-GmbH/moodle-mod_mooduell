@@ -40,6 +40,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function definition() {
         global $CFG;
+        global $DB;
 
         $mform = $this->_form;
 
@@ -73,18 +74,105 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
         $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
         $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
+        
         $options = [
-            0 => get_string('nocountdown', 'mod_mooduell'),
-            10 => get_string('xseconds', 'mod_mooduell', 10),
-            20 => get_string('xseconds', 'mod_mooduell', 20),
-            30 => get_string('xseconds', 'mod_mooduell', 30),
-            60 => get_string('xseconds', 'mod_mooduell', 60),
-            90 => get_string('xseconds', 'mod_mooduell', 90),
-            120 => get_string('xseconds', 'mod_mooduell', 120)
+            "0" => get_string('nocountdown', 'mod_mooduell'),
+            "10" => get_string('xseconds', 'mod_mooduell', 10),
+            "20" => get_string('xseconds', 'mod_mooduell', 20),
+            "30" => get_string('xseconds', 'mod_mooduell', 30),
+            "60" => get_string('xseconds', 'mod_mooduell', 60),
+            "90" => get_string('xseconds', 'mod_mooduell', 90),
+            "120" => get_string('xseconds', 'mod_mooduell', 120)
         ];
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $options);
 
+        //we add the categories for the random question. Right now, there is only one category supported but as a preparation, we already use the formgroup
+        $listofcategories = $DB->get_records('question_categories');
+        $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
+        $formgroup = array();
+        $formgroup[] =& $mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
+        $mform->addGroup($formgroup, 'categoriesgroup', get_string('questionscategorygroup', 'mod_mooduell'));
+        
+
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+
+    private function generate_sorted_list($listofcategories) {
+
+        $i = 1;
+        $sortedcategories = array();
+
+        foreach ($listofcategories as $category) {
+            if ($category->parent == 0) {
+                array_push($sortedcategories, $category);
+                foreach ($this->return_children_in_list($category, $listofcategories) as $child) {
+                    if ($child) {
+                        array_push($sortedcategories, $child);
+                    }
+                }
+            }
+        }
+
+        return $sortedcategories;
+    }
+
+    private function return_list_of_category_options($list) {
+        $names = array();
+        $spaces = "";
+        $previous_item = null;
+
+        foreach ($list as $item) {
+            if ($item->parent == 0) {
+                $spaces = "";
+            }
+            else if ($previous_item && $previous_item->id == $item->parent) {
+                $spaces .= "-> ";
+            }
+            else {
+                $spaces = "-> ";
+                $parent = $this->return_parent_for_item_in_list($list, $item);
+                
+                while ($parent->parent != 0) {
+                    $parent = $this->return_parent_for_item_in_list($list, $item);
+                    $spaces .= "-> ";
+                }
+            }
+            if ($item->parent != 0) {
+                array_push($names, [$item->id => $spaces ." " . $item->name]);
+            }
+            $previous_item = $item;
+        }
+        return $names;
+    }
+
+    private function return_parent_for_item_in_list($list, $item) {
+        foreach($list as $parentitem) {
+            if ($item->parent == $parentitem->id) {
+                $parent = $parentitem;
+                break;
+            }
+        }
+        return $parent;
+    }
+
+    private function return_children_in_list($parent, $list) {
+
+        $i = 1;
+        $children = array();
+
+        foreach ($list as $child) {
+
+            if ($parent->id == $child->parent) {
+                array_push($children, $child);
+                foreach ($this->return_children_in_list($child, $list) as $grandchild) {
+                    if ($grandchild) {
+                        array_push($children, $grandchild);
+                    }
+                }
+            }
+        }
+        return $children;
     }
 }

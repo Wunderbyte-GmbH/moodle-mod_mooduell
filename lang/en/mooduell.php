@@ -47,4 +47,5 @@ $string['showcontinuebutton'] = 'Show "Continue"-button';
 $string['showcorrectanswer'] = 'Show correct answer';
 
 $string['pluginadministration'] = 'Plugin Administration';
-$string['questionscategory'] = 'Category for random questions';
+$string['questionscategory'] = 'Category for random question';
+$string['questionscategorygroup'] = 'Categories for random questions';
