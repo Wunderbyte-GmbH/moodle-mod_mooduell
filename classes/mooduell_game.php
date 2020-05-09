@@ -74,13 +74,18 @@ class mooduell_game {
 
         $data = $this->gamedata;
         $data->playerbid = $playerbid;
+        $data->mooduellid = $this->mooduell->cm->id;
 
         //we collect all the data to safe to mooduell_games table
 
-        //$DB->insert_record('mooduell_game', $data);
+        $DB->insert_record('mooduell_games', $data);
 
         //we retrieve all the questions we can get
-        $this->get_available_questions();
+        //$availablequestions = $this->get_available_questions();
+
+        //we create our randomly created questions
+
+
 
 
         return true;
@@ -88,18 +93,25 @@ class mooduell_game {
 
 
     /**
-     * Retrieve all available questions from the question bank, filtered by category, if necessary
+     * Retrieve all available questions from the question bank, filtered by category
      */
-    static function get_available_questions($category = null) {
+    static function get_available_questions() {
 
         global $DB;
+        $questions = array();
 
         //for debugging disabled
         //$DB->insert_record('mooduell_game', $data);
 
-        $questions = $DB->get_records('question');
+        //first we lookup all the categories linked to this Mooduell instance. In our first version, this will return only one record
+        foreach($DB->get_records('mooduell_categories', ['mooduellid' => $this->mooduell->id]) as $category) {
+            //now we fetch all the questions linked to the category which we want to use in our Moodle Instance
+            foreach($DB->get_records('question', ['category' => $category->id]) as $question) {
+                array_push($questions, new question_control($question));
+            }
+        }
 
-        return null;        
+        return $questions;        
 
 
 

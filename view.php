@@ -42,7 +42,6 @@ $mooduell->setup_page();
 // $gamecontroler->start_new_game(8);
 //$quizimporter->import_demo_quiz();
 
-
 echo $mooduell->display();
 
 

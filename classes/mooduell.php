@@ -60,6 +60,7 @@ class mooduell {
      */
     public $context = null;
 
+
     /**
      * Mooduell constructor. Fetches MooDuell settings from DB.
      *
@@ -93,8 +94,10 @@ class mooduell {
     public function display(bool $inline = false) {
         global $OUTPUT;
 
+        $id = $this->cm->instance;
 
-        $mform = new mooduell_form();
+
+        $mform = new mooduell_form($this);
 
         $out = '';
         if (!$inline) {

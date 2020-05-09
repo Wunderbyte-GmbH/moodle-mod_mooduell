@@ -50,3 +50,5 @@ $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Category for random question';
 $string['questionscategorygroup'] = 'Categories for random questions';
 $string['nocategories'] = 'There are not categories added yet';
+$string['nomessage'] = 'There is nothing to say';
+$string['foundthesegames'] = 'We found these games:';

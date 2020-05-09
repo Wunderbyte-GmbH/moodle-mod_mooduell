@@ -84,7 +84,7 @@ class mod_mooduell_external extends external_api
 
         if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
             throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null,
-                "Course module id: $id");
+                "Course module id: $quizid");
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -104,7 +104,7 @@ class mod_mooduell_external extends external_api
         //TODO: Trigger Notification for other User
 
         $result = array();
-        $result['status'] = $create_result;
+        $result['status'] = true;
         return $result;
 
         return $result;
