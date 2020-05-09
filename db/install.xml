@@ -60,6 +60,18 @@
         <KEY NAME="fk_category" TYPE="foreign" FIELDS="category" REFTABLE="question_categories" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
+    <TABLE NAME="mooduell_qeustions" COMMENT="Stores all the questions linked to this quiz">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id question linked to this quiz"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+        <KEY NAME="fk_questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
     <TABLE NAME="mooduell_question_attempts" COMMENT="Each row here corresponds to an attempt at one question, as part of a question_usage. A question_attempt will have some question_attempt_steps">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
