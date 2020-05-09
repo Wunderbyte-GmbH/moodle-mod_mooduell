@@ -25,9 +25,10 @@
         <KEY NAME="fk_quizid" TYPE="foreign" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="mooduell_game" COMMENT="Stores the mooduell game progress.">
+    <TABLE NAME="mooduell_games" COMMENT="Stores the mooduell game progress.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
         <FIELD NAME="playeraid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the player who initiated the game."/>
         <FIELD NAME="playerbid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the player who was challenged to this game"/>
         <FIELD NAME="playeratime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Do you want to use the countdown and how much time do your students have to answer a question?"/>
@@ -40,6 +41,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
         <KEY NAME="fk_playera" TYPE="foreign" FIELDS="playeraid" REFTABLE="user" REFFIELDS="id"/>
         <KEY NAME="fk_playerb" TYPE="foreign" FIELDS="playerbid" REFTABLE="user" REFFIELDS="id"/>
         <KEY NAME="fk_winnerid" TYPE="foreign" FIELDS="winnerid" REFTABLE="user" REFFIELDS="id"/>
