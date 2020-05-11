@@ -115,7 +115,8 @@ class mod_mooduell_external extends external_api
      * @since Moodle 3.1
      */
 
-    public static function start_attempt_returns()
+
+     public static function start_attempt_returns()
     {
         return new external_single_structure(
             array(

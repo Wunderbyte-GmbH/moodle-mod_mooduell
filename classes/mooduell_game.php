@@ -68,7 +68,7 @@ class mooduell_game
      *
      * @return integer quizid or 0 when no quizid is set
      */
-    public function create_new_game($playerbid)
+    public function start_new_game($playerbid)
     {
 
         global $USER;
@@ -85,7 +85,7 @@ class mooduell_game
 
         //we retrieve exactly nine questions from the right categories
 
-        $questions = self::get_available_questions();
+        $questions = self::set_random_questions();
 
 
         //write all our questions to our DB and link it to our gameID
@@ -105,9 +105,13 @@ class mooduell_game
 
 
     /**
-     * Retrieve all available questions from the question bank, filtered by category
+     * Retrieve all available questions from the right categories in our question bank
+     * We make sure we retrieve them according to weight and number of categories linked to the mooduell instance
+     * Return the questions as instances of question_control
      */
-    private function get_available_questions()
+
+
+    private function set_random_questions()
     {
 
         global $DB;
@@ -199,7 +203,7 @@ class mooduell_game
         }
 
 
-        //TODO: here we should have a warning/error if we don't have count(questions) > 9
+        //We have an error if we don't have count(questions) == 9
 
         if (count($questions) != $fixednumberofquestions) {
             throw new moodle_exception(
@@ -209,9 +213,6 @@ class mooduell_game
                 "For some unknown reason we didn't receive the right number of questions"
             );
         }
-
-
-
 
         return $questions;
     }

@@ -81,13 +81,12 @@ class mooduell_form extends moodleform
     }
 
 
-
     public function create_list_of_games()
     {
 
         global $DB;
 
-        $games = $DB->get_records('mooduell_games', ['mooduellid' => $this->mooduell->cm->id]);
+        $games = $DB->get_records('mooduell_games', ['mooduellid' => $this->mooduell->cm->instance]);
 
 
 
