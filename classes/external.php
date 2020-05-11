@@ -104,9 +104,7 @@ class mod_mooduell_external extends external_api
         //TODO: Trigger Notification for other User
 
         $result = array();
-        $result['status'] = true;
-        return $result;
-
+        $result['status'] = $start_game_result;
         return $result;
     }
 
@@ -121,7 +119,7 @@ class mod_mooduell_external extends external_api
     {
         return new external_single_structure(
             array(
-                'status' => new external_value(PARAM_BOOL, 'status: true if success')
+                'status' => new external_value(PARAM_INT, 'number of added questions')
             )
         );
     }

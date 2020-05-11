@@ -64,12 +64,14 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
+        <FIELD NAME="gameid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Game"/>
         <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id question linked to this quiz"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
         <KEY NAME="fk_questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+        <KEY NAME="fk_gameid" TYPE="foreign" FIELDS="gameid" REFTABLE="mooduell_games" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="mooduell_question_attempts" COMMENT="Each row here corresponds to an attempt at one question, as part of a question_usage. A question_attempt will have some question_attempt_steps">

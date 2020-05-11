@@ -43,8 +43,8 @@ class game_control {
     public function start_new_game($playerbid){
 
         $newgameinstance = new mooduell_game($this->mooduell);
-        $game = $newgameinstance->create_new_game($playerbid);
+        $numberofquestions = $newgameinstance->create_new_game($playerbid);
 
-        return true;
+        return $numberofquestions;
     }
 }

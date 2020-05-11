@@ -18,8 +18,10 @@ namespace mod_mooduell;
 
 use stdClass;
 use DateTime;
+use moodle_exception;
 
-class mooduell_game {
+class mooduell_game
+{
 
     /**
      * @var mooduell MooDuell instance
@@ -43,7 +45,8 @@ class mooduell_game {
      *
      * @param mooduell $mooduell
      */
-    public function __construct(mooduell $mooduell) {
+    public function __construct(mooduell $mooduell)
+    {
 
         global $USER;
 
@@ -56,9 +59,8 @@ class mooduell_game {
         $data->playeraid = $USER->id;
         $data->timemodified = $nowtime;
         $data->timecreated = $nowtime;
-        
-        $this->gamedata = $data;
 
+        $this->gamedata = $data;
     }
 
     /**
@@ -66,7 +68,8 @@ class mooduell_game {
      *
      * @return integer quizid or 0 when no quizid is set
      */
-    public function create_new_game($playerbid){
+    public function create_new_game($playerbid)
+    {
 
         global $USER;
         global $DB;
@@ -74,57 +77,141 @@ class mooduell_game {
 
         $data = $this->gamedata;
         $data->playerbid = $playerbid;
-        $data->mooduellid = $this->mooduell->cm->id;
+        $data->mooduellid = $this->mooduell->cm->instance;
 
         //we collect all the data to safe to mooduell_games table
 
         $DB->insert_record('mooduell_games', $data);
 
-        //we retrieve all the questions we can get
-        //$availablequestions = $this->get_available_questions();
+        //we retrieve exactly nine questions from the right categories
 
-        //we create our randomly created questions
-
+        $questions = self::get_available_questions();
 
 
+        //write all our questions to our DB and link it to our gameID
+        foreach ($questions as $question) {
 
-        return true;
+            //we set data back
+            $data = null;
+            $data->questionid = $question->id;
+            $data->mooduellid = $this->mooduell->cm->instance;
+
+            $DB->insert_record('mooduell_questions', $data);
+        }
+
+        return $questions;
     }
 
 
     /**
      * Retrieve all available questions from the question bank, filtered by category
      */
-    static function get_available_questions() {
+    private function get_available_questions()
+    {
 
         global $DB;
         $questions = array();
 
-        //for debugging disabled
-        //$DB->insert_record('mooduell_game', $data);
+        $categories = $DB->get_records('mooduell_categories', ['mooduellid' => $this->mooduell->cm->instance]);
+
+
+        //first we calculate the number of question every category gets
+        $fixednumberofquestions = 9;
+        $sum = 0;
+        foreach ($categories as $category) {
+            $sum += $category->weight;
+        }
+
+        $numberofaddedquestions = 0;
+
+        //now we add the numbersofquestions key to each category
+        $calculatednumberofquestions = 0;
+        foreach ($categories as $category) {
+
+            $categories[$category->id]->numberofquestions = round(($category->weight / $sum) * $fixednumberofquestions);
+            $calculatednumberofquestions += $categories[$category->id]->numberofquestions;
+        }
+
 
         //first we lookup all the categories linked to this Mooduell instance. In our first version, this will return only one record
-        foreach($DB->get_records('mooduell_categories', ['mooduellid' => $this->mooduell->id]) as $category) {
-            //now we fetch all the questions linked to the category which we want to use in our Moodle Instance
-            foreach($DB->get_records('question', ['category' => $category->id]) as $question) {
-                array_push($questions, new question_control($question));
+        foreach ($categories as $category) {
+
+
+            //we need a correction of the calculated values to make sure we always add exactly nine questions
+            //(there could be a problem when we have to categories with weight 100, we would only add two times 4)
+            //TODO make this random and linked to overall weight. Right now we only add it to the first category
+            if ($calculatednumberofquestions != $fixednumberofquestions) {
+                $difference = $fixednumberofquestions - $calculatednumberofquestions;
+                $categories[$category->id]->numberofquestions += $difference;
+                $calculatednumberofquestions += $difference;
+
+                if ($calculatednumberofquestions != $fixednumberofquestions) {
+                    throw new moodle_exception(
+                        'wrongnumberofquestions ',
+                        null,
+                        null,
+                        "We have the wrong number of questions"
+                    );
+                }
+            }
+
+            //we retrieve all the available questions
+            $allavailalbequestions = $DB->get_records('question', ['category' => $category->category]);
+
+
+            //we have to be sure that the number of available questions for this category is bigger than the number of questions we want from this category
+
+            if (count($allavailalbequestions) < $category->numberofquestions) {
+                throw new moodle_exception(
+                    'wrongnumberofquestions ',
+                    null,
+                    null,
+                    "There are not enough questions in this category"
+                );
+            }
+
+
+            $i = 0;
+            $emergencybreak = 0;
+            while ($i < $category->numberofquestions) {
+                $key = array_rand($allavailalbequestions);
+
+                $question = $allavailalbequestions[$key];
+
+                if ($question != null && !in_array($question, $questions)) {
+                    array_push($questions, $question);
+                    $i++;
+                }
+                $emergencybreak++;
+                //we have an emergency break here to avoid looping
+                //it could kick in if we have less then nine different questions overall (three random querstions with three times the same category, which all in all only has four questions. So enough questions for each category individually, but not together)
+
+                if ($emergencybreak > 500) {
+                    throw new moodle_exception(
+                        'onlyduplicatequestionsfound ',
+                        null,
+                        null,
+                        "Apparently we have only duplicate questions, we had to abort our search for unqiue questions"
+                    );
+                }
             }
         }
 
-        return $questions;        
+
+        //TODO: here we should have a warning/error if we don't have count(questions) > 9
+
+        if (count($questions) != $fixednumberofquestions) {
+            throw new moodle_exception(
+                'wrongnumberofquestions ',
+                null,
+                null,
+                "For some unknown reason we didn't receive the right number of questions"
+            );
+        }
 
 
 
 
-
-
-
-
+        return $questions;
     }
-
-
-
-
-
-
 }

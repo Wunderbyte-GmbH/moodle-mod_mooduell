@@ -38,13 +38,12 @@ class mooduell_form extends moodleform
     public $mooduell = null;
 
 
-    public function __construct($mooduell) {
+    public function __construct($mooduell)
+    {
         //first we set the variable
         $this->mooduell = $mooduell;
         //now we can run the constructor of the base class
         parent::__construct();
-
-        
     }
 
 
@@ -52,25 +51,28 @@ class mooduell_form extends moodleform
     public function definition()
     {
 
-        
+
         $mform = $this->_form; // Don't forget the underscore!
-        
+
 
         //we only call this if we have a mooduell instance linked
         if ($this->mooduell) {
-            $mform->addElement('static', 'games', get_string('foundthesegames', 'mod_mooduell'));
-            foreach($this->create_list_of_games() as $game) {
 
-                $mform->addElement('static', 'game', $game->playeraid . " " . $game->playerbid);
-    
+            $games = $this->create_list_of_games();
+
+            if (count($games) > 0) {
+                $mform->addElement('static', 'games', get_string('foundthesegames', 'mod_mooduell'));
+                foreach ($games as $game) {
+
+                    $mform->addElement('static', 'game', $game->playeraid . " " . $game->playerbid);
+                }
             }
-        }
-        else {
+            else {
+                $mform->addElement('static', 'games', get_string('nogamesfound', 'mod_mooduell'));
+            }
+        } else {
             $mform->addElement('static', 'message', get_string('nomessage', 'mod_mooduell'));
-        }     
-       
-
-
+        }
     }
     //Custom validation should be added here
     public function validation($data, $files)
@@ -80,19 +82,18 @@ class mooduell_form extends moodleform
 
 
 
-    public function create_list_of_games() {
+    public function create_list_of_games()
+    {
 
         global $DB;
 
         $games = $DB->get_records('mooduell_games', ['mooduellid' => $this->mooduell->cm->id]);
 
 
-        
+
 
 
 
         return $games;
-
-
     }
 }
