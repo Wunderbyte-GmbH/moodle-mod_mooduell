@@ -81,7 +81,7 @@ class mooduell_game
 
         //we collect all the data to safe to mooduell_games table
 
-        $DB->insert_record('mooduell_games', $data);
+        $gameid = $DB->insert_record('mooduell_games', $data);
 
         //we retrieve exactly nine questions from the right categories
 
@@ -95,11 +95,12 @@ class mooduell_game
             $data = null;
             $data->questionid = $question->id;
             $data->mooduellid = $this->mooduell->cm->instance;
+            $data->gameid = $gameid;
 
             $DB->insert_record('mooduell_questions', $data);
         }
 
-        return $questions;
+        return $gameid;
     }
 
 
