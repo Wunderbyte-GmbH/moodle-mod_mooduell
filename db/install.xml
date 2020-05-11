@@ -60,7 +60,7 @@
         <KEY NAME="fk_category" TYPE="foreign" FIELDS="category" REFTABLE="question_categories" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="mooduell_qeustions" COMMENT="Stores all the questions linked to this quiz">
+    <TABLE NAME="mooduell_questions" COMMENT="Stores all the questions linked to this quiz">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
