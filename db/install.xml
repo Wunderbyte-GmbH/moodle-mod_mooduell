@@ -66,6 +66,8 @@
         <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Instance"/>
         <FIELD NAME="gameid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the MooDuell Game"/>
         <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id question linked to this quiz"/>
+        <FIELD NAME="playeraanswered" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Null if not answered, 1 if false, 2 if true"/>
+        <FIELD NAME="playerbanswered" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Null if not answered, 1 if false, 2 if true"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

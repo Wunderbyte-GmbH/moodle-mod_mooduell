@@ -115,10 +115,10 @@ class mod_mooduell_mod_form extends moodleform_mod
 
         foreach ($listofcategories as $category) {
             if ($category->parent == 0) {
-                array_push($sortedcategories, $category);
+                $sortedcategories[] = $category;
                 foreach ($this->return_children_in_list($category, $listofcategories) as $child) {
                     if ($child) {
-                        array_push($sortedcategories, $child);
+                        $sortedcategories[] = $child;
                     }
                 }
             }
@@ -148,7 +148,7 @@ class mod_mooduell_mod_form extends moodleform_mod
                 }
             }
             if ($item->parent != 0) {
-                //array_push($names, (object)[$item->id => $spaces . " " . $item->name]);
+                
                 $idkey = (string)$item->id;
                 $names[$idkey] = $spaces . " " . $item->name;
             }
@@ -177,7 +177,7 @@ class mod_mooduell_mod_form extends moodleform_mod
         foreach ($list as $child) {
 
             if ($parent->id == $child->parent) {
-                array_push($children, $child);
+                $children[] = $child;
                 foreach ($this->return_children_in_list($child, $list) as $grandchild) {
                     if ($grandchild) {
                         array_push($children, $grandchild);

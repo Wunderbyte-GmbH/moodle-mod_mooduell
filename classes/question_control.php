@@ -49,6 +49,22 @@ class question_control {
      */
     public $category;
 
+
+    /**
+     * @var question answered (null=no, 1 = falsely, 2 = correctly)
+     */
+    public $playeraanswered;
+
+
+    /**
+     * @var question answered (null=no, 1 = falsely, 2 = correctly)
+     */
+    public $playerbanswered;
+
+
+
+
+
     /**
      * question_control constructor.
      *
@@ -57,26 +73,22 @@ class question_control {
     public function __construct($data = null) {
        
         //if we have $data, we automatically create all the relevant values for this question AND we retrieve the matching answers from $DB
-        if (!$data) {
+        if ($data) {
             $this->id = $data->id;
             $this->name = $data->name;
             $this->questiontext = $data->questiontext;
             $this->qtype = $data->qtype;
             $this->category = $data->category;
+
+            if ($data->payeraanswered) {
+                $this->playeraanswered = $data->playeraanswered;
+            }
+            if ($data->payerbanswered) {
+                $this->playerbanswered = $data->playerbanswered;
+            }
         }
 
     }
 
-    /**
-     * Create new game, set random question sequence and write to DB
-     *
-     * @return bool status 1 or 0, depending on success
-     */
-    public function start_new_game($playerbid){
 
-        $newgameinstance = new mooduell_game($this->mooduell);
-        $game = $newgameinstance->start_new_game($playerbid);
-
-        return true;
-    }
 }

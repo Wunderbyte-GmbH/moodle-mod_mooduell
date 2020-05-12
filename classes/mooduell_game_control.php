@@ -20,18 +20,13 @@ use stdClass;
 use DateTime;
 use moodle_exception;
 
-class mooduell_game
+class mooduell_game_control
 {
 
     /**
      * @var mooduell MooDuell instance
      */
     public $mooduell;
-
-    /**
-     * @var questions
-     */
-    private $questions;
 
     /**
      * @var gamedata
@@ -45,20 +40,45 @@ class mooduell_game
      *
      * @param mooduell $mooduell
      */
-    public function __construct(mooduell $mooduell)
+    public function __construct(mooduell $mooduell, $gameid = null)
     {
 
         global $USER;
+        global $DB;
 
         $now = new DateTime();
         $nowtime = $now->getTimestamp();
 
         $this->mooduell = $mooduell;
 
-        $data = new stdClass();
-        $data->playeraid = $USER->id;
-        $data->timemodified = $nowtime;
-        $data->timecreated = $nowtime;
+
+        //if we construct with a game id, we load all the data
+        if ($gameid) {
+
+            $data = $DB->get_record('mooduell_games', ['id' => $gameid]);
+            $data->gameid = $gameid;
+
+            //if we have already a record and player a or player b are not the user we use here, we throw an error
+            if (($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
+                throw new moodle_exception(
+                    'notallowedtoaccessthisgame',
+                    'mooduell',
+                    null,
+                    null,
+                    "Your are not participant of this game, you can't access it's data"
+                );
+            }
+
+
+        }
+        //if we have no gameid on construction, we create what we need (we expect that start_new_game will be called next)
+        else {
+            $data = new stdClass();
+            $data->playeraid = $USER->id;
+            $data->timemodified = $nowtime;
+            $data->timecreated = $nowtime;
+        }
+
 
         $this->gamedata = $data;
     }
@@ -70,8 +90,6 @@ class mooduell_game
      */
     public function start_new_game($playerbid)
     {
-
-        global $USER;
         global $DB;
 
 
@@ -81,7 +99,7 @@ class mooduell_game
 
         //we collect all the data to safe to mooduell_games table
 
-        $gameid = $DB->insert_record('mooduell_games', $data);
+        $this->gameid = $DB->insert_record('mooduell_games', $data);
 
         //we retrieve exactly nine questions from the right categories
 
@@ -95,13 +113,69 @@ class mooduell_game
             $data = null;
             $data->questionid = $question->id;
             $data->mooduellid = $this->mooduell->cm->instance;
-            $data->gameid = $gameid;
+            $data->gameid = $this->gameid;
 
             $DB->insert_record('mooduell_questions', $data);
         }
 
-        return $gameid;
+        return $this->gameid;
     }
+
+
+    /**
+     * We return game data
+     *
+     * @return object of all the relevant data
+     */
+    public function return_game_data()
+    {
+
+        global $DB;
+        global $USER;
+
+        //we have to make sure we have all the questions added to the normal game data
+
+        $questionsdata = $DB->get_records('mooduell_questions', ['gameid' => $this->gamedata->gameid]);
+
+        if (count($questionsdata) != 9) {
+            throw new moodle_exception(
+                'wrongnumberofquestions',
+                'mooduell',
+                null,
+                null,
+                "we received the wrong number of questions linked to our Mooduell game"
+            );
+        }
+
+
+
+
+        $questions = array();
+
+        if ($questionsdata && count($questionsdata) > 0) {
+
+            foreach ($questionsdata as $questiondata) {
+
+                $data = $DB->get_record('question', ['id' => $questiondata->questionid]);
+
+                $question = new question_control(($data));
+
+                $question->playeraanswered = $questiondata->playeraanswered;
+                $question->playerbanswered = $questiondata->playerbanswered;
+
+                $questions[] = $question;
+            }
+        }
+
+        $this->gamedata->questions = $questions;
+
+        return $this->gamedata;
+    }
+
+
+
+
+
 
 
     /**
@@ -109,7 +183,6 @@ class mooduell_game
      * We make sure we retrieve them according to weight and number of categories linked to the mooduell instance
      * Return the questions as instances of question_control
      */
-
 
     private function set_random_questions()
     {
@@ -184,7 +257,7 @@ class mooduell_game
                 $question = $allavailalbequestions[$key];
 
                 if ($question != null && !in_array($question, $questions)) {
-                    array_push($questions, $question);
+                    $questions[] = $question;
                     $i++;
                 }
                 $emergencybreak++;
