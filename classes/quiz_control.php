@@ -1,33 +1,40 @@
 <?php
-// This file is part of mod_datalynx for Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
-// It is free software: you can redistribute it and/or modify
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// It is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 namespace mod_mooduell;
+
+defined('MOODLE_INTERNAL') || die();
+
 use backup;
+use base_plan_exception;
+use base_setting_exception;
+use core\event\course_module_created;
+use file_exception;
 use restore_controller;
 use restore_controller_exception;
+use stored_file_creation_exception;
 
 require_once("{$CFG->libdir}/filelib.php");
 require_once("{$CFG->dirroot}/mod/quiz/mod_form.php");
 require_once("{$CFG->dirroot}/course/modlib.php");
 require_once("{$CFG->dirroot}/backup/util/includes/restore_includes.php");
-//require_once("{$CFG->dirroot}/filelib.php");
 
 class quiz_control {
 
     /**
+     *
      * @var mooduell MooDuell instance
      */
     public $mooduell;
@@ -46,8 +53,8 @@ class quiz_control {
      *
      * @return integer quizid or 0 when no quizid is set
      */
-    public function is_quiz_configured(){
-        if ($this->mooduell->settings->quizid == 0 OR is_null($this->mooduell->settings->quizid)){
+    public function is_quiz_configured() {
+        if ($this->mooduell->settings->quizid == 0 or is_null($this->mooduell->settings->quizid)) {
             $quizid = 0;
         } else {
             $quizid = $this->mooduell->settings->quizid;
@@ -56,7 +63,8 @@ class quiz_control {
     }
 
     /**
-     * Check the settings of the quiz. When quiz is OK, then return an empty array else return array with problems.
+     * Check the settings of the quiz.
+     * When quiz is OK, then return an empty array else return array with problems.
      *
      * @return array of problems indexed by setting name
      */
@@ -69,26 +77,26 @@ class quiz_control {
      * Creates a quiz instance in the same course of the mooduell instance using a quiz activity backup file.
      *
      * @return string
-     * @throws \base_plan_exception
-     * @throws \base_setting_exception
-     * @throws \file_exception
-     * @throws \restore_controller_exception
-     * @throws \stored_file_creation_exception
+     * @throws base_plan_exception
+     * @throws base_setting_exception
+     * @throws file_exception
+     * @throws restore_controller_exception
+     * @throws stored_file_creation_exception
      */
     public function import_demo_quiz() {
         global $CFG, $USER, $DB;
 
-        $backup_file = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
+        $backupfile = $CFG->dirroot . '/mod/mooduell/files/demoquiz.mbz';
         $tmpid = restore_controller::get_tempdir_name($this->mooduell->course->id, $USER->id);
         $filepath = make_backup_temp_directory($tmpid);
         if (!check_dir_exists($filepath, true, true)) {
             throw new restore_controller_exception('cannot_create_backup_temp_dir');
         }
         $fp = get_file_packer('application/vnd.moodle.backup');
-        $fp->extract_to_pathname($backup_file, $filepath);
+        $fp->extract_to_pathname($backupfile, $filepath);
 
-        $rc = new restore_controller($tmpid, $this->mooduell->course->id, backup::INTERACTIVE_NO,
-            backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
+        $rc = new restore_controller($tmpid, $this->mooduell->course->id, backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id,
+                backup::TARGET_CURRENT_ADDING);
 
         // Make sure that the restore_general_groups setting is always enabled when duplicating an activity.
         $plan = $rc->get_plan();
@@ -123,8 +131,10 @@ class quiz_control {
         }
 
         if ($newcmid) {
-            $section = $DB->get_record('course_sections',
-                array('id' => $this->mooduell->cm->section, 'course' => $this->mooduell->cm->course));
+            $section = $DB->get_record('course_sections', array(
+                    'id' => $this->mooduell->cm->section,
+                    'course' => $this->mooduell->cm->course
+            ));
             $modarray = explode(",", trim($section->sequence));
             $cmindex = array_search($this->mooduell->cm->id, $modarray);
             if ($cmindex !== false && $cmindex < count($modarray) - 1) {
@@ -134,7 +144,7 @@ class quiz_control {
 
             // Trigger course module created event. We can trigger the event only if we know the newcmid.
             $newcm = get_fast_modinfo($this->mooduell->cm->course)->get_cm($newcmid);
-            $event = \core\event\course_module_created::create_from_cm($newcm);
+            $event = course_module_created::create_from_cm($newcm);
             $event->trigger();
         }
         return $newcm;

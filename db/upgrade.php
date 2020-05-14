@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__.'/upgradelib.php');
+require_once(__DIR__ . '/upgradelib.php');
 
 /**
  * Execute mod_mooduell upgrade from the given old version.

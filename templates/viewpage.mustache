@@ -23,22 +23,22 @@
     * rows - array: An array of content rows for the table.
     
     }}
-    <h2>{{heading}}</h2>
+<h2>{{heading}}</h2>
 <table class="generaltable">
- <thead>
+    <thead>
     <tr>
-{{#headings}}
-      <th class="header" style="text-align:left;" scope="col">{{playera}}</th>
-      <th class="header" style="text-align:left;" scope="col">{{playerb}}</th>
-{{/headings}}
+        {{#headings}}
+            <th class="header" style="text-align:left;" scope="col">{{playera}}</th>
+            <th class="header" style="text-align:left;" scope="col">{{playerb}}</th>
+        {{/headings}}
     </tr>
-  </thead>
-  <tbody>
-{{#games}}
-    <tr>
-      <td class="cell" style="text-align:left;" scope="col">{{playera}}</td>
-      <td class="cell" style="text-align:left;" scope="col">{{playerb}}</td>
-    </tr>
-{{/games}}
-  </tbody>
+    </thead>
+    <tbody>
+    {{#games}}
+        <tr>
+            <td class="cell" style="text-align:left;" scope="col">{{playera}}</td>
+            <td class="cell" style="text-align:left;" scope="col">{{playerb}}</td>
+        </tr>
+    {{/games}}
+    </tbody>
 </table>

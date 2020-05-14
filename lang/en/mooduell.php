@@ -38,6 +38,8 @@ $string['mooduellfieldset'] = 'MooDuell settings';
 $string['usefullnames'] = 'Use full names';
 $string['modulename_help'] = 'The MooDuell module helps you to create multiplayer quiz activities which then can be played using the MooDuell App.';
 $string['modulename'] = 'MooDuell';
+$string['addInstance'] = 'Add instance';
+$string['mooduell:addinstance'] = 'Add instance';
 
 $string['countdown'] = 'Countdown';
 $string['nocountdown'] = 'No Countdown';

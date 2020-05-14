@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_mooduell';
-$plugin->release = '0.1.1';
-$plugin->version = 2020050400;
+$plugin->release = '0.1.5';
+$plugin->version = 2020050404;
 $plugin->requires = 2018051700;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [
-    'mod_quiz' => 2018051400,
+        'mod_quiz' => 2018051400,
 ];

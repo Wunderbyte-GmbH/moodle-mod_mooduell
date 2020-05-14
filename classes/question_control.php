@@ -1,12 +1,12 @@
 <?php
-// This file is part of mod_datalynx for Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
-// It is free software: you can redistribute it and/or modify
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// It is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -16,54 +16,51 @@
 
 namespace mod_mooduell;
 
-use stdClass;
-use DateTime;
+defined('MOODLE_INTERNAL') || die();
 
 class question_control {
 
     /**
-     * @var id of question
+     *
+     * @var int
      */
     public $id;
-    
-    
+
     /**
-     * @var name of question
+     *
+     * @var string
      */
     public $name;
 
-
     /**
-     * @var questiontext
+     *
+     * @var string
      */
     public $questiontext;
 
     /**
-     * @var type of question
+     *
+     * @var string
      */
     public $qtype;
 
-
     /**
-     * @var category of question
+     *
+     * @var int
      */
     public $category;
 
-
     /**
-     * @var question answered (null=no, 1 = falsely, 2 = correctly)
+     *
+     * @var int answered (null=no, 1 = falsely, 2 = correctly)
      */
     public $playeraanswered;
 
-
     /**
-     * @var question answered (null=no, 1 = falsely, 2 = correctly)
+     *
+     * @var int answered (null=no, 1 = falsely, 2 = correctly)
      */
     public $playerbanswered;
-
-
-
-
 
     /**
      * question_control constructor.
@@ -71,8 +68,9 @@ class question_control {
      * @param mooduell $mooduell
      */
     public function __construct($data = null) {
-       
-        //if we have $data, we automatically create all the relevant values for this question AND we retrieve the matching answers from $DB
+
+        // if we have $data, we automatically create all the relevant values for this question ...
+        // AND we retrieve the matching answers from $DB.
         if ($data) {
             $this->id = $data->id;
             $this->name = $data->name;
@@ -87,8 +85,5 @@ class question_control {
                 $this->playerbanswered = $data->playerbanswered;
             }
         }
-
     }
-
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,10 +25,18 @@
 
 namespace mod_mooduell\output;
 
+use renderable;
+use renderer_base;
+use templatable;
+
 defined('MOODLE_INTERNAL') || die();
 
-class viewpage implements \renderable, \templatable
-{
+/**
+ *
+ * @author georgmaisser
+ *
+ */
+class viewpage implements renderable, templatable {
 
     /**
      * An array of headings
@@ -50,19 +57,17 @@ class viewpage implements \renderable, \templatable
      *
      * @param array $headings An array of renderable headings
      */
-    public function __construct($data)
-    {
+    public function __construct($data) {
         $this->data = $data;
     }
 
     /**
      * Prepare data for use in a template
      *
-     * @param \renderer_base $output
+     * @param renderer_base $output
      * @return array
      */
-    public function export_for_template(\renderer_base $output)
-    {
+    public function export_for_template(renderer_base $output) {
         $data = $this->data;
         return $data;
     }

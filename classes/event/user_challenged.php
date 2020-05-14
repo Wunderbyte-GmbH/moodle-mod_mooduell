@@ -36,6 +36,6 @@ defined('MOODLE_INTERNAL') || die();
 class user_challenged extends base {
 
     // For more information about the Events API, please visit:
-    // https://docs.moodle.org/dev/Event_2
+    // https://docs.moodle.org/dev/Event_2 .
 
 }
