@@ -53,3 +53,6 @@ $string['nocategories'] = 'There are not categories added yet';
 $string['nomessage'] = 'There is nothing to say';
 $string['foundthesegames'] = 'We found these games:';
 $string['nogamesfound'] = 'There are no open games yet.';
+$string['opengames'] = 'Open games:';
+$string['playera'] = 'Player A';
+$string['playerb'] = 'Player B';

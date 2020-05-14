@@ -26,12 +26,12 @@ class mooduell_game_control
     /**
      * @var mooduell MooDuell instance
      */
-    public $mooduell;
+    private $mooduell;
 
     /**
      * @var gamedata
      */
-    private $gamedata;
+    public $gamedata;
 
     /**
      * game_control constructor.
@@ -40,7 +40,7 @@ class mooduell_game_control
      *
      * @param mooduell $mooduell
      */
-    public function __construct(mooduell $mooduell, $gameid = null)
+    public function __construct(mooduell $mooduell, $gameid = null, $gamedata = null)
     {
 
         global $USER;
@@ -52,8 +52,8 @@ class mooduell_game_control
         $this->mooduell = $mooduell;
 
 
-        //if we construct with a game id, we load all the data
-        if ($gameid) {
+        //if we construct with a game id from the Webservice, we load all the data
+        if ($gameid && !$gamedata) {
 
             $data = $DB->get_record('mooduell_games', ['id' => $gameid]);
             $data->gameid = $gameid;
@@ -69,7 +69,19 @@ class mooduell_game_control
                 );
             }
 
-
+        }
+        //if we have no gameid but we have gamedata, we want to s
+        else if ($gamedata) {
+            $data = new stdClass();
+            $data->playeraid = $gamedata->playeraid;
+            $data->playerbid = $gamedata->playerbid;
+            $data->playeratime = $gamedata->playeratime;
+            $data->playerbtime = $gamedata->playerbtime;
+            $data->winnerid = $gamedata->winnerid;
+            $data->status = $gamedata->status;
+            $data->victorycoefficient = $gamedata->victorycoefficient;
+            $data->timemodified = $gamedata->timemodified;
+            $data->timecreated = $gamedata->timecreated;
         }
         //if we have no gameid on construction, we create what we need (we expect that start_new_game will be called next)
         else {
@@ -91,6 +103,21 @@ class mooduell_game_control
     public function start_new_game($playerbid)
     {
         global $DB;
+
+
+
+        //first we check if the playerbid provided is valid, if not, we throw and exception
+
+        if (!$this->mooduell->user_exists($playerbid)) {
+            throw new moodle_exception(
+                'adversaryiddoesnotexist',
+                'mooduell',
+                null,
+                null,
+                "You provided a user id which could not be found in our DB"
+            );
+        }
+
 
 
         $data = $this->gamedata;

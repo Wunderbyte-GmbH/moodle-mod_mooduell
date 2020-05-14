@@ -186,9 +186,6 @@ class mod_mooduell_external extends external_api
             foreach ($quizzes as $quiz) {
                 $context = context_module::instance($quiz->coursemodule);
 
-                // Update quiz with override information.
-                $quiz = quiz_update_effective_access($quiz, $USER->id);
-
                 // Entry to return.
                 $quizdetails = array();
                 // First, we return information that any user can see in the web interface.
@@ -209,7 +206,9 @@ class mod_mooduell_external extends external_api
                     // Fields only for managers.
                     if (has_capability('moodle/course:manageactivities', $context)) {
                         //we could do something here
-                        $quizdetails['isteacher'] = true;
+                        $quizdetails['isteacher'] = 1;
+                    } else {
+                        $quizdetails['isteacher'] = 0;
                     }
                 }
                 $returnedquizzes[] = $quizdetails;
@@ -231,11 +230,182 @@ class mod_mooduell_external extends external_api
 
     public static function get_quizzes_by_courses_returns()
     {
-        return new external_multiple_structure(
-            new external_single_structure(
-                array(
-                    'id' => new external_value(PARAM_INT, 'id of coursemodule'),
-                    'name' => new external_value(PARAM_RAW, 'name of quiz')
+        return new external_single_structure(
+            array(
+                'quizzes' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'id of coursemodule'),
+                            'name' => new external_value(PARAM_RAW, 'name of quiz'),
+                            'course' => new external_value(PARAM_INT, 'courseid'),
+                            'isteacher' => new external_value(PARAM_INT, 'isteacher'),
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+
+
+    /**
+     * Describes the parameters for get_games_by_courses.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_games_by_courses_parameters()
+    {
+        return new external_function_parameters(
+            array(
+                'courseids' => new external_multiple_structure(
+                    new external_value(PARAM_INT, 'course id'),
+                    'Array of course ids',
+                    VALUE_DEFAULT,
+                    array()
+                ),
+            )
+        );
+    }
+
+    /**
+     * function to get_games_by_courses
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_games_by_courses($courseids)
+    {
+        global $USER;
+
+        $warnings = array();
+        $returnedquizzes = array();
+
+        $params = array(
+            'courseids' => $courseids,
+        );
+        $params = self::validate_parameters(self::get_games_by_courses_parameters(), $params);
+
+        $mycourses = array();
+        if (empty($params['courseids'])) {
+            $mycourses = enrol_get_my_courses();
+            $params['courseids'] = array_keys($mycourses);
+        }
+        // Ensure there are courseids to loop through.
+        if (!empty($params['courseids'])) {
+
+            list($courses, $warnings) = external_util::validate_courses($params['courseids'], $mycourses);
+
+            // Get the quizzes in this course, this function checks users visibility permissions.
+            // We can avoid then additional validate_context calls.
+            $quizzes = get_all_instances_in_courses("mooduell", $courses);
+
+            foreach ($quizzes as $quiz) {
+                $context = context_module::instance($quiz->coursemodule);
+
+                // Entry to return.
+                $quizdetails = array();
+                // First, we return information that any user can see in the web interface.
+                $quizdetails['id'] = $quiz->id;
+                //$quizdetails['coursemodule']      = $quiz->coursemodule;
+                $quizdetails['course']            = $quiz->course;
+                $quizdetails['name']              = external_format_string($quiz->name, $context->id);
+
+                $quizdetails['coursename']        = $courses[$quiz->course]->fullname;
+
+
+                if (has_capability('mod/quiz:view', $context)) {
+
+                    // Some times this function returns just empty.
+                    //$hasfeedback = quiz_has_feedback($quiz);
+                    //$quizdetails['hasfeedback'] = (!empty($hasfeedback)) ? 1 : 0;
+
+                    $timenow = time();
+
+                    // Fields only for managers.
+                    if (has_capability('moodle/course:manageactivities', $context)) {
+                        //we could do something here
+                        $quizdetails['isteacher'] = 1;
+                    } else {
+                        $quizdetails['isteacher'] = 0;
+                    }
+                }
+
+
+                //now we want to add all the games we have to our quizzes
+                //therefore, we need a mooduell instance for every quiz
+
+                //we create Mooduell Instance
+                $mooduell = new mooduell($quiz->coursemodule);
+
+                //we create the game_controller Instance
+                $games = $mooduell->return_list_of_games();
+
+                if ($games && count($games)>0) {
+
+                    foreach($games as $game) {
+
+                        $quizdetails['games'][] = [
+                            'gameid' => $game->gameid,
+                            'playeraid' => $game->playeraid,
+                            'playerbid' => $game->playerbid,
+                            'playeratime' => $game->playeratime,
+                            'playerbtime' => $game->playerbtime,
+                            'winnerid' => $game->winnerid,
+                            'status' => $game->status,
+                            'timecreated' => $game->timecreated,
+                            'timemodified' => $game->timemodified,
+                        ];
+
+
+                    }
+
+
+                }
+
+
+
+
+
+                $returnedquizzes[] = $quizdetails;
+            }
+        }
+        $result = array();
+        $result['quizzes'] = $returnedquizzes;
+        $result['warnings'] = $warnings;
+        return $result;
+    }
+
+    /**
+     * Describes the returns for get_games_by_courses.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+
+
+    public static function get_games_by_courses_returns()
+    {
+        return new external_single_structure(
+            array(
+                'quizzes' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'id of coursemodule'),
+                            'name' => new external_value(PARAM_RAW, 'name of quiz'),
+                            'course' => new external_value(PARAM_INT, 'courseid'),
+                            'isteacher' => new external_value(PARAM_INT, 'isteacher'),
+                            'games' => new external_multiple_structure(
+                                new external_single_structure(
+                                    array(
+                                        'gameid' => new external_value(PARAM_INT, 'id of game'),
+                                        'playeraid' => new external_value(PARAM_INT, 'id of player A'),
+                                        'playerbid' => new external_value(PARAM_INT, 'id of player B'),
+                                    )
+                                )
+                            )
+                        )
+                    )
                 )
             )
         );

@@ -24,11 +24,13 @@
 
 
 namespace mod_mooduell;
+
 use coding_exception;
 use dml_exception;
 use moodle_exception;
 use stdClass;
 use context_module;
+use Exception;
 use mod_mooduell\mooduell_form;
 
 defined('MOODLE_INTERNAL') || die();
@@ -38,7 +40,8 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package mod_mooduell
  */
-class mooduell {
+class mooduell
+{
 
     /**
      * @var stdClass|null fieldset record of mooduell instance
@@ -68,19 +71,30 @@ class mooduell {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function __construct(int $id = 0) {
+    public function __construct(int $id = 0)
+    {
         global $DB;
 
         if (!$this->cm = get_coursemodule_from_id('mooduell', $id)) {
-            throw new moodle_exception('invalidcoursemodule ' . $id, 'mooduell', null, null,
-                "Course module id: $id");
+            throw new moodle_exception(
+                'invalidcoursemodule ' . $id,
+                'mooduell',
+                null,
+                null,
+                "Course module id: $id"
+            );
         }
 
         $this->course = get_course($this->cm->course);
 
         if (!$this->settings = $DB->get_record('mooduell', array('id' => $this->cm->instance))) {
-            throw new moodle_exception('invalidmooduell', 'mooduell', null, null,
-                "Mooduell id: {$this->cm->instance}");
+            throw new moodle_exception(
+                'invalidmooduell',
+                'mooduell',
+                null,
+                null,
+                "Mooduell id: {$this->cm->instance}"
+            );
         }
         $this->context = context_module::instance($this->cm->id);
     }
@@ -91,17 +105,19 @@ class mooduell {
      * @param bool $inline Display without header and footer?
      * @return string
      */
-    public function display(bool $inline = false) {
+    public function display(bool $inline = false)
+    {
         global $OUTPUT;
+        global $PAGE;
 
         $id = $this->cm->instance;
 
+        $output = $PAGE->get_renderer('mod_mooduell');
 
-        $mform = new mooduell_form($this);
 
         $out = '';
         if (!$inline) {
-            $out .= $OUTPUT->header();
+            $out .= $output->header();
         }
 
         $id = $this->cm->id;
@@ -109,11 +125,14 @@ class mooduell {
         // TODO: Replace with content.
         //$out .= "This is the content $id";
 
-        $out .= $mform->render();
-        
-        
+        $data = $this->return_list_of_games();
+
+        $viewpage = new \mod_mooduell\output\viewpage($data);
+        $out .= $output->render_viewpage($viewpage);
+
+
         if (!$inline) {
-            $out .= $OUTPUT->footer();
+            $out .= $output->footer();
         }
         return $out;
     }
@@ -123,7 +142,8 @@ class mooduell {
      *
      * @throws coding_exception
      */
-    public function setup_page(){
+    public function setup_page()
+    {
         global $PAGE;
         $event = event\course_module_viewed::create(array(
             'objectid' => $this->cm->instance,
@@ -141,7 +161,8 @@ class mooduell {
 
 
 
-    public static function update_categories($mooduellid, $formdata) {
+    public static function update_categories($mooduellid, $formdata)
+    {
 
         global $DB;
 
@@ -154,23 +175,22 @@ class mooduell {
                 $data->mooduellid = $mooduellid;
                 $data->category = $category;
                 $data->weight = 100;
-    
+
                 $DB->insert_record('mooduell_categories', $data);
-    
             }
         }
-        
+
         return null;
     }
 
     /**
      * Get MooDuell object by instanceid (id of mooduell table)
      *
-     * @param $instanceid
+     * @param int
      * @return mooduell
-     * @throws coding_exception
      */
-    public static function get_mooduell_by_instance(int $instanceid) {
+    public static function get_mooduell_by_instance(int $instanceid)
+    {
         $cm = get_coursemodule_from_instance('mooduell', $instanceid);
         return new mooduell($cm->id);
     }
@@ -183,9 +203,9 @@ class mooduell {
      * @param stdClass $formdata
      * @param \mod_mooduell_mod_form $mform
      * @return bool|int
-     * @throws dml_exception
      */
-    public static function add_instance(stdClass $formdata) {
+    public static function add_instance(stdClass $formdata)
+    {
         global $DB;
 
         // Add the database record.
@@ -201,7 +221,7 @@ class mooduell {
         $data->usefullnames = isset($formdata->usefullnames) ? $formdata->usefullnames : 0;
         $data->showcontinuebutton = isset($formdata->showcontinuebutton) ? $formdata->showcontinuebutton : 0;
         $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;
-        $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0 ) ? $formdata->quizid : null;
+        $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0) ? $formdata->quizid : null;
 
         $mooduellid = $DB->insert_record('mooduell', $data);
 
@@ -211,6 +231,120 @@ class mooduell {
         self::update_categories($mooduellid, $formdata);
 
         return $mooduellid;
+    }
 
+
+    /**
+     * Retrieve all games linked to this MooDuell instance from $DB and return them as an array of std
+     * 
+     * @return object
+     */
+    function return_games_for_this_instance()
+    {
+
+        global $DB;
+
+
+        $returnedgames = array();
+
+        $games = $DB->get_records('mooduell_games', ['mooduellid' => $this->cm->instance]);
+
+
+        if ($games && count($games) > 0) {
+
+            foreach ($games as $gamedata) {
+
+                //first we create a game instance for every game
+                $game = new mooduell_game_control($this, null, $gamedata);
+
+                $returnedgames[] = $game;
+            }
+        }
+
+        return $returnedgames;
+    }
+
+    /**
+     * We return an array which we can then pass on to our mustache template
+     * containing
+     * - pageheading (Title on top of the page)
+     * - tableheading (heading for the colums of the table)
+     * - games (for every game a row with multiple columns)
+     *
+     * @return array
+     */
+    function return_list_of_games()
+    {
+
+        $games = $this->return_games_for_this_instance();
+        $returngames = array();
+
+        foreach ($games as $game) {
+            $returngames[] = [
+                "playera" => $this->return_name_by_id($game->gamedata->playeraid),
+                'playerb' => $this->return_name_by_id($game->gamedata->playerbid)
+            ];
+        }
+
+        $returnobject =
+
+            [
+                'pageheading' => get_string('opengames', 'mod_mooduell'),
+                'tableheading' => [
+                    [
+                        'playera' => get_string('playera', 'mod_mooduell'),
+                        'playerb' => get_string('playerb', 'mod_mooduell')
+                    ]
+                ],
+                'games' => $returngames
+            ];
+
+        return $returnobject;
+    }
+
+
+    /**
+     *  allows us to securely retrieve the (user)name of a user by id
+     * @param int
+     * @return string
+     */
+    public function return_name_by_id(int $userid)
+    {
+
+        global $DB;
+        //doesn't work via webservice, no instance?
+        //$userarray = \user_get_users_by_id([$userid]);
+
+        //therefore, we have to do it manually
+        $userarray = $DB->get_records_list('user', 'id', [$userid]);
+
+        if ($userarray && $userarray[$userid] && $userarray[$userid]->username) {
+            $playeraname = $userarray[$userid]->firstname . " " . $userarray[$userid]->lastname;
+        } else {
+            $playeraname = "dummyname";
+        }
+        return $playeraname;
+    }
+
+    /**
+     *  check if user exists
+     * @param int
+     * @return bool
+     */
+    public function user_exists(int $userid) {
+
+        global $DB;
+
+        //doesn't work via webservice, no instance?
+        //$userarray = \user_get_users_by_id([$userid]);
+
+        //therefore, we have to do it manually
+        $userarray = $DB->get_records_list('user', 'id', [$userid]);
+
+        if ($userarray && $userarray[$userid]) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
