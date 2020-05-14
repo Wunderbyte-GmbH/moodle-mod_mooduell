@@ -180,7 +180,7 @@ class mod_mooduell_mod_form extends moodleform_mod
                 $children[] = $child;
                 foreach ($this->return_children_in_list($child, $list) as $grandchild) {
                     if ($grandchild) {
-                        array_push($children, $grandchild);
+                        $children[] = $grandchild;
                     }
                 }
             }
