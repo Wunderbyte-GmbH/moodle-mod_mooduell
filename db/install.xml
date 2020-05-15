@@ -51,7 +51,7 @@
                 <FIELD NAME="winnerid" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Timestamp of when the instance was added to the course."/>
                 <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
-                       COMMENT="1 when game is finished."/>
+                       COMMENT="NULL is open game, 1 is player A's turn, 2 is player B's turn, 3 is finished"/>
                 <FIELD NAME="victorycoefficient" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Timestamp of when the instance was last modified."/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
@@ -104,47 +104,6 @@
                 <KEY NAME="fk_questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
                 <KEY NAME="fk_gameid" TYPE="foreign" FIELDS="gameid" REFTABLE="mooduell_games" REFFIELDS="id"/>
             </KEYS>
-        </TABLE>
-        <TABLE NAME="mooduell_question_attempts"
-               COMMENT="Each row here corresponds to an attempt at one question, as part of a question_usage. A question_attempt will have some question_attempt_steps">
-            <FIELDS>
-                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="slot" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
-                       COMMENT="Used to number the questions in one attempt sequentially."/>
-                <FIELD NAME="behaviour" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false"
-                       COMMENT="The name of the question behaviour that is managing this question attempt."/>
-                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
-                       COMMENT="The id of the question being attempted. Foreign key references question.id."/>
-                <FIELD NAME="variant" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"
-                       COMMENT="The variant of the qusetion being used."/>
-                <FIELD NAME="maxmark" TYPE="number" LENGTH="12" NOTNULL="true" SEQUENCE="false" DECIMALS="7"
-                       COMMENT="The grade this question is marked out of in this attempt."/>
-                <FIELD NAME="minfraction" TYPE="number" LENGTH="12" NOTNULL="true" SEQUENCE="false" DECIMALS="7"
-                       COMMENT="Some questions can award negative marks. This indicates the most negative mark that can be awarded, on the faction scale where the maximum positive mark is 1."/>
-                <FIELD NAME="maxfraction" TYPE="number" LENGTH="12" NOTNULL="true" DEFAULT="1" SEQUENCE="false"
-                       DECIMALS="7"
-                       COMMENT="Some questions can give fractions greater than 1. This indicates the greatest fraction that can be awarded."/>
-                <FIELD NAME="flagged" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
-                       COMMENT="Whether this question has been flagged within the attempt."/>
-                <FIELD NAME="questionsummary" TYPE="text" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="If this question uses randomisation, it should set this field to summarise what random version the student actually saw. This is a human-readable textual summary of the student's response which might, for example, be used in a report."/>
-                <FIELD NAME="rightanswer" TYPE="text" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="This is a human-readable textual summary of the right answer to this question. Might be used, for example on the quiz preview, to help people who are testing the question. Or might be used in reports."/>
-                <FIELD NAME="playeraresponsesummary" TYPE="text" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="This is a textual summary of the student's response (basically what you would expect to in the Quiz responses report)."/>
-                <FIELD NAME="playerbresponsesummary" TYPE="text" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="This is a textual summary of the student's response (basically what you would expect to in the Quiz responses report)."/>
-                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
-                       COMMENT="The time this record was last changed."/>
-            </FIELDS>
-            <KEYS>
-                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
-            </KEYS>
-            <INDEXES>
-                <INDEX NAME="behaviour" UNIQUE="false" FIELDS="behaviour"
-                       COMMENT="Required because we need to be able to determine efficiently which behaviours are in use."/>
-            </INDEXES>
         </TABLE>
     </TABLES>
 </XMLDB>

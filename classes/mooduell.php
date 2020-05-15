@@ -224,7 +224,7 @@ class mooduell {
      *
      * @return object
      */
-    public function return_games_for_this_instance() {
+    public function return_games_for_this_instance($timemodified = -1) {
         global $DB;
 
         $returnedgames = array();
@@ -236,6 +236,11 @@ class mooduell {
         if ($games && count($games) > 0) {
 
             foreach ($games as $gamedata) {
+
+                // If we only want to deal with games that were added since the last time we checked
+                if ($timemodified > $gamedata->timemodified) {
+                    continue;
+                }
 
                 // First we create a game instance for every game.
                 $game = new game_control($this, null, $gamedata);

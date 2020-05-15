@@ -63,14 +63,21 @@ class question_control {
     public $playerbanswered;
 
     /**
+     *
+     * @var array of answer_control class
+     */
+    public $answers;
+
+    /**
      * question_control constructor.
      *
      * @param mooduell $mooduell
      */
+
     public function __construct($data = null) {
 
         // if we have $data, we automatically create all the relevant values for this question ...
-        // AND we retrieve the matching answers from $DB.
+        // AND we retrieve the matching answersdata from $DB.
         if ($data) {
             $this->id = $data->id;
             $this->name = $data->name;
@@ -84,6 +91,28 @@ class question_control {
             if ($data->payerbanswered) {
                 $this->playerbanswered = $data->playerbanswered;
             }
+
+            $this->answers = $this->return_answers();
+
         }
     }
+
+    public function return_answers() {
+
+        global $DB;
+
+        $answers = array();
+        $answersdata = $DB->get_records('question_answers', [
+                'question' => $this->id
+        ]);
+
+        if ($answersdata || count($answersdata) > 0) {
+            foreach ($answersdata as $answerdata) {
+                $answer = new answer_control($answerdata);
+                $answers[] = $answer;
+            }
+        }
+        return $answers;
+    }
+
 }

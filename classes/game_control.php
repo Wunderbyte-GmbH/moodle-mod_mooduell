@@ -89,6 +89,7 @@ class game_control {
      * Create new game, set random question sequence and write to DB
      *
      * @return integer quizid or 0 when no quizid is set
+     * @throws moodle_exception
      */
     public function start_new_game($playerbid) {
         global $DB;
@@ -102,15 +103,15 @@ class game_control {
 
         $data = $this->gamedata;
         $data->playerbid = $playerbid;
+        $data->status = 1; // This means that it's player As turn
         $data->mooduellid = $this->mooduell->cm->instance;
 
-        // We collect all the data to safe to mooduell_games table.
-
-        $this->gameid = $DB->insert_record('mooduell_games', $data);
-
         // We retrieve exactly nine questions from the right categories.
-
+        // We run this before we save our game, because it will throw an error if we don't receive the right number of questions.
         $questions = self::set_random_questions();
+
+        // We collect all the data to safe to mooduell_games table.
+        $this->gameid = $DB->insert_record('mooduell_games', $data);
 
         // Write all our questions to our DB and link it to our gameID.
         foreach ($questions as $question) {
@@ -251,10 +252,8 @@ class game_control {
 
                 $question = new question_control(($data));
 
-                $question->playeraanswered = $questiondata->playeraanswered;
-                $question->playerbanswered = $questiondata->playerbanswered;
-
                 $questions[] = $question;
+
             }
         }
 

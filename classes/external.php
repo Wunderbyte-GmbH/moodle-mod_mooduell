@@ -24,8 +24,8 @@
  * @since Moodle 3.1
  */
 
-use mod_mooduell\mooduell;
 use mod_mooduell\game_control;
+use mod_mooduell\mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -111,6 +111,76 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
+ /**
+     * function to answer_question.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function answer_question($quizid, $gameid, $questionid, $answerid) {
+        $params = array(
+                'quizid' => $quizid,
+                'gameid' => $gameid,
+                'questionid' => $questionid,
+                'answerid' => $answerid
+        );
+
+        $params = self::validate_parameters(self::start_attempt_parameters(), $params);
+
+        // now security checks.
+
+        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
+            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        }
+        $context = context_module::instance($cm->id);
+        self::validate_context($context);
+
+        // require_capability('moodle/course:managegroups', $context);
+
+        // we create Mooduell Instance.
+        $mooduell = new mooduell($quizid);
+
+        // we create the game_controller Instance.
+        $gamecontroller = new game_control($mooduell);
+    
+        return 1;
+    }
+
+
+    /**
+     * Describes the parameters for start_attempt.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function answer_question_parameters() {
+        return new external_function_parameters(array(
+                'quizid' => new external_value(PARAM_INT, 'quizid id'),
+                'gameid' => new external_value(PARAM_INT, 'gameid id'),
+                'questionid' => new external_value(PARAM_INT, 'question id'),
+                'answerid' => new external_multiple_structure(new external_value(PARAM_INT, 'answer id'),
+                                'Array of answer ids'),
+        ));
+    }
+
+    /**
+     * Describes the returns for start_attempt.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function answer_question_returns() {
+        return new external_single_structure(array(
+                'status' => new external_value(PARAM_INT, '0 if false, 1 if true')
+        ));
+    }
+
+
+
+
+
+
+
     /**
      * Describes the returns for get_quizzes_for_user.
      *
@@ -137,9 +207,12 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_games_by_courses_parameters() {
         return new external_function_parameters(array(
-                'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'), 'Array of course ids',
-                        VALUE_DEFAULT, array())
-        ));
+                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
+                                'Array of course ids', VALUE_DEFAULT, array()),
+                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
+                                VALUE_DEFAULT, -1),
+                )
+        );
     }
 
     /**
@@ -148,10 +221,10 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 3.1
      */
-    public static function get_games_by_courses($courseids) {
+    public static function get_games_by_courses($courseids, $timemodified) {
 
         // We just call our function here to get all the quizzes.
-        $returnedquizzes = self::get_quizzes_by_courses($courseids);
+        $returnedquizzes = self::get_quizzes_by_courses($courseids, $timemodified);
 
         // But we only want the quizzes array, no warnings.
         $warnings = $returnedquizzes['warnings'];
@@ -167,7 +240,7 @@ class mod_mooduell_external extends external_api {
             $mooduell = new mooduell($instanceid);
 
             // We create the game_controller Instance.
-            $games = $mooduell->return_games_for_this_instance();
+            $games = $mooduell->return_games_for_this_instance($timemodified);
 
             if ($games && count($games) > 0) {
 
@@ -185,6 +258,8 @@ class mod_mooduell_external extends external_api {
                             'timemodified' => $game->gamedata->timemodified
                     ];
                 }
+            } else {
+                $quiz['games'] = array();
             }
 
             $returnedquizzes[] = $quiz;
@@ -202,12 +277,13 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 3.1
      */
-    public static function get_quizzes_by_courses($courseids) {
+    public static function get_quizzes_by_courses($courseids, $timemodfied) {
         $warnings = array();
         $returnedquizzes = array();
 
         $params = array(
-                'courseids' => $courseids
+                'courseids' => $courseids,
+                'timemodified' => $timemodfied
         );
         $params = self::validate_parameters(self::get_quizzes_by_courses_parameters(), $params);
 
@@ -263,9 +339,12 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_quizzes_by_courses_parameters() {
         return new external_function_parameters(array(
-                'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'), 'Array of course ids',
-                        VALUE_DEFAULT, array())
-        ));
+                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
+                                'Array of course ids', VALUE_DEFAULT, array()),
+                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
+                                VALUE_DEFAULT, -1),
+                )
+        );
     }
 
     /**
@@ -347,21 +426,31 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_quiz_data_returns() {
         return new external_single_structure(array(
-                'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
-                'gameid' => new external_value(PARAM_INT, 'gameid'),
-                'playeraid' => new external_value(PARAM_INT, 'player A id'),
-                'playerbid' => new external_value(PARAM_INT, 'player B id'),
-                'winnerid' => new external_value(PARAM_INT, 'winner id'),
-                'status' => new external_value(PARAM_INT, 'stauts'),
-                'questions' => new external_multiple_structure(new external_single_structure(array(
-                        'id' => new external_value(PARAM_INT, 'questionid'),
-                        'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                        'id' => new external_value(PARAM_INT, 'questionid'),
-                        'qtype' => new external_value(PARAM_RAW, 'qtype'),
-                        'category' => new external_value(PARAM_INT, 'category'),
-                        'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
-                        'playerbanswered' => new external_value(PARAM_INT, 'answer player a')
-                )))
-        ));
+                        'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
+                        'gameid' => new external_value(PARAM_INT, 'gameid'),
+                        'playeraid' => new external_value(PARAM_INT, 'player A id'),
+                        'playerbid' => new external_value(PARAM_INT, 'player B id'),
+                        'winnerid' => new external_value(PARAM_INT, 'winner id'),
+                        'status' => new external_value(PARAM_INT, 'stauts'),
+                        'questions' => new external_multiple_structure(new external_single_structure(array(
+                                                'id' => new external_value(PARAM_INT, 'questionid'),
+                                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
+                                                'id' => new external_value(PARAM_INT, 'questionid'),
+                                                'qtype' => new external_value(PARAM_RAW, 'qtype'),
+                                                'category' => new external_value(PARAM_INT, 'category'),
+                                                'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
+                                                'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
+                                                'answers' => new external_multiple_structure(new external_single_structure(array(
+                                                                        'id' => new external_value(PARAM_INT, 'answerid'),
+                                                                        'answertext' => new external_value(PARAM_RAW,
+                                                                                'answer text'),
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 }
