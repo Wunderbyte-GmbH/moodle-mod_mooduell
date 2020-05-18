@@ -174,7 +174,11 @@ class mooduell {
             $out .= $output->header();
         }
 
+        //create the list of open games we can pass on to the renderer
         $data = $this->return_list_of_games();
+
+        // add the localised string for "No open games yet" 
+        $data['noopengames'] = get_string('nooopengames', 'mod_mooduell');
 
         $viewpage = new viewpage($data);
         $out .= $output->render_viewpage($viewpage);
