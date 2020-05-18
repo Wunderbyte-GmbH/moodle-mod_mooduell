@@ -174,10 +174,10 @@ class mooduell {
             $out .= $output->header();
         }
 
-        //create the list of open games we can pass on to the renderer
+        // Create the list of open games we can pass on to the renderer.
         $data = $this->return_list_of_games();
 
-        // add the localised string for "No open games yet" 
+        // Add the localised string for "No open games yet".
         $data['noopengames'] = get_string('nooopengames', 'mod_mooduell');
 
         $viewpage = new viewpage($data);
@@ -257,7 +257,7 @@ class mooduell {
     }
 
     /**
-     * allows us to securely retrieve the (user)name of a user by id
+     * Allows us to securely retrieve the (user)name of a user by id
      *
      * @param
      *            int
