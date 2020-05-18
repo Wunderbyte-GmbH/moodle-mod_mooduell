@@ -97,6 +97,12 @@ class question_control {
         }
     }
 
+    /**
+     * Return array of answers of a given question
+     *
+     * @return array
+     * @throws \dml_exception
+     */
     public function return_answers() {
 
         global $DB;

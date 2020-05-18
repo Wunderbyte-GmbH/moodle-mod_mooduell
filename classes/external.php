@@ -29,12 +29,12 @@ use mod_mooduell\mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir . '/externallib.php');
+// require_once($CFG->libdir . '/externallib.php');
 // require_once $CFG->dirroot . '/mod/quiz/locallib.php';
 require_once('mooduell.php');
 
 /**
- * Quiz external functions
+ * Mooduell external functions
  *
  * @package mod_quiz
  * @category external
@@ -45,10 +45,17 @@ require_once('mooduell.php');
 class mod_mooduell_external extends external_api {
 
     /**
-     * function to start_attempt.
+     * Create a new MooDuell game. We have to provide the quizid (MooDuell Instance) and the Id of our adversary
      *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @param $courseid
+     * @param $quizid
+     * @param $playerbid
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
      */
     public static function start_attempt($courseid, $quizid, $playerbid) {
         $params = array(
@@ -86,10 +93,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the parameters for start_attempt.
-     *
      * @return external_function_parameters
-     * @since Moodle 3.1
      */
     public static function start_attempt_parameters() {
         return new external_function_parameters(array(
@@ -100,10 +104,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the returns for start_attempt.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @return external_single_structure
      */
     public static function start_attempt_returns() {
         return new external_single_structure(array(
@@ -111,21 +112,31 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
- /**
-     * function to answer_question.
+    /**
+     * We answer a question with the array of ids of the answers. Depending on the internal setting of the MooDuell Instance...
+     * ... we might either retrieve an array of the correct answer-ids ...
+     * ... or an array of with one value 0 for incorrect and 1 for correctly answered.
      *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @param $quizid
+     * @param $gameid
+     * @param $questionid
+     * @param $answerids
+     * @return mixed
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
      */
-    public static function answer_question($quizid, $gameid, $questionid, $answerid) {
+    public static function answer_question($quizid, $gameid, $questionid, $answerids) {
         $params = array(
                 'quizid' => $quizid,
                 'gameid' => $gameid,
                 'questionid' => $questionid,
-                'answerid' => $answerid
+                'answerids' => $answerids
         );
 
-        $params = self::validate_parameters(self::start_attempt_parameters(), $params);
+        $params = self::validate_parameters(self::answer_question_parameters(), $params);
 
         // now security checks.
 
@@ -141,51 +152,39 @@ class mod_mooduell_external extends external_api {
         $mooduell = new mooduell($quizid);
 
         // we create the game_controller Instance.
-        $gamecontroller = new game_control($mooduell);
-    
-        return 1;
+        $gamecontroller = new game_control($mooduell, $gameid);
+
+        $result['response'] = $gamecontroller->validate_question($questionid, $answerids);
+
+        return $result;
     }
 
-
     /**
-     * Describes the parameters for start_attempt.
-     *
      * @return external_function_parameters
-     * @since Moodle 3.1
      */
     public static function answer_question_parameters() {
         return new external_function_parameters(array(
                 'quizid' => new external_value(PARAM_INT, 'quizid id'),
                 'gameid' => new external_value(PARAM_INT, 'gameid id'),
                 'questionid' => new external_value(PARAM_INT, 'question id'),
-                'answerid' => new external_multiple_structure(new external_value(PARAM_INT, 'answer id'),
-                                'Array of answer ids'),
+                'answerids' => new external_multiple_structure(new external_value(PARAM_INT, 'answer ids'),
+                        'Array of answer ids'),
         ));
     }
 
     /**
-     * Describes the returns for start_attempt.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @return external_single_structure
      */
     public static function answer_question_returns() {
         return new external_single_structure(array(
-                'status' => new external_value(PARAM_INT, '0 if false, 1 if true')
+                'response' => new external_multiple_structure(
+                        new external_value(PARAM_INT, 'ids of correct questions OR 0 if false, 1 if true')
+                )
         ));
     }
 
-
-
-
-
-
-
     /**
-     * Describes the returns for get_quizzes_for_user.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @return external_single_structure
      */
     public static function get_quizzes_by_courses_returns() {
         return new external_single_structure(array(
@@ -216,10 +215,17 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * function to get_games_by_courses.
+     * Get all the open or closed MooDuell Games. By providing a date, we can limit the treated entries...
+     * .. to those which were upadted since the last glance we took.
+     * An empty courseid will return all the games of all the MooDuell Instances visible to this user.
      *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @param $courseids
+     * @param $timemodified
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
      */
     public static function get_games_by_courses($courseids, $timemodified) {
 
@@ -272,10 +278,13 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * function to get_quizzes_for_user
+     * Get all the quizzes (Mooduell Instances) by courses
      *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @param $courseids
+     * @param $timemodfied
+     * @return array
+     * @throws coding_exception
+     * @throws invalid_parameter_exception
      */
     public static function get_quizzes_by_courses($courseids, $timemodfied) {
         $warnings = array();
@@ -332,10 +341,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the parameters for get_quizzes_for_user.
-     *
      * @return external_function_parameters
-     * @since Moodle 3.1
      */
     public static function get_quizzes_by_courses_parameters() {
         return new external_function_parameters(array(
@@ -348,10 +354,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the returns for get_games_by_courses.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @return external_single_structure
      */
     public static function get_games_by_courses_returns() {
         return new external_single_structure(array(
@@ -370,10 +373,17 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * function to get_quiz_data
+     * Return array of quiz data
      *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @param $courseid
+     * @param $quizid
+     * @param $gameid
+     * @return stdClass
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
      */
     public static function get_quiz_data($courseid, $quizid, $gameid) {
         $params = array(
@@ -398,10 +408,8 @@ class mod_mooduell_external extends external_api {
         // We create the game_controller Instance.
         $gamecontroller = new game_control($mooduell, $gameid);
 
-        // We can now retrieve our game data.
-        $gamedata = $gamecontroller->return_game_data();
-
-        return $gamedata;
+        // We can now retrieve the questions and add them to our gamedata
+        return $gamecontroller->retrieve_questions();
     }
 
     /**
@@ -419,10 +427,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the returns for get_quiz_data.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
+     * @return external_single_structure
      */
     public static function get_quiz_data_returns() {
         return new external_single_structure(array(
@@ -435,7 +440,6 @@ class mod_mooduell_external extends external_api {
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'id' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                                                'id' => new external_value(PARAM_INT, 'questionid'),
                                                 'qtype' => new external_value(PARAM_RAW, 'qtype'),
                                                 'category' => new external_value(PARAM_INT, 'category'),
                                                 'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),

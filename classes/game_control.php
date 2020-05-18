@@ -222,11 +222,84 @@ class game_control {
     }
 
     /**
+     * Take the question id and the array of answerids and check if we have actually answered a question correctly.
+     * Depending on the Instance Setting (showcorrectanswers) we either return an array of the correct answerids (validation will
+     * be up to the App)...
+     * ... or we return 0 for false and 1 for correctly answered.
+     * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
+     *
+     * @param $questionid
+     * @param $answerids
+     * @return array
+     * @throws moodle_exception
+     */
+    public function validate_question($questionid, $answerids) {
+
+        //Check if it's the right question sequence.
+        //First we retrieve our game data.
+        $this->retrieve_questions();
+
+        $questions = $this->gamedata->questions;
+
+        $resultarray = array();
+
+        //if there are questions, if we have the right number and if we find the specific question with the right id
+        if ($questions && count($questions) == 9) {
+
+            $answers = array();
+            foreach ($questions as $question) {
+                if ($question->id == $questionid) {
+                    $answers = $question->answers;
+                }
+            }
+
+            // If we want the correct answers, we just return an array of these correct answers to the app...
+            // ... which will deal with the rest.
+            $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1 ? true : false;
+
+            foreach ($answers as $answer) {
+                if ($answer->fraction >= 0) {
+                    //if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
+                    if ($showcorrectanswer) {
+                        $resultarray[] = $answer->id;
+                    } else {
+                        //if we can't find the correct answer in our answerarray, we return wrong answer
+                        if (!in_array($answer->id, $answerids)) {
+                            $resultarray[] = 0;
+                            break;
+                        }
+                    }
+
+                } else {
+                    //If we have on wrong answer in our answer array ...
+                    //... and only if we don't want to show the correct answers
+                    if (!$showcorrectanswer) {
+                        //we check if we have registered a wrong answer
+                        if (in_array($answer->id, $answerids)) {
+                            $resultarray[] = 0;
+                            break;
+                        }
+                    }
+
+                }
+            }
+            //if we had no reason to add 0 to our result array, we can return 1
+            if (count($resultarray) == 0) {
+                $resultarray[] = 1;
+            }
+        } else {
+            $resultarray[] = 0;
+        }
+
+        return $resultarray;
+    }
+
+    /**
      *
      * @return stdClass
      * @throws moodle_exception
      */
-    public function return_game_data() {
+    public function retrieve_questions() {
         global $DB;
 
         // We have to make sure we have all the questions added to the normal game data.
@@ -261,4 +334,5 @@ class game_control {
 
         return $this->gamedata;
     }
+
 }
