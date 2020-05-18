@@ -1,18 +1,18 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
+// This file is part of Moodle - http:// moodle.org/
+// 
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http:// www.gnu.org/licenses/>.
 namespace mod_mooduell;
 
 defined('MOODLE_INTERNAL') || die();
@@ -235,15 +235,15 @@ class game_control {
      */
     public function validate_question($questionid, $answerids) {
 
-        //Check if it's the right question sequence.
-        //First we retrieve our game data.
+        // Check if it's the right question sequence.
+        // First we retrieve our game data.
         $this->retrieve_questions();
 
         $questions = $this->gamedata->questions;
 
         $resultarray = array();
 
-        //if there are questions, if we have the right number and if we find the specific question with the right id
+        // if there are questions, if we have the right number and if we find the specific question with the right id
         if ($questions && count($questions) == 9) {
 
             $answers = array();
@@ -259,11 +259,11 @@ class game_control {
 
             foreach ($answers as $answer) {
                 if ($answer->fraction >= 0) {
-                    //if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
+                    // if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
                     if ($showcorrectanswer) {
                         $resultarray[] = $answer->id;
                     } else {
-                        //if we can't find the correct answer in our answerarray, we return wrong answer
+                        // if we can't find the correct answer in our answerarray, we return wrong answer
                         if (!in_array($answer->id, $answerids)) {
                             $resultarray[] = 0;
                             break;
@@ -271,10 +271,10 @@ class game_control {
                     }
 
                 } else {
-                    //If we have on wrong answer in our answer array ...
-                    //... and only if we don't want to show the correct answers
+                    // If we have on wrong answer in our answer array ...
+                    // ... and only if we don't want to show the correct answers
                     if (!$showcorrectanswer) {
-                        //we check if we have registered a wrong answer
+                        // we check if we have registered a wrong answer
                         if (in_array($answer->id, $answerids)) {
                             $resultarray[] = 0;
                             break;
@@ -283,7 +283,7 @@ class game_control {
 
                 }
             }
-            //if we had no reason to add 0 to our result array, we can return 1
+            // if we had no reason to add 0 to our result array, we can return 1
             if (count($resultarray) == 0) {
                 $resultarray[] = 1;
             }
