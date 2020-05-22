@@ -16,9 +16,12 @@
 
 namespace mod_mooduell;
 
+require_once("$CFG->libdir/enrollib.php");
+
 defined('MOODLE_INTERNAL') || die();
 
 use DateTime;
+use dml_exception;
 use moodle_exception;
 use stdClass;
 
@@ -55,11 +58,20 @@ class game_control {
         if ($gameid && !$gamedata) {
 
             $data = $DB->get_record('mooduell_games', [
-                    'id' => $gameid
+                    'id' => $gameid,
+                    'mooduellid' => $this->mooduell->cm->instance
             ]);
+
+            if (!$data->id) {
+
+                // This error will also kick in if we have the gameid, but it's not asked for in the right quiz (mooduell instance id).
+
+                throw new moodle_exception('nosuchgame', 'mooduell', null, null,
+                        "We couldn't find the game you asked for in our database.");
+            }
             $data->gameid = $gameid;
 
-            // if we have already a record and player a or player b are not the user we use here, we throw an error.
+            // If we have already a record and player a or player b are not the user we use here, we throw an error.
             if (($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
                 throw new moodle_exception('notallowedtoaccessthisgame', 'mooduell', null, null,
                         "Your are not participant of this game, you can't access it's data");
@@ -84,6 +96,7 @@ class game_control {
         }
 
         $this->gamedata = $data;
+
     }
 
     /**
@@ -107,7 +120,7 @@ class game_control {
         $data->status = 1; // This means that it's player As turn
         $data->mooduellid = $this->mooduell->cm->instance;
 
-        // We retrieve exactly nine questions from the right categories.
+        // We get exactly nine questions from the right categories.
         // We run this before we save our game, because it will throw an error if we don't receive the right number of questions.
         $questions = self::set_random_questions();
 
@@ -130,8 +143,8 @@ class game_control {
     }
 
     /**
-     * Retrieve all available questions from the right categories in our question bank
-     * We make sure we retrieve them according to weight and number of categories linked to the mooduell instance
+     * get all available questions from the right categories in our question bank
+     * We make sure we get them according to weight and number of categories linked to the mooduell instance
      * Return the questions as instances of question_control
      *
      * @return mixed[]
@@ -176,7 +189,7 @@ class game_control {
                 }
             }
 
-            // We retrieve all the available questions.
+            // We get all the available questions.
             $allavailalbequestions = $DB->get_records('question', [
                     'category' => $category->category
             ]);
@@ -236,27 +249,48 @@ class game_control {
      */
     public function validate_question($questionid, $answerids) {
 
+        global $USER;
+
         // Check if it's the right question sequence.
-        // First we retrieve our game data.
-        $this->retrieve_questions();
+        // First we get our game data.
+        $this->get_questions();
 
         $questions = $this->gamedata->questions;
 
+        if (!$this->is_it_active_users_turn()) {
+            throw new moodle_exception('notyourturn', 'mooduell', null, null,
+                    "It's not your turn to answer a question");
+        }
+
         $resultarray = array();
 
-        // if there are questions, if we have the right number and if we find the specific question with the right id
+        // If there are questions, if we have the right number and if we find the specific question with the right id.
         if ($questions && count($questions) == 9) {
 
             $answers = array();
             foreach ($questions as $question) {
-                if ($question->id == $questionid) {
+                if ($question->questionid == $questionid) {
                     $answers = $question->answers;
+                    break;
                 }
+                //Sequence check to make sure we haven't skipped a question
+                if (($USER->id == $this->gamedata->playeraid && $question->playeraanswered == null) ||
+                        ($USER->id == $this->gamedata->playerbid && $question->playerbanswered == null)) {
+                    throw new moodle_exception('outofsequence', 'mooduell', null, null,
+                            "You tried to answere a question out of sequence");
+                }
+            }
+
+            // If we don't have answers, something went wrong, we return error code -1.
+            if (count($answers) == 0) {
+                return [-1];
             }
 
             // If we want the correct answers, we just return an array of these correct answers to the app...
             // ... which will deal with the rest.
             $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1 ? true : false;
+
+            $result = 0;
 
             foreach ($answers as $answer) {
                 if ($answer->fraction >= 0) {
@@ -285,22 +319,43 @@ class game_control {
                 }
             }
             // if we had no reason to add 0 to our result array, we can return 1
-            if (count($resultarray) == 0) {
+            if (!$showcorrectanswer && count($resultarray) == 0) {
                 $resultarray[] = 1;
             }
+
         } else {
-            $resultarray[] = 0;
+            $resultarray[] = -1;
         }
+
+        if (!$showcorrectanswer) {
+            $result = $resultarray[0] == 1 ? 2 : 1;
+        } else {
+            foreach ($resultarray as $resultitem) {
+                if (count($resultarray) != count($answerids) || !in_array($resultitem, $answerids)) {
+                    $result = 1;
+                    break;
+                }
+            }
+            //if we haven't set result to 1 (which means false), we can set it to 2 (correct)
+            $result != 1 ? $result = 2 : null;
+        }
+
+        // We write the result of our question check.
+
+        $this->save_result_to_DB($this->gamedata->gameid, $questionid, $result);
+
+        $this->save_my_turn_status();
 
         return $resultarray;
     }
 
     /**
+     * Get all questions and save them to gamedata.
      *
      * @return stdClass
      * @throws moodle_exception
      */
-    public function retrieve_questions() {
+    public function get_questions() {
         global $DB;
 
         // We have to make sure we have all the questions added to the normal game data.
@@ -325,6 +380,7 @@ class game_control {
                 ]);
 
                 $question = new question_control(($data));
+                $question->get_results($this->gamedata->gameid);
 
                 $questions[] = $question;
 
@@ -334,6 +390,159 @@ class game_control {
         $this->gamedata->questions = $questions;
 
         return $this->gamedata;
+    }
+
+    /**
+     * Check if active player is allowed to answer questions
+     *
+     * @return bool
+     */
+    private function is_it_active_users_turn() {
+        global $USER;
+
+        $i = 0;
+        $j = 0;
+        foreach ($this->gamedata->questions as $question) {
+            if ($USER->id == $this->gamedata->playeraid) {
+                $i += $question->playeraanswered != null ? 1 : 0;
+                $j += $question->playerbanswered != null ? 1 : 0;
+            } else {
+                $j += $question->playeraanswered != null ? 1 : 0;
+                $i += $question->playerbanswered != null ? 1 : 0;
+            }
+        }
+
+        // If we have incomplete packages, we can always go on...
+        // ... else we have to have less or equal answered questions.
+
+        if (($i <= $j) || ($i % 3 != 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Write result to DB, 1 is false, 2 is correct.
+     *
+     * @param $gameid
+     * @param $questionid
+     * @param $result
+     * @return bool
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    private function save_result_to_DB($gameid, $questionid, $result) {
+
+        global $DB;
+        global $USER;
+
+        // First we fetch the record of this question.
+        $question = $DB->get_record('mooduell_questions', ['gameid' => $gameid, 'questionid' => $questionid]);
+
+        // Then we update the content.
+        $update = new stdClass();
+        $update->id = $question->id;
+
+        //depending if I am player A or B, we update the right field
+        if ($this->gamedata->playeraid == $USER->id) {
+
+            // We throw an Error if the question is already answered.
+            if ($question->playeraanswered != null) {
+                throw new moodle_exception('questionalreadyanswered', 'mooduell', null, null,
+                        "You just answered a question which was already answered");
+            }
+
+            $update->playeraanswered = $result;
+            // We update result in live memory as well
+            $this->gamedata->questions[$questionid]->playeraanswered = $result;
+        } else {
+
+            // We throw an Error if the question is already answered.
+            if ($question->playerbanswered != null) {
+                throw new moodle_exception('questionalreadyanswered', 'mooduell', null, null,
+                        "You just answered a question which was already answered");
+            }
+
+            $update->playerbanswered = $result;
+            // We update in live memory as well
+            $this->gamedata->questions[$questionid]->playerbanswered = $result;
+        }
+
+        $DB->update_record('mooduell_questions', $update);
+
+        return true;
+    }
+
+    /**
+     * Save whose turn it is to status in mooduell_games DB (1 Player As turn, 2 Player B turn).
+     * This function also check if game is finished and sets status to 3 if so.
+     *
+     * @throws dml_exception
+     */
+    private function save_my_turn_status() {
+        global $DB;
+        global $USER;
+
+        $update = new stdClass();
+        $update->id = $this->gamedata->gameid;
+
+        if ($this->is_game_finished()) {
+            $update->status = 3;
+            //we might want to trigger some event here
+        } else if ($this->is_it_active_users_turn()) {
+            $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
+        } else {
+            $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
+        }
+
+        $DB->update_record('mooduell_games', $update);
+
+    }
+
+    /**
+     * Check if active player is allowed to answer questions
+     *
+     * @return bool
+     */
+    private function is_game_finished() {
+
+        if (count($this->gamedata->questions) != 9) {
+            throw new moodle_exception('nottherightnumberofquestions', 'mooduell', null, null,
+                    "Not the right number of questions, we can't decide if game is finsihed or not");
+        }
+
+        foreach ($this->gamedata->questions as $question) {
+            if ($question->playeraanswered == null || $question->playerbanswered == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module
+     * This is needed to give us a valid list of potential partners for a new game
+     *
+     * @return array
+     * @throws moodle_exception
+     */
+    public function return_users_for_game() {
+        $context = $this->mooduell->context;
+        $users = get_enrolled_users($context);
+
+        $filteredusers = array();
+
+        foreach ($users as $user) {
+            //we need to specifiy userid already when calling modinfo.
+            $modinfo = get_fast_modinfo($this->mooduell->course->id, $user->id);
+            $cm = $modinfo->get_cm($this->mooduell->cm->id);
+
+            if ($cm->uservisible) {
+                $filteredusers[] = $user;
+            }
+        }
+        return $filteredusers;
     }
 
 }

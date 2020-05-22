@@ -16,9 +16,17 @@
 
 namespace mod_mooduell;
 
+use dml_exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 class question_control {
+
+    /**
+     *
+     * @var int
+     */
+    public $questionid;
 
     /**
      *
@@ -77,14 +85,14 @@ class question_control {
     public function __construct($data = null) {
 
         // if we have $data, we automatically create all the relevant values for this question ...
-        // AND we retrieve the matching answersdata from $DB.
         if ($data) {
-            $this->id = $data->id;
+            $this->questionid = $data->id;
             $this->name = $data->name;
             $this->questiontext = $data->questiontext;
             $this->qtype = $data->qtype;
             $this->category = $data->category;
 
+            // Normally we don't have this information, we use retrieve_result to retrieve it.
             if ($data->payeraanswered) {
                 $this->playeraanswered = $data->playeraanswered;
             }
@@ -93,7 +101,6 @@ class question_control {
             }
 
             $this->answers = $this->return_answers();
-
         }
     }
 
@@ -101,7 +108,7 @@ class question_control {
      * Return array of answers of a given question
      *
      * @return array
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public function return_answers() {
 
@@ -109,7 +116,7 @@ class question_control {
 
         $answers = array();
         $answersdata = $DB->get_records('question_answers', [
-                'question' => $this->id
+                'question' => $this->questionid
         ]);
 
         if ($answersdata || count($answersdata) > 0) {
@@ -119,6 +126,24 @@ class question_control {
             }
         }
         return $answers;
+    }
+
+    /**
+     * We fetch the result of the question from DB and add it to this instance.
+     *
+     * @param $gameid
+     * @throws dml_exception
+     */
+    public function get_results($gameid) {
+
+        global $DB;
+
+        if ($this->questionid) {
+            $question = $DB->get_record('mooduell_questions', ['gameid' => $gameid, 'questionid' => $this->questionid]);
+
+            $this->playeraanswered = $question->playeraanswered;
+            $this->playerbanswered = $question->playerbanswered;
+        }
     }
 
 }

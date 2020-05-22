@@ -409,7 +409,7 @@ class mod_mooduell_external extends external_api {
         $gamecontroller = new game_control($mooduell, $gameid);
 
         // We can now retrieve the questions and add them to our gamedata
-        return $gamecontroller->retrieve_questions();
+        return $gamecontroller->get_questions();
     }
 
     /**
@@ -453,6 +453,73 @@ class mod_mooduell_external extends external_api {
                                                 )
                                         )
                                 )
+                        )
+                )
+        );
+    }
+
+    /**
+     * Return array of quiz data
+     *
+     * @param $courseid
+     * @param $quizid
+     * @param $gameid
+     * @return stdClass
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
+     */
+    public static function get_quiz_users($courseid, $quizid, $gameid) {
+        $params = array(
+                'courseid' => $courseid,
+                'quizid' => $quizid,
+                'gameid' => $gameid
+        );
+
+        $params = self::validate_parameters(self::get_quiz_users_parameters(), $params);
+
+        // Now security checks.
+
+        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
+            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        }
+        $context = context_module::instance($cm->id);
+        self::validate_context($context);
+
+        // We create Mooduell Instance.
+        $mooduell = new mooduell($quizid);
+
+        // We create the game_controller Instance.
+        $gamecontroller = new game_control($mooduell, $gameid);
+
+        // We can now retrieve the questions and add them to our gamedata
+        return $gamecontroller->return_users_for_game();
+    }
+
+    /**
+     * Describes the parameters for get_quiz_data.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_quiz_users_parameters() {
+        return new external_function_parameters(array(
+                'courseid' => new external_value(PARAM_INT, 'course id'),
+                'quizid' => new external_value(PARAM_INT, 'quizid id'),
+                'gameid' => new external_value(PARAM_INT, 'gameid id')
+        ));
+    }
+
+    /**
+     * @return external_single_structure
+     */
+    public static function get_quiz_users_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'id' => new external_value(PARAM_INT, 'userid'),
+                                'firstname' => new external_value(PARAM_RAW, 'firstname'),
+                                'lastname' => new external_value(PARAM_RAW, 'lastname')
                         )
                 )
         );
