@@ -29,6 +29,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT);
+$action = optional_param('action', '', PARAM_RAW);
 
 $course = $DB->get_record('course', array(
         'id' => $id

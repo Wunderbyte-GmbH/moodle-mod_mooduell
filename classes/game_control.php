@@ -534,7 +534,7 @@ class game_control {
         $filteredusers = array();
 
         foreach ($users as $user) {
-            //we need to specifiy userid already when calling modinfo.
+            // We need to specifiy userid already when calling modinfo.
             $modinfo = get_fast_modinfo($this->mooduell->course->id, $user->id);
             $cm = $modinfo->get_cm($this->mooduell->cm->id);
 

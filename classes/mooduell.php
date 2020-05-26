@@ -177,9 +177,6 @@ class mooduell {
         // Create the list of open games we can pass on to the renderer.
         $data = $this->return_list_of_games();
 
-        // Add the localised string for "No open games yet".
-        $data['noopengames'] = get_string('nooopengames', 'mod_mooduell');
-
         $viewpage = new viewpage($data);
         $out .= $output->render_viewpage($viewpage);
 
@@ -204,19 +201,13 @@ class mooduell {
 
         foreach ($games as $game) {
             $returngames[] = [
+                    'gameid'=>  $game->gamedata->gameid,
                     "playera" => $this->return_name_by_id($game->gamedata->playeraid),
                     'playerb' => $this->return_name_by_id($game->gamedata->playerbid)
             ];
         }
 
         $returnobject = [
-                'pageheading' => get_string('opengames', 'mod_mooduell'),
-                'tableheading' => [
-                        [
-                                'playera' => get_string('playera', 'mod_mooduell'),
-                                'playerb' => get_string('playerb', 'mod_mooduell')
-                        ]
-                ],
                 'games' => $returngames
         ];
 

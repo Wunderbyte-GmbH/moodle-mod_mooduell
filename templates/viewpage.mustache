@@ -23,27 +23,32 @@
     * rows - array: An array of content rows for the table.
     
     }}
-<h2>{{heading}}</h2>
+<h2>{{#str}} opengames, mod_mooduell {{/str}}</h2>
 
 {{^games}}
-    {{noopengames}}
+   {{#str}} noopengames, mod_mooduell {{/str}}
 {{/games}}
 
-<table class="generaltable">
-    <thead>
+<table class="generaltable fullwidth fieldslist">
+<thead>                
     <tr>
-        {{#headings}}
-            <th class="header" style="text-align:left;" scope="col">{{playera}}</th>
-            <th class="header" style="text-align:left;" scope="col">{{playerb}}</th>
-        {{/headings}}
+                    <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
+                    <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
+                    <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
     <tbody>
     {{#games}}
-        <tr>
-            <td class="cell" style="text-align:left;" scope="col">{{playera}}</td>
-            <td class="cell" style="text-align:left;" scope="col">{{playerb}}</td>
-        </tr>
+    <tr class="field">
+                        <td>{{{playera}}}</td>
+                        <td>{{{playerb}}}</td>
+                        <td class="text-right">
+                            {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix} 
+                                t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
+                            <a href="index.php?action=delete&id={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
+                                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
+                        </td>
+                    </tr>
     {{/games}}
     </tbody>
 </table>
