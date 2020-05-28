@@ -25,10 +25,6 @@
     }}
 <h2>{{#str}} opengames, mod_mooduell {{/str}}</h2>
 
-{{^games}}
-   {{#str}} noopengames, mod_mooduell {{/str}}
-{{/games}}
-
 <table class="generaltable fullwidth fieldslist">
 <thead>                
     <tr>
@@ -52,3 +48,7 @@
     {{/games}}
     </tbody>
 </table>
+
+{{^games}}
+   {{#str}} noopengames, mod_mooduell {{/str}}
+{{/games}}
