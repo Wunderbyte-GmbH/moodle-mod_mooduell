@@ -158,6 +158,11 @@ class game_control {
                 'mooduellid' => $this->mooduell->cm->instance
         ]);
 
+        if (count($categories) == 0) {
+            throw new moodle_exception('nocategoriesassociated', null, null,
+                    "There are no Categories associated to this quiz. We can't find any questions.");
+        }
+
         // First we calculate the number of question every category gets.
         $setnumberofquestions = 9;
         $sum = 0;
