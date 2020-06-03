@@ -397,6 +397,42 @@ class game_control {
         return $this->gamedata;
     }
 
+
+    function return_status() {
+
+        // We make sure we already have our questions when we call this function.
+        if (!isset($this->gamedata->questions) || count($this->gamedata->questions) == 0) {
+            $this->get_questions();
+        }
+
+        $playerastring = '';
+        $playerbstring = '';
+
+        foreach ($this->gamedata->questions as $question) {
+
+            if ($question->playeraanswered == null) {
+                $playerastring .= ' - ';
+            }
+            else {
+                $playerastring .= $question->playeraanswered == 1 ? '&#10008;' : '&#10003;';
+            }
+
+            if ($question->playerbanswered == null) {
+                $playerbstring .= ' - ';
+            }
+            else {
+                $playerbstring .= $question->playerbanswered == 1 ? '&#10008;' : '&#10003;';
+            }
+        }
+
+        $returnarray[] = $playerastring;
+        $returnarray[] = $playerbstring;
+
+        return $returnarray;
+    }
+
+
+
     /**
      * Check if active player is allowed to answer questions
      *
@@ -532,16 +568,16 @@ class game_control {
      * @return array
      * @throws moodle_exception
      */
-    public function return_users_for_game() {
-        $context = $this->mooduell->context;
+    public static function return_users_for_game($mooduell) {
+        $context = $mooduell->context;
         $users = get_enrolled_users($context);
 
         $filteredusers = array();
 
         foreach ($users as $user) {
             // We need to specifiy userid already when calling modinfo.
-            $modinfo = get_fast_modinfo($this->mooduell->course->id, $user->id);
-            $cm = $modinfo->get_cm($this->mooduell->cm->id);
+            $modinfo = get_fast_modinfo($mooduell->course->id, $user->id);
+            $cm = $modinfo->get_cm($mooduell->cm->id);
 
             if ($cm->uservisible) {
                 $filteredusers[] = $user;

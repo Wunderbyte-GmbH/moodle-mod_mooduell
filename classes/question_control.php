@@ -30,12 +30,6 @@ class question_control {
 
     /**
      *
-     * @var int
-     */
-    public $id;
-
-    /**
-     *
      * @var string
      */
     public $name;
@@ -93,10 +87,10 @@ class question_control {
             $this->category = $data->category;
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
-            if ($data->payeraanswered) {
+            if (isset($data->playeraanswered)) {
                 $this->playeraanswered = $data->playeraanswered;
             }
-            if ($data->payerbanswered) {
+            if (isset($data->playerbanswered)) {
                 $this->playerbanswered = $data->playerbanswered;
             }
 

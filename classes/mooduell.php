@@ -232,10 +232,15 @@ class mooduell {
         $returngames = array();
 
         foreach ($games as $game) {
+
+            $results = $game->return_status();
+
             $returngames[] = [
                     'gameid'=>  $game->gamedata->gameid,
                     "playera" => $this->return_name_by_id($game->gamedata->playeraid),
-                    'playerb' => $this->return_name_by_id($game->gamedata->playerbid)
+                    'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
+                    'playeraresults' => $results[0],
+                    'playerbresults' => $results[1]
             ];
         }
 

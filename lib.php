@@ -69,7 +69,7 @@ function mooduell_add_instance(stdClass $data, mod_mooduell_mod_form $mform = nu
  * @param mod_mooduell_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function mooduell_update_instance($moduleinstance, $mform = null) {
+function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();

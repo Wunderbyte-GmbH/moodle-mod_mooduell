@@ -26,25 +26,29 @@
 <h2>{{#str}} opengames, mod_mooduell {{/str}}</h2>
 
 <table class="generaltable fullwidth fieldslist">
-<thead>                
+    <thead>
     <tr>
-                    <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
-                    <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
-                    <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
+        <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
     <tbody>
     {{#games}}
-    <tr class="field">
-                        <td>{{{playera}}}</td>
-                        <td>{{{playerb}}}</td>
-                        <td class="text-right">
-                            {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix} 
-                                t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                            <a href="index.php?action=delete&id={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
-                                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
-                        </td>
-                    </tr>
+        <tr class="field">
+            <td>{{{playera}}}</td>
+            <td>{{{playeraresults}}}</td>
+            <td>{{{playerb}}}</td>
+            <td>{{{playerbresults}}}</td>
+            <td class="text-right">
+                {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
+                    t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
+                <a href="index.php?action=delete&id={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
+                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
+            </td>
+        </tr>
     {{/games}}
     </tbody>
 </table>
