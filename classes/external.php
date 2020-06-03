@@ -178,7 +178,7 @@ class mod_mooduell_external extends external_api {
     public static function answer_question_returns() {
         return new external_single_structure(array(
                 'response' => new external_multiple_structure(
-                        new external_value(PARAM_INT, 'ids of correct questions OR 0 if false, 1 if true')
+                        new external_value(PARAM_INT, 'ids of correct answers OR 0 if false, 1 if true')
                 )
         ));
     }
@@ -444,7 +444,7 @@ class mod_mooduell_external extends external_api {
                         'winnerid' => new external_value(PARAM_INT, 'winner id'),
                         'status' => new external_value(PARAM_INT, 'stauts'),
                         'questions' => new external_multiple_structure(new external_single_structure(array(
-                                                'id' => new external_value(PARAM_INT, 'questionid'),
+                                                'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
                                                 'qtype' => new external_value(PARAM_RAW, 'qtype'),
                                                 'category' => new external_value(PARAM_INT, 'category'),
@@ -477,11 +477,10 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_quiz_users($courseid, $quizid, $gameid) {
+    public static function get_quiz_users($courseid, $quizid) {
         $params = array(
                 'courseid' => $courseid,
-                'quizid' => $quizid,
-                'gameid' => $gameid
+                'quizid' => $quizid
         );
 
         $params = self::validate_parameters(self::get_quiz_users_parameters(), $params);
@@ -497,11 +496,8 @@ class mod_mooduell_external extends external_api {
         // We create Mooduell Instance.
         $mooduell = new mooduell($quizid);
 
-        // We create the game_controller Instance.
-        $gamecontroller = new game_control($mooduell, $gameid);
-
         // We can now retrieve the questions and add them to our gamedata
-        return $gamecontroller->return_users_for_game();
+        return game_control::return_users_for_game($mooduell);
     }
 
     /**
@@ -513,8 +509,7 @@ class mod_mooduell_external extends external_api {
     public static function get_quiz_users_parameters() {
         return new external_function_parameters(array(
                 'courseid' => new external_value(PARAM_INT, 'course id'),
-                'quizid' => new external_value(PARAM_INT, 'quizid id'),
-                'gameid' => new external_value(PARAM_INT, 'gameid id')
+                'quizid' => new external_value(PARAM_INT, 'quizid id')
         ));
     }
 
