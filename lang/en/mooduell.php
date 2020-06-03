@@ -59,3 +59,6 @@ $string['opengames'] = 'Open games:';
 $string['playera'] = 'Player A';
 $string['playerb'] = 'Player B';
 $string['action'] = 'Action';
+$string['noquestions'] = 'No questions';
+$string['question'] = 'question';
+$string['questions'] = 'questions';

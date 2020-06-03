@@ -90,6 +90,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // We add the categories for the random question.
         // Right now, there is only one category supported but as a preparation, we already use the formgroup.
         $listofcategories = $DB->get_records('question_categories');
+
         if (count($listofcategories) > 0) {
             $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
             $formgroup = array();
@@ -104,6 +105,9 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     private function return_list_of_category_options($list) {
+
+        global $DB;
+
         $names = array();
         $spaces = "";
         $previousitem = null;
@@ -124,8 +128,20 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
             if ($item->parent != 0) {
 
+                // Here we fetch the number of available questions from our DB:
+                $numberofquestions = $DB->count_records('question', ['category' => $item->id]);
+
+                if ($numberofquestions == 0 ) {
+                    $questionsstring = '(' . get_string('noquestions', 'mod_mooduell') . ')';
+                } else if ($numberofquestions == 1) {
+                    $questionsstring = '(1 ' . get_string('question', 'mod_mooduell') . ')';
+                } else {
+                    $questionsstring = '(' . $numberofquestions . ' ' . get_string('questions', 'mod_mooduell') . ')';
+                }
+
+
                 $idkey = (string) $item->id;
-                $names[$idkey] = $spaces . " " . $item->name;
+                $names[$idkey] = $spaces . " " . $item->name . ' ' . $questionsstring;
             }
             $previousitem = $item;
         }
