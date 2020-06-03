@@ -66,7 +66,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::start_attempt_parameters(), $params);
 
-        // now security checks.
+        // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
             throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
@@ -238,7 +238,6 @@ class mod_mooduell_external extends external_api {
         $returnedquizzes = array();
 
         // Now we run through all the quizzes to find the matching games.
-
         foreach ($quizzes as $quiz) {
 
             // We create Mooduell Instance.
@@ -309,6 +308,13 @@ class mod_mooduell_external extends external_api {
             // Get the quizzes in this course, this function checks users visibility permissions.
             // We can avoid then additional validate_context calls.
             $quizzes = get_all_instances_in_courses("mooduell", $courses);
+
+            // If there are not MooDuell Instances at all in the courses we wanted, we return an exception.
+            if (count($quizzes) == 0) {
+                throw new moodle_exception('nomooduellincourses ', 'mooduell', null, null,
+                        "There are no MooDuell instances in the courses you were looking in");
+            }
+
             foreach ($quizzes as $quiz) {
                 $context = context_module::instance($quiz->coursemodule);
 
