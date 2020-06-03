@@ -141,16 +141,48 @@ class mooduell {
         global $DB;
 
         // Write categories to categories table.
-
         if (isset($formdata->categoriesgroup)) {
-            foreach ($formdata->categoriesgroup as $category) {
 
-                $data = new stdClass();
-                $data->mooduellid = $mooduellid;
-                $data->category = $category;
-                $data->weight = 100;
 
-                $DB->insert_record('mooduell_categories', $data);
+            // First we have to check if we have any category entry for our Mooduell Id
+            $foundrecords = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
+            $newrecords = $formdata->categoriesgroup;
+
+            // If there is no categoriesgroup in Formdata at all, we abort.
+            if (!$newrecords || count($newrecords) == 0) {
+                return;
+            }
+
+            // Else we determine if we have more new or old records and set $i accordingly;
+            $max = count($foundrecords) >= count($newrecords) ? count($foundrecords) : count($newrecords);
+            $i = 0;
+
+            while ($i < $max) {
+
+                $foundrecord = count($foundrecords) > 0 ? array_pop($foundrecords) : null;
+                $newrecord = count($newrecords) > 0 ? array_pop($newrecords) : null;
+
+                // If we have still a foundrecord left, we update it
+                if ($foundrecord && $newrecord) {
+                    $data = new stdClass();
+                    $data->id = $foundrecord->id;
+                    $data->mooduellid = $mooduellid;
+                    $data->category = is_object($newrecord) ? $newrecord->category : $newrecord;
+                    $data->weight = 100;
+                    $DB->update_record('mooduell_categories', $data);
+                } else if ($foundrecord) {
+                    // Else we have more foundrecords than new recors, we delete the found ones.
+                    $data = new stdClass();
+                    $data->id = $foundrecord->id;
+                    $DB->delete_record('mooduell_categories', $data);
+                } else {
+                    $data = new stdClass();
+                    $data->mooduellid = $mooduellid;
+                    $data->category = is_object($newrecord) ? $newrecord->category : $newrecord;
+                    $data->weight = 100;
+                    $DB->insert_record('mooduell_categories', $data);
+                }
+                $i++;
             }
         }
 

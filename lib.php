@@ -75,6 +75,8 @@ function mooduell_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
+    mod_mooduell\mooduell::update_categories($moduleinstance->id, $mform->get_data());
+
     return $DB->update_record('mooduell', $moduleinstance);
 }
 
