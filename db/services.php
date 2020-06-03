@@ -24,7 +24,7 @@
  * @since Moodle 3.1
  */
 $functions = array(
-        'mod_mooduell_quiz_start_attempt' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function
+        'mod_mooduell_start_attempt' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function
             // ... that the client will call.
                 'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external .
                 'methodname' => 'start_attempt', // Implement this function into the above class.
