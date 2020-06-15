@@ -189,11 +189,15 @@ class mod_mooduell_external extends external_api {
     public static function get_quizzes_by_courses_returns() {
         return new external_single_structure(array(
                 'quizzes' => new external_multiple_structure(new external_single_structure(array(
-                        'id' => new external_value(PARAM_INT, 'id of coursemodule'),
-                        'name' => new external_value(PARAM_RAW, 'name of quiz'),
-                        'course' => new external_value(PARAM_INT, 'courseid'),
-                        'coursemodule' => new external_value(PARAM_INT, 'coursemodule'),
-                        'isteacher' => new external_value(PARAM_INT, 'isteacher')
+                        'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
+                        'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
+                        'courseid' => new external_value(PARAM_INT, 'courseid'),
+                        'coursename' => new external_value(PARAM_INT, 'coursename'),
+                        'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
+                        'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
+                        'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
+                        'countdown' => new external_value(PARAM_INT, 'countdown'),
+                        'isteacher' => new external_value(PARAM_INT, 'isteacher'),
                 )))
         ));
     }
@@ -321,11 +325,17 @@ class mod_mooduell_external extends external_api {
                 // Entry to return.
                 $quizdetails = array();
                 // First, we return information that any user can see in the web interface.
-                $quizdetails['id'] = $quiz->id;
+                $quizdetails['quizid'] = $quiz->coursemodule;
+                $quizdetails['quizname'] = 'testname';
+                $quizdetails['usefullnames'] = $quiz->usefullnames;
+                $quizdetails['showcontinuebutton'] = $quiz->showcontinuebutton;
+                $quizdetails['showcorrectanswer'] = $quiz->showcorrectanswer;
+                $quizdetails['countdown'] = $quiz->countdown;
 
-                $quizdetails['course'] = $quiz->course;
+                $quizdetails['courseid'] = $quiz->course;
+                $quizdetails['coursename'] = $quiz->course;
                 $quizdetails['coursemodule'] = $quiz->coursemodule;
-                $quizdetails['name'] = external_format_string($quiz->name, $context->id);
+                $quizdetails['quizname'] = external_format_string($quiz->name, $context->id);
 
                 if (has_capability('mod/quiz:view', $context)) {
 
@@ -365,14 +375,24 @@ class mod_mooduell_external extends external_api {
     public static function get_games_by_courses_returns() {
         return new external_single_structure(array(
                 'quizzes' => new external_multiple_structure(new external_single_structure(array(
-                        'id' => new external_value(PARAM_INT, 'id of coursemodule'),
-                        'name' => new external_value(PARAM_RAW, 'name of quiz'),
-                        'course' => new external_value(PARAM_INT, 'courseid'),
+                        'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
+                        'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
+                        'courseid' => new external_value(PARAM_INT, 'courseid'),
+                        'coursename' => new external_value(PARAM_INT, 'coursename'),
+                        'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
+                        'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
+                        'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
+                        'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
                         'games' => new external_multiple_structure(new external_single_structure(array(
                                 'gameid' => new external_value(PARAM_INT, 'id of game'),
                                 'playeraid' => new external_value(PARAM_INT, 'id of player A'),
-                                'playerbid' => new external_value(PARAM_INT, 'id of player B')
+                                'playerbid' => new external_value(PARAM_INT, 'id of player B'),
+                                'playeratime' => new external_value(PARAM_INT, 'time of player B'),
+                                'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
+                                'status' => new external_value(PARAM_INT, 'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
+                                'winnerid' => new external_value(PARAM_INT, 'id of winner'),
+                                'timemodified' => new external_value(PARAM_INT, 'time modified')
                         )))
                 )))
         ));
