@@ -520,7 +520,10 @@ class mod_mooduell_external extends external_api {
         return new external_multiple_structure(new external_single_structure(array(
                                 'id' => new external_value(PARAM_INT, 'userid'),
                                 'firstname' => new external_value(PARAM_RAW, 'firstname'),
-                                'lastname' => new external_value(PARAM_RAW, 'lastname')
+                                'lastname' => new external_value(PARAM_RAW, 'lastname'),
+                                'username' => new external_value(PARAM_RAW, 'username'),
+                                'lang' => new external_value(PARAM_RAW, 'lastname'),
+                                'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
                         )
                 )
         );

@@ -569,6 +569,9 @@ class game_control {
      * @throws moodle_exception
      */
     public static function return_users_for_game($mooduell) {
+
+        global $PAGE;
+
         $context = $mooduell->context;
         $users = get_enrolled_users($context);
 
@@ -582,6 +585,11 @@ class game_control {
             if ($cm->uservisible) {
                 $filteredusers[] = $user;
             }
+
+            $userpicture = new \user_picture($user);
+            $userpicture->size = 1; // Size f1.
+            $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
+
         }
         return $filteredusers;
     }
