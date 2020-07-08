@@ -89,7 +89,7 @@ class mod_mooduell_external extends external_api {
 
         $result = array();
         $result['status'] = $startgameresult;
-        return $result;
+        return $startgameresult;
     }
 
     /**
@@ -108,8 +108,31 @@ class mod_mooduell_external extends external_api {
      */
     public static function start_attempt_returns() {
         return new external_single_structure(array(
-                'status' => new external_value(PARAM_INT, 'number of added questions')
-        ));
+                        'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
+                        'gameid' => new external_value(PARAM_INT, 'gameid'),
+                        'playeraid' => new external_value(PARAM_INT, 'player A id'),
+                        'playerbid' => new external_value(PARAM_INT, 'player B id'),
+                        'winnerid' => new external_value(PARAM_INT, 'winner id'),
+                        'status' => new external_value(PARAM_INT, 'stauts'),
+                        'questions' => new external_multiple_structure(new external_single_structure(array(
+                                                'questionid' => new external_value(PARAM_INT, 'questionid'),
+                                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
+                                                'questiontype' => new external_value(PARAM_RAW, 'qtype'),
+                                                'category' => new external_value(PARAM_INT, 'category'),
+                                                'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
+                                                'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
+                                                'answers' => new external_multiple_structure(new external_single_structure(array(
+                                                                        'id' => new external_value(PARAM_INT, 'answerid'),
+                                                                        'answertext' => new external_value(PARAM_RAW,
+                                                                                'answer text'),
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
     /**
@@ -192,7 +215,7 @@ class mod_mooduell_external extends external_api {
                         'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
                         'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
                         'courseid' => new external_value(PARAM_INT, 'courseid'),
-                        'coursename' => new external_value(PARAM_INT, 'coursename'),
+                        'coursename' => new external_value(PARAM_>RAW, 'coursename'),
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
@@ -321,6 +344,7 @@ class mod_mooduell_external extends external_api {
 
             foreach ($quizzes as $quiz) {
                 $context = context_module::instance($quiz->coursemodule);
+                $course = get_course($quiz->course);
 
                 // Entry to return.
                 $quizdetails = array();
@@ -333,7 +357,7 @@ class mod_mooduell_external extends external_api {
                 $quizdetails['countdown'] = $quiz->countdown;
 
                 $quizdetails['courseid'] = $quiz->course;
-                $quizdetails['coursename'] = $quiz->course;
+                $quizdetails['coursename'] = $course->fullname;
                 $quizdetails['coursemodule'] = $quiz->coursemodule;
                 $quizdetails['quizname'] = external_format_string($quiz->name, $context->id);
 
@@ -378,7 +402,7 @@ class mod_mooduell_external extends external_api {
                         'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
                         'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
                         'courseid' => new external_value(PARAM_INT, 'courseid'),
-                        'coursename' => new external_value(PARAM_INT, 'coursename'),
+                        'coursename' => new external_value(PARAM_RAW, 'coursename'),
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
@@ -391,7 +415,7 @@ class mod_mooduell_external extends external_api {
                                 'playeratime' => new external_value(PARAM_INT, 'time of player B'),
                                 'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
                                 'status' => new external_value(PARAM_INT, 'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
-                                'winnerid' => new external_value(PARAM_INT, 'id of winner'),
+                                'winnerid' => new external_value(PARAM_INT, 'id of winner, 0 is not yet finished'),
                                 'timemodified' => new external_value(PARAM_INT, 'time modified')
                         )))
                 )))
@@ -411,14 +435,14 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_quiz_data($courseid, $quizid, $gameid) {
+    public static function get_game_data($courseid, $quizid, $gameid) {
         $params = array(
                 'courseid' => $courseid,
                 'quizid' => $quizid,
                 'gameid' => $gameid
         );
 
-        $params = self::validate_parameters(self::get_quiz_data_parameters(), $params);
+        $params = self::validate_parameters(self::get_game_data_parameters(), $params);
 
         // Now security checks.
 
@@ -439,12 +463,12 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the parameters for get_quiz_data.
+     * Describes the parameters for get_game_data.
      *
      * @return external_function_parameters
      * @since Moodle 3.1
      */
-    public static function get_quiz_data_parameters() {
+    public static function get_game_data_parameters() {
         return new external_function_parameters(array(
                 'courseid' => new external_value(PARAM_INT, 'course id'),
                 'quizid' => new external_value(PARAM_INT, 'quizid id'),
@@ -455,7 +479,7 @@ class mod_mooduell_external extends external_api {
     /**
      * @return external_single_structure
      */
-    public static function get_quiz_data_returns() {
+    public static function get_game_data_returns() {
         return new external_single_structure(array(
                         'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
                         'gameid' => new external_value(PARAM_INT, 'gameid'),
@@ -466,7 +490,7 @@ class mod_mooduell_external extends external_api {
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                                                'qtype' => new external_value(PARAM_RAW, 'qtype'),
+                                                'questiontype' => new external_value(PARAM_RAW, 'qtype'),
                                                 'category' => new external_value(PARAM_INT, 'category'),
                                                 'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
                                                 'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
@@ -521,7 +545,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the parameters for get_quiz_data.
+     * Describes the parameters for get_quiz_users.
      *
      * @return external_function_parameters
      * @since Moodle 3.1

@@ -90,7 +90,8 @@ class game_control {
             $data->timecreated = $gamedata->timecreated;
         } else {
             $data = new stdClass();
-            $data->playeraid = $USER->id;
+            $data->playeraid = (int)$USER->id;
+            $data->winnerid = 0;
             $data->timemodified = $nowtime;
             $data->timecreated = $nowtime;
         }
@@ -125,7 +126,7 @@ class game_control {
         $questions = self::set_random_questions();
 
         // We collect all the data to safe to mooduell_games table.
-        $this->gameid = $DB->insert_record('mooduell_games', $data);
+        $this->gamedata->gameid = $DB->insert_record('mooduell_games', $data);
 
         // Write all our questions to our DB and link it to our gameID.
         foreach ($questions as $question) {
@@ -134,12 +135,12 @@ class game_control {
             $data = null;
             $data->questionid = $question->id;
             $data->mooduellid = $this->mooduell->cm->instance;
-            $data->gameid = $this->gameid;
+            $data->gameid = $this->gamedata->gameid;
 
             $DB->insert_record('mooduell_questions', $data);
         }
 
-        return $this->gameid;
+        return $this->get_questions();
     }
 
     /**
@@ -496,7 +497,12 @@ class game_control {
 
             $update->playeraanswered = $result;
             // We update result in live memory as well
-            $this->gamedata->questions[$questionid]->playeraanswered = $result;
+            foreach ($this->gamedata->questions as $question){
+                if ($questionid == $question->questionid) {
+                    $question->playeraanswered = $result;
+                    break;
+                }
+            }
         } else {
 
             // We throw an Error if the question is already answered.
@@ -507,8 +513,15 @@ class game_control {
 
             $update->playerbanswered = $result;
             // We update in live memory as well
-            $this->gamedata->questions[$questionid]->playerbanswered = $result;
+            foreach ($this->gamedata->questions as $question){
+                if ($questionid == $question->questionid) {
+                    $question->playerbanswered = $result;
+                    break;
+                }
+            }
         }
+
+        // Check who's turn it is
 
         $DB->update_record('mooduell_questions', $update);
 
@@ -550,7 +563,7 @@ class game_control {
 
         if (count($this->gamedata->questions) != 9) {
             throw new moodle_exception('nottherightnumberofquestions', 'mooduell', null, null,
-                    "Not the right number of questions, we can't decide if game is finsihed or not");
+                    'Not the right number of questions ('. count($this->gamedata->questions) .'), we cant decide if game is finsihed or not');
         }
 
         foreach ($this->gamedata->questions as $question) {

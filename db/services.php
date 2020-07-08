@@ -44,10 +44,10 @@ $functions = array(
             // Optional, only available for Moodle 3.1 onwards. List of built-in services (by shortname) ...
             // ... where the function will be included. Services created manually via the Moodle interface are not supported.
         ),
-        'mod_mooduell_get_quiz_data' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function ...
+        'mod_mooduell_get_game_data' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function ...
             // ... that the client will call.
                 'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_quiz_data', // Implement this function into the above class
+                'methodname' => 'get_game_data', // Implement this function into the above class
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'This documentation will be displayed in the generated API documentation
                                   (Administration > Plugins > Webservices > API documentation)',

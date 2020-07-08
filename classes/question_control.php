@@ -44,7 +44,7 @@ class question_control {
      *
      * @var string
      */
-    public $qtype;
+    public $questiontype;
 
     /**
      *
@@ -83,7 +83,7 @@ class question_control {
             $this->questionid = $data->id;
             $this->name = $data->name;
             $this->questiontext = $data->questiontext;
-            $this->qtype = $data->qtype;
+            $this->questiontype = $data->qtype;
             $this->category = $data->category;
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
