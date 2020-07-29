@@ -457,11 +457,33 @@ class game_control {
         // If we have incomplete packages, we can always go on...
         // ... else we have to have less or equal answered questions.
 
-        if (($i <= $j) || ($i % 3 != 0)) {
-            return true;
+        if ($i % 3 === 0 && $j % 3 === 0) {
+            switch ($i) {
+                case 0:
+                    return true;
+                    break;
+                case 3:
+                    return false;
+                    break;
+                case 9:
+                    return false;
+                    break;
+
+            }
         } else {
-            return false;
+            // we are in the middle of a game, therefore, we only return the set status of our game
+            switch ($this->gamedata.status) {
+                case null:
+                    return true;
+                case 1:
+                    return true;
+                case 2:
+                    return false;
+                case 3:
+                    return false;
+            }
         }
+
     }
 
     /**
