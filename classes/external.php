@@ -574,6 +574,48 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * @param $userid
+     * @return array
+     * @throws invalid_parameter_exception
+     */
+    public static function get_user_stats($userid) {
+        $params = array(
+                'userid' => $userid
+        );
+
+        $params = self::validate_parameters(self::get_user_stats_parameters(), $params);
+
+
+        return game_control::get_user_stats($params['userid']);
+
+    }
+
+    /**
+     * Describes the parameters for get_user_stats
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_user_stats_parameters() {
+        return new external_function_parameters(array(
+                'userid' => new external_value(PARAM_INT, 'user id')
+        ));
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function get_user_stats_returns() {
+        return new external_single_structure(array(
+                                'userid' => new external_value(PARAM_INT, 'userid'),
+                                'playedgames' => new external_value(PARAM_INT, 'playedgames'),
+                                'wongames' => new external_value(PARAM_INT, 'wongames'),
+                                'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
+                        )
+        );
+    }
+
+    /**
      * @param $quizid
      * @return mixed
      * @throws invalid_parameter_exception

@@ -607,6 +607,55 @@ class game_control {
         return $filteredusers;
     }
 
+    public static function get_user_stats($userid) {
+
+        global $USER;
+        global $DB;
+
+        $returnarray = [];
+
+        // Get all the games where player was either Player A or Player B AND game is finished
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = '.$userid.' OR playerbid ='.$userid.') AND status = 3');
+        $returnarray['playedgames'] = count($data);
+        $data = $DB->count_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = '.$userid);
+        $returnarray['wongames'] = count($data);
+        $returnarray['userid'] = $userid;
+
+        // to find out the id of our nemesis, we first have to get all the records where we lost
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = '.$userid.' OR playerbid ='.$userid.') AND status = 3 AND winnerid !='.$userid.' AND winnerid != 0');
+        
+        // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again
+
+        $enemiesarray = [];
+        foreach ($data as $entry) {
+
+            // first we have to get adversaryid
+            $adversaryid = $entry->playeraid == $userid ? $entry->playerbid : $entry->playeraid;
+
+            if (!$enemiesarray[$adversaryid]) {
+                $enemiesarray[$adversaryid] = 1;
+            } else {
+                $enemiesarray[$adversaryid] += 1;
+            }
+        }
+
+        $maxs = array_keys($enemiesarray, max($enemiesarray));
+        $returnarray['nemesisuserid'] = $maxs[0];
+
+        // We don't want to return undefined, so we check if we have to fix something
+
+        if (!$returnarray['nemesisuserid']) {
+            $returnarray['nemesisuserid'] = 0;
+        }
+        if (!$returnarray['playedgames']) {
+            $returnarray['playedgames'] = 0;
+        }
+        if (!$returnarray['wongames']) {
+            $returnarray['wongames'] = 0;
+        }
+
+        return $returnarray;
+    }
 
     public static function get_highscores($quizid) {
 

@@ -142,6 +142,26 @@ $functions = array(
             // List of built-in services (by shortname) where the function will be included.
             // Services created manually via the Moodle interface are not supported.
         ),
+        'mod_mooduell_get_user_stats' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
+            // ... web service function that the client will call.
+                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
+                'methodname' => 'get_user_stats', // Implement this function into the above class
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'This documentation will be displayed in the generated API documentation
+                              (Administration > Plugins > Webservices > API documentation)',
+                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
+                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
+                'capabilities' => 'mod/mooduell:view',
+            // List the capabilities required by the function (those in a require_capability() call) ...
+            // ... (missing capabilities are displayed for authorised users ...
+            // ... and also for manually created tokens in the web interface, this is just informative).
+                'services' => array(
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                )
+            // Optional, only available for Moodle 3.1 onwards.
+            // List of built-in services (by shortname) where the function will be included.
+            // Services created manually via the Moodle interface are not supported.
+        ),
         'mod_mooduell_get_highscores' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
             // ... web service function that the client will call.
                 'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
