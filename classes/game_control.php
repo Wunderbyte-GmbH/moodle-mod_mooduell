@@ -607,4 +607,54 @@ class game_control {
         return $filteredusers;
     }
 
+
+    public static function get_highscores($quizid) {
+
+        global $USER;
+        global $DB;
+
+        $temparray = [];
+
+        // Get all the finished games
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE status = 3');
+
+        $temparray = [];
+
+        foreach ($data as $entry) {
+            // get the scores
+
+            switch($entry->winnerid) {
+                case 0:
+                    $playerascore = 1;
+                    $playerbscore = 1;
+                    break;
+                case $entry->playeraid:
+                    $playerascore = 3;
+                    $playerbscore = 0;
+                    break;
+                case $entry->playerbid:
+                    $playerascore = 0;
+                    $playerbscore = 3;
+                    break;
+            }
+
+            if (!$temparray[$entry->playeraid]) {
+                $temparray[$entry->playeraid] = $playerascore;
+                $temparray[$entry->playerbid] = $playerbscore;
+            } else {
+                $temparray[$entry->playeraid] += $playerascore;
+                $temparray[$entry->playerbid] += $playerbscore;
+            }
+        }
+        $returnarray = [];
+        foreach($temparray as $entry) {
+            $returnarray
+        };
+
+
+
+        return $returnarray;
+
+    }
+
 }

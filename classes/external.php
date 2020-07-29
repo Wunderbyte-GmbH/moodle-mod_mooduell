@@ -572,4 +572,45 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
+
+    /**
+     * @param $quizid
+     * @return mixed
+     * @throws invalid_parameter_exception
+     */
+    public static function get_highscores($quizid) {
+        $params = array(
+                'quizid' => $quizid
+        );
+
+        $params = self::validate_parameters(self::get_highscores_parameters(), $params);
+
+
+        return game_control::get_highscores($params['quizid']);
+
+    }
+
+    /**
+     * Describes the parameters for get_user_stats
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_highscores_parameters() {
+        return new external_function_parameters(array(
+                'quizid' => new external_value(PARAM_INT, 'quiz id')
+        ));
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function get_highscores_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'userid' => new external_value(PARAM_INT, 'userid'),
+                                'points' => new external_value(PARAM_INT, 'firstname')
+                        )
+                )
+        );
+    }
 }
