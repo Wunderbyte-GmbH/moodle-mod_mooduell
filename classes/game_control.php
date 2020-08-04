@@ -694,16 +694,16 @@ class game_control {
         foreach ($data as $entry) {
             // get the scores
 
-            switch($entry->winnerid) {
+            switch ($entry->winnerid) {
                 case 0:
                     $playerascore = 1;
                     $playerbscore = 1;
                     break;
-                case $entry->playeraid:
+                case ($entry->winnerid === $entry->playeraid):
                     $playerascore = 3;
                     $playerbscore = 0;
                     break;
-                case $entry->playerbid:
+                case ($entry->winnerid === $entry->playerbid):
                     $playerascore = 0;
                     $playerbscore = 3;
                     break;
@@ -718,8 +718,11 @@ class game_control {
             }
         }
         $returnarray = [];
-        foreach($temparray as $entry) {
-            $returnarray
+        foreach($temparray as $key => $value) {
+            $entry = [];
+            $entry['userid'] = $key;
+            $entry['score'] = $value;
+            $returnarray[] = $entry;
         };
 
 

@@ -68,8 +68,8 @@ class mod_mooduell_external extends external_api {
 
         // Now security checks.
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
-            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -77,13 +77,13 @@ class mod_mooduell_external extends external_api {
         // require_capability('moodle/course:managegroups', $context);
 
         // we create Mooduell Instance.
-        $mooduell = new mooduell($quizid);
+        $mooduell = new mooduell($params['quizid']);
 
         // we create the game_controller Instance.
         $gamecontroller = new game_control($mooduell);
 
         // we create a new game: Save parameters to DB & trigger notification event.
-        $startgameresult = $gamecontroller->start_new_game($playerbid);
+        $startgameresult = $gamecontroller->start_new_game($params['playerbid']);
 
         // TODO: Trigger Notification for other User.
 
@@ -163,8 +163,8 @@ class mod_mooduell_external extends external_api {
 
         // now security checks.
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
-            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -172,12 +172,12 @@ class mod_mooduell_external extends external_api {
         // require_capability('moodle/course:managegroups', $context);
 
         // we create Mooduell Instance.
-        $mooduell = new mooduell($quizid);
+        $mooduell = new mooduell($params['quizid']);
 
         // we create the game_controller Instance.
-        $gamecontroller = new game_control($mooduell, $gameid);
+        $gamecontroller = new game_control($mooduell, $params['gameid']);
 
-        $result['response'] = $gamecontroller->validate_question($questionid, $answerids);
+        $result['response'] = $gamecontroller->validate_question($params['questionid'], $params['answerids']);
 
         return $result;
     }
@@ -446,17 +446,17 @@ class mod_mooduell_external extends external_api {
 
         // Now security checks.
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
-            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
         // We create Mooduell Instance.
-        $mooduell = new mooduell($quizid);
+        $mooduell = new mooduell($params['quizid']);
 
         // We create the game_controller Instance.
-        $gamecontroller = new game_control($mooduell, $gameid);
+        $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         // We can now retrieve the questions and add them to our gamedata
         return $gamecontroller->get_questions();
@@ -531,14 +531,14 @@ class mod_mooduell_external extends external_api {
 
         // Now security checks.
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $quizid)) {
-            throw new moodle_exception('invalidcoursemodule ' . $quizid, 'quiz', null, null, "Course module id: $quizid");
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
         // We create Mooduell Instance.
-        $mooduell = new mooduell($quizid);
+        $mooduell = new mooduell($params['quizid']);
 
         // We can now retrieve the questions and add them to our gamedata
         return game_control::return_users_for_game($mooduell);
@@ -627,7 +627,6 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::get_highscores_parameters(), $params);
 
-
         return game_control::get_highscores($params['quizid']);
 
     }
@@ -650,7 +649,7 @@ class mod_mooduell_external extends external_api {
     public static function get_highscores_returns() {
         return new external_multiple_structure(new external_single_structure(array(
                                 'userid' => new external_value(PARAM_INT, 'userid'),
-                                'points' => new external_value(PARAM_INT, 'firstname')
+                                'score' => new external_value(PARAM_INT, 'firstname')
                         )
                 )
         );
