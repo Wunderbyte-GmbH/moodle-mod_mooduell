@@ -259,6 +259,7 @@ class mooduell {
      */
     public function return_games_for_this_instance($timemodified = -1) {
         global $DB;
+        global $USER;
 
         $returnedgames = array();
 
@@ -272,6 +273,11 @@ class mooduell {
 
                 // If we only want to deal with games that were added since the last time we checked
                 if ($timemodified > $gamedata->timemodified) {
+                    continue;
+                }
+
+                // We only want to include games where the active user is involved
+                if ($gamedata->playeraid != $USER->id && $gamedata->playerbid != $USER->id) {
                     continue;
                 }
 
