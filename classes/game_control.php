@@ -472,7 +472,7 @@ class game_control {
             }
         } else {
             // we are in the middle of a game, therefore, we only return the set status of our game
-            switch ($this->gamedata.status) {
+            switch ($this->gamedata->status) {
                 case null:
                     return true;
                 case 1:
