@@ -123,6 +123,7 @@ class mooduell {
         $data->intro = $formdata->intro;
         $data->introformat = $formdata->introformat;
         $data->countdown = $formdata->countdown;
+        $data->waitfornextquestion = $formdata->waitfornextquestion;
         $data->usefullnames = isset($formdata->usefullnames) ? $formdata->usefullnames : 0;
         $data->showcontinuebutton = isset($formdata->showcontinuebutton) ? $formdata->showcontinuebutton : 0;
         $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;

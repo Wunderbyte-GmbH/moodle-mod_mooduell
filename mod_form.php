@@ -87,6 +87,16 @@ class mod_mooduell_mod_form extends moodleform_mod {
         ];
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $options);
 
+        $options = [
+                "0" => get_string('dontwait', 'mod_mooduell'),
+                "10" => get_string('xseconds', 'mod_mooduell', 2),
+                "20" => get_string('xseconds', 'mod_mooduell', 5),
+                "30" => get_string('xseconds', 'mod_mooduell', 10),
+                "60" => get_string('xseconds', 'mod_mooduell', 20),
+                "90" => get_string('xseconds', 'mod_mooduell', 30)
+        ];
+        $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'), $options);
+
         // We add the categories for the random question.
         // Right now, there is only one category supported but as a preparation, we already use the formgroup.
         $listofcategories = $DB->get_records('question_categories');
