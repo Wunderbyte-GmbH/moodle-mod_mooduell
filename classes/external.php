@@ -113,7 +113,7 @@ class mod_mooduell_external extends external_api {
                         'playeraid' => new external_value(PARAM_INT, 'player A id'),
                         'playerbid' => new external_value(PARAM_INT, 'player B id'),
                         'winnerid' => new external_value(PARAM_INT, 'winner id'),
-                        'status' => new external_value(PARAM_INT, 'stauts'),
+                        'status' => new external_value(PARAM_INT, 'status'),
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
@@ -220,6 +220,7 @@ class mod_mooduell_external extends external_api {
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
+                        'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
                 )))
         ));
@@ -355,7 +356,7 @@ class mod_mooduell_external extends external_api {
                 $quizdetails['showcontinuebutton'] = $quiz->showcontinuebutton;
                 $quizdetails['showcorrectanswer'] = $quiz->showcorrectanswer;
                 $quizdetails['countdown'] = $quiz->countdown;
-
+                $quizdetails['waitfornextquestion'] = $quiz->waitfornextquestion;
                 $quizdetails['courseid'] = $quiz->course;
                 $quizdetails['coursename'] = $course->fullname;
                 $quizdetails['coursemodule'] = $quiz->coursemodule;
@@ -407,6 +408,7 @@ class mod_mooduell_external extends external_api {
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
+                        'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
                         'games' => new external_multiple_structure(new external_single_structure(array(
                                 'gameid' => new external_value(PARAM_INT, 'id of game'),
@@ -486,7 +488,7 @@ class mod_mooduell_external extends external_api {
                         'playeraid' => new external_value(PARAM_INT, 'player A id'),
                         'playerbid' => new external_value(PARAM_INT, 'player B id'),
                         'winnerid' => new external_value(PARAM_INT, 'winner id'),
-                        'status' => new external_value(PARAM_INT, 'stauts'),
+                        'status' => new external_value(PARAM_INT, 'status'),
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
