@@ -299,7 +299,7 @@ class game_control {
             $result = 0;
 
             foreach ($answers as $answer) {
-                if ($answer->fraction >= 0) {
+                if ($answer->fraction > 0) {
                     // if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
                     if ($showcorrectanswer) {
                         $resultarray[] = $answer->id;
