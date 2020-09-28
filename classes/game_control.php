@@ -445,45 +445,45 @@ class game_control {
         $i = 0;
         $j = 0;
         foreach ($this->gamedata->questions as $question) {
-            if ($USER->id == $this->gamedata->playeraid) {
-                $i += $question->playeraanswered != null ? 1 : 0;
-                $j += $question->playerbanswered != null ? 1 : 0;
-            } else {
-                $j += $question->playeraanswered != null ? 1 : 0;
-                $i += $question->playerbanswered != null ? 1 : 0;
-            }
+
+            $i += $question->playeraanswered != null ? 1 : 0;
+            $j += $question->playerbanswered != null ? 1 : 0;
+
         }
 
         // If we have incomplete packages, we can always go on...
         // ... else we have to have less or equal answered questions.
 
-        if ($i % 3 === 0 && $j % 3 === 0) {
-            switch ($i) {
-                case 0:
-                    return true;
-                    break;
-                case 3:
-                    return false;
-                    break;
-                case 9:
-                    return false;
-                    break;
-
+        // For i playera & j playerb
+        if ($i < 3 && $j == 0) {
+            // player a
+            if ($USER->id == $this->gamedata->playeraid) {
+                return true;
+            } else {
+                return false;
             }
-        } else {
-            // we are in the middle of a game, therefore, we only return the set status of our game
-            switch ($this->gamedata->status) {
-                case null:
-                    return true;
-                case 1:
-                    return true;
-                case 2:
-                    return false;
-                case 3:
-                    return false;
+        } else if ($i == 3 && $j < 6) {
+            // player b
+            if ($USER->id == $this->gamedata->playeraid) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if ($i < 9 && $j == 6) {
+            // player a
+            if ($USER->id == $this->gamedata->playeraid) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ($i == 9 && $j < 9) {
+            // player b
+            if ($USER->id == $this->gamedata->playeraid) {
+                return false;
+            } else {
+                return true;
             }
         }
-
     }
 
     /**
