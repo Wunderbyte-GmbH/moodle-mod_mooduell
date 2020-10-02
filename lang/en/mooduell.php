@@ -52,8 +52,12 @@ $string['clicktomoveon'] = 'Show next question right away';
 
 $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Category for random question';
+$string['categoryweight'] = 'Weight of the category';
+$string['categoriesexplanation'] = 'If you choose more than one category, please add a weight. Weight DOES NOT have to sum up to 100';
+$string['addanothercategory'] = 'Add another category';
 $string['questionscategorygroup'] = 'Categories for random questions';
 $string['nocategories'] = 'There are not categories added yet';
+$string['important'] = 'Important!';
 $string['nomessage'] = 'There is nothing to say';
 $string['foundthesegames'] = 'We found these games:';
 $string['noopengames'] = 'There are no open games yet.';

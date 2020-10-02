@@ -138,16 +138,45 @@ class mooduell {
         return $mooduellid;
     }
 
+    /**
+     * Function is called on creating or updating MooDuell Quiz Settings.
+     * One Quiz can have one or more categories-entries.
+     * This function has to make sure creating and updating results in the correct DB entries.
+     * @param $mooduellid
+     * @param $formdata
+     * @return void|null
+     * @throws dml_exception
+     */
     public static function update_categories($mooduellid, $formdata) {
         global $DB;
 
-        // Write categories to categories table.
-        if (isset($formdata->categoriesgroup)) {
+        $categoriesarray = [];
 
+        $counter = 0;
+        $groupname = 'categoriesgroup' . $counter;
+
+        while (isset($formdata->$groupname)) {
+
+            $entry = new stdClass();
+            $newrecord = (object) $formdata->$groupname;
+            $entry->category = $newrecord->category;
+            $entry->weight = $newrecord->weight;
+            $categoriesarray[] = $entry;
+
+            $counter++;
+            $checkboxname = "addanothercategory" . $counter;
+            $groupname = 'categoriesgroup' . $counter;
+            if (!isset($formdata->$checkboxname)) {
+                break;
+            }
+        }
+
+        // Write categories to categories table.
+        if (count($categoriesarray) > 0) {
 
             // First we have to check if we have any category entry for our Mooduell Id
             $foundrecords = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
-            $newrecords = $formdata->categoriesgroup;
+            $newrecords = $categoriesarray;
 
             // If there is no categoriesgroup in Formdata at all, we abort.
             if (!$newrecords || count($newrecords) == 0) {
@@ -168,19 +197,17 @@ class mooduell {
                     $data = new stdClass();
                     $data->id = $foundrecord->id;
                     $data->mooduellid = $mooduellid;
-                    $data->category = is_object($newrecord) ? $newrecord->category : $newrecord;
-                    $data->weight = 100;
+                    $data->category = $newrecord->category;
+                    $data->weight = $newrecord->weight;
                     $DB->update_record('mooduell_categories', $data);
                 } else if ($foundrecord) {
                     // Else we have more foundrecords than new recors, we delete the found ones.
-                    $data = new stdClass();
-                    $data->id = $foundrecord->id;
-                    $DB->delete_record('mooduell_categories', $data);
+                    $DB->delete_records('mooduell_categories', array('id' => $foundrecord->id));
                 } else {
                     $data = new stdClass();
                     $data->mooduellid = $mooduellid;
-                    $data->category = is_object($newrecord) ? $newrecord->category : $newrecord;
-                    $data->weight = 100;
+                    $data->category = $newrecord->category;
+                    $data->weight = $newrecord->weight;
                     $DB->insert_record('mooduell_categories', $data);
                 }
                 $i++;

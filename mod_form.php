@@ -68,7 +68,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $this->standard_coursemodule_elements();
 
         // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
-        // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
         $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
 
@@ -76,42 +75,75 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
         $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
 
-        $options = [
-                "0" => get_string('nocountdown', 'mod_mooduell'),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30),
-                "60" => get_string('xseconds', 'mod_mooduell', 60),
-                "90" => get_string('xseconds', 'mod_mooduell', 90),
-                "120" => get_string('xseconds', 'mod_mooduell', 120)
-        ];
-        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $options);
-
-        $options = [
-                "0" => get_string('clicktomoveon', 'mod_mooduell'),
-                "2" => get_string('xseconds', 'mod_mooduell', 2),
-                "5" => get_string('xseconds', 'mod_mooduell', 5),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30)
-        ];
-        $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'), $options);
+        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
+        $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
+                $this->return_move_on_options());
 
         // We add the categories for the random question.
-        // Right now, there is only one category supported but as a preparation, we already use the formgroup.
         $listofcategories = $DB->get_records('question_categories');
 
+        // Get MooDuell id.
+        $cm = $this->get_coursemodule();
+        $mooduellid = $cm->instance;
+        $listofmooduellcategories = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
-            $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
-            $formgroup = array();
-            $formgroup[] = &
-                    $mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
-            $mform->addGroup($formgroup, 'categoriesgroup', get_string('questionscategorygroup', 'mod_mooduell'));
+            // First, there is the explanation.
+            $mform->addElement('static', 'categoriesexplanation', get_string('important', 'mod_mooduell'),
+                    get_string('categoriesexplanation', 'mod_mooduell'));
+
+            // Between one to three categories are supported.
+            $i = 0;
+            $max = 3;
+            while ($i < $max) {
+
+                $selectedcategory = array_shift($listofmooduellcategories);
+
+                $this->add_categories_group($i, $selectedcategory, $listofcategories, $mform);
+                if ($i < $max - 1) {
+                    $j = $i + 1;
+                    $mform->addElement('checkbox', 'addanothercategory' . $j, get_string('addanothercategory', 'mod_mooduell'));
+                    // we check the checkbox if we have a category element saved
+                    if (count($listofmooduellcategories) > 0) {
+                        $mform->setDefault('addanothercategory' . $j, true);
+                    }
+                }
+                // Hide categories depending on checkboxes add categories.
+                if ($i > 0) {
+                    $j = $i -1;
+                    $mform->hideIf('categoriesgroup' . $i, 'addanothercategory' . $i, 'notchecked');
+                    $mform->hideIf('addanothercategory' . $i, 'addanothercategory' . $j, 'notchecked');
+                }
+                $i++;
+            }
+
         } else {
-            $mform->addElement('static', 'warning', get_string('nocategories', 'mod_mooduell'));
+            // Warning if there are not categories.
+            $mform->addElement('static', 'warning', get_string('important', 'mod_mooduell'),
+                    get_string('nocategories', 'mod_mooduell'));
         }
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    private function add_categories_group($counter, $selectedcategory, $listofcategories, $mform) {
+
+        $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
+        $categoryweightoptions = $this->return_list_of_category_weight_options();
+
+        $formgroup = array();
+        $formgroup[] =&
+                $mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
+        if ($selectedcategory) {
+            $formgroup[0]->setSelected($selectedcategory->category);
+        }
+        $formgroup[] =&
+                $mform->createElement('select', 'weight', get_string('categoryweight', 'mod_mooduell'), $categoryweightoptions);
+        if ($selectedcategory) {
+            $formgroup[1]->setSelected($selectedcategory->weight);
+        } else {
+            $formgroup[1]->setSelected('100');
+        }
+        $mform->addGroup($formgroup, 'categoriesgroup' . $counter, get_string('questionscategorygroup', 'mod_mooduell'));
     }
 
     private function return_list_of_category_options($list) {
@@ -141,7 +173,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 // Here we fetch the number of available questions from our DB:
                 $numberofquestions = $DB->count_records('question', ['category' => $item->id]);
 
-                if ($numberofquestions == 0 ) {
+                if ($numberofquestions == 0) {
                     $questionsstring = '(' . get_string('noquestions', 'mod_mooduell') . ')';
                 } else if ($numberofquestions == 1) {
                     $questionsstring = '(1 ' . get_string('question', 'mod_mooduell') . ')';
@@ -149,13 +181,23 @@ class mod_mooduell_mod_form extends moodleform_mod {
                     $questionsstring = '(' . $numberofquestions . ' ' . get_string('questions', 'mod_mooduell') . ')';
                 }
 
-
                 $idkey = (string) $item->id;
                 $names[$idkey] = $spaces . " " . $item->name . ' ' . $questionsstring;
             }
             $previousitem = $item;
         }
         return $names;
+    }
+
+    private function return_list_of_category_weight_options() {
+        return array(
+                0 => '0',
+                17 => '17',
+                33 => '33',
+                50 => '50',
+                66 => '66',
+                100 => '100'
+        );
     }
 
     private function return_parent_for_item_in_list($list, $item) {
@@ -202,5 +244,40 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
         }
         return $children;
+    }
+
+    /**
+     * Because of get_string, this has to be a function
+     *
+     * @return array
+     * @throws coding_exception
+     */
+    private function return_move_on_options() {
+        return [
+                "0" => get_string('clicktomoveon', 'mod_mooduell'),
+                "2" => get_string('xseconds', 'mod_mooduell', 2),
+                "5" => get_string('xseconds', 'mod_mooduell', 5),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30)
+        ];
+    }
+
+    /**
+     * Because of get_string, this has to be a function
+     *
+     * @return array
+     * @throws coding_exception
+     */
+    private function return_countdown_options() {
+        return [
+                "0" => get_string('nocountdown', 'mod_mooduell'),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30),
+                "60" => get_string('xseconds', 'mod_mooduell', 60),
+                "90" => get_string('xseconds', 'mod_mooduell', 90),
+                "120" => get_string('xseconds', 'mod_mooduell', 120)
+        ];
     }
 }
