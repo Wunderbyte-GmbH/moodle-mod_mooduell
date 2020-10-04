@@ -18,31 +18,35 @@
  * Display information about all the mod_mooduell modules in the requested course.
  *
  * @package mod_mooduell
- * @copyright 2020 David Bogner <david.bogner@wunderbyte.at>
+ * @copyright 2020 Georg Maißer <georg.maisser@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use mod_mooduell\event\course_module_viewed;
 
-require(__DIR__ . '/../../config.php');
-
-require_once(__DIR__ . '/lib.php');
+require_once("../../config.php");
+require_once("locallib.php");
 
 $id = required_param('id', PARAM_INT);
-$action = optional_param('action', '', PARAM_RAW);
+$PAGE->set_url('/mod/quiz/index.php', array('id'=>$id));
+if (!$course = $DB->get_record('course', array('id' => $id))) {
+    print_error('invalidcourseid');
+}
+$coursecontext = context_course::instance($id);
+require_login($course);
+$PAGE->set_pagelayout('incourse');
 
-$course = $DB->get_record('course', array(
-        'id' => $id
-), '*', MUST_EXIST);
-require_course_login($course);
+$params = array(
+        'context' => $coursecontext
+);
 
-$coursecontext = context_course::instance($course->id);
-
-$event = course_module_viewed::create(array(
+/* TODO: Event has to be included
+ *
+ * $event = course_module_viewed::create(array(
         'context' => $modulecontext
 ));
 $event->add_record_snapshot('course', $course);
-$event->trigger();
+$event->trigger();*/
 
 $PAGE->set_url('/mod/mooduell/index.php', array(
         'id' => $id
