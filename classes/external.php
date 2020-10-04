@@ -69,7 +69,8 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+                    "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -164,7 +165,8 @@ class mod_mooduell_external extends external_api {
         // now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+                    "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -215,7 +217,7 @@ class mod_mooduell_external extends external_api {
                         'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
                         'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
                         'courseid' => new external_value(PARAM_INT, 'courseid'),
-                        'coursename' => new external_value(PARAM_>RAW, 'coursename'),
+                        'coursename' => new external_value(PARAM_ > RAW, 'coursename'),
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
@@ -416,7 +418,8 @@ class mod_mooduell_external extends external_api {
                                 'playerbid' => new external_value(PARAM_INT, 'id of player B'),
                                 'playeratime' => new external_value(PARAM_INT, 'time of player B'),
                                 'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
-                                'status' => new external_value(PARAM_INT, 'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
+                                'status' => new external_value(PARAM_INT,
+                                        'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
                                 'winnerid' => new external_value(PARAM_INT, 'id of winner, 0 is not yet finished'),
                                 'timemodified' => new external_value(PARAM_INT, 'time modified')
                         )))
@@ -449,7 +452,8 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+                    "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -534,7 +538,8 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null, "Course module id:".$params['quizid']);
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+                    "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -587,7 +592,6 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::get_user_stats_parameters(), $params);
 
-
         return game_control::get_user_stats($params['userid']);
 
     }
@@ -609,11 +613,11 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_user_stats_returns() {
         return new external_single_structure(array(
-                                'userid' => new external_value(PARAM_INT, 'userid'),
-                                'playedgames' => new external_value(PARAM_INT, 'playedgames'),
-                                'wongames' => new external_value(PARAM_INT, 'wongames'),
-                                'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
-                        )
+                        'userid' => new external_value(PARAM_INT, 'userid'),
+                        'playedgames' => new external_value(PARAM_INT, 'playedgames'),
+                        'wongames' => new external_value(PARAM_INT, 'wongames'),
+                        'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
+                )
         );
     }
 
@@ -651,7 +655,10 @@ class mod_mooduell_external extends external_api {
     public static function get_highscores_returns() {
         return new external_multiple_structure(new external_single_structure(array(
                                 'userid' => new external_value(PARAM_INT, 'userid'),
-                                'score' => new external_value(PARAM_INT, 'firstname')
+                                'won' => new external_value(PARAM_INT, 'won'), // games won
+                                'lost' => new external_value(PARAM_INT, 'lost'), // games lost
+                                'score' => new external_value(PARAM_INT, 'firstname'), // games played
+                                'played' => new external_value(PARAM_INT, 'played')
                         )
                 )
         );

@@ -142,6 +142,7 @@ class mooduell {
      * Function is called on creating or updating MooDuell Quiz Settings.
      * One Quiz can have one or more categories-entries.
      * This function has to make sure creating and updating results in the correct DB entries.
+     *
      * @param $mooduellid
      * @param $formdata
      * @return void|null
@@ -264,7 +265,8 @@ class mooduell {
             $results = $game->return_status();
 
             $returngames[] = [
-                    'gameid'=>  $game->gamedata->gameid,
+                    'mooduellid' => $this->cm->id,
+                    'gameid' => $game->gamedata->gameid,
                     "playera" => $this->return_name_by_id($game->gamedata->playeraid),
                     'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
                     'playeraresults' => $results[0],
@@ -389,5 +391,29 @@ class mooduell {
         } else {
             return false;
         }
+    }
+
+    /**
+     * This function deals with different actions we can call from settings.
+     * @param $action
+     * @param $gameid
+     * @throws dml_exception
+     */
+    public function execute_action($action, $gameid) {
+        if ($action === 'delete' && $gameid) {
+            $this->delete_game_by_id($gameid);
+        }
+    }
+
+    /**
+     * This function allows the teacher to delete games entirely from DB, including randomly selected questions.
+     * @param $gameid
+     * @throws dml_exception
+     */
+    private function delete_game_by_id($gameid) {
+        global $DB;
+
+        $DB->delete_records('mooduell_games', array('id' => $gameid));
+        $DB->delete_records('mooduell_questions', array('gameid' => $gameid));
     }
 }

@@ -30,8 +30,16 @@ require_once("{$CFG->dirroot}/mod/mooduell/classes/mooduell.php");
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 
 $id = required_param('id', PARAM_INT);
+$action = optional_param('action', '', PARAM_RAW);
+$gameid = optional_param('gameid', '', PARAM_INT);
+
 $mooduell = new mooduell($id);
 require_login($mooduell->course, true, $mooduell->cm);
+
+if ($action) {
+    $mooduell->execute_action($action, $gameid);
+    $PAGE->set_url('/mod/mooduell/view.php', array('id'=>$id));
+}
 
 $mooduell->setup_page();
 

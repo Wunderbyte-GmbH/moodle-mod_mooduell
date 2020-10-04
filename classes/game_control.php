@@ -238,6 +238,9 @@ class game_control {
                     "For some unknown reason we didn't receive the right number of questions");
         }
 
+        // We now have an "ordered" array of questions, categories are not mixed up.
+        shuffle($questions);
+
         return $questions;
     }
 
@@ -694,41 +697,69 @@ class game_control {
         foreach ($data as $entry) {
             // get the scores
 
+            $playera = new stdClass();
+            $playerb = new stdClass();
+
+            $playera->played = 1;
+            $playerb->played = 1;
+
             switch ($entry->winnerid) {
                 case 0:
-                    $playerascore = 1;
-                    $playerbscore = 1;
+                    $playera->won = 0;
+                    $playera->lost = 0;
+                    $playerb->lost = 0;
+                    $playerb->won = 0;
+                    $playera->score = 1;
+                    $playerb->score = 1;
                     break;
                 case ($entry->winnerid === $entry->playeraid):
-                    $playerascore = 3;
-                    $playerbscore = 0;
+                    $playera->won = 1;
+                    $playera->lost = 0;
+                    $playerb->lost = 1;
+                    $playerb->won = 0;
+                    $playera->score = 3;
+                    $playerb->score = 0;
                     break;
                 case ($entry->winnerid === $entry->playerbid):
-                    $playerascore = 0;
-                    $playerbscore = 3;
+                    $playera->won = 0;
+                    $playera->lost = 1;
+                    $playerb->lost = 0;
+                    $playerb->won = 1;
+                    $playera->score = 0;
+                    $playerb->score = 3;
                     break;
             }
-
             if (!$temparray[$entry->playeraid]) {
-                $temparray[$entry->playeraid] = $playerascore;
-                $temparray[$entry->playerbid] = $playerbscore;
+                $temparray[$entry->playeraid] = $playera;
             } else {
-                $temparray[$entry->playeraid] += $playerascore;
-                $temparray[$entry->playerbid] += $playerbscore;
+                self::add_score($temparray[$entry->playeraid], $playera);
+            }
+            if (!$temparray[$entry->playerbid]) {
+                $temparray[$entry->playerbid] = $playerb;
+            } else {
+                self::add_score($temparray[$entry->playerbid], $playerb);
             }
         }
         $returnarray = [];
         foreach($temparray as $key => $value) {
             $entry = [];
             $entry['userid'] = $key;
-            $entry['score'] = $value;
+            $entry['score'] = $value->score;
+            $entry['won'] = $value->won;
+            $entry['lost'] = $value->lost;
+            $entry['played'] = $value->played;
             $returnarray[] = $entry;
         };
 
-
-
         return $returnarray;
 
+    }
+
+    private function add_score($stored_player, $new_entry) {
+        $stored_player->score += $new_entry->score;
+        $stored_player->won += $new_entry->won;
+        $stored_player->lost += $new_entry->lost;
+        $stored_player->played += $new_entry->played;
     }
 
 }
