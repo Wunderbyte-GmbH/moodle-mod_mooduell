@@ -23,36 +23,40 @@
     * rows - array: An array of content rows for the table.
     
     }}
-<h2>{{#str}} opengames, mod_mooduell {{/str}}</h2>
+<h2>{{#str}} listofquestions, mod_mooduell {{/str}}</h2>
 
 <table class="generaltable fullwidth fieldslist">
     <thead>
     <tr>
-        <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questionid, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questionimage, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontext, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontype, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontextlength, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questionstatus, mod_mooduell {{/str}}</th>
         <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
     <tbody>
-    {{#games}}
+    {{#questions}}
         <tr class="field">
-            <td>{{{playera}}}</td>
-            <td>{{{playeraresults}}}</td>
-            <td>{{{playerb}}}</td>
-            <td>{{{playerbresults}}}</td>
+            <td>{{{id}}}</td>
+            <td>{{{image}}}</td>
+            <td>{{{text}}}</td>
+            <td>{{{type}}}</td>
+            <td>{{{length}}}</td>
+            <td>{{{status}}}</td>
             <td class="text-right">
                 {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
                     t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                <a href="view.php?action=delete&id={{mooduellid}}&gameid={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
+                <a href="view.php?action=delete&id={{mooduellid}}&questionid={{id}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
                 t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
             </td>
         </tr>
-    {{/games}}
+    {{/questions}}
     </tbody>
 </table>
 
-{{^games}}
+{{^questions}}
    {{#str}} noopengames, mod_mooduell {{/str}}
-{{/games}}
+{{/questions}}
