@@ -36,11 +36,20 @@ $gameid = optional_param('gameid', '', PARAM_INT);
 $mooduell = new mooduell($id);
 require_login($mooduell->course, true, $mooduell->cm);
 
-if ($action) {
-    $mooduell->execute_action($action, $gameid);
-    $PAGE->set_url('/mod/mooduell/view.php', array('id'=>$id));
+$pagename = null;
+$mooduell->view_page();
+
+// Use the view.php for different actions and views.
+switch ($action) {
+    case undefined:
+        break;
+    case 'delete':
+        $mooduell->execute_action($action, $gameid);
+        $PAGE->set_url('/mod/mooduell/view.php', array('id' => $id));
+        break;
+    case 'viewquestions':
+        $pagename = 'questions';
+        break;
 }
 
-$mooduell->setup_page();
-
-echo $mooduell->display();
+echo $mooduell->display_page(false, $pagename, $gameid);

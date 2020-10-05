@@ -109,7 +109,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 }
                 // Hide categories depending on checkboxes add categories.
                 if ($i > 0) {
-                    $j = $i -1;
+                    $j = $i - 1;
                     $mform->hideIf('categoriesgroup' . $i, 'addanothercategory' . $i, 'notchecked');
                     $mform->hideIf('addanothercategory' . $i, 'addanothercategory' . $j, 'notchecked');
                 }
@@ -123,6 +123,41 @@ class mod_mooduell_mod_form extends moodleform_mod {
         }
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    /**
+     * Because of get_string, this has to be a function
+     *
+     * @return array
+     * @throws coding_exception
+     */
+    private function return_countdown_options() {
+        return [
+                "0" => get_string('nocountdown', 'mod_mooduell'),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30),
+                "60" => get_string('xseconds', 'mod_mooduell', 60),
+                "90" => get_string('xseconds', 'mod_mooduell', 90),
+                "120" => get_string('xseconds', 'mod_mooduell', 120)
+        ];
+    }
+
+    /**
+     * Because of get_string, this has to be a function
+     *
+     * @return array
+     * @throws coding_exception
+     */
+    private function return_move_on_options() {
+        return [
+                "0" => get_string('clicktomoveon', 'mod_mooduell'),
+                "2" => get_string('xseconds', 'mod_mooduell', 2),
+                "5" => get_string('xseconds', 'mod_mooduell', 5),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30)
+        ];
     }
 
     private function add_categories_group($counter, $selectedcategory, $listofcategories, $mform) {
@@ -189,17 +224,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $names;
     }
 
-    private function return_list_of_category_weight_options() {
-        return array(
-                0 => '0',
-                17 => '17',
-                33 => '33',
-                50 => '50',
-                66 => '66',
-                100 => '100'
-        );
-    }
-
     private function return_parent_for_item_in_list($list, $item) {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
@@ -246,38 +270,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $children;
     }
 
-    /**
-     * Because of get_string, this has to be a function
-     *
-     * @return array
-     * @throws coding_exception
-     */
-    private function return_move_on_options() {
-        return [
-                "0" => get_string('clicktomoveon', 'mod_mooduell'),
-                "2" => get_string('xseconds', 'mod_mooduell', 2),
-                "5" => get_string('xseconds', 'mod_mooduell', 5),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30)
-        ];
-    }
-
-    /**
-     * Because of get_string, this has to be a function
-     *
-     * @return array
-     * @throws coding_exception
-     */
-    private function return_countdown_options() {
-        return [
-                "0" => get_string('nocountdown', 'mod_mooduell'),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30),
-                "60" => get_string('xseconds', 'mod_mooduell', 60),
-                "90" => get_string('xseconds', 'mod_mooduell', 90),
-                "120" => get_string('xseconds', 'mod_mooduell', 120)
-        ];
+    private function return_list_of_category_weight_options() {
+        return array(
+                0 => '0',
+                17 => '17',
+                33 => '33',
+                50 => '50',
+                66 => '66',
+                100 => '100'
+        );
     }
 }

@@ -94,7 +94,12 @@ function mooduell_delete_instance($id) {
         return false;
     }
 
+    // TODO: Delete all entries belonging to this instance as well from db
+
     $DB->delete_records('mooduell', array('id' => $id));
+    $DB->delete_records('mooduell_categories', array('mooduellid' => $id));
+    $DB->delete_records('mooduell_games', array('mooduellid' => $id));
+    $DB->delete_records('mooduell_questions', array('mooduellid' => $id));
 
     return true;
 }

@@ -33,6 +33,7 @@
         <th scope="col">{{#str}} questiontext, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} questiontype, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} questiontextlength, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} category, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} questionstatus, mod_mooduell {{/str}}</th>
         <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
@@ -40,11 +41,12 @@
     <tbody>
     {{#questions}}
         <tr class="field">
-            <td>{{{id}}}</td>
+            <td>{{{questionid}}}</td>
             <td>{{{image}}}</td>
-            <td>{{{text}}}</td>
-            <td>{{{type}}}</td>
+            <td>{{{questiontext}}}</td>
+            <td>{{{questiontype}}}</td>
             <td>{{{length}}}</td>
+            <td>{{{category}}}</td>
             <td>{{{status}}}</td>
             <td class="text-right">
                 {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
@@ -58,5 +60,5 @@
 </table>
 
 {{^questions}}
-   {{#str}} noopengames, mod_mooduell {{/str}}
+    {{#str}} noopengames, mod_mooduell {{/str}}
 {{/questions}}

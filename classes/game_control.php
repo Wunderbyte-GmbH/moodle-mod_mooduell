@@ -90,7 +90,7 @@ class game_control {
             $data->timecreated = $gamedata->timecreated;
         } else {
             $data = new stdClass();
-            $data->playeraid = (int)$USER->id;
+            $data->playeraid = (int) $USER->id;
             $data->winnerid = 0;
             $data->timemodified = $nowtime;
             $data->timecreated = $nowtime;
@@ -98,6 +98,171 @@ class game_control {
 
         $this->gamedata = $data;
 
+    }
+
+    /**
+     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module
+     * This is needed to give us a valid list of potential partners for a new game
+     *
+     * @return array
+     * @throws moodle_exception
+     */
+    public static function return_users_for_game($mooduell) {
+
+        global $PAGE;
+
+        $context = $mooduell->context;
+        $users = get_enrolled_users($context);
+
+        $filteredusers = array();
+
+        foreach ($users as $user) {
+            // We need to specifiy userid already when calling modinfo.
+            $modinfo = get_fast_modinfo($mooduell->course->id, $user->id);
+            $cm = $modinfo->get_cm($mooduell->cm->id);
+
+            if ($cm->uservisible) {
+                $filteredusers[] = $user;
+            }
+
+            $userpicture = new \user_picture($user);
+            $userpicture->size = 1; // Size f1.
+            $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
+
+        }
+        return $filteredusers;
+    }
+
+    public static function get_user_stats($userid) {
+
+        global $USER;
+        global $DB;
+
+        $returnarray = [];
+
+        // Get all the games where player was either Player A or Player B AND game is finished
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
+                ') AND status = 3');
+        $returnarray['playedgames'] = count($data);
+        $data = $DB->count_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = ' . $userid);
+        $returnarray['wongames'] = count($data);
+        $returnarray['userid'] = $userid;
+
+        // to find out the id of our nemesis, we first have to get all the records where we lost
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
+                ') AND status = 3 AND winnerid !=' . $userid . ' AND winnerid != 0');
+
+        // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again
+
+        $enemiesarray = [];
+        foreach ($data as $entry) {
+
+            // first we have to get adversaryid
+            $adversaryid = $entry->playeraid == $userid ? $entry->playerbid : $entry->playeraid;
+
+            if (!$enemiesarray[$adversaryid]) {
+                $enemiesarray[$adversaryid] = 1;
+            } else {
+                $enemiesarray[$adversaryid] += 1;
+            }
+        }
+
+        $maxs = array_keys($enemiesarray, max($enemiesarray));
+        $returnarray['nemesisuserid'] = $maxs[0];
+
+        // We don't want to return undefined, so we check if we have to fix something
+
+        if (!$returnarray['nemesisuserid']) {
+            $returnarray['nemesisuserid'] = 0;
+        }
+        if (!$returnarray['playedgames']) {
+            $returnarray['playedgames'] = 0;
+        }
+        if (!$returnarray['wongames']) {
+            $returnarray['wongames'] = 0;
+        }
+
+        return $returnarray;
+    }
+
+    public static function get_highscores($quizid) {
+
+        global $USER;
+        global $DB;
+
+        $temparray = [];
+
+        // Get all the finished games
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE status = 3');
+
+        $temparray = [];
+
+        foreach ($data as $entry) {
+            // get the scores
+
+            $playera = new stdClass();
+            $playerb = new stdClass();
+
+            $playera->played = 1;
+            $playerb->played = 1;
+
+            switch ($entry->winnerid) {
+                case 0:
+                    $playera->won = 0;
+                    $playera->lost = 0;
+                    $playerb->lost = 0;
+                    $playerb->won = 0;
+                    $playera->score = 1;
+                    $playerb->score = 1;
+                    break;
+                case ($entry->winnerid === $entry->playeraid):
+                    $playera->won = 1;
+                    $playera->lost = 0;
+                    $playerb->lost = 1;
+                    $playerb->won = 0;
+                    $playera->score = 3;
+                    $playerb->score = 0;
+                    break;
+                case ($entry->winnerid === $entry->playerbid):
+                    $playera->won = 0;
+                    $playera->lost = 1;
+                    $playerb->lost = 0;
+                    $playerb->won = 1;
+                    $playera->score = 0;
+                    $playerb->score = 3;
+                    break;
+            }
+            if (!$temparray[$entry->playeraid]) {
+                $temparray[$entry->playeraid] = $playera;
+            } else {
+                self::add_score($temparray[$entry->playeraid], $playera);
+            }
+            if (!$temparray[$entry->playerbid]) {
+                $temparray[$entry->playerbid] = $playerb;
+            } else {
+                self::add_score($temparray[$entry->playerbid], $playerb);
+            }
+        }
+        $returnarray = [];
+        foreach ($temparray as $key => $value) {
+            $entry = [];
+            $entry['userid'] = $key;
+            $entry['score'] = $value->score;
+            $entry['won'] = $value->won;
+            $entry['lost'] = $value->lost;
+            $entry['played'] = $value->played;
+            $returnarray[] = $entry;
+        };
+
+        return $returnarray;
+
+    }
+
+    private function add_score($stored_player, $new_entry) {
+        $stored_player->score += $new_entry->score;
+        $stored_player->won += $new_entry->won;
+        $stored_player->lost += $new_entry->lost;
+        $stored_player->played += $new_entry->played;
     }
 
     /**
@@ -172,11 +337,11 @@ class game_control {
         }
 
         // Now we add the numbersofquestions key to each category.
-        $calculatednumberofquestions = 0;
+        $calculatedqnumber = 0;
         foreach ($categories as $category) {
 
             $categories[$category->id]->numberofquestions = round(($category->weight / $sum) * $setnumberofquestions);
-            $calculatednumberofquestions += $categories[$category->id]->numberofquestions;
+            $calculatedqnumber += $categories[$category->id]->numberofquestions;
         }
 
         // First we lookup all the categories linked to this Mooduell instance. In our first version, this will return only one record.
@@ -185,24 +350,24 @@ class game_control {
             // We need a correction of the calculated values to make sure we always add exactly nine questions.
             // (there could be a problem when we have to categories with weight 100, we would only add two times 4).
             // TODO make this random and linked to overall weight. Right now we only add it to the first category.
-            if ($calculatednumberofquestions != $setnumberofquestions) {
-                $difference = $setnumberofquestions - $calculatednumberofquestions;
+            if ($calculatedqnumber != $setnumberofquestions) {
+                $difference = $setnumberofquestions - $calculatedqnumber;
                 $categories[$category->id]->numberofquestions += $difference;
-                $calculatednumberofquestions += $difference;
+                $calculatedqnumber += $difference;
 
-                if ($calculatednumberofquestions != $setnumberofquestions) {
+                if ($calculatedqnumber != $setnumberofquestions) {
                     throw new moodle_exception('wrongnumberofquestions ', null, null, "We have the wrong number of questions");
                 }
             }
 
             // We get all the available questions.
-            $allavailalbequestions = $DB->get_records('question', [
+            $allavailableqs = $DB->get_records('question', [
                     'category' => $category->category
             ]);
 
             // We have to be sure that the number of available questions for this category is bigger than the number of questions we want from this category.
 
-            if (count($allavailalbequestions) < $category->numberofquestions) {
+            if (count($allavailableqs) < $category->numberofquestions) {
                 throw new moodle_exception('wrongnumberofquestions ', null, null,
                         "There are not enough questions in this category");
             }
@@ -210,9 +375,9 @@ class game_control {
             $i = 0;
             $emergencybreak = 0;
             while ($i < $category->numberofquestions) {
-                $key = array_rand($allavailalbequestions);
+                $key = array_rand($allavailableqs);
 
-                $question = $allavailalbequestions[$key];
+                $question = $allavailableqs[$key];
 
                 if ($question != null && !in_array($question, $questions)) {
                     $questions[] = $question;
@@ -242,6 +407,49 @@ class game_control {
         shuffle($questions);
 
         return $questions;
+    }
+
+    /**
+     * Get all questions and save them to gamedata.
+     *
+     * @return stdClass
+     * @throws moodle_exception
+     */
+    public function get_questions() {
+        global $DB;
+
+        // We have to make sure we have all the questions added to the normal game data.
+
+        $questionsdata = $DB->get_records('mooduell_questions', [
+                'gameid' => $this->gamedata->gameid
+        ]);
+
+        if (count($questionsdata) != 9) {
+            throw new moodle_exception('wrongnumberofquestions', 'mooduell', null, null,
+                    "we received the wrong number of questions linked to our Mooduell game");
+        }
+
+        $questions = array();
+
+        if ($questionsdata && count($questionsdata) > 0) {
+
+            foreach ($questionsdata as $questiondata) {
+
+                $data = $DB->get_record('question', [
+                        'id' => $questiondata->questionid
+                ]);
+
+                $question = new question_control(($data));
+                $question->get_results($this->gamedata->gameid);
+
+                $questions[] = $question;
+
+            }
+        }
+
+        $this->gamedata->questions = $questions;
+
+        return $this->gamedata;
     }
 
     /**
@@ -359,85 +567,6 @@ class game_control {
     }
 
     /**
-     * Get all questions and save them to gamedata.
-     *
-     * @return stdClass
-     * @throws moodle_exception
-     */
-    public function get_questions() {
-        global $DB;
-
-        // We have to make sure we have all the questions added to the normal game data.
-
-        $questionsdata = $DB->get_records('mooduell_questions', [
-                'gameid' => $this->gamedata->gameid
-        ]);
-
-        if (count($questionsdata) != 9) {
-            throw new moodle_exception('wrongnumberofquestions', 'mooduell', null, null,
-                    "we received the wrong number of questions linked to our Mooduell game");
-        }
-
-        $questions = array();
-
-        if ($questionsdata && count($questionsdata) > 0) {
-
-            foreach ($questionsdata as $questiondata) {
-
-                $data = $DB->get_record('question', [
-                        'id' => $questiondata->questionid
-                ]);
-
-                $question = new question_control(($data));
-                $question->get_results($this->gamedata->gameid);
-
-                $questions[] = $question;
-
-            }
-        }
-
-        $this->gamedata->questions = $questions;
-
-        return $this->gamedata;
-    }
-
-
-    function return_status() {
-
-        // We make sure we already have our questions when we call this function.
-        if (!isset($this->gamedata->questions) || count($this->gamedata->questions) == 0) {
-            $this->get_questions();
-        }
-
-        $playerastring = '';
-        $playerbstring = '';
-
-        foreach ($this->gamedata->questions as $question) {
-
-            if ($question->playeraanswered == null) {
-                $playerastring .= ' - ';
-            }
-            else {
-                $playerastring .= $question->playeraanswered == 1 ? '&#10008;' : '&#10003;';
-            }
-
-            if ($question->playerbanswered == null) {
-                $playerbstring .= ' - ';
-            }
-            else {
-                $playerbstring .= $question->playerbanswered == 1 ? '&#10008;' : '&#10003;';
-            }
-        }
-
-        $returnarray[] = $playerastring;
-        $returnarray[] = $playerbstring;
-
-        return $returnarray;
-    }
-
-
-
-    /**
      * Check if active player is allowed to answer questions
      *
      * @return bool
@@ -522,7 +651,7 @@ class game_control {
 
             $update->playeraanswered = $result;
             // We update result in live memory as well
-            foreach ($this->gamedata->questions as $question){
+            foreach ($this->gamedata->questions as $question) {
                 if ($questionid == $question->questionid) {
                     $question->playeraanswered = $result;
                     break;
@@ -538,7 +667,7 @@ class game_control {
 
             $update->playerbanswered = $result;
             // We update in live memory as well
-            foreach ($this->gamedata->questions as $question){
+            foreach ($this->gamedata->questions as $question) {
                 if ($questionid == $question->questionid) {
                     $question->playerbanswered = $result;
                     break;
@@ -588,7 +717,8 @@ class game_control {
 
         if (count($this->gamedata->questions) != 9) {
             throw new moodle_exception('nottherightnumberofquestions', 'mooduell', null, null,
-                    'Not the right number of questions ('. count($this->gamedata->questions) .'), we cant decide if game is finsihed or not');
+                    'Not the right number of questions (' . count($this->gamedata->questions) .
+                    '), we cant decide if game is finsihed or not');
         }
 
         foreach ($this->gamedata->questions as $question) {
@@ -599,167 +729,35 @@ class game_control {
         return true;
     }
 
-    /**
-     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module
-     * This is needed to give us a valid list of potential partners for a new game
-     *
-     * @return array
-     * @throws moodle_exception
-     */
-    public static function return_users_for_game($mooduell) {
+    function return_status() {
 
-        global $PAGE;
-
-        $context = $mooduell->context;
-        $users = get_enrolled_users($context);
-
-        $filteredusers = array();
-
-        foreach ($users as $user) {
-            // We need to specifiy userid already when calling modinfo.
-            $modinfo = get_fast_modinfo($mooduell->course->id, $user->id);
-            $cm = $modinfo->get_cm($mooduell->cm->id);
-
-            if ($cm->uservisible) {
-                $filteredusers[] = $user;
-            }
-
-            $userpicture = new \user_picture($user);
-            $userpicture->size = 1; // Size f1.
-            $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
-
+        // We make sure we already have our questions when we call this function.
+        if (!isset($this->gamedata->questions) || count($this->gamedata->questions) == 0) {
+            $this->get_questions();
         }
-        return $filteredusers;
-    }
 
-    public static function get_user_stats($userid) {
+        $playerastring = '';
+        $playerbstring = '';
 
-        global $USER;
-        global $DB;
+        foreach ($this->gamedata->questions as $question) {
 
-        $returnarray = [];
-
-        // Get all the games where player was either Player A or Player B AND game is finished
-        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = '.$userid.' OR playerbid ='.$userid.') AND status = 3');
-        $returnarray['playedgames'] = count($data);
-        $data = $DB->count_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = '.$userid);
-        $returnarray['wongames'] = count($data);
-        $returnarray['userid'] = $userid;
-
-        // to find out the id of our nemesis, we first have to get all the records where we lost
-        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = '.$userid.' OR playerbid ='.$userid.') AND status = 3 AND winnerid !='.$userid.' AND winnerid != 0');
-        
-        // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again
-
-        $enemiesarray = [];
-        foreach ($data as $entry) {
-
-            // first we have to get adversaryid
-            $adversaryid = $entry->playeraid == $userid ? $entry->playerbid : $entry->playeraid;
-
-            if (!$enemiesarray[$adversaryid]) {
-                $enemiesarray[$adversaryid] = 1;
+            if ($question->playeraanswered == null) {
+                $playerastring .= ' - ';
             } else {
-                $enemiesarray[$adversaryid] += 1;
+                $playerastring .= $question->playeraanswered == 1 ? '&#10008;' : '&#10003;';
+            }
+
+            if ($question->playerbanswered == null) {
+                $playerbstring .= ' - ';
+            } else {
+                $playerbstring .= $question->playerbanswered == 1 ? '&#10008;' : '&#10003;';
             }
         }
 
-        $maxs = array_keys($enemiesarray, max($enemiesarray));
-        $returnarray['nemesisuserid'] = $maxs[0];
-
-        // We don't want to return undefined, so we check if we have to fix something
-
-        if (!$returnarray['nemesisuserid']) {
-            $returnarray['nemesisuserid'] = 0;
-        }
-        if (!$returnarray['playedgames']) {
-            $returnarray['playedgames'] = 0;
-        }
-        if (!$returnarray['wongames']) {
-            $returnarray['wongames'] = 0;
-        }
+        $returnarray[] = $playerastring;
+        $returnarray[] = $playerbstring;
 
         return $returnarray;
-    }
-
-    public static function get_highscores($quizid) {
-
-        global $USER;
-        global $DB;
-
-        $temparray = [];
-
-        // Get all the finished games
-        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE status = 3');
-
-        $temparray = [];
-
-        foreach ($data as $entry) {
-            // get the scores
-
-            $playera = new stdClass();
-            $playerb = new stdClass();
-
-            $playera->played = 1;
-            $playerb->played = 1;
-
-            switch ($entry->winnerid) {
-                case 0:
-                    $playera->won = 0;
-                    $playera->lost = 0;
-                    $playerb->lost = 0;
-                    $playerb->won = 0;
-                    $playera->score = 1;
-                    $playerb->score = 1;
-                    break;
-                case ($entry->winnerid === $entry->playeraid):
-                    $playera->won = 1;
-                    $playera->lost = 0;
-                    $playerb->lost = 1;
-                    $playerb->won = 0;
-                    $playera->score = 3;
-                    $playerb->score = 0;
-                    break;
-                case ($entry->winnerid === $entry->playerbid):
-                    $playera->won = 0;
-                    $playera->lost = 1;
-                    $playerb->lost = 0;
-                    $playerb->won = 1;
-                    $playera->score = 0;
-                    $playerb->score = 3;
-                    break;
-            }
-            if (!$temparray[$entry->playeraid]) {
-                $temparray[$entry->playeraid] = $playera;
-            } else {
-                self::add_score($temparray[$entry->playeraid], $playera);
-            }
-            if (!$temparray[$entry->playerbid]) {
-                $temparray[$entry->playerbid] = $playerb;
-            } else {
-                self::add_score($temparray[$entry->playerbid], $playerb);
-            }
-        }
-        $returnarray = [];
-        foreach($temparray as $key => $value) {
-            $entry = [];
-            $entry['userid'] = $key;
-            $entry['score'] = $value->score;
-            $entry['won'] = $value->won;
-            $entry['lost'] = $value->lost;
-            $entry['played'] = $value->played;
-            $returnarray[] = $entry;
-        };
-
-        return $returnarray;
-
-    }
-
-    private function add_score($stored_player, $new_entry) {
-        $stored_player->score += $new_entry->score;
-        $stored_player->won += $new_entry->won;
-        $stored_player->lost += $new_entry->lost;
-        $stored_player->played += $new_entry->played;
     }
 
 }

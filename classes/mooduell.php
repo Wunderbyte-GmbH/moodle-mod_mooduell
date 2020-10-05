@@ -28,6 +28,7 @@ use coding_exception;
 use context_module;
 use dml_exception;
 use mod_mooduell\output\viewpage;
+use mod_mooduell\output\viewquestions;
 use mod_mooduell_mod_form;
 use moodle_exception;
 use stdClass;
@@ -225,7 +226,7 @@ class mooduell {
      *            Display without header and footer?
      * @return string
      */
-    public function display(bool $inline = null) {
+    public function display_page(bool $inline = null, string $pagename = null, int $gameid = null) {
         global $PAGE;
 
         $output = $PAGE->get_renderer('mod_mooduell');
@@ -235,11 +236,21 @@ class mooduell {
             $out .= $output->header();
         }
 
-        // Create the list of open games we can pass on to the renderer.
-        $data = $this->return_list_of_games();
-
-        $viewpage = new viewpage($data);
-        $out .= $output->render_viewpage($viewpage);
+        switch ($pagename) {
+            case null:
+                // Create the list of open games we can pass on to the renderer.
+                $data = $this->return_list_of_games();
+                $viewpage = new viewpage($data);
+                $out .= $output->render_viewpage($viewpage);
+                break;
+            case 'questions':
+                // Create the list of questions  we can pass on to the renderer.
+                $mooduellgame = new game_control($this, $gameid);
+                $data = $mooduellgame->get_questions();
+                $viewquestions = new viewquestions($data->questions);
+                $out .= $output->render_viewquestions($viewquestions);
+                break;
+        }
 
         if (!$inline) {
             $out .= $output->footer();
@@ -350,7 +361,7 @@ class mooduell {
      *
      * @throws coding_exception
      */
-    public function setup_page() {
+    public function view_page() {
         global $PAGE;
         $event = event\course_module_viewed::create(array(
                 'objectid' => $this->cm->instance,
@@ -395,6 +406,7 @@ class mooduell {
 
     /**
      * This function deals with different actions we can call from settings.
+     *
      * @param $action
      * @param $gameid
      * @throws dml_exception
@@ -407,6 +419,7 @@ class mooduell {
 
     /**
      * This function allows the teacher to delete games entirely from DB, including randomly selected questions.
+     *
      * @param $gameid
      * @throws dml_exception
      */

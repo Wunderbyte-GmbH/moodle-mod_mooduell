@@ -40,7 +40,7 @@ notifications:
     #  - secure: "wvrbHUFW97rRKj6LOPj3qWdwBjQFrXtczU3TFd3f48aDOeN3qxKOA3Ycuj3HnpHOvq+EEUeVIjubhAvQfJgiJ2n8/PORdtTU2ARTAUx9z/c8ik5jXTpMXcwEDSSTHhhqKABpzun4qLoqAaBdkqb0jTaNQOfPr9hRoRsTXi07jMNBUsKB0dSy4W8CiGNB93r8uZRIBo2ZlKbZoVbA9EMJQO+wXYuabBiV8mLD7R/qTxBX5qix/gHnKKnDnbwtfUBMVu/XhJihP0aGznQF2xG5PiWaTXPWayv+VIm4Ryx+3cQhOqZmyIRaZvR6Ukvyd16ijrNm+BwaCVJGoaHwOr1YYp+3wY6vV/cyJFMU4Ome+wIyJKjEWa5ZkEfXda8Shs/PmSZEN9Wi5y145SSXe/n3hv/1qWj7t3sD8FsbAsH5I5yNkVUcAYkmZjWqR4kTMlL2tVqSXck71nVRZ9PS0x1bXrX84WNaPMJk4eCeAvVhmtYHviZaGVe++hDAn4aDKi3rf/fB7xhwQhx3k6NpRQfmr6EaYf6E6CllRwUWYb65D/KM7lQt7chrgQryT65CqI6/DqHA9ZdG2iwRIiKlRavaCIg6JQxAi3pDHtg5coVE5uGfP+DxoywF0CQsDyREueRZ+u4yNFWHo5I3XoGd9k1IE0uqyzL6Jcg/i3BCYh+Pu3I="
     on_success: always # default: change
     on_failure: always # default: always
-      #slack:
+    #slack:
     # This is the value "[Slack-Organisation]:[API-Key]#[channel]" just encrypted!
     #rooms:
     # Channels for slack integration (none right now)

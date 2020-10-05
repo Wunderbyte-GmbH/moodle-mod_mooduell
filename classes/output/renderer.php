@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
 class renderer extends plugin_renderer_base {
 
     /**
-     * Render a questionnaire view page.
+     * Render a mooduell view page.
      *
      * @param templatable $viewpage
      * @return string|boolean
@@ -45,5 +45,16 @@ class renderer extends plugin_renderer_base {
     public function render_viewpage(templatable $viewpage) {
         $data = $viewpage->export_for_template($this);
         return $this->render_from_template('mod_mooduell/viewpage', $data);
+    }
+
+    /**
+     * Render a mooduell list of questions
+     *
+     * @param templatable $viewquestions
+     * @return string|boolean
+     */
+    public function render_viewquestions(templatable $viewquestions) {
+        $data = $viewquestions->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/viewquestions', $data);
     }
 }

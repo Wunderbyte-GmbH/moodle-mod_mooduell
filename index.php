@@ -22,13 +22,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_mooduell\event\course_module_viewed;
-
 require_once("../../config.php");
 require_once("locallib.php");
 
 $id = required_param('id', PARAM_INT);
-$PAGE->set_url('/mod/quiz/index.php', array('id'=>$id));
+$PAGE->set_url('/mod/quiz/index.php', array('id' => $id));
 if (!$course = $DB->get_record('course', array('id' => $id))) {
     print_error('invalidcourseid');
 }
