@@ -108,32 +108,7 @@ class mod_mooduell_external extends external_api {
      * @return external_single_structure
      */
     public static function start_attempt_returns() {
-        return new external_single_structure(array(
-                        'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
-                        'gameid' => new external_value(PARAM_INT, 'gameid'),
-                        'playeraid' => new external_value(PARAM_INT, 'player A id'),
-                        'playerbid' => new external_value(PARAM_INT, 'player B id'),
-                        'winnerid' => new external_value(PARAM_INT, 'winner id'),
-                        'status' => new external_value(PARAM_INT, 'status'),
-                        'questions' => new external_multiple_structure(new external_single_structure(array(
-                                                'questionid' => new external_value(PARAM_INT, 'questionid'),
-                                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                                                'questiontype' => new external_value(PARAM_RAW, 'qtype'),
-                                                'category' => new external_value(PARAM_INT, 'category'),
-                                                'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
-                                                'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
-                                                'answers' => new external_multiple_structure(new external_single_structure(array(
-                                                                        'id' => new external_value(PARAM_INT, 'answerid'),
-                                                                        'answertext' => new external_value(PARAM_RAW,
-                                                                                'answer text'),
-                                                                )
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
-                )
-        );
+        return self::get_game_data_returns();
     }
 
     /**

@@ -140,4 +140,51 @@ class question_control {
         }
     }
 
+
+    public function validate_question($answerids, $showcorrectanswer) {
+
+        // If we don't have answers, something went wrong, we return error code -1.
+        if (count($this->answers) == 0) {
+            return [-1];
+        }
+
+        $result = 0;
+
+        foreach ($this->answers as $answer) {
+            if ($answer->fraction > 0) {
+                // if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
+                if ($showcorrectanswer) {
+                    $resultarray[] = $answer->id;
+                } else {
+                    // if we can't find the correct answer in our answerarray, we return wrong answer
+                    if (!in_array($answer->id, $answerids)) {
+                        $resultarray[] = 0;
+                        break;
+                    }
+                }
+
+            } else {
+                // If we have on wrong answer in our answer array ...
+                // ... and only if we don't want to show the correct answers
+                if (!$showcorrectanswer) {
+                    // we check if we have registered a wrong answer
+                    if (in_array($answer->id, $answerids)) {
+                        $resultarray[] = 0;
+                        break;
+                    }
+                }
+
+            }
+        }
+        // If we had no reason to add 0 to our result array, we can return 1.
+        if (!$showcorrectanswer && count($resultarray) == 0) {
+            $resultarray[] = 1;
+        }
+
+
+
+
+    }
+
+
 }

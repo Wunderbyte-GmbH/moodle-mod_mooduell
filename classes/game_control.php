@@ -39,9 +39,9 @@ class game_control {
     private $mooduell;
 
     /**
-     * game_control constructor.
+     * Game_control constructor.
      *
-     * we set all the data we have at this moment and make it available to the instance of this class
+     * We set all the data we have at this moment and make it available to the instance of this class.
      *
      * @param mooduell $mooduell
      */
@@ -54,7 +54,7 @@ class game_control {
 
         $this->mooduell = $mooduell;
 
-        // if we construct with a game id from the Webservice, we load all the data.
+        // If we construct with a game id from the Webservice, we load all the data.
         if ($gameid && !$gamedata) {
 
             $data = $DB->get_record('mooduell_games', [
@@ -101,8 +101,8 @@ class game_control {
     }
 
     /**
-     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module
-     * This is needed to give us a valid list of potential partners for a new game
+     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module.
+     * This is needed to give us a valid list of potential partners for a new game.
      *
      * @return array
      * @throws moodle_exception
@@ -140,7 +140,7 @@ class game_control {
 
         $returnarray = [];
 
-        // Get all the games where player was either Player A or Player B AND game is finished
+        // Get all the games where player was either Player A or Player B AND game is finished.
         $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
                 ') AND status = 3');
         $returnarray['playedgames'] = count($data);
@@ -148,16 +148,16 @@ class game_control {
         $returnarray['wongames'] = count($data);
         $returnarray['userid'] = $userid;
 
-        // to find out the id of our nemesis, we first have to get all the records where we lost
+        // To find out the id of our nemesis, we first have to get all the records where we lost.
         $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
                 ') AND status = 3 AND winnerid !=' . $userid . ' AND winnerid != 0');
 
-        // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again
+        // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again.
 
         $enemiesarray = [];
         foreach ($data as $entry) {
 
-            // first we have to get adversaryid
+            // First we have to get adversaryid.
             $adversaryid = $entry->playeraid == $userid ? $entry->playerbid : $entry->playeraid;
 
             if (!$enemiesarray[$adversaryid]) {
@@ -170,7 +170,7 @@ class game_control {
         $maxs = array_keys($enemiesarray, max($enemiesarray));
         $returnarray['nemesisuserid'] = $maxs[0];
 
-        // We don't want to return undefined, so we check if we have to fix something
+        // We don't want to return undefined, so we check if we have to fix something.
 
         if (!$returnarray['nemesisuserid']) {
             $returnarray['nemesisuserid'] = 0;
@@ -192,7 +192,7 @@ class game_control {
 
         $temparray = [];
 
-        // Get all the finished games
+        // Get all the finished games.
         $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE status = 3');
 
         $temparray = [];
@@ -258,15 +258,15 @@ class game_control {
 
     }
 
-    private function add_score($stored_player, $new_entry) {
-        $stored_player->score += $new_entry->score;
-        $stored_player->won += $new_entry->won;
-        $stored_player->lost += $new_entry->lost;
-        $stored_player->played += $new_entry->played;
+    private function add_score($storedplayer, $newentry) {
+        $storedplayer->score += $newentry->score;
+        $storedplayer->won += $newentry->won;
+        $storedplayer->lost += $newentry->lost;
+        $storedplayer->played += $newentry->played;
     }
 
     /**
-     * Create new game, set random question sequence and write to DB
+     * Create new game, set random question sequence and write to DB.
      *
      * @return integer quizid or 0 when no quizid is set
      * @throws moodle_exception
@@ -309,9 +309,9 @@ class game_control {
     }
 
     /**
-     * get all available questions from the right categories in our question bank
-     * We make sure we get them according to weight and number of categories linked to the mooduell instance
-     * Return the questions as instances of question_control
+     * Get all available questions from the right categories in our question bank.
+     * We make sure we get them according to weight and number of categories linked to the mooduell instance.
+     * Return the questions as instances of question_control.
      *
      * @return mixed[]
      * @throws moodle_exception
@@ -484,13 +484,15 @@ class game_control {
         // If there are questions, if we have the right number and if we find the specific question with the right id.
         if ($questions && count($questions) == 9) {
 
-            $answers = array();
+            $activequestion = null;
+
             foreach ($questions as $question) {
                 if ($question->questionid == $questionid) {
                     $answers = $question->answers;
+                    $activequestion = $question;
                     break;
                 }
-                //Sequence check to make sure we haven't skipped a question
+                // Sequence check to make sure we haven't skipped a question.
                 if (($USER->id == $this->gamedata->playeraid && $question->playeraanswered == null) ||
                         ($USER->id == $this->gamedata->playerbid && $question->playerbanswered == null)) {
                     throw new moodle_exception('outofsequence', 'mooduell', null, null,
@@ -498,52 +500,23 @@ class game_control {
                 }
             }
 
-            // If we don't have answers, something went wrong, we return error code -1.
-            if (count($answers) == 0) {
-                return [-1];
-            }
-
             // If we want the correct answers, we just return an array of these correct answers to the app...
             // ... which will deal with the rest.
             $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1 ? true : false;
 
-            $result = 0;
-
-            foreach ($answers as $answer) {
-                if ($answer->fraction > 0) {
-                    // if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
-                    if ($showcorrectanswer) {
-                        $resultarray[] = $answer->id;
-                    } else {
-                        // if we can't find the correct answer in our answerarray, we return wrong answer
-                        if (!in_array($answer->id, $answerids)) {
-                            $resultarray[] = 0;
-                            break;
-                        }
-                    }
-
-                } else {
-                    // If we have on wrong answer in our answer array ...
-                    // ... and only if we don't want to show the correct answers
-                    if (!$showcorrectanswer) {
-                        // we check if we have registered a wrong answer
-                        if (in_array($answer->id, $answerids)) {
-                            $resultarray[] = 0;
-                            break;
-                        }
-                    }
-
-                }
-            }
-            // if we had no reason to add 0 to our result array, we can return 1
-            if (!$showcorrectanswer && count($resultarray) == 0) {
-                $resultarray[] = 1;
+            if ($activequestion) {
+                $resultarray = $activequestion->validate_question($answerids, $showcorrectanswer);
+            } else {
+                throw new moodle_exception('noactivquestion', 'mooduell', null, null,
+                        "Couldn't find the question you wanted to answer");
             }
 
         } else {
             $resultarray[] = -1;
         }
 
+        // After having calculated the resultarray, we have to translate the result for the db.
+        // There, we don't need the correct answerids, but just if the player has answered correctly (1 is false, 2 is correct).
         if (!$showcorrectanswer) {
             $result = $resultarray[0] == 1 ? 2 : 1;
         } else {
@@ -553,21 +526,20 @@ class game_control {
                     break;
                 }
             }
-            //if we haven't set result to 1 (which means false), we can set it to 2 (correct)
+            // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
             $result != 1 ? $result = 2 : null;
         }
 
         // We write the result of our question check.
-
-        $this->save_result_to_DB($this->gamedata->gameid, $questionid, $result);
-
+        $this->save_result_to_db($this->gamedata->gameid, $questionid, $result);
+        // After every answered questions, turn status is updated as well.
         $this->save_my_turn_status();
 
         return $resultarray;
     }
 
     /**
-     * Check if active player is allowed to answer questions
+     * Check if active player is allowed to answer questions.
      *
      * @return bool
      */
@@ -628,7 +600,7 @@ class game_control {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    private function save_result_to_DB($gameid, $questionid, $result) {
+    private function save_result_to_db($gameid, $questionid, $result) {
 
         global $DB;
         global $USER;
@@ -640,7 +612,7 @@ class game_control {
         $update = new stdClass();
         $update->id = $question->id;
 
-        //depending if I am player A or B, we update the right field
+        // Depending if I am player A or B, we update the right field.
         if ($this->gamedata->playeraid == $USER->id) {
 
             // We throw an Error if the question is already answered.
@@ -650,7 +622,7 @@ class game_control {
             }
 
             $update->playeraanswered = $result;
-            // We update result in live memory as well
+            // We update result in live memory as well.
             foreach ($this->gamedata->questions as $question) {
                 if ($questionid == $question->questionid) {
                     $question->playeraanswered = $result;
@@ -666,7 +638,7 @@ class game_control {
             }
 
             $update->playerbanswered = $result;
-            // We update in live memory as well
+            // We update in live memory as well.
             foreach ($this->gamedata->questions as $question) {
                 if ($questionid == $question->questionid) {
                     $question->playerbanswered = $result;
@@ -675,7 +647,7 @@ class game_control {
             }
         }
 
-        // Check who's turn it is
+        // Check who's turn it is.
 
         $DB->update_record('mooduell_questions', $update);
 
@@ -709,7 +681,7 @@ class game_control {
     }
 
     /**
-     * Check if active player is allowed to answer questions
+     * Check if active player is allowed to answer questions.
      *
      * @return bool
      */
@@ -729,7 +701,10 @@ class game_control {
         return true;
     }
 
-    function return_status() {
+    /**
+     * @return mixed
+     */
+    public function return_status() {
 
         // We make sure we already have our questions when we call this function.
         if (!isset($this->gamedata->questions) || count($this->gamedata->questions) == 0) {

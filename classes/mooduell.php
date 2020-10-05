@@ -43,25 +43,21 @@ defined('MOODLE_INTERNAL') || die();
 class mooduell {
 
     /**
-     *
      * @var stdClass|null fieldset record of mooduell instance
      */
     public $settings = null;
 
     /**
-     *
      * @var bool|false|mixed|stdClass|null course object
      */
     public $course = null;
 
     /**
-     *
      * @var stdClass|null course module
      */
     public $cm = null;
 
     /**
-     *
      * @var stdClass|null context
      */
     public $context = null;
@@ -69,7 +65,6 @@ class mooduell {
     /**
      * Mooduell constructor.
      * Fetches MooDuell settings from DB.
-     *
      * @param int $id
      *            course module id
      * @throws dml_exception
