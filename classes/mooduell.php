@@ -108,7 +108,6 @@ class mooduell {
      */
     public static function add_instance(stdClass $formdata) {
         global $DB;
-
         // Add the database record.
         $data = new stdClass();
         $data->name = $formdata->name;
@@ -288,7 +287,7 @@ class mooduell {
     }
 
     /**
-     * Retrieve all games linked to this MooDuell instance from $DB and return them as an array of std
+     * Retrieve all games linked to this MooDuell instance from $DB and return them as an array of std.
      *
      * @return object
      */
@@ -306,12 +305,12 @@ class mooduell {
 
             foreach ($games as $gamedata) {
 
-                // If we only want to deal with games that were added since the last time we checked
+                // If we only want to deal with games that were added since the last time we checked.
                 if ($timemodified > $gamedata->timemodified) {
                     continue;
                 }
 
-                // We only want to include games where the active user is involved
+                // We only want to include games where the active user is involved.
                 if ($gamedata->playeraid != $USER->id && $gamedata->playerbid != $USER->id) {
                     continue;
                 }
@@ -327,7 +326,7 @@ class mooduell {
     }
 
     /**
-     * Allows us to securely retrieve the (user)name of a user by id
+     * Allows us to securely retrieve the (user)name of a user by id.
      *
      * @param
      *            int
@@ -375,7 +374,7 @@ class mooduell {
     }
 
     /**
-     * check if user exists
+     * Check if user exists.
      *
      * @param
      *            int

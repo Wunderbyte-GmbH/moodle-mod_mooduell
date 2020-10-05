@@ -51,7 +51,7 @@ class answer_control {
      */
     public function __construct($data = null) {
 
-        // if we have $data, we automatically create all the relevant values for this answer ...
+        // If we have $data, we automatically create all the relevant values for this answer...
 
         if ($data) {
             $this->id = $data->id;

@@ -77,8 +77,7 @@ class question_control {
      */
 
     public function __construct($data = null) {
-
-        // if we have $data, we automatically create all the relevant values for this question ...
+        // If we have $data, we automatically create all the relevant values for this question...
         if ($data) {
             $this->questionid = $data->id;
             $this->name = $data->name;
@@ -99,15 +98,13 @@ class question_control {
     }
 
     /**
-     * Return array of answers of a given question
+     * Return array of answers of a given question.
      *
      * @return array
      * @throws dml_exception
      */
     public function return_answers() {
-
         global $DB;
-
         $answers = array();
         $answersdata = $DB->get_records('question_answers', [
                 'question' => $this->questionid
@@ -129,9 +126,7 @@ class question_control {
      * @throws dml_exception
      */
     public function get_results($gameid) {
-
         global $DB;
-
         if ($this->questionid) {
             $question = $DB->get_record('mooduell_questions', ['gameid' => $gameid, 'questionid' => $this->questionid]);
 
@@ -147,25 +142,21 @@ class question_control {
         if (count($this->answers) == 0) {
             return [-1];
         }
-
-        $result = 0;
-
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
-                // if this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers
+                // If this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers.
                 if ($showcorrectanswer) {
                     $resultarray[] = $answer->id;
                 } else {
-                    // if we can't find the correct answer in our answerarray, we return wrong answer
+                    // If we can't find the correct answer in our answerarray, we return wrong answer.
                     if (!in_array($answer->id, $answerids)) {
                         $resultarray[] = 0;
                         break;
                     }
                 }
-
             } else {
                 // If we have on wrong answer in our answer array ...
-                // ... and only if we don't want to show the correct answers
+                // ... and only if we don't want to show the correct answers.
                 if (!$showcorrectanswer) {
                     // we check if we have registered a wrong answer
                     if (in_array($answer->id, $answerids)) {
@@ -173,18 +164,11 @@ class question_control {
                         break;
                     }
                 }
-
             }
         }
         // If we had no reason to add 0 to our result array, we can return 1.
         if (!$showcorrectanswer && count($resultarray) == 0) {
             $resultarray[] = 1;
         }
-
-
-
-
     }
-
-
 }

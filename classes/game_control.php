@@ -669,7 +669,7 @@ class game_control {
 
         if ($this->is_game_finished()) {
             $update->status = 3;
-            //we might want to trigger some event here
+            // We might want to trigger some event here.
         } else if ($this->is_it_active_users_turn()) {
             $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
         } else {

@@ -85,7 +85,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Get MooDuell id.
         $cm = $this->get_coursemodule();
         $mooduellid = $cm->instance;
-        $listofmooduellcategories = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
+        $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
             // First, there is the explanation.
             $mform->addElement('static', 'categoriesexplanation', get_string('important', 'mod_mooduell'),
@@ -96,14 +96,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $max = 3;
             while ($i < $max) {
 
-                $selectedcategory = array_shift($listofmooduellcategories);
+                $selectedcategory = array_shift($listofmooduellcats);
 
                 $this->add_categories_group($i, $selectedcategory, $listofcategories, $mform);
                 if ($i < $max - 1) {
                     $j = $i + 1;
                     $mform->addElement('checkbox', 'addanothercategory' . $j, get_string('addanothercategory', 'mod_mooduell'));
-                    // we check the checkbox if we have a category element saved
-                    if (count($listofmooduellcategories) > 0) {
+                    // We check the checkbox if we have a category element saved.
+                    if (count($listofmooduellcats) > 0) {
                         $mform->setDefault('addanothercategory' . $j, true);
                     }
                 }
@@ -126,7 +126,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     /**
-     * Because of get_string, this has to be a function
+     * Because of get_string, this has to be a function.
      *
      * @return array
      * @throws coding_exception
@@ -144,7 +144,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     /**
-     * Because of get_string, this has to be a function
+     * Because of get_string, this has to be a function.
      *
      * @return array
      * @throws coding_exception
@@ -163,7 +163,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     private function add_categories_group($counter, $selectedcategory, $listofcategories, $mform) {
 
         $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
-        $categoryweightoptions = $this->return_list_of_category_weight_options();
+        $catweightoptions = $this->return_list_of_category_weight_options();
 
         $formgroup = array();
         $formgroup[] =&
@@ -172,7 +172,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $formgroup[0]->setSelected($selectedcategory->category);
         }
         $formgroup[] =&
-                $mform->createElement('select', 'weight', get_string('categoryweight', 'mod_mooduell'), $categoryweightoptions);
+                $mform->createElement('select', 'weight', get_string('categoryweight', 'mod_mooduell'), $catweightoptions);
         if ($selectedcategory) {
             $formgroup[1]->setSelected($selectedcategory->weight);
         } else {
@@ -235,7 +235,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     private function generate_sorted_list($listofcategories) {
-        $i = 1;
         $sortedcategories = array();
 
         foreach ($listofcategories as $category) {
@@ -253,7 +252,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     private function return_children_in_list($parent, $list) {
-        $i = 1;
         $children = array();
 
         foreach ($list as $child) {

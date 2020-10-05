@@ -36,8 +36,7 @@ $string['mooduellname_help'] = 'Wähle einen Namen für Dein Spiel';
 $string['mooduellsettings'] = 'MooDuell Einstellungen';
 $string['mooduellfieldset'] = 'MooDuell Einstellungen';
 $string['usefullnames'] = 'Verwende ganze Namen';
-$string['modulename_help'] =
-        'Das MooDuell Modul hilft dir eine Multiplayer Quiz Aktivität zu erstellen, die dann das Spielen mit der MooDuell App erlaubt.';
+$string['modulename_help'] ='Das MooDuell Modul hilft dir eine Multiplayer Quiz Aktivität zu erstellen, die dann das Spielen mit der MooDuell App erlaubt.';
 $string['modulename'] = 'MooDuell';
 $string['addInstance'] = 'Ein neues Spiel hinzufügen';
 $string['mooduell:addinstance'] = 'Ein neues Spiel hinzufügen';
@@ -54,8 +53,7 @@ $string['clicktomoveon'] = 'Zeige die nächste Frage sofort.';
 $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Kategorie für Zufallsfragen';
 $string['categoryweight'] = 'Gewichtung der Kategorie (0 bis 100)';
-$string['categoriesexplanation'] =
-        'Wenn du mehr als eine Kategorie auswählst, gib bitte auch eine Gewichtung an. Gewichtungen müssen NICHT zusammen 100 ergeben.';
+$string['categoriesexplanation'] ='Wenn du mehr als eine Kategorie auswählst, gib bitte auch eine Gewichtung an. Gewichtungen müssen NICHT zusammen 100 ergeben.';
 $string['addanothercategory'] = 'Eine weitere Kategorie hinzufügen';
 $string['questionscategorygroup'] = 'Kategorien für Zufallsfragen';
 $string['nocategories'] = 'Es gibt noch keine Kategorien';
