@@ -17,29 +17,38 @@
 /**
  * Display information about all the mod_mooduell modules in the requested course.
  *
- * @package     mod_mooduell
- * @copyright   2020 David Bogner <david.bogner@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @copyright 2020 Georg Maißer <georg.maisser@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-
-require_once(__DIR__.'/lib.php');
+require_once("../../config.php");
+require_once("locallib.php");
 
 $id = required_param('id', PARAM_INT);
+$PAGE->set_url('/mod/quiz/index.php', array('id' => $id));
+if (!$course = $DB->get_record('course', array('id' => $id))) {
+    print_error('invalidcourseid');
+}
+$coursecontext = context_course::instance($id);
+require_login($course);
+$PAGE->set_pagelayout('incourse');
 
-$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
-require_course_login($course);
+$params = array(
+        'context' => $coursecontext
+);
 
-$coursecontext = context_course::instance($course->id);
-
-$event = \mod_mooduell\event\course_module_instance_list_viewed::create(array(
-    'context' => $modulecontext
+/* TODO: Event has to be included
+ *
+ * $event = course_module_viewed::create(array(
+        'context' => $modulecontext
 ));
 $event->add_record_snapshot('course', $course);
-$event->trigger();
+$event->trigger();*/
 
-$PAGE->set_url('/mod/mooduell/index.php', array('id' => $id));
+$PAGE->set_url('/mod/mooduell/index.php', array(
+        'id' => $id
+));
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($coursecontext);
@@ -52,39 +61,67 @@ echo $OUTPUT->heading($modulenameplural);
 $mooduells = get_all_instances_in_course('mooduell', $course);
 
 if (empty($mooduells)) {
-    notice(get_string('nonewmodules', 'mod_mooduell'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    notice(get_string('nonewmodules', 'mod_mooduell'), new moodle_url('/course/view.php', array(
+            'id' => $course->id
+    )));
 }
 
 $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
 
 if ($course->format == 'weeks') {
-    $table->head  = array(get_string('week'), get_string('name'));
-    $table->align = array('center', 'left');
+    $table->head = array(
+            get_string('week'),
+            get_string('name')
+    );
+    $table->align = array(
+            'center',
+            'left'
+    );
 } else if ($course->format == 'topics') {
-    $table->head  = array(get_string('topic'), get_string('name'));
-    $table->align = array('center', 'left', 'left', 'left');
+    $table->head = array(
+            get_string('topic'),
+            get_string('name')
+    );
+    $table->align = array(
+            'center',
+            'left',
+            'left',
+            'left'
+    );
 } else {
-    $table->head  = array(get_string('name'));
-    $table->align = array('left', 'left', 'left');
+    $table->head = array(
+            get_string('name')
+    );
+    $table->align = array(
+            'left',
+            'left',
+            'left'
+    );
 }
 
 foreach ($mooduells as $mooduell) {
     if (!$mooduell->visible) {
-        $link = html_writer::link(
-            new moodle_url('/mod/mooduell/view.php', array('id' => $mooduell->coursemodule)),
-            format_string($mooduell->name, true),
-            array('class' => 'dimmed'));
+        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', array(
+                'id' => $mooduell->coursemodule
+        )), format_string($mooduell->name, true), array(
+                'class' => 'dimmed'
+        ));
     } else {
-        $link = html_writer::link(
-            new moodle_url('/mod/mooduell/view.php', array('id' => $mooduell->coursemodule)),
-            format_string($mooduell->name, true));
+        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', array(
+                'id' => $mooduell->coursemodule
+        )), format_string($mooduell->name, true));
     }
 
     if ($course->format == 'weeks' or $course->format == 'topics') {
-        $table->data[] = array($mooduell->section, $link);
+        $table->data[] = array(
+                $mooduell->section,
+                $link
+        );
     } else {
-        $table->data[] = array($link);
+        $table->data[] = array(
+                $link
+        );
     }
 }
 

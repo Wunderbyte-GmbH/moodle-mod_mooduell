@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/viewpage
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    * headings - array: An array of table headings.
+    * rows - array: An array of content rows for the table.
+
+    }}
+
+<table class="generaltable fullwidth fieldslist">
+    <thead>
+    <tr>
+        <th scope="col">{{#str}} questionid, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questionimage, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontext, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontype, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questiontextlength, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} category, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} warnings, mod_mooduell {{/str}}</th>
+        <th scope="col">{{#str}} questionstatus, mod_mooduell {{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#questions}}
+        <tr class="field">
+            <td>
+                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{questionid}}">
+                {{questionid}}
+                </a>
+            </td>
+            <td>
+                <a href="{{imageurl}}"><img src="{{imageurl}}" width="100px"></img></a>
+            </td>
+            <td>
+                {{{questiontext}}}
+
+                {{#answers}}
+                    <ul>
+                        <li>{{#correct}}
+                        <span style="font-weight:bold">
+                        {{/correct}}{{{answertext}}} {{#correct}}
+                        </span>
+                        {{/correct}}</li>
+                    </ul>
+                {{/answers}}
+            </td>
+            <td>{{questiontype}}</td>
+            <td>{{length}}</td>
+            <td>{{category}}</td>
+            <td>
+                <ul>
+                    {{#warnings}}
+                    <li>
+                        <span style="color: red">{{message}}</span>
+                    </li>
+                    {{/warnings}}
+                </ul>
+            </td>
+            <td>{{status}}</td>
+        </tr>
+    {{/questions}}
+    </tbody>
+</table>
+
+{{^questions}}
+    {{#str}} noopengames, mod_mooduell {{/str}}
+{{/questions}}

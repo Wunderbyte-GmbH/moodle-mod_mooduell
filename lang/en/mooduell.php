@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['messageprovider:status'] = 'Game status changes';
-$string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell game';
+$string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell Game';
 $string['mooduell:viewstatistics'] = 'View game statistics';
 $string['mooduell:viewstudentnames'] = 'View full names of participants';
 $string['pluginname'] = 'MooDuell';
@@ -34,6 +34,79 @@ $string['modulenameplural'] = 'MooDuells';
 $string['mooduellname'] = 'Name of the MooDuell game';
 $string['mooduellname_help'] = 'Choose a name for your game';
 $string['mooduellsettings'] = 'MooDuell settings';
+$string['mooduellfieldset'] = 'MooDuell settings';
+$string['usefullnames'] = 'Use full names';
+$string['modulename_help'] = 'The MooDuell module helps you to create multiplayer quiz activities which then can be played using the MooDuell App.';
 $string['modulename'] = 'MooDuell';
-$string['modulename'] = 'MooDuell';
-$string['modulename'] = 'MooDuell';
+$string['addInstance'] = 'Add instance';
+$string['mooduell:addinstance'] = 'Add instance';
+
+$string['countdown'] = 'Countdown';
+$string['nocountdown'] = 'No Countdown';
+$string['xseconds'] = '{$a} seconds';
+
+$string['showcontinuebutton'] = 'Show "Continue"-button';
+$string['showcorrectanswer'] = 'Show correct answer';
+$string['waitfornextquestion'] = 'Time to contemplate result after answering';
+$string['clicktomoveon'] = 'Show next question right away';
+
+$string['pluginadministration'] = 'Plugin Administration';
+$string['questionscategory'] = 'Category for random question';
+$string['categoryweight'] = 'Weight of the category';
+$string['categoriesexplanation'] = 'If you choose more than one category, please add a weight. Weight DOES NOT have to sum up to 100';
+$string['addanothercategory'] = 'Add another category';
+$string['questionscategorygroup'] = 'Categories for random questions';
+$string['nocategories'] = 'There are not categories added yet';
+$string['important'] = 'Important!';
+$string['nomessage'] = 'There is nothing to say';
+$string['foundthesegames'] = 'We found these games:';
+$string['noopengames'] = 'There are no open games yet.';
+
+
+$string['listofquestions'] = 'List of questions:';
+$string['playera'] = 'Player A';
+$string['playerb'] = 'Player B';
+$string['playeraresults'] = 'Result A';
+$string['playerbresults'] = 'Result B';
+$string['playerbresults'] = 'Result B';
+$string['action'] = 'Action';
+$string['noquestions'] = 'No questions';
+$string['question'] = 'question';
+$string['warnings'] = 'Warnings';
+$string['status'] = 'Status';
+$string['category'] = 'Category';
+
+$string['opengames'] = 'Open games';
+$string['finishedgames'] = 'Finished games';
+$string['highscores'] = 'Highscores';
+$string['students'] = 'Students';
+$string['questions'] = 'questions';
+
+$string['questionid'] = 'ID';
+$string['questiontext'] = 'Text';
+$string['questiontype'] = 'Type';
+$string['questionimage'] = 'Image';
+$string['questiontextlength'] = 'Text length';
+$string['questionstatus'] = 'Status';
+$string['noquestions'] = 'There are no questions in this quiz.';
+
+$string['univiemooduell'] = 'Univie Mooduell';
+$string['downloaduniviemoduell'] = 'Dowload your app and start playing now!';
+$string['univiemooduellappstore'] = 'Get it on Apple App Store:';
+$string['univiemooduellplaystore'] = 'Get it on Google Play Store:';
+
+$string['username'] = 'name';
+$string['gamesplayed'] = 'games played';
+$string['gameswon'] = 'games won';
+$string['gameslost'] = 'games lost';
+$string['score'] = 'score';
+
+$string['notenoughquestions'] = 'There are not enough questions in the chosen category. Choose another category or add more questions to the existing one.';
+$string['nowarnings'] = 'Your game seems fine, there are currently no warnings';
+$string['questiontexttooshort'] = 'ID {$a}: Questiontext is too short';
+$string['questiontexttoolong'] = 'ID {$a}: Questiontext is too long';
+$string['wrongquestiontype'] = 'ID {$a}: Question has the wrong type';
+$string['questionhasnocorrectanswers'] = 'ID {$a}: Question has no correct answers';
+
+$string['notok'] = 'Not OK';
+$string['ok'] = 'OK';

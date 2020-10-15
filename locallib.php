@@ -25,6 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * DO NOT USE THIS FILE IF POSSIBLE!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+/**
  * Handle the mod_mooduell\event\user_challenged event.
  *
  * @param object $event The event object.

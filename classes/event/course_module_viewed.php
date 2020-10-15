@@ -17,10 +17,10 @@
 /**
  * The mod_mooduell course module viewed event.
  *
- * @package    mod_mooduell
- * @since      Moodle 2.7
- * @copyright  2013 Mark Nelson <markn@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @since Moodle 2.7
+ * @copyright 2013 Mark Nelson <markn@moodle.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_mooduell\event;
@@ -30,12 +30,19 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The mod_mooduell course module viewed event class.
  *
- * @package    mod_mooduell
- * @since      Moodle 3.5
- * @copyright  2020 onwards Wunderbyte GmbH
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @since Moodle 3.5
+ * @copyright 2020 onwards Wunderbyte GmbH
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_viewed extends \core\event\course_module_viewed {
+
+    public static function get_objectid_mapping() {
+        return array(
+                'db' => 'mooduell',
+                'restore' => 'mooduell'
+        );
+    }
 
     /**
      * Set basic properties for the event.
@@ -44,9 +51,5 @@ class course_module_viewed extends \core\event\course_module_viewed {
         $this->data['objecttable'] = 'lesson';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-    }
-
-    public static function get_objectid_mapping() {
-        return array('db' => 'mooduell', 'restore' => 'mooduell');
     }
 }

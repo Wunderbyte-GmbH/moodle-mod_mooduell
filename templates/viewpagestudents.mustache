@@ -1,0 +1,73 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/viewpage
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    * headings - array: An array of table headings.
+    * rows - array: An array of content rows for the table.
+
+    }}
+
+<h2>{{#str}} univiemooduell, mod_mooduell {{/str}}</h2>
+{{^opengames}}
+{{#str}} downloaduniviemoduell, mod_mooduell {{/str}}
+<br>
+<br>
+<table class="fullwidth">
+    <tr>
+        <td>
+            {{#str}} univiemooduellappstore, mod_mooduell {{/str}}
+        </td>
+        <td align="center">
+            <a href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img width="150px"  alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{#str}} univiemooduellplaystore, mod_mooduell {{/str}}
+        </td>
+        <td align="center">
+            <a href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="170px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+        </td>
+    </tr>
+</table>
+{{/opengames}}
+
+<ul class="nav nav-tabs" id="mooduellTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="opengames-tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames" aria-selected="true"><h4>{{#str}} opengames, mod_mooduell {{/str}}</h4></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="finishedgames-tab" data-toggle="tab" href="#finishedgames" role="tab" aria-controls="finishedgames" aria-selected="false"><h4>{{#str}} finishedgames, mod_mooduell {{/str}}</h4></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="highscores-tab" data-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
+    </li>
+</ul>
+<div class="tab-content" id="mooduellTabContent">
+    <div class="tab-pane fade show active" id="opengames" role="tabpanel" aria-labelledby="opengames-tab">
+        {{> mooduell/table_open_games_students }}
+    </div>
+    <div class="tab-pane fade" id="finishedgames" role="tabpanel" aria-labelledby="finishedgames-tab">
+        {{> mooduell/table_finished_games_students }}
+    </div>
+    <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
+        {{> mooduell/table_highscores }}
+    </div>
+</div>

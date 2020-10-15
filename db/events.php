@@ -30,15 +30,15 @@ defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
 
-    array(
-        'eventname' => 'mod_mooduell\event\user_challenged',
-        'callback' => 'user_challenged',
-        'internal' => false,
-    ),
+        array(
+                'eventname' => 'mod_mooduell\event\user_challenged',
+                'callback' => 'user_challenged',
+                'internal' => false,
+        ),
 
-    array(
-        'eventname' => 'mod_mooduell\event\leg_finished',
-        'callback' => 'leg_finished',
-        'internal' => false,
-    ),
+        array(
+                'eventname' => 'mod_mooduell\event\leg_finished',
+                'callback' => 'leg_finished',
+                'internal' => false,
+        ),
 );

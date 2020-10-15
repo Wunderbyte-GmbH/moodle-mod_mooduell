@@ -27,36 +27,59 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-    'mod/mooduell:viewstudentnames' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'view',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
+        'mod/mooduell:viewstudentnames' => [
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'view',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
         ],
-    ],
 
-    'mod/mooduell:managemooduellsettings' => [
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
+        'mod/mooduell:managemooduellsettings' => [
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
         ],
-    ],
 
-    'mod/mooduell:viewstatistics' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'view',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
+        'mod/mooduell:addinstance' => [
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
         ],
-    ],
+
+        'mod/mooduell:viewstatistics' => [
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'view',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
+        ],
+        'mod/mooduell:editgames' => [
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
+        ]
 ];

@@ -17,49 +17,50 @@
 /**
  * Prints an instance of mod_mooduell.
  *
- * @package     mod_mooduell
- * @copyright   2020 David Bogner <david.bogner@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+use mod_mooduell\mooduell;
 
-// Course_module ID, or
-$id = optional_param('id', 0, PARAM_INT);
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
+require_once("{$CFG->dirroot}/mod/mooduell/classes/mooduell.php");
+require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 
-// ... module instance id.
-$m  = optional_param('m', 0, PARAM_INT);
+$id = required_param('id', PARAM_INT);
+$action = optional_param('action', '', PARAM_RAW);
+$gameid = optional_param('gameid', '', PARAM_INT);
 
-if ($id) {
-    $cm             = get_coursemodule_from_id('mooduell', $id, 0, false, MUST_EXIST);
-    $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $moduleinstance = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
-} else if ($m) {
-    $moduleinstance = $DB->get_record('mooduell', array('id' => $n), '*', MUST_EXIST);
-    $course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
-    $cm             = get_coursemodule_from_instance('mooduell', $moduleinstance->id, $course->id, false, MUST_EXIST);
-} else {
-    print_error(get_string('missingidandcmid', 'mod_mooduell'));
+$mooduell = new mooduell($id);
+require_login($mooduell->course, true, $mooduell->cm);
+
+$pagename = null;
+$mooduell->view_page();
+
+$context = $mooduell->context;
+
+
+
+// Use the view.php for different actions and views.
+switch ($action) {
+    case null:
+        break;
+    case 'delete':
+        // this check is not really necessary
+        if (has_capability('mod/mooduell:editgames', $context)) {
+            $PAGE->set_url('/mod/mooduell/view.php', array('id' => $id));
+            $mooduell->execute_action($action, $gameid);
+        }
+        break;
+    case 'viewquestions':
+        $pagename = 'questions';
+        break;
 }
 
-require_login($course, true, $cm);
+if (!has_capability('mod/mooduell:viewstatistics', $context)) {
+    $pagename = 'studentsview';
+}
 
-$modulecontext = context_module::instance($cm->id);
-
-$event = \mod_mooduell\event\course_module_viewed::create(array(
-    'objectid' => $moduleinstance->id,
-    'context' => $modulecontext
-));
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('mooduell', $moduleinstance);
-$event->trigger();
-
-$PAGE->set_url('/mod/mooduell/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($moduleinstance->name));
-$PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($modulecontext);
-
-echo $OUTPUT->header();
-
-echo $OUTPUT->footer();
+echo $mooduell->display_page(false, $pagename, $gameid);

@@ -17,9 +17,9 @@
 /**
  * Plugin event classes are defined here.
  *
- * @package     mod_mooduell
- * @copyright   2020 David Bogner <david.bogner@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @copyright 2020 David Bogner <david.bogner@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_mooduell\event;
@@ -29,13 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The leg_finshed event class.
  *
- * @package    mod_mooduell
- * @copyright  2020 David Bogner <david.bogner@wunderbyte.at>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @copyright 2020 David Bogner <david.bogner@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class leg_finshed extends base {
 
     // For more information about the Events API, please visit:
     // https://docs.moodle.org/dev/Event_2
-
 }

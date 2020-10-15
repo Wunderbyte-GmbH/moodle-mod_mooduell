@@ -18,17 +18,17 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     mod_mooduell
- * @copyright   2020 David Bogner <david.bogner@wunderbyte.at>
+ * @copyright   2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_mooduell';
-$plugin->release = '0.1.0';
-$plugin->version = 2020042100;
+$plugin->release = '0.1.1';
+$plugin->version = 2020050409;
 $plugin->requires = 2018051700;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [
-    'mod_quiz' => 2018051400,
+        'mod_quiz' => 2018051400,
 ];

@@ -1,23 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/mooduell/db" VERSION="20200421" COMMENT="XMLDB file for Moodle mod_mooduell"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+<XMLDB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PATH="mod/mooduell/db" VERSION="20200421"
+       COMMENT="XMLDB file for Moodle mod_mooduell"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
-  <TABLES>
-    <TABLE NAME="mooduell" COMMENT="Stores the mooduell activity module instances.">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the course this activity is part of."/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the activity module instance"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified."/>
-        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
-        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the intro field."/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
-      </KEYS>
-    </TABLE>
-  </TABLES>
+    <TABLES>
+        <TABLE NAME="mooduell" COMMENT="Stores the mooduell activity module instances.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="ID of the course this activity is part of."/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="The name of the activity module instance"/>
+                <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
+                <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="The format of the intro field."/>
+                <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="ID of the quiz this mooduell instance is linked to. Null until quiz is linked to mooduell."/>
+                <FIELD NAME="usefullnames" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Students can't see the full name of their peers (0), They can see the fullname, if Moodle configuration allows it (1)"/>
+                <FIELD NAME="showcontinuebutton" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Treat every question as a multi answer question, where we have to press 'continue' to register the answer (1) Register answer of single answer questions directy by pressing the answer button"/>
+                <FIELD NAME="showcorrectanswer" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="After wrongly answering a querstion, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
+                <FIELD NAME="countdown" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Set time your students have to answer a question. 0 means no limit."/>
+                <FIELD NAME="waitfornextquestion" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Set time your students can contemplate the correct result. 0 means no limit."/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was added to the course."/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was last modified."/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+                <KEY NAME="fk_quizid" TYPE="foreign" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="mooduell_games" COMMENT="Stores the mooduell game progress.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the MooDuell Instance"/>
+                <FIELD NAME="playeraid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the player who initiated the game."/>
+                <FIELD NAME="playerbid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the player who was challenged to this game"/>
+                <FIELD NAME="playeratime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Do you want to use the countdown and how much time do your students have to answer a question?"/>
+                <FIELD NAME="playerbtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was added to the course."/>
+                <FIELD NAME="winnerid" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was added to the course."/>
+                <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="NULL is open game, 1 is player A's turn, 2 is player B's turn, 3 is finished"/>
+                <FIELD NAME="victorycoefficient" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was last modified."/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was last modified."/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Timestamp of when the instance was created."/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+                <KEY NAME="fk_playera" TYPE="foreign" FIELDS="playeraid" REFTABLE="user" REFFIELDS="id"/>
+                <KEY NAME="fk_playerb" TYPE="foreign" FIELDS="playerbid" REFTABLE="user" REFFIELDS="id"/>
+                <KEY NAME="fk_winnerid" TYPE="foreign" FIELDS="winnerid" REFTABLE="user" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="mooduell_categories"
+               COMMENT="Stores categories from which to chose the random questions of this MooDuell instance.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the MooDuell Instance"/>
+                <FIELD NAME="category" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of category in the question_categories table"/>
+                <FIELD NAME="weight" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="Weight of the Questions from 0 to 100. If there are more than one categories linked to one moodle instance, the number of questions from one category are determined by the weight given."/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+                <KEY NAME="fk_category" TYPE="foreign" FIELDS="category" REFTABLE="question_categories" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="mooduell_questions" COMMENT="Stores all the questions linked to this quiz">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the MooDuell Instance"/>
+                <FIELD NAME="gameid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id of the MooDuell Game"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id question linked to this quiz"/>
+                <FIELD NAME="playeraanswered" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="Null if not answered, 1 if false, 2 if true"/>
+                <FIELD NAME="playerbanswered" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="Null if not answered, 1 if false, 2 if true"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+                <KEY NAME="fk_questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+                <KEY NAME="fk_gameid" TYPE="foreign" FIELDS="gameid" REFTABLE="mooduell_games" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+    </TABLES>
 </XMLDB>
