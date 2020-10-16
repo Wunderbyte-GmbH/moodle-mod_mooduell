@@ -240,6 +240,7 @@ class mooduell {
         global $PAGE;
 
         $output = $PAGE->get_renderer('mod_mooduell');
+        $data = [];
 
         $out = '';
         if (!$inline) {
@@ -250,6 +251,8 @@ class mooduell {
             case null:
                 // Create the list of open games we can pass on to the renderer.
                 $data = $this->return_list_of_games();
+                // Add the Name of the instance
+                $data['quizname'] = $this->cm->name;
                 // Add the list of questions
                 $data['questions'] = $this->return_list_of_questions();
                 $data['highscores'] = $this->return_list_of_highscores();
@@ -260,14 +263,19 @@ class mooduell {
             case 'questions':
                 // Create the list of questions  we can pass on to the renderer.
                 $mooduellgame = new game_control($this, $gameid);
-                $data = $mooduellgame->get_questions();
+                $gamedata = $mooduellgame->get_questions();
+                $data['questions'] = $gamedata->questions;
                 // Use the viewquestions renderer template
-                $viewquestions = new viewquestions($data->questions);
+                // Add the Name of the instance
+                $data['quizname'] = $this->cm->name;
+                $viewquestions = new viewquestions($data);
                 $out .= $output->render_viewquestions($viewquestions);
                 break;
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
                 $data = $this->return_list_of_games(true);
+                // Add the Name of the instance
+                $data['quizname'] = $this->cm->name;
                 $data['highscores'] = $this->return_list_of_highscores();
                 $viewpage = new viewpagestudents($data);
                 $out .= $output->render_viewpagestudents($viewpage);
