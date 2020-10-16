@@ -77,6 +77,19 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
 
     mod_mooduell\mooduell::update_categories($moduleinstance->id, $mform->get_data());
 
+    // As empty checkboxes are not included in data, we have to make sure they are transmitted to DB.
+    // Check for keys and add 0 if they are not present.
+    if (!$moduleinstance->showcontinuebutton) {
+        $moduleinstance->showcontinuebutton = 0;
+    }
+    if (!$moduleinstance->showcorrectanswer) {
+        $moduleinstance->showcorrectanswer = 0;
+    }
+    if (!$moduleinstance->usefullnames) {
+        $moduleinstance->usefullnames = 0;
+    }
+
+
     return $DB->update_record('mooduell', $moduleinstance);
 }
 
