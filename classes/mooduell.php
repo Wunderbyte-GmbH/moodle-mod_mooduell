@@ -254,7 +254,7 @@ class mooduell {
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 // Add the list of questions
-                $data['questions'] = $this->return_list_of_questions();
+                $data['questions'] = $this->return_list_of_all_questions_in_quiz();
                 $data['highscores'] = $this->return_list_of_highscores();
                 // Use the viewpage renderer template
                 $viewpage = new viewpage($data);
@@ -344,7 +344,7 @@ class mooduell {
      * This function is meant for display on browser, not for webservice.
      * It replaces category-id already with category-name.
      */
-    public function return_list_of_questions() {
+    public function return_list_of_all_questions_in_quiz() {
 
         global $DB;
 
@@ -369,10 +369,7 @@ class mooduell {
         $data = $DB->get_records_sql($sql);
         foreach ($data as $entry) {
             $newQuestion = new question_control(($entry));
-            $newQuestion->replace_category_id_by_name();
             $questions[] = $newQuestion;
-
-
         }
 
         return $questions;
@@ -658,7 +655,7 @@ class mooduell {
         $returnarray = [];
 
         // TODO: Check each question individually
-        $questions = $this->return_list_of_questions();
+        $questions = $this->return_list_of_all_questions_in_quiz();
 
         // Are there enough questions in the categories added?
         if (count($questions) < 9) {
