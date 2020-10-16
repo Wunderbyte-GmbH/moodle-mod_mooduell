@@ -43,6 +43,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
+        // Get MooDuell id.
+        // Get MooDuell id.
+        $cm = $this->get_coursemodule();
+        $mooduellid = $cm->instance;
+
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -80,11 +85,9 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 $this->return_move_on_options());
 
         // We add the categories for the random question.
-        $listofcategories = $DB->get_records('question_categories');
+        $listofcategories = $this->get_categories_of_context_from_db();
 
-        // Get MooDuell id.
-        $cm = $this->get_coursemodule();
-        $mooduellid = $cm->instance;
+
         $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
             // First, there is the explanation.
@@ -197,14 +200,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
             if ($item->parent == 0) {
                 $spaces = "";
             } else if ($previousitem && $previousitem->id == $item->parent) {
-                $spaces .= "-> ";
+                $spaces .= "-";
             } else {
-                $spaces = "-> ";
+                $spaces = "-";
                 $parent = $this->return_parent_for_item_in_list($list, $item);
 
                 while ($parent->parent != 0) {
                     $parent = $this->return_parent_for_item_in_list($list, $parent);
-                    $spaces .= "-> ";
+                    $spaces .= "-";
                 }
             }
             if ($item->parent != 0) {
@@ -221,7 +224,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 }
 
                 $idkey = (string) $item->id;
-                $names[$idkey] = $spaces . " " . $item->name . ' ' . $questionsstring;
+                $names[$idkey] = $spaces . "> " . $item->name . ' ' . $questionsstring;
             }
             $previousitem = $item;
         }
@@ -238,6 +241,10 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $parent;
     }
 
+    /**
+     * @param $listofcategories
+     * @return array
+     */
     private function generate_sorted_list($listofcategories) {
         $sortedcategories = array();
 
@@ -281,5 +288,27 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 66 => '66',
                 100 => '100'
         );
+    }
+
+    private function get_categories_of_context_from_db() {
+        global $DB;
+
+
+        $context = $this->context;
+        $listofcontextids = explode('/', $context->path);
+
+        // Then the SQL query is built from the relevant categories.
+        $sql = 'SELECT * FROM {question_categories} WHERE';
+        foreach ($listofcontextids as $key=>$entry) {
+            if ($entry != '') {
+                $sql .= ' contextid = ' . $entry;
+                if ($key < count($listofcontextids) - 1) {
+                    $sql .= ' OR';
+                }
+            }
+        }
+        $sql .= ';';
+
+        return $DB->get_records_sql($sql);
     }
 }
