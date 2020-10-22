@@ -74,7 +74,12 @@ class game_control {
             $data->gameid = $gameid;
 
             // If we have already a record and player a or player b are not the user we use here, we throw an error.
-            if (($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
+
+            $context = $mooduell->context;
+
+            // A Teacher can access a game where he/she is was not involved
+            if (!has_capability('mod/mooduell:managemooduellsettings', $context)
+            && ($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
                 throw new moodle_exception('notallowedtoaccessthisgame', 'mooduell', null, null,
                         "Your are not participant of this game, you can't access it's data");
             }
