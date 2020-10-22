@@ -106,5 +106,7 @@ $string['questiontexttoolong'] = 'ID: {$a}: Text der Frage ist zu lang';
 $string['wrongquestiontype'] = 'ID {$a}: Frage hat einen falschen Typ';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Frage hat keine richtigen Antworten';
 
+$string['addquestionstocategory'] = 'Fragen zur Kategorie {$a} hinzufügen';
+
 $string['notok'] = 'Nicht OK';
 $string['ok'] = 'OK';

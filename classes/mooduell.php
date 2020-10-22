@@ -26,6 +26,7 @@ namespace mod_mooduell;
 
 use coding_exception;
 use context_module;
+use core_customfield\category;
 use dml_exception;
 use mod_mooduell\output\viewpage;
 use mod_mooduell\output\viewpagestudents;
@@ -256,6 +257,7 @@ class mooduell {
                 // Add the list of questions
                 $data['questions'] = $this->return_list_of_all_questions_in_quiz();
                 $data['highscores'] = $this->return_list_of_highscores();
+                $data['categories'] = $this->return_list_of_categories();
                 // Use the viewpage renderer template
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpage($viewpage);
@@ -348,8 +350,17 @@ class mooduell {
 
         global $DB;
 
-        // First, the added categories have to be determined.
         $categorydata = $DB->get_records('mooduell_categories', array('mooduellid' => $this->cm->instance));
+
+        // If we have no categories, we return an empty array.
+        if (!($categorydata && is_array($categorydata))) {
+            return [];
+        }
+
+
+        // The questions are fetched from DB and built via question class.
+        // On the way, we replace category number by category-name.
+        $questions = [];
 
         // Then the SQL query is built from the relevant categories.
         $sql = 'SELECT * FROM {question} WHERE';
@@ -363,10 +374,13 @@ class mooduell {
         }
         $sql .= ';';
 
-        // The questions are fetched from DB and built via question class.
-        // On the way, we replace category number by category-name.
-        $questions = [];
         $data = $DB->get_records_sql($sql);
+
+        // If data is null or data isnt an array we return 0;
+        if (!($data && is_array($data))) {
+            return [];
+        }
+
         foreach ($data as $entry) {
             $newQuestion = new question_control(($entry));
             $questions[] = $newQuestion;
@@ -375,6 +389,7 @@ class mooduell {
         return $questions;
 
     }
+
 
     /**
      * @return array[]
@@ -669,5 +684,32 @@ class mooduell {
 
 
         return $returnarray;
+    }
+
+    private function return_list_of_categories() {
+
+        global $DB;
+
+        $mooduellcategories = $DB->get_records('mooduell_categories', array('mooduellid' => $this->cm->instance));
+
+        // If we have no categories, we return an empty array.
+        if (!($mooduellcategories && is_array($mooduellcategories))) {
+            return [];
+        }
+
+        $categoriesdata = [];
+
+        foreach ($mooduellcategories as $moodcat) {
+            $tempentry = $DB->get_record('question_categories', array('id' => $moodcat->category));
+            $entry = [];
+            $entry['catid'] = $tempentry->id;
+            $entry['contextid'] = $tempentry->contextid;
+            $entry['catname'] = $tempentry->name;
+            $entry['courseid'] = $this->course->id;
+            $categorydata[] = $entry;
+        }
+
+        return $categorydata;
+
     }
 }

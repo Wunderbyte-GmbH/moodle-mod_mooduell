@@ -24,6 +24,16 @@
 
     }}
 
+<ul>
+{{#categories}}
+    <li>
+        <a href="../../question/edit.php?courseid={{courseid}}&category={{catid}}%2C{{contextid}}">
+        {{#str}} addquestionstocategory, mod_mooduell, {{catname}}{{/str}}
+        </a>
+    </li>
+{{/categories}}
+</ul>
+
 <table class="generaltable fullwidth fieldslist">
     <thead>
     <tr>
