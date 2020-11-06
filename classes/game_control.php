@@ -597,7 +597,8 @@ class game_control {
             $update->status = 3;
 
             // Set winnerid
-            $update->winnerid = $this->return_winnerid();
+
+            list($update->winnerid, $update->playerascore, $update->playerbscore) = $this->return_winnerid_and_correct_answers();
 
         } else if ($this->is_it_active_users_turn()) {
             $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
@@ -635,7 +636,22 @@ class game_control {
      * Returns 0 on draw.
      * @return int
      */
-    private function return_winnerid() {
+    private function return_winnerid_and_correct_answers() {
+
+        list($playerascore, $playerbscore) = $this->return_correctanswers();
+
+        $winnerid = 0;
+
+        if ($playerascore < $playerbscore) {
+            $winnerid = $this->gamedata->playerbid;
+        } else if ($playerascore > $playerbscore) {
+            $winnerid = $this->gamedata->playeraid;
+        }
+
+        return [$winnerid, $playerascore, $playerbscore];
+    }
+
+    private function return_correctanswers() {
         $playerascore = 0;
         $playerbscore = 0;
         foreach($this->gamedata->questions as $question) {
@@ -646,13 +662,7 @@ class game_control {
                 ++$playerbscore;
             }
         }
-        if ($playerascore < $playerbscore) {
-            return $this->gamedata->playerbid;
-        } else if ($playerascore > $playerbscore) {
-            return $this->gamedata->playeraid;
-        } else {
-            return 0;
-        }
+        return [$playerascore, $playerbscore];
     }
 
     /**
