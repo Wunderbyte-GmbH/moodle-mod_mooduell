@@ -124,6 +124,13 @@ class game_control {
         $filteredusers = array();
 
         foreach ($users as $user) {
+
+            //First we check if the user needs an alternatename and if he has one
+            if (!$mooduell->gameData->usefullnames
+            && strlen($user->alternatename) == 0) {
+                continue;
+            }
+
             // We need to specifiy userid already when calling modinfo.
             $modinfo = get_fast_modinfo($mooduell->course->id, $user->id);
             $cm = $modinfo->get_cm($mooduell->cm->id);

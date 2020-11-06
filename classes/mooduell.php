@@ -473,22 +473,27 @@ class mooduell {
         return $returnedgames;
     }
 
+
     public static function get_highscores($quizid) {
 
-        global $DB;
+        global $DB, $USER;
 
         $temparray = [];
 
         // Get all the finished games.
-
-        $mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
-
-        if (!$mooduellrecord || !$mooduellrecord->instance) {
-            throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
-                    "This MooDuell Instance does not exist.");
+        // If we have a quizid, we only get highscore for one special game
+        // if there is no quiz id, we get highscore for all the games
+        if ($quizid != 0) {
+            $mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
+            if (!$mooduellrecord || !$mooduellrecord->instance) {
+                throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
+                        "This MooDuell Instance does not exist.");
+            }
+            $data = $DB->get_records('mooduell_games', array('status' => 3, 'mooduellid' => $mooduellrecord->instance));
+        } else {
+            $data = $DB->get_records('mooduell_games', array('status' => 3));
         }
 
-        $data = $DB->get_records('mooduell_games', array('status' => 3, 'mooduellid' => $mooduellrecord->instance));
 
         $temparray = [];
 
@@ -540,6 +545,12 @@ class mooduell {
         }
         $returnarray = [];
         foreach ($temparray as $key => $value) {
+
+            // if quizid = 0, we only return active user, else we return all users
+            if ($quizid == 0 && $key != $USER->id) {
+                continue;
+            }
+
             $entry = [];
             $entry['userid'] = $key;
             $entry['score'] = $value->score;
