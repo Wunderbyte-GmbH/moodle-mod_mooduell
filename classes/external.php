@@ -637,7 +637,6 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_user_stats_returns() {
         return new external_single_structure(array(
-                        'userid' => new external_value(PARAM_INT, 'userid'),
                         'playedgames' => new external_value(PARAM_INT, 'playedgames'),
                         'wongames' => new external_value(PARAM_INT, 'wongames'),
                         'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
