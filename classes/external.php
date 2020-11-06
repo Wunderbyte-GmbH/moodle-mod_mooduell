@@ -61,7 +61,7 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
                     "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
@@ -132,7 +132,7 @@ class mod_mooduell_external extends external_api {
         // now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
                     "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
@@ -421,7 +421,7 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
                     "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
@@ -506,7 +506,7 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'quiz', null, null,
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
                     "Course module id:" . $params['quizid']);
         }
         $context = context_module::instance($cm->id);
@@ -518,6 +518,61 @@ class mod_mooduell_external extends external_api {
         // We can now retrieve the questions and add them to our gamedata
         return game_control::return_users_for_game($mooduell);
     }
+
+    /**
+     * Set alternate name of user
+     * @param $userid
+     * @param $alternatename
+     * @return bool
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
+    public static function set_alternatename($userid, $alternatename) {
+        $params = array(
+                'userid' => $userid,
+                'alternatename' => $alternatename
+        );
+
+        $params = self::validate_parameters(self::set_alternatename_parameters(), $params);
+
+        global $USER, $DB;
+
+        // Every user can only set his/her own name
+        if ($params['userid'] != $USER->id) {
+            throw new moodle_exception('norighttosetnameofthisuser ' . $params['userid'], 'mooduell', null, null,
+                    "Course module id:" . $params['quizid']);
+        }
+
+        $USER->alternatename = \core_user::clean_field($params['alternatename'], 'alternatename');
+
+        $DB->update_record('user', $USER);
+
+        return array('status' => 1);
+    }
+
+
+    /**
+     * Describes the parameters for set_alternatename.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function set_alternatename_parameters() {
+        return new external_function_parameters(array(
+                'userid' => new external_value(PARAM_INT, 'user id'),
+                'alternatename' => new external_value(PARAM_RAW, 'alternate name')
+        ));
+    }
+
+    public static function set_alternatename_returns() {
+        return new external_single_structure(array(
+                        'status' => new external_value(PARAM_INT, 'status')
+                )
+        );
+    }
+
+
 
     /**
      * Describes the parameters for get_quiz_users.
@@ -542,7 +597,7 @@ class mod_mooduell_external extends external_api {
                                 'lastname' => new external_value(PARAM_RAW, 'lastname'),
                                 'username' => new external_value(PARAM_RAW, 'username'),
                                 'alternatename' => new external_value(PARAM_RAW, 'nickname'),
-                                'lang' => new external_value(PARAM_RAW, 'lastname'),
+                                'lang' => new external_value(PARAM_RAW, 'language'),
                                 'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
                         )
                 )
