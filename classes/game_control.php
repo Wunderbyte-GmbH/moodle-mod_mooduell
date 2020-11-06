@@ -632,15 +632,15 @@ class game_control {
         $playerascore = 0;
         $playerbscore = 0;
         foreach($this->gamedata->questions as $question) {
-            if ($question->playeraanswered == 1) {
+            if ($question->playeraanswered == 2) {
                 ++$playerascore;
             }
-            if ($question->playerbanswered == 1) {
+            if ($question->playerbanswered == 2) {
                 ++$playerbscore;
             }
         }
         if ($playerascore < $playerbscore) {
-            return $this->gamedata->playeraid;
+            return $this->gamedata->playerbid;
         } else if ($playerascore > $playerbscore) {
             return $this->gamedata->playeraid;
         } else {
