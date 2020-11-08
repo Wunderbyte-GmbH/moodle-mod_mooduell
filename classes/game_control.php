@@ -157,8 +157,28 @@ class game_control {
             $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
                     ') AND status = 3');
             $returnarray['playedgames'] = count($data);
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = ' . $userid);
-            $returnarray['wongames'] = count($data);
+
+            $wongames = 0;
+            $lostgames = 0;
+            $correctlyanswered = 0;
+            foreach ($data as $entry) {
+                if ($entry->winnerid == $userid) {
+                    ++$wongames;
+                } else if ($entry->winnerid !== 0) {
+                    ++$lostgames;
+                }
+                if ($entry->playeraid == $userid) {
+                    $correctlyanswered += $entry->playeracorrect;
+                } else {
+                    $correctlyanswered += $entry->playerbcorrect;
+                }
+            }
+            $returnarray['wongames'] = $wongames;
+            $returnarray['lostgames'] = $lostgames;
+            $returnarray['correctlyanswered'] = $correctlyanswered;
+
+            /*$data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = ' . $userid);
+            $returnarray['wongames'] = count($data);*/
 
             // To find out the id of our nemesis, we first have to get all the records where we lost.
             $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
@@ -602,7 +622,7 @@ class game_control {
 
             // Set winnerid
 
-            list($update->winnerid, $update->playerascore, $update->playerbscore) = $this->return_winnerid_and_correct_answers();
+            list($update->winnerid, $update->playeracorrect, $update->playerbcorrect) = $this->return_winnerid_and_correct_answers();
 
         } else if ($this->is_it_active_users_turn()) {
             $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
@@ -642,17 +662,17 @@ class game_control {
      */
     private function return_winnerid_and_correct_answers() {
 
-        list($playerascore, $playerbscore) = $this->return_correctanswers();
+        list($playeracorrect, $playerbcorrect) = $this->return_correctanswers();
 
         $winnerid = 0;
 
-        if ($playerascore < $playerbscore) {
+        if ($playeracorrect < $playerbcorrect) {
             $winnerid = $this->gamedata->playerbid;
-        } else if ($playerascore > $playerbscore) {
+        } else if ($playeracorrect > $playerbcorrect) {
             $winnerid = $this->gamedata->playeraid;
         }
 
-        return [$winnerid, $playerascore, $playerbscore];
+        return [$winnerid, $playeracorrect, $playerbcorrect];
     }
 
     private function return_correctanswers() {

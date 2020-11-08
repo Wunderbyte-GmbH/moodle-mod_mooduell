@@ -496,6 +496,7 @@ class mooduell {
 
 
         $temparray = [];
+        $nemesis = [];
 
         foreach ($data as $entry) {
             // Get the scores.
@@ -532,6 +533,18 @@ class mooduell {
                     $playerb->score = 3;
                     break;
             }
+
+            // If the game is not a draw and active User is not the winner...
+            if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
+
+                if (!array_key_exists($entry->winnerid, $nemesis)) {
+                    $nemesis[$entry->winnerid] = 1;
+                } else {
+                    ++$nemesis[$entry->winnerid];
+                }
+
+            }
+
             if (!array_key_exists($entry->playeraid, $temparray)) {
                 $temparray[$entry->playeraid] = $playera;
             } else {
@@ -544,6 +557,7 @@ class mooduell {
             }
         }
         $returnarray = [];
+        $nemesis = arsort($nemesis);
         foreach ($temparray as $key => $value) {
 
             // if quizid = 0, we only return active user, else we return all users
@@ -552,11 +566,13 @@ class mooduell {
             }
 
             $entry = [];
+            $entry['quizid'] = $quizid;
             $entry['userid'] = $key;
             $entry['score'] = $value->score;
             $entry['won'] = $value->won;
             $entry['lost'] = $value->lost;
             $entry['played'] = $value->played;
+            $entry['nemesis'] = reset($nemesis);
             $returnarray[] = $entry;
         }
 

@@ -639,6 +639,8 @@ class mod_mooduell_external extends external_api {
         return new external_single_structure(array(
                         'playedgames' => new external_value(PARAM_INT, 'playedgames'),
                         'wongames' => new external_value(PARAM_INT, 'wongames'),
+                        'lostgames' => new external_value(PARAM_INT, 'lostgames'),
+                        'correctlyanswered' => new external_value(PARAM_INT, 'correctlyanswered'),
                         'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
                 )
         );
@@ -674,6 +676,7 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_highscores_returns() {
         return new external_multiple_structure(new external_single_structure(array(
+                                'quizid' => new external_value(PARAM_INT, 'quizid'),
                                 'userid' => new external_value(PARAM_INT, 'userid'),
                                 'won' => new external_value(PARAM_INT, 'won'), // games won
                                 'lost' => new external_value(PARAM_INT, 'lost'), // games lost
