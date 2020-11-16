@@ -391,6 +391,7 @@ class mooduell {
     }
 
 
+
     /**
      * @return array[]
      * @throws dml_exception
@@ -472,6 +473,71 @@ class mooduell {
 
         return $returnedgames;
     }
+
+
+    public static function get_pushtokens($userid) {
+
+        global $DB, $USER;
+
+        $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
+        $entry = [];
+        if ($data && count($data) > 0)  {
+            foreach($data as $entry) {
+
+                $returndata[] = [
+                        'identifier' => $entry->identifier,
+                        'model' => $entry->model,
+                        'pushtoken' => $entry->pushtoken,
+                ];
+
+            }
+            $entry = [
+                    'userid' => $userid,
+                    'pushtokens' => $returndata,
+            ];
+        }
+
+        return $entry;
+
+}
+
+    /**
+     * Pushtokens have to be verified for validity.
+     * This verification can only be done by other users sending push tokens.
+     * If a push token is no longer connected to a device, it return an error.
+     * Therefore, this function allows users to set push tokens of other users.
+     * This is not great, but it works for the moment.
+     * @param $userid
+     * @param $pushtokens
+     */
+    public static function set_pushtoken($userid, $model, $identifier, $pushtoken) {
+
+        global $DB, $USER;
+
+        $data = $DB->get_record('mooduell_pushtokens', array('userid' => $userid, 'identifier' => $identifier));
+
+        $update_data = [
+                'userid' => $userid,
+                'model' => $model,
+                'identifier' => $identifier,
+                'pushtoken' => $pushtoken
+        ];
+
+        if ($data) {
+            $update_data['id'] = $data->id;
+            $DB->update_record('mooduell_pushtokens', $update_data);
+        } else {
+            $DB->insert_record('mooduell_pushtokens', $update_data);
+        }
+
+
+
+
+
+        return ['status' => 1];
+    }
+
+
 
 
     public static function get_highscores($quizid) {
@@ -575,6 +641,8 @@ class mooduell {
             $entry['nemesis'] = reset($nemesis);
             $returnarray[] = $entry;
         }
+
+        usort($returnarray, self::build_sorter('score'));
 
         return $returnarray;
 

@@ -150,4 +150,32 @@ $functions = array(
                         MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
+        'mod_mooduell_set_pushtokens' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
+            // ... web service function that the client will call.
+                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
+                'methodname' => 'set_pushtokens', // Implement this function into the above class
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'This documentation will be displayed in the generated API documentation
+                              (Administration > Plugins > Webservices > API documentation)',
+                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
+                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
+                'capabilities' => 'mod/mooduell:view',
+                'services' => array(
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                )
+        ),
+        'mod_mooduell_get_pushtokens' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
+            // ... web service function that the client will call.
+                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
+                'methodname' => 'get_pushtokens', // Implement this function into the above class
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'This documentation will be displayed in the generated API documentation
+                              (Administration > Plugins > Webservices > API documentation)',
+                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
+                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
+                'capabilities' => 'mod/mooduell:view',
+                'services' => array(
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                )
+        ),
 );

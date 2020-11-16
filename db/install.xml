@@ -111,5 +111,21 @@
                 <KEY NAME="fk_gameid" TYPE="foreign" FIELDS="gameid" REFTABLE="mooduell_games" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
+        <TABLE NAME="mooduell_pushtokens" COMMENT="Stores all the pushtokens for all the users">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Id userid"/>
+                <FIELD NAME="identifier" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Device identifier"/>
+                <FIELD NAME="model" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="Device model"/>
+                <FIELD NAME="pushtoken" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="pushtoken"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
     </TABLES>
 </XMLDB>

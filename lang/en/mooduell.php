@@ -48,7 +48,7 @@ $string['xseconds'] = '{$a} seconds';
 $string['showcontinuebutton'] = 'Show "Continue"-button';
 $string['showcorrectanswer'] = 'Show correct answer';
 $string['waitfornextquestion'] = 'Time to contemplate result after answering';
-$string['clicktomoveon'] = 'Show next question right away';
+$string['clicktomoveon'] = 'Click to move on';
 
 $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Category for random question';

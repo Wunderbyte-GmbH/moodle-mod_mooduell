@@ -330,7 +330,7 @@ class game_control {
             if (!$emergencybrake) {
                 $emergencybrake = true;
             } else if (count($questions) != $setnumberofquestions) {
-                throw new moodle_exception('wrongnumberofquestions2', null, null,
+                throw new moodle_exception('wrongnumberofquestions', null, null,
                         "For some unknown reason we didn't receive the right number of questions");
             }
         }

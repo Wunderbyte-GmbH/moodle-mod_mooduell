@@ -686,4 +686,122 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
+
+    /**
+     * @param $quizid
+     * @return mixed
+     * @throws invalid_parameter_exception
+     */
+    public static function get_pushtokens($userid) {
+
+        global $DB, $USER;
+
+        $params = array(
+                'userid' => $userid
+        );
+
+        $params = self::validate_parameters(self::get_pushtokens_parameters(), $params);
+
+        $activeuserid = $USER->id;
+
+        // We only allow to set a pushToken for another user, if there is an active game going on.
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} 
+            WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
+            AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
+            AND status != 3');
+
+        if (!$data || count($data) == 0) {
+            throw new moodle_exception('cantgetpushtoken', 'mooduell', null, null,
+                    "You can't get pushtoken of this user " . $params['userid']);
+        }
+
+        return mooduell::get_pushtokens($params['userid']);
+
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function get_pushtokens_parameters() {
+        return new external_function_parameters(array(
+                'userid' => new external_value(PARAM_INT, 'user id')
+        ));
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function get_pushtokens_returns() {
+        return new external_single_structure(array(
+                        'userid' => new external_value(PARAM_INT, 'quizid'),
+                        'pushtokens' => new external_multiple_structure(new external_single_structure(array(
+                                                'identifier' => new external_value(PARAM_RAW, 'identifier'),
+                                                'model' => new external_value(PARAM_RAW, 'model'),
+                                                'pushtoken' => new external_value(PARAM_RAW, 'pushtoken'))
+                                )
+                        )
+                )
+        );
+    }
+
+    /**
+     * @param $userid
+     * @param $model
+     * @param $identifier
+     * @param $pushtoken
+     * @return int[]
+     * @throws invalid_parameter_exception
+     */
+    public static function set_pushtokens($userid, $identifier, $model, $pushtoken) {
+
+        global $DB, $USER;
+
+        $params = array(
+                'userid' => $userid,
+                'identifier' => $identifier,
+                'model' => $model,
+                'pushtoken' => $pushtoken,
+        );
+
+        $params = self::validate_parameters(self::set_pushtokens_parameters(), $params);
+
+        $activeuserid = $USER->id;
+
+        // We only allow to set a pushToken for another user, if there is an active game going on.
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} 
+            WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
+            AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
+            AND status != 3');
+
+        if (!$data || count($data) == 0) {
+            throw new moodle_exception('cantsetpushtoken', 'mooduell', null, null,
+                    "You can't set pushtoken of this user " . $params['userid']);
+        }
+
+        return mooduell::set_pushtoken($params['userid'], $params['identifier'], $params['model'], $params['pushtoken']);
+
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function set_pushtokens_parameters() {
+        return new external_function_parameters(array(
+                        'userid' => new external_value(PARAM_INT, 'user id'),
+                        'model' => new external_value(PARAM_RAW, 'identifier'),
+                        'identifier' => new external_value(PARAM_RAW, 'model'),
+                        'pushtoken' => new external_value(PARAM_RAW, 'pushtoken')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function set_pushtokens_returns() {
+        return new external_single_structure(array(
+                        'status' => new external_value(PARAM_INT, 'status')
+                )
+        );
+    }
 }
