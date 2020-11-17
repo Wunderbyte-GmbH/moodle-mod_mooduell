@@ -480,7 +480,7 @@ class mooduell {
         global $DB, $USER;
 
         $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
-        $entry = [];
+        $returndata = [];
         if ($data && count($data) > 0)  {
             foreach($data as $entry) {
 
@@ -491,13 +491,14 @@ class mooduell {
                 ];
 
             }
-            $entry = [
-                    'userid' => $userid,
-                    'pushtokens' => $returndata,
-            ];
         }
 
-        return $entry;
+
+
+        return [
+                'userid' => $userid,
+                'pushtokens' => $returndata,
+        ];
 
 }
 
