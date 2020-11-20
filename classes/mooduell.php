@@ -422,7 +422,7 @@ class mooduell {
      * @param $key
      * @return \Closure
      */
-    private function build_sorter($key) {
+    private static function build_sorter($key) {
         return function ($a, $b) use ($key) {
             return $a[$key] < $b[$key];
         };
@@ -624,7 +624,7 @@ class mooduell {
             }
         }
         $returnarray = [];
-        $nemesis = arsort($nemesis);
+        arsort($nemesis);
         foreach ($temparray as $key => $value) {
 
             // if quizid = 0, we only return active user, else we return all users
@@ -655,7 +655,7 @@ class mooduell {
      * @param $storedplayer
      * @param $newentry
      */
-    private function add_score($storedplayer, $newentry) {
+    private static function add_score($storedplayer, $newentry) {
         $storedplayer->score += $newentry->score;
         $storedplayer->won += $newentry->won;
         $storedplayer->lost += $newentry->lost;

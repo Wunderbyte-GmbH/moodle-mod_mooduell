@@ -273,7 +273,7 @@ class question_control {
         $dom->loadHTML($this->questiontext);
 
         $images = $dom->getElementsByTagName('img');
-
+        $url = '';
 
         foreach ($images as $image) {
             $url = $image->getAttribute('src');
