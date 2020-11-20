@@ -484,8 +484,154 @@ class game_control {
         // After every answered questions, turn status is updated as well.
         $this->save_my_turn_status();
 
+        // Do we need to send a push notification? If so, we'll do it here.
+        $this->send_notifcation_if_necessary();
+
         return $resultarray;
     }
+
+    /**
+     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned
+     */
+    private function send_notifcation_if_necessary() {
+
+        $i = 0;
+        $j = 0;
+        foreach ($this->gamedata->questions as $question) {
+
+            $i += $question->playeraanswered != null ? 1 : 0;
+            $j += $question->playerbanswered != null ? 1 : 0;
+
+        }
+
+        if ($this->gamedata->status === 3) {
+            // Notify Player A
+            if ($this->gamedata->winnerid === $this->gamedata->playeraid) {
+                // you won
+                $this->sendPushNotification('youwon');
+            } else if ($this->gamedata->winnerid === 0) {
+                // you played draw
+                $this->sendPushNotification('draw');
+            } else if ($this->gamedata->winnerid === $this->gamedata->playerbid) {
+                // you lost
+                $this->sendPushNotification('youlost');
+            }
+        } else if ($i === 3 && $j === 0) {
+            // player b is challenged
+            $this->sendPushNotification('challenged');
+        } else if ($i === 3 && $j === 6) {
+            // player a's turn
+            $this->sendPushNotification('YOURTURNA');
+        } else if ($i === 9 && $j === 6) {
+            // player b's turn
+            $this->sendPushNotification('YOURTURNB');
+        }
+    }
+
+    /**
+     * Prepare all the information we need to send a push notification.
+     * @param $messagetype
+     * @return array|null
+     * @throws \coding_exception
+     * @throws dml_exception
+     */
+    private function gather_notifcation_data($messagetype) {
+
+        $users = get_enrolled_users($this->mooduell->context);
+
+        foreach ($users as $user) {
+            if ($user->id === $this->gamedata->playeraid) {
+                $playerAName = $this->mooduell->usefullnames === 1 ?
+                        $user->firstname + ' ' +$user->lastname: $user->alternatename;
+                $playerA = $user;
+            }
+            if ($user->id === $this->gamedata->playerbid) {
+                $playerBName = $this->mooduell->usefullnames === 1 ?
+                        $user->firstname + ' ' +$user->lastname: $user->alternatename;
+                $playerB = $user;
+            }
+        }
+
+        $recepientid = 0;
+
+        switch ($messagetype) {
+            case 'youwin':
+                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
+                $recepientid = $playerA->id;
+                break;
+            case 'youlose':
+                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
+                $recepientid = $playerA->id;
+                break;
+            case 'draw':
+                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
+                $recepientid = $playerA->id;
+                break;
+            case 'YOURTURNA':
+                $message = get_string('yourturn', 'mod_mooduell',  $playerBName);
+                $recepientid = $playerA->id;
+                break;
+            case 'YOURTURNB':
+                $message = get_string('yourturn', 'mod_mooduell',  $playerAName);
+                $recepientid = $playerB->id;
+                break;
+            case 'challenged':
+                $message = get_string($messagetype, 'mod_mooduell',  $playerAName);
+                $recepientid = $playerB->id;
+                break;
+        }
+
+        $tokens = $this->return_push_tokens_of_user($recepientid);
+
+        if (!$tokens || count($tokens) === 0) {
+            return null;
+        }
+        $fields = array
+        (
+                'registration_ids'  => $tokens,
+                'data'          => array(
+                        "name"=>"xyz",
+                        'image'=>'https://www.example.com/images/minion.jpg'
+                ),
+                'notification' => array(
+                        'body' => $message,
+                        'title' => $message,
+                        'sound' => 'default',
+                        'icon' => 'icon',
+                        'badge' => 4
+                )
+        );
+
+        return $fields;
+
+
+    }
+
+    /**
+     * returns array of pushtoken strings from given user.
+     * If there are non, we return empty array
+     * @param $userid
+     * @return array
+     * @throws dml_exception
+     */
+    private function return_push_tokens_of_user($userid) {
+
+        global $DB;
+
+        $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
+
+        $returnarray = [];
+
+        if ($data && count($data) > 0) {
+            foreach ($data as $entry)
+            $returnarray[] = $entry->pushtoken;
+        }
+
+        return $returnarray;
+    }
+
+
+
 
     /**
      * Check if active player is allowed to answer questions.
@@ -748,4 +894,35 @@ class game_control {
 
         return $returnarray;
     }
+
+
+    private function sendPushNotification($messagetype)
+    {
+
+        $fields = $this->gather_notifcation_data($messagetype);
+
+        // If the user has no pushtokens, we abort.
+        if (!$fields) {
+            return;
+        }
+
+
+        $API_ACCESS_KEY = 'AAAA5opPaII:APA91bGdlnKYrw9B-8Ulu2IABFtlsVmAiA8RogciARSJL75mjU1HjHIYjtTL-f0zEysNiEB9isctOkUTPsPnilrkmSzT0HX_uz3T3E03YaCw7stn8xP0sbipyLAreY6D6iJxXIUKVMse';
+        $headers = array
+        (
+                'Authorization: key=' . $API_ACCESS_KEY,
+                'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        curl_close( $ch );
+        return $result;
+    }
+
 }

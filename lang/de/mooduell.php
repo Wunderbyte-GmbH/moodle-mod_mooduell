@@ -110,3 +110,10 @@ $string['addquestionstocategory'] = 'Fragen zur Kategorie {$a} hinzufügen';
 
 $string['notok'] = 'Nicht OK';
 $string['ok'] = 'OK';
+
+
+$string['youwin'] = 'Du hast gegen {$a} gewonnen';
+$string['youlose'] = 'Du hast gegen {$a} verloren';
+$string['draw'] = 'Du hast gegen {$a} unentschieden gespielt';
+$string['yourturn'] = 'Du bist dran gegen {$a}';
+$string['challenged'] = '{$a} hat dich herausgefordert';

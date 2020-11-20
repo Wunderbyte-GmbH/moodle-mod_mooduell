@@ -112,3 +112,9 @@ $string['addquestionstocategory'] = 'Add questions to category {$a}';
 
 $string['notok'] = 'Not OK';
 $string['ok'] = 'OK';
+
+$string['youwin'] = 'You won against {$a}';
+$string['youlose'] = 'You lost against {$a}';
+$string['draw'] = 'You played draw against {$a}';
+$string['yourturn'] = 'It\'s your turn against {$a}';
+$string['challenged'] = '{$a} has challenged you';
