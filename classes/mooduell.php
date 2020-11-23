@@ -302,6 +302,8 @@ class mooduell {
     public function return_list_of_games($student = false) {
 
         $returnwarnings = $this->check_quiz();
+        $finishedreturngames = [];
+        $openreturngames = [];
 
         $games = $this->return_games_for_this_instance($student);
 

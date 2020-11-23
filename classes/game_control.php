@@ -598,7 +598,7 @@ class game_control {
                         'title' => $message,
                         'sound' => 'default',
                         'icon' => 'icon',
-                        'badge' => 4
+                        'badge' => 1
                 )
         );
 
@@ -775,6 +775,9 @@ class game_control {
         } else {
             $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
         }
+
+        $now = new DateTime("now", \core_date::get_server_timezone_object());
+        $update->timemodified = $now->getTimestamp();
 
         $DB->update_record('mooduell_games', $update);
 

@@ -79,13 +79,13 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
 
     // As empty checkboxes are not included in data, we have to make sure they are transmitted to DB.
     // Check for keys and add 0 if they are not present.
-    if (!$moduleinstance->showcontinuebutton) {
+    if (!isset($moduleinstance->showcontinuebutton)) {
         $moduleinstance->showcontinuebutton = 0;
     }
-    if (!$moduleinstance->showcorrectanswer) {
+    if (!isset($moduleinstance->showcorrectanswer)) {
         $moduleinstance->showcorrectanswer = 0;
     }
-    if (!$moduleinstance->usefullnames) {
+    if (!isset($moduleinstance->usefullnames)) {
         $moduleinstance->usefullnames = 0;
     }
 

@@ -31,7 +31,6 @@
         <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
-        <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
     <tbody>
@@ -41,12 +40,6 @@
             <td>{{playeraresults}}</td>
             <td>{{playerb}}</td>
             <td>{{playerbresults}}</td>
-            <td class="text-right">
-                {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
-                    t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                <a href="view.php?action=delete&id={{mooduellid}}&gameid={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
-                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
-            </td>
         </tr>
     {{/opengames}}
     </tbody>

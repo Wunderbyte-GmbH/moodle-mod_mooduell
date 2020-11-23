@@ -461,6 +461,7 @@ class mod_mooduell_external extends external_api {
                         'playeraid' => new external_value(PARAM_INT, 'player A id'),
                         'playerbid' => new external_value(PARAM_INT, 'player B id'),
                         'winnerid' => new external_value(PARAM_INT, 'winner id'),
+                        'timemodified' => new external_value(PARAM_INT, 'time modified'),
                         'status' => new external_value(PARAM_INT, 'status'),
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
@@ -544,7 +545,7 @@ class mod_mooduell_external extends external_api {
                     "Course module id:" . $params['quizid']);
         }
 
-        $USER->alternatename = \core_user::clean_field($params['alternatename'], 'alternatename');
+        $USER->alternatename = core_user::clean_field($params['alternatename'], 'alternatename');
 
         $DB->update_record('user', $USER);
 
