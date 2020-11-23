@@ -804,4 +804,65 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
+
+    /**
+     * @param $gameid
+     * @return mixed
+     * @throws invalid_parameter_exception
+     */
+    public static function giveup_game($gameid) {
+
+        global $DB, $USER;
+
+        $params = array(
+                'gameid' => $gameid,
+        );
+
+        $params = self::validate_parameters(self::giveup_game_parameters(), $params);
+
+        $entry = $DB->get_record('mooduell_games', array('id' => $params['gameid']));
+
+        if ($entry) {
+
+            if ($entry->playeraid === $USER->id) {
+                $entry->winnerid = $entry->playerbid;
+            } else if ($entry->playerbid === $USER->id) {
+                $entry->winnerid = $entry->playeraid;
+            } else {
+                return ['status' => 0];
+            }
+        } else {
+            return ['status' => 0];
+        }
+        $entry->status = 3;
+
+        $now = new DateTime("now", core_date::get_server_timezone_object());
+        $entry->timemodified = $now->getTimestamp();
+
+        $DB->update_record('mooduell_games', $entry);
+
+        return ['status' => 1];
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public
+    static function giveup_game_parameters() {
+        return new external_function_parameters(array(
+                        'gameid' => new external_value(PARAM_INT, 'game id')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public
+    static function giveup_game_returns() {
+        return new external_single_structure(array(
+                        'status' => new external_value(PARAM_INT, 'status')
+                )
+        );
+    }
 }
