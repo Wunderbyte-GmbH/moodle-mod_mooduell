@@ -122,6 +122,8 @@
                        COMMENT="Device model"/>
                 <FIELD NAME="pushtoken" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
                        COMMENT="pushtoken"/>
+                <FIELD NAME="numberofnotifications" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="numberofnotifications"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
