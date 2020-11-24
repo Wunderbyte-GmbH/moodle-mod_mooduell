@@ -399,6 +399,7 @@ class game_control {
             $data->component = 'mod_mooduell';
             $data->preferredbehaviour = 'deferredfeedback';
             $DB->insert_records('question_usages', [$data]);
+            return $data;
         }
 
     }

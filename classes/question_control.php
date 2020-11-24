@@ -247,7 +247,7 @@ class question_control {
 
         $context = \context_course::instance($this->courseid);
 
-        require_once($CFG->libdir . '/coursecatlib.php');
+        // require_once($CFG->libdir . '/coursecatlib.php');
         $course = get_course($this->courseid);
 
         // Retrieve the question usage id from Db.
@@ -257,14 +257,13 @@ class question_control {
         if ($quids && count($quids) > 0) {
             $quid = array_shift($quids);
         } else {
-            game_control::register_for_question_usage($context);
+            $quid = game_control::register_for_question_usage($context);
         }
 
         $idstring = implode("/", [$quid->id, 1, $this->questionid]);
 
 
         $this->questiontext = file_rewrite_pluginfile_urls($this->questiontext, 'pluginfile.php', $this->contextid, 'question', 'questiontext', $idstring);
-
 
 
 
