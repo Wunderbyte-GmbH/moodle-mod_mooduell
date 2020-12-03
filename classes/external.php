@@ -184,7 +184,7 @@ class mod_mooduell_external extends external_api {
                         'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
                         'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
                         'courseid' => new external_value(PARAM_INT, 'courseid'),
-                        'coursename' => new external_value(PARAM_ > RAW, 'coursename'),
+                        'coursename' => new external_value(PARAM_RAW, 'coursename'),
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
@@ -302,7 +302,7 @@ class mod_mooduell_external extends external_api {
         // Ensure there are courseids to loop through.
         if (!empty($params['courseids'])) {
 
-            list ($courses, $warnings) = external_util::validate_courses($params['courseids'], $mycourses);
+            list ($courses, $warnings) = external_util::validate_courses($params['courseids'], $mycourses, false, true);
 
             // Get the quizzes in this course, this function checks users visibility permissions.
             // We can avoid then additional validate_context calls.

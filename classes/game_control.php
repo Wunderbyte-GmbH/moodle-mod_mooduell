@@ -126,7 +126,7 @@ class game_control {
         foreach ($users as $user) {
 
             //First we check if the user needs an alternatename and if he has one
-            if (!$mooduell->gameData->usefullnames
+            if ($mooduell->settings->usefullnames == 0
             && strlen($user->alternatename) == 0) {
                 continue;
             }
@@ -509,13 +509,13 @@ class game_control {
             // Notify Player A
             if ($this->gamedata->winnerid === $this->gamedata->playeraid) {
                 // you won
-                $this->sendPushNotification('youwon');
+                $this->sendPushNotification('youwin');
             } else if ($this->gamedata->winnerid === 0) {
                 // you played draw
                 $this->sendPushNotification('draw');
             } else if ($this->gamedata->winnerid === $this->gamedata->playerbid) {
                 // you lost
-                $this->sendPushNotification('youlost');
+                $this->sendPushNotification('youlose');
             }
         } else if ($i === 3 && $j === 0) {
             // player b is challenged
@@ -766,10 +766,14 @@ class game_control {
         if ($this->is_game_finished()) {
             // We might want to trigger some event here.
             $update->status = 3;
+            $this->gamedata->status = 3;
 
             // Set winnerid
 
             list($update->winnerid, $update->playeracorrect, $update->playerbcorrect) = $this->return_winnerid_and_correct_answers();
+            $this->gamedata->winnerid = $update->winnerid;
+
+
 
         } else if ($this->is_it_active_users_turn()) {
             $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
