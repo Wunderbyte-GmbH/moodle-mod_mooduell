@@ -60,7 +60,10 @@ class answer_control {
 
         if ($data) {
             $this->id = $data->id;
+            // No HTML Tags anymore!
             $this->answertext = strip_tags($data->answer);
+            // If there is still markdown in answers, we want to render it properly
+            $this->answertext = format_text($this->answertext, 4);
             $this->fraction = $data->fraction;
             if ($data->feedback) {
                 $this->feedback = $data->feedback;

@@ -54,6 +54,12 @@ class question_control {
 
     /**
      *
+     * @var string
+     */
+    public $questiontextformat;
+
+    /**
+     *
      * @var int
      */
     public $category;
@@ -116,10 +122,12 @@ class question_control {
         global $COURSE;
         global $DB;
 
+
         if ($data) {
             $this->questionid = $data->id;
             $this->name = $data->name;
             $this->questiontext = $data->questiontext;
+            $this->questiontextformat = $data->questiontextformat;
             $this->questiontype = $data->qtype;
             $this->category = $data->category;
             $this->courseid = $COURSE->id;
@@ -271,6 +279,7 @@ class question_control {
 
         $dom->loadHTML($this->questiontext);
 
+
         $images = $dom->getElementsByTagName('img');
         $url = '';
 
@@ -278,7 +287,10 @@ class question_control {
             $url = $image->getAttribute('src');
             break;
         }
+        // No HTML Text anymore
         $this->questiontext = strip_tags($this->questiontext);
+        // But markdown, if there is any. Even if it's not markdown formatted text
+        $this->questiontext = format_text($this->questiontext, 4);
         $this->length = strlen($this->questiontext);
         $this->imageurl = $url;
     }
