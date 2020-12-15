@@ -411,7 +411,9 @@ class mooduell {
                     'gamesplayed' => $entry->played,
                     'gameswon' => $entry->won,
                     'gameslost' => $entry->lost,
-                    'score' => $entry->score
+                    'score' => $entry->score,
+                    'correct' => $entry->correct,
+                    'correctpercentage' => $entry->correctpercentage
             ];
         }
 
@@ -576,6 +578,11 @@ class mooduell {
             $playera->played = 1;
             $playerb->played = 1;
 
+            $playera->correct = $entry->playeracorrect;
+            $playerb->correct = $entry->playerbcorrect;
+            // $playera->correctlyanswere
+
+
             switch ($entry->winnerid) {
                 case 0:
                     $playera->won = 0;
@@ -641,6 +648,8 @@ class mooduell {
             $entry['won'] = $value->won;
             $entry['lost'] = $value->lost;
             $entry['played'] = $value->played;
+            $entry['correct'] = $value->correct;
+            $entry['correctpercentage'] = number_format((($value->correct / ($value->played * 9))* 100), 1);
             $entry['nemesis'] = reset($nemesis);
             $returnarray[] = $entry;
         }
@@ -662,6 +671,7 @@ class mooduell {
         $storedplayer->won += $newentry->won;
         $storedplayer->lost += $newentry->lost;
         $storedplayer->played += $newentry->played;
+        $storedplayer->correct += $newentry->correct;
     }
 
     /**

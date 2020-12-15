@@ -99,6 +99,8 @@ $string['gamesplayed'] = 'Gespielte Spiele';
 $string['gameswon'] = 'Gewonnene Spiele';
 $string['gameslost'] = 'Verlorene Spiele';
 $string['score'] = 'Punkte';
+$string['correctlyanswered'] = 'Korrekt';
+$string['correctlyansweredpercentage'] = '% korrekt';
 
 $string['notenoughquestions'] = 'Es gibt nicht genug Fragen in diesem Spiel. Füge der gewählten Fragenkategorie mehr Fragen hinzu oder wechsle die Kategorie.';
 $string['nowarnings'] = 'Dein Spiel sieht gut aus, es gibt keine Warnungen.';

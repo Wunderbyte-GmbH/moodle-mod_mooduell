@@ -101,6 +101,8 @@ $string['gamesplayed'] = 'games played';
 $string['gameswon'] = 'games won';
 $string['gameslost'] = 'games lost';
 $string['score'] = 'score';
+$string['correctlyanswered'] = 'correctly answered';
+$string['correctlyansweredpercentage'] = '% correctly answered';
 
 $string['notenoughquestions'] = 'There are not enough questions in the chosen category. Choose another category or add more questions to the existing one.';
 $string['nowarnings'] = 'Your game seems fine, there are currently no warnings';

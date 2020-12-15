@@ -77,9 +77,6 @@
     <li class="nav-item">
         <a class="nav-link" id="highscores-tab" data-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="students-tab" data-toggle="tab" href="#students" role="tab" aria-controls="students" aria-selected="false"><h4>{{#str}} students, mod_mooduell {{/str}}</h4></a>
-    </li>
 </ul>
 
 <div class="tab-content" id="mooduellTabContent">
@@ -93,9 +90,6 @@
         {{> mooduell/table_questions_teacher }}
     </div>
     <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
-        {{> mooduell/table_highscores }}
-    </div>
-    <div class="tab-pane fade" id="students" role="tabpanel" aria-labelledby="students-tab">
-        students here
+        {{> mooduell/table_highscores_teacher }}
     </div>
 </div>
