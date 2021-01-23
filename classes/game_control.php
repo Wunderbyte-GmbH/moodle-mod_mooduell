@@ -249,7 +249,7 @@ class game_control {
         foreach ($questions as $question) {
 
             // We set data back
-            $data = null;
+            $data = new stdClass();
             $data->questionid = $question->id;
             $data->mooduellid = $this->mooduell->cm->instance;
             $data->gameid = $this->gamedata->gameid;
