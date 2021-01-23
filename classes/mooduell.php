@@ -281,6 +281,11 @@ class mooduell {
                 $data['highscores'] = $this->return_list_of_highscores();
                 $viewpage = new viewpagestudents($data);
                 $out .= $output->render_viewpagestudents($viewpage);
+                break;
+            case 'populatedb':
+                $logdata = $this->test_populate_games(0);
+                $out .= $logdata;
+                break;
         }
 
         if (!$inline) {

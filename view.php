@@ -57,6 +57,8 @@ switch ($action) {
     case 'viewquestions':
         $pagename = 'questions';
         break;
+    case 'populatedb':  // A way to create games in DB without much hassle for performance testing.
+        $pagename = 'populatedb';
 }
 
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {
