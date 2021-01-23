@@ -84,17 +84,11 @@ class game_control {
                         "Your are not participant of this game, you can't access it's data");
             }
         } else if ($gamedata) {
-            $data = new stdClass();
-            $data->gameid = $gamedata->id;
-            $data->playeraid = $gamedata->playeraid;
-            $data->playerbid = $gamedata->playerbid;
-            $data->playeratime = $gamedata->playeratime;
-            $data->playerbtime = $gamedata->playerbtime;
-            $data->winnerid = $gamedata->winnerid;
-            $data->status = $gamedata->status;
-            $data->victorycoefficient = $gamedata->victorycoefficient;
-            $data->timemodified = $gamedata->timemodified;
-            $data->timecreated = $gamedata->timecreated;
+
+            $gameid = $gamedata->id;
+            $data = $gamedata;
+            $data->gameid = $gameid;
+            $data->id = null;
         } else {
             $data = new stdClass();
             $data->playeraid = (int) $USER->id;
