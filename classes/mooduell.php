@@ -310,15 +310,15 @@ class mooduell {
 
         foreach ($games as $game) {
 
-            $results = $game->return_status();
+            // $results = $game->return_status();
             if ($game->gamedata->status != 3) {
                 $openreturngames[] = [
                         'mooduellid' => $this->cm->id,
                         'gameid' => $game->gamedata->gameid,
                         "playera" => $this->return_name_by_id($game->gamedata->playeraid),
                         'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
-                        'playeraresults' => $results[0],
-                        'playerbresults' => $results[1]
+                        'playeraresults' => $game->gamedata->playeraresults,
+                        'playerbresults' => $game->gamedata->playerbresults
                 ];
             } else {
                 $finishedreturngames[] = [
@@ -326,8 +326,8 @@ class mooduell {
                         'gameid' => $game->gamedata->gameid,
                         "playera" => $this->return_name_by_id($game->gamedata->playeraid),
                         'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
-                        'playeraresults' => $results[0],
-                        'playerbresults' => $results[1]
+                        'playeraresults' => $game->gamedata->playeraresults,
+                        'playerbresults' => $game->gamedata->playerbresults
                 ];
             }
         }

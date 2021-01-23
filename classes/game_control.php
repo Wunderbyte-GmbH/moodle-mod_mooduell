@@ -750,7 +750,7 @@ class game_control {
      *
      * @throws dml_exception
      */
-    private function save_my_turn_status() {
+    public function save_my_turn_status() {
         global $DB;
         global $USER;
 
@@ -774,6 +774,11 @@ class game_control {
         } else {
             $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
         }
+
+        $result = $this->return_status();
+        $update->playeraresults = $result[0];
+        $update->playerbresults = $result[1];
+
 
         $now = new DateTime("now", \core_date::get_server_timezone_object());
         $update->timemodified = $now->getTimestamp();
