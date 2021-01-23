@@ -38,7 +38,7 @@ function xmldb_mooduell_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 20200504166) {
+    if ($oldversion < 2020050416) {
         $table = new xmldb_table('mooduell_pushtokens');
 
         // Adding fields to table mooduell_pushtokens.
@@ -57,10 +57,10 @@ function xmldb_mooduell_upgrade($oldversion) {
         }
 
         // Booking savepoint reached.
-        upgrade_mod_savepoint(true, 20200504166, 'mooduell');
+        upgrade_mod_savepoint(true, 2020050416, 'mooduell');
     }
 
-    if ($oldversion < 20200504171) {
+    if ($oldversion < 2020050417) {
 
         // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell_pushtokens');
@@ -71,8 +71,9 @@ function xmldb_mooduell_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Booking savepoint reached.
-        upgrade_mod_savepoint(true, 20200504171, 'mooduell');
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2020050417, 'mooduell');
+    }
     }
 
     return true;
