@@ -63,8 +63,8 @@ class renderer extends plugin_renderer_base {
      * @param templatable $viewquestions
      * @return string|boolean
      */
-    public function render_viewquestions(templatable $viewquestions) {
-        $data = $viewquestions->export_for_template($this);
+    public function render_viewquestions(templatable $viewpage) {
+        $data = $viewpage->export_for_template($this);
         return $this->render_from_template('mod_mooduell/viewquestions', $data);
     }
 }
