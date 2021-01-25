@@ -25,7 +25,63 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/* if ($ADMIN->fulltree) {
-    // TODO: Define the plugin settings page.
-    // https://docs.moodle.org/dev/Admin_settings
-} */
+if ($ADMIN->fulltree) {
+    //--- general settings -----------------------------------------------------------------------------------
+     /*       $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
+        $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
+
+        $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
+        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
+
+        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
+        $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'), */
+
+    $settings->add(new admin_setting_configcheckbox('mooduell/usefullnames',
+        get_string('usefullnames', 'mod_mooduell'),""
+        , 0));
+
+    $settings->add(new admin_setting_configcheckbox('mooduell/showcontinuebutton',
+        get_string('showcontinuebutton', 'mod_mooduell'),"", 0));
+
+    
+    $settings->add(new admin_setting_configcheckbox('mooduell/showcorrectanswer',
+        get_string('showcorrectanswer', 'mod_mooduell'),
+        "", 0));
+ 
+
+    $name = new lang_string('countdown', 'mod_mooduell');
+    $options = array(
+       "0" => get_string('nocountdown', 'mod_mooduell'),
+        "10" => get_string('xseconds', 'mod_mooduell', 10),
+        "20" => get_string('xseconds', 'mod_mooduell', 20),
+        "30" => get_string('xseconds', 'mod_mooduell', 30),
+        "60" => get_string('xseconds', 'mod_mooduell', 60),
+        "90" => get_string('xseconds', 'mod_mooduell', 90),
+        "120" => get_string('xseconds', 'mod_mooduell', 120),
+    );
+
+    $settings->add(new admin_setting_configselect('mooduell/countdown',
+                                                    $name,
+                                                    "",
+                                                    -1,
+                                                    $options));
+
+
+    $name = new lang_string('clicktomoveon', 'mod_mooduell');
+    $options = array(
+      "0" => get_string('clicktomoveon', 'mod_mooduell'),
+                "2" => get_string('xseconds', 'mod_mooduell', 2),
+                "5" => get_string('xseconds', 'mod_mooduell', 5),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30),
+    );
+
+
+    $settings->add(new admin_setting_configselect('mooduell/waitfornextquestion',
+                                                    $name,
+                                                    "",
+                                                    -1,
+                                                    $options));
+}

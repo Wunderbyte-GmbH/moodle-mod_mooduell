@@ -41,6 +41,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
         global $CFG;
         global $DB;
 
+
+        $config = get_config('mooduell');
         $mform = $this->_form;
 
         // Get MooDuell id.
@@ -77,12 +79,17 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
 
         $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
+        $mform->setDefault('usefullnames', $config->usefullnames);
         $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
+        $mform->setDefault('showcontinuebutton', $config->showcontinuebutton);
         $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
+        $mform->setDefault('showcorrectanswer', $config->showcorrectanswer);
 
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
+        $mform->setDefault('countdown', $config->countdown);
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
                 $this->return_move_on_options());
+        $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
 
         // We add the categories for the random question.
         $listofcategories = $this->get_categories_of_context_from_db();
