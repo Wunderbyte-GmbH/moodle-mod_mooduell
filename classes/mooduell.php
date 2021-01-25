@@ -358,46 +358,29 @@ class mooduell {
      * They are not yet linked to a special game.
      * This function is meant for display on browser, not for webservice.
      * It replaces category-id already with category-name.
+     * It stores the list of questions in $this->questions for performance.
      */
     public function return_list_of_all_questions_in_quiz() {
 
+        if ($this->questions && count($this->questions) > 0) {
+            return $this->questions;
+        }
+
         global $DB;
 
-        $categorydata = $DB->get_records('mooduell_categories', array('mooduellid' => $this->cm->instance));
-
-        // If we have no categories, we return an empty array.
-        if (!($categorydata && is_array($categorydata))) {
-            return [];
-        }
+        $questions = array();
 
 
-        // The questions are fetched from DB and built via question class.
-        // On the way, we replace category number by category-name.
-        $questions = [];
+        $listofquestions = $this->return_list_of_questions();
+        $listofanswers = $this->return_list_of_answers();
 
-        // Then the SQL query is built from the relevant categories.
-        $sql = 'SELECT * FROM {question} WHERE';
-        $i = 0;
-        foreach ($categorydata as $entry) {
-            $sql .= ' category = ' . $entry->category;
-            if ($i < count($categorydata) - 1) {
-                $sql .= ' OR';
-            }
-            $i++;
-        }
-        $sql .= ';';
 
-        $data = $DB->get_records_sql($sql);
-
-        // If data is null or data isnt an array we return 0;
-        if (!($data && is_array($data))) {
-            return [];
-        }
-
-        foreach ($data as $entry) {
-            $newQuestion = new question_control(($entry));
+        foreach ($listofquestions as $entry) {
+            $newQuestion = new question_control($entry, $listofanswers);
             $questions[] = $newQuestion;
         }
+
+        $this->questions = $questions;
 
         return $questions;
 
@@ -487,6 +470,8 @@ class mooduell {
         }
         return $listofanswers;
     }
+
+
     /**
      * @param $key
      * @return \Closure
