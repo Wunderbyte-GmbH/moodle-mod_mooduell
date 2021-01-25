@@ -62,7 +62,13 @@ class question_control {
      *
      * @var int
      */
-    public $category;
+    public $categoryid;
+
+    /**
+     *
+     * @var string
+     */
+    public $categoryname;
 
     /**
      *
@@ -117,7 +123,7 @@ class question_control {
      *
      * @param mooduell $mooduell
      */
-    public function __construct($data = null) {
+    public function __construct($data = null, $listofanswers = null) {
         // If we have $data, we automatically create all the relevant values for this question...
         global $COURSE;
         global $DB;
@@ -129,11 +135,12 @@ class question_control {
             $this->questiontext = $data->questiontext;
             $this->questiontextformat = $data->questiontextformat;
             $this->questiontype = $data->qtype;
-            $this->category = $data->category;
+            $this->categoryid = $data->category;
+            $this->categoryname = isset($data->categoryname) ? $data->categoryname : null;
             $this->courseid = $COURSE->id;
-            $categoryentry = $DB->get_record('question_categories', array('id' => $this->category));
 
-            if ($categoryentry && $categoryentry->contextid) $this->contextid = $categoryentry->contextid;
+            // We need the context id, but it might be there already
+            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories', 'contextid', array('id' => $this->categoryid));
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
             if (isset($data->playeraanswered)) {
@@ -145,7 +152,7 @@ class question_control {
 
             $this->extract_image();
 
-            $this->answers = $this->return_answers();
+            $this->answers = $this->return_answers($listofanswers);
 
             $this->check_question();
         }
@@ -157,17 +164,25 @@ class question_control {
      * @return array
      * @throws dml_exception
      */
-    public function return_answers() {
+    public function return_answers($listofanswers = null) {
         global $DB;
         $answers = array();
-        $answersdata = $DB->get_records('question_answers', [
-                'question' => $this->questionid
-        ]);
 
-        if ($answersdata || count($answersdata) > 0) {
-            foreach ($answersdata as $answerdata) {
-                $answer = new answer_control($answerdata);
-                $answers[] = $answer;
+        if (!$listofanswers || count($listofanswers) === 0) {
+            $listofanswers = $DB->get_records('question_answers', [
+                    'question' => $this->questionid
+            ]);
+        }
+
+        if ($listofanswers && count($listofanswers) > 0) {
+
+
+            foreach ($listofanswers as $k => $val) {
+                if ($val->question == $this->questionid) {
+                    $answer = new answer_control($val);
+                    $answers[] = $answer;
+                    unset($listofanswers[$k]);
+                }
             }
         }
         return $answers;
@@ -245,9 +260,17 @@ class question_control {
             $this->status =  get_string('ok', 'mod_mooduell');
         }
 
+
     }
 
+    /**
+     * @throws dml_exception
+     */
     private function extract_image() {
+
+        if (strpos($this->questiontext, '<img src') === false) {
+            return;
+        }
 
         global $PAGE;
         global $DB;
@@ -299,14 +322,14 @@ class question_control {
      * In some cases we want to replace the cateogry id with the category name (for display).
      * @throws dml_exception
      */
-    public function replace_category_id_by_name() {
+    /*public function replace_category_id_by_name() {
         global $DB;
 
-        $category = $DB->get_record('question_categories', array('id' => $this->category));
+        $category = $DB->get_record('question_categories', array('id' => $this->categoryid));
         if ($category && $category->name) {
-            $this->category = $category->name;
+            $this->categoryid = $category->name;
         }
-    }
+    }*/
 
     private function check_for_right_number_of_answers() {
         $countcorrectanswers = 0;

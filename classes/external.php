@@ -472,7 +472,7 @@ class mod_mooduell_external extends external_api {
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
                                                 'questiontype' => new external_value(PARAM_RAW, 'qtype'),
-                                                'category' => new external_value(PARAM_INT, 'category'),
+                                                // 'category' => new external_value(PARAM_INT, 'category'),
                                                 'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
                                                 'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
                                                 'imageurl' => new external_value(PARAM_RAW, 'image URL'),
