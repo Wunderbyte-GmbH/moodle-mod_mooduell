@@ -350,6 +350,8 @@ class game_control {
         self::register_for_question_usage($this->mooduell->context);
 
         // We have to make sure we have all the questions added to the normal game data.
+        // Also, we use the mquestions here because we find the results attached to every question.
+        // therefore, we update the question class instances we already have.
         $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid));
 
         // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
@@ -371,6 +373,7 @@ class game_control {
                 foreach($this->mooduell->questions as $item) {
                     if ($mquestion->questionid == $item->questionid) {
                         $item->playeraanswered = $mquestion->playeraanswered;
+                        $item->playerbanswered = $mquestion->playerbanswered;
                         $questions[] = $item;
                         $found = true;
                         break;
@@ -384,10 +387,12 @@ class game_control {
             return $this->gamedata;
         }
 
-
-        $searcharray = json_encode($questionids);
-        $searcharray = substr($searcharray, 1, -1);
-        $searcharray = "($searcharray)";
+        $searcharray = '(';
+        foreach ($mquestions as $mquestion) {
+            $searcharray .= "$mquestion->questionid, ";
+        }
+        $searcharray = substr($searcharray, 0, -2);
+        $searcharray .= ')';
 
 
         $sql = "SELECT *
@@ -400,10 +405,14 @@ class game_control {
         }
 
 
-        foreach ($questionids as $item) {
+        foreach ($mquestions as $mquestion) {
 
-            $question = new question_control($questionsdata[$item]);
-            $question->get_results($this->gamedata->gameid);
+            $question = new question_control($questionsdata[$mquestion->questionid]);
+
+            $question->playeraanswered = $mquestion->playeraanswered;
+            $question->playerbanswered = $mquestion->playerbanswered;
+
+            //$question->get_results($this->gamedata->gameid);
             $questions[] = $question;
 
         }
