@@ -48,7 +48,13 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Get MooDuell id.
         // Get MooDuell id.
         $cm = $this->get_coursemodule();
-        $mooduellid = $cm->instance;
+
+        if ($cm && property_exists($cm, 'instance')) {
+            $mooduellid = $cm->instance;
+        } else {
+            $mooduellid = 0;
+        }
+
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
