@@ -79,6 +79,12 @@ class mooduell {
      */
     public $context = null;
 
+
+    /**
+     * @var array
+     */
+    public $questions = array();
+
     /**
      * Mooduell constructor.
      * Fetches MooDuell settings from DB.
@@ -427,6 +433,60 @@ class mooduell {
         return $returnarray;
     }
 
+
+
+
+    /**
+     * Function to fetch all questions for this instance, but before runnig through instantiation.
+     * @return array
+     */
+    private function return_list_of_questions() {
+
+        global $DB;
+
+        $mooduellid = $this->cm->instance;
+
+        $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname
+                FROM {mooduell_categories} mc
+                JOIN {question_categories} qc
+                ON mc.category=qc.id
+                JOIN {question} q
+                ON q.category=qc.id
+                WHERE mc.mooduellid=$mooduellid";
+
+
+        if (!$listofquestions = $DB->get_records_sql($sql)) {
+            return [];
+        }
+        return $listofquestions;
+    }
+
+    /**
+     * Function to fetch all answers for this instance, but before runnig through instantiation.
+     * @return array
+     */
+    private function return_list_of_answers() {
+
+        global $DB;
+
+        $mooduellid = $this->cm->instance;
+
+        $sql = "SELECT qa.*
+                FROM {mooduell_categories} mc
+                JOIN {question_categories} qc
+                ON mc.category=qc.id
+                JOIN {question} q
+                ON q.category=qc.id
+                JOIN {question_answers} qa
+                ON qa.question=q.id
+                WHERE mc.mooduellid=$mooduellid";
+
+
+        if (!$listofanswers = $DB->get_records_sql($sql)) {
+            return [];
+        }
+        return $listofanswers;
+    }
     /**
      * @param $key
      * @return \Closure
