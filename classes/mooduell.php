@@ -877,7 +877,7 @@ class mooduell {
             }
         }
 
-        $data = $DB->get_records('mooduell_games', array('status' => 1));
+        $data = $DB->get_records('mooduell_games', array('mooduellid' => $this->cm->instance, 'status' => 1));
 
         $numberofgames = count($data);
 
