@@ -250,14 +250,17 @@ class game_control {
 
             // We set data back
             $data = new stdClass();
-            $data->questionid = $question->id;
+            $data->questionid = $question->questionid;
             $data->mooduellid = $this->mooduell->cm->instance;
             $data->gameid = $this->gamedata->gameid;
 
             $DB->insert_record('mooduell_questions', $data);
         }
 
-        return $this->get_questions();
+        //return $this->get_questions();
+
+        $this->gamedata->questions = $questions;
+        return $this->gamedata;
     }
 
     /**
@@ -308,8 +311,6 @@ class game_control {
                     $emergencybrake = false;
                     $i = array_rand($category->availableQuestions);
 
-
-
                     $question = $category->availableQuestions[$i];
                     $questions[] = $question;
                     unset($categories[$key]->availableQuestions[$i]);
@@ -349,35 +350,65 @@ class game_control {
         self::register_for_question_usage($this->mooduell->context);
 
         // We have to make sure we have all the questions added to the normal game data.
-        $questionsdata = $DB->get_records('mooduell_questions', [
-                'gameid' => $this->gamedata->gameid
-        ]);
+        $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid));
 
-        if (count($questionsdata) != 9) {
+        // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
+        if (count($mquestions) != 9) {
+            $DB->delete_records('mooduell_games', array('id' => $this->gamedata->id));
             throw new moodle_exception('wrongnumberofquestions1', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
         }
 
+
         $questions = array();
 
-        if ($questionsdata && count($questionsdata) > 0) {
 
-            foreach ($questionsdata as $questiondata) {
+        // If we have questions in our instance, we can return them right away.
+        if ($this->mooduell->questions && count($this->mooduell->questions) > 0) {
 
-                $data = $DB->get_record('question', [
-                        'id' => $questiondata->questionid
-                ]);
+            foreach ($mquestions as $mquestion) {
+                $found = false;
+                foreach($this->mooduell->questions as $item) {
+                    if ($mquestion->questionid == $item->questionid) {
+                        $item->playeraanswered = $mquestion->playeraanswered;
+                        $questions[] = $item;
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
 
-                $question = new question_control(($data));
-                $question->get_results($this->gamedata->gameid);
-
-                $questions[] = $question;
-
+                }
             }
+            $this->gamedata->questions = $questions;
+            return $this->gamedata;
+        }
+
+
+        $searcharray = json_encode($questionids);
+        $searcharray = substr($searcharray, 1, -1);
+        $searcharray = "($searcharray)";
+
+
+        $sql = "SELECT *
+                FROM {question} q
+                WHERE q.id IN $searcharray";
+
+        if (!$questionsdata = $DB->get_records_sql($sql)) {
+            throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
+                    "we received the wrong number of questions linked to our Mooduell game");
+        }
+
+
+        foreach ($questionids as $item) {
+
+            $question = new question_control($questionsdata[$item]);
+            $question->get_results($this->gamedata->gameid);
+            $questions[] = $question;
+
         }
 
         $this->gamedata->questions = $questions;
-
         return $this->gamedata;
     }
 
@@ -714,7 +745,7 @@ class game_control {
             $update->playeraanswered = $result;
             // We update result in live memory as well.
             foreach ($this->gamedata->questions as $question) {
-                if ($questionid == $question->questionid) {
+                if ($questionid == $question->id) {
                     $question->playeraanswered = $result;
                     break;
                 }
@@ -730,7 +761,7 @@ class game_control {
             $update->playerbanswered = $result;
             // We update in live memory as well.
             foreach ($this->gamedata->questions as $question) {
-                if ($questionid == $question->questionid) {
+                if ($questionid == $question->id) {
                     $question->playerbanswered = $result;
                     break;
                 }
@@ -783,7 +814,9 @@ class game_control {
         $now = new DateTime("now", \core_date::get_server_timezone_object());
         $update->timemodified = $now->getTimestamp();
 
-        $DB->update_record('mooduell_games', $update);
+        $status = $DB->update_record('mooduell_games', $update);
+
+        $status;
 
     }
 
@@ -887,14 +920,17 @@ class game_control {
 
         $returnarray = [];
 
-        $questions = $DB->get_records('question', [
-                'category' => $category->category
-        ]);
+        $mooduell = $this->mooduell;
 
-        foreach($questions as $question) {
-            $newquestion = new question_control($question);
+        if ($mooduell->questions && count($this->mooduell->questions) > 0) {
 
-            if ($newquestion->status == get_string('ok', 'mod_mooduell')) {
+        } else {
+            $mooduell->return_list_of_all_questions_in_quiz();
+        }
+
+        foreach ($mooduell->questions as $question) {
+            if ($question->category == $category->category
+                    && $question->status == get_string('ok', 'mod_mooduell')) {
                 $returnarray[] = $question;
             }
         }

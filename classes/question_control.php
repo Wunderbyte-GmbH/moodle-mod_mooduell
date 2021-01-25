@@ -62,7 +62,7 @@ class question_control {
      *
      * @var int
      */
-    public $categoryid;
+    public $category;
 
     /**
      *
@@ -135,12 +135,12 @@ class question_control {
             $this->questiontext = $data->questiontext;
             $this->questiontextformat = $data->questiontextformat;
             $this->questiontype = $data->qtype;
-            $this->categoryid = $data->category;
+            $this->category = $data->category;
             $this->categoryname = isset($data->categoryname) ? $data->categoryname : null;
             $this->courseid = $COURSE->id;
 
             // We need the context id, but it might be there already
-            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories', 'contextid', array('id' => $this->categoryid));
+            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories', 'contextid', array('id' => $this->category));
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
             if (isset($data->playeraanswered)) {
@@ -317,19 +317,6 @@ class question_control {
         $this->length = strlen($this->questiontext);
         $this->imageurl = $url;
     }
-
-    /**
-     * In some cases we want to replace the cateogry id with the category name (for display).
-     * @throws dml_exception
-     */
-    /*public function replace_category_id_by_name() {
-        global $DB;
-
-        $category = $DB->get_record('question_categories', array('id' => $this->categoryid));
-        if ($category && $category->name) {
-            $this->categoryid = $category->name;
-        }
-    }*/
 
     private function check_for_right_number_of_answers() {
         $countcorrectanswers = 0;
