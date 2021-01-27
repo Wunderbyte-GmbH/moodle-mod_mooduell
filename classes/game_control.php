@@ -517,6 +517,13 @@ class game_control {
         // We write the result of our question check.
         $this->save_result_to_db($this->gamedata->gameid, $questionid, $result);
         // After every answered questions, turn status is updated as well.
+
+        if ($USER->id == $this->gamedata->playeraid) {
+            $activequestion->playeraanswered = $result;
+        } else {
+            $activequestion->playerbanswered = $result;
+        }
+
         $this->save_my_turn_status();
 
         // Do we need to send a push notification? If so, we'll do it here.
