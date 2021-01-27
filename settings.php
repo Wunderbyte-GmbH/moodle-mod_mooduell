@@ -37,9 +37,12 @@ if ($ADMIN->fulltree) {
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'), */
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/usefullnames',
+    $setting = new admin_setting_configcheckbox('mooduell/usefullnames',
         get_string('usefullnames', 'mod_mooduell'),""
-        , 0));
+        , 0);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+	$settings->add($setting);
+
 
     $settings->add(new admin_setting_configcheckbox('mooduell/showcontinuebutton',
         get_string('showcontinuebutton', 'mod_mooduell'),"", 0));
@@ -48,7 +51,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('mooduell/showcorrectanswer',
         get_string('showcorrectanswer', 'mod_mooduell'),
         "", 0));
- 
+ 	
 
     $name = new lang_string('countdown', 'mod_mooduell');
     $options = array(

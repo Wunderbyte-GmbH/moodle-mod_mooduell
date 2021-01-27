@@ -96,6 +96,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
                 $this->return_move_on_options());
         $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
+           
+        $this->apply_admin_defaults();
 
         // We add the categories for the random question.
         $listofcategories = $this->get_categories_of_context_from_db();
