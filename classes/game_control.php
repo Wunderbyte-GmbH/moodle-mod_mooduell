@@ -832,8 +832,6 @@ class game_control {
 
         $status = $DB->update_record('mooduell_games', $update);
 
-        $status;
-
     }
 
     /**
