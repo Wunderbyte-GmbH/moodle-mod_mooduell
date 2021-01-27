@@ -87,4 +87,8 @@ if ($ADMIN->fulltree) {
                                                     "",
                                                     -1,
                                                     $options));
+
+    $settings->add(new admin_setting_configtext('mooduell/pushtoken',get_string('pushtoken', 'mod_mooduell'),'','',PARAM_TEXT));
+
+    $settings->add(new admin_setting_configcheckbox('mooduell/enablepush',get_string('enablepush', 'mod_mooduell'),'',0));
 }

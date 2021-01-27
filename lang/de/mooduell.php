@@ -42,6 +42,8 @@ $string['modulename'] = 'MooDuell';
 $string['addInstance'] = 'Ein neues Spiel hinzufügen';
 $string['mooduell:addinstance'] = 'Ein neues Spiel hinzufügen';
 
+$string['enablepush'] = 'Push Nachrichten aktivieren';
+$string['pushtoken'] = 'Push API Access Key';
 $string['countdown'] = 'Countdown';
 $string['nocountdown'] = 'Kein Countdown';
 $string['xseconds'] = '{$a} Sekunden';

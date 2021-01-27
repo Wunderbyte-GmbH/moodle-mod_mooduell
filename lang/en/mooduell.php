@@ -42,6 +42,8 @@ $string['modulename'] = 'MooDuell';
 $string['addInstance'] = 'Add instance';
 $string['mooduell:addinstance'] = 'Add instance';
 
+$string['enablepush'] = 'enable push';
+$string['pushtoken'] = 'Push API Access Key';
 $string['countdown'] = 'Countdown';
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';

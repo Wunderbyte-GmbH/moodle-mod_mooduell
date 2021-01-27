@@ -949,32 +949,36 @@ class game_control {
 
 
     private function sendPushNotification($messagetype)
-    {
+    {   
+        $pushenabled = get_config('mooduell','enablepush');
 
-        $fields = $this->gather_notifcation_data($messagetype);
+        if($pushenabled) {
 
-        // If the user has no pushtokens, we abort.
-        if (!$fields) {
-            return;
+            $fields = $this->gather_notifcation_data($messagetype);
+
+            // If the user has no pushtokens, we abort.
+            if (!$fields) {
+                return;
+            }
+
+            $API_ACCESS_KEY = get_config('mooduell','pushtoken');
+            //$API_ACCESS_KEY = 'AAAA5opPaII:APA91bGdlnKYrw9B-8Ulu2IABFtlsVmAiA8RogciARSJL75mjU1HjHIYjtTL-f0zEysNiEB9isctOkUTPsPnilrkmSzT0HX_uz3T3E03YaCw7stn8xP0sbipyLAreY6D6iJxXIUKVMse';
+            $headers = array
+            (
+                    'Authorization: key=' . $API_ACCESS_KEY,
+                    'Content-Type: application/json'
+            );
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
+            return $result;
         }
-
-
-        $API_ACCESS_KEY = 'AAAA5opPaII:APA91bGdlnKYrw9B-8Ulu2IABFtlsVmAiA8RogciARSJL75mjU1HjHIYjtTL-f0zEysNiEB9isctOkUTPsPnilrkmSzT0HX_uz3T3E03YaCw7stn8xP0sbipyLAreY6D6iJxXIUKVMse';
-        $headers = array
-        (
-                'Authorization: key=' . $API_ACCESS_KEY,
-                'Content-Type: application/json'
-        );
-        $ch = curl_init();
-        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-        curl_setopt( $ch,CURLOPT_POST, true );
-        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($ch );
-        curl_close( $ch );
-        return $result;
+        return;
     }
-
 }
