@@ -285,7 +285,7 @@ class mooduell {
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $data['highscores'] = $this->return_list_of_highscores();
-                $viewpage = new viewpagestudents($data);
+                $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;
             case 'populatedb':
@@ -784,19 +784,7 @@ class mooduell {
     public function user_exists(int $userid) {
         global $DB;
 
-        // Doesn't work via webservice, no instance?
-        // $userarray = \user_get_users_by_id([$userid]);
-
-        // Therefore, we have to do it manually.
-        $userarray = $DB->get_records_list('user', 'id', [
-                $userid
-        ]);
-
-        if ($userarray && $userarray[$userid]) {
-            return true;
-        } else {
-            return false;
-        }
+        return $DB->record_exists('user', array('id' => $userid));
     }
 
     /**
