@@ -733,20 +733,22 @@ class mooduell {
      */
     public function return_name_by_id(int $userid) {
         global $DB;
-        // Doesn't work via webservice, no instance?
-        // $userarray = \user_get_users_by_id([$userid]);
 
-        // Therefore, we have to do it manually.
-        $userarray = $DB->get_records_list('user', 'id', [
-                $userid
-        ]);
+        $usefullnames = $this->settings->usefullnames;
 
-        if ($userarray && $userarray[$userid] && $userarray[$userid]->username) {
-            $playeraname = $userarray[$userid]->firstname . " " . $userarray[$userid]->lastname;
+        // Get user record of user
+        $user = $DB->get_record('user', array('id' => $userid));
+
+        if ($usefullnames != 1) {
+            if ($user->alternatename && strlen($user->alternatename) > 0) {
+                return $user->alternatename;
+            } else {
+                return get_string('userhasnonickname', 'mod_mooduell');
+            }
+
         } else {
-            $playeraname = "dummyname";
+            return "$user->firstname $user->lastname";
         }
-        return $playeraname;
     }
 
     /**

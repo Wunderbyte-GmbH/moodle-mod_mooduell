@@ -123,3 +123,4 @@ $string['youlose'] = 'You lost against {$a}';
 $string['draw'] = 'You played draw against {$a}';
 $string['yourturn'] = 'It\'s your turn against {$a}';
 $string['challenged'] = '{$a} has challenged you';
+$string['userhasnonickname'] = 'User has no nickname';

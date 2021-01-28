@@ -122,3 +122,4 @@ $string['youlose'] = 'Du hast gegen {$a} verloren';
 $string['draw'] = 'Du hast gegen {$a} unentschieden gespielt';
 $string['yourturn'] = 'Du bist dran gegen {$a}';
 $string['challenged'] = '{$a} hat dich herausgefordert';
+$string['userhasnonickname'] = 'SpielerIn ohne Alias';
