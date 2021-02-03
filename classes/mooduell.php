@@ -290,10 +290,6 @@ class mooduell {
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;
-            case 'populatedb':
-                $logdata = $this->test_populate_games(0);
-                $out .= $logdata;
-                break;
             case 'downloadhighscores':
                 $listofhighscores = $this->return_list_of_highscores();
                 $headline = [get_string('username', 'mod_mooduell'),
@@ -890,76 +886,6 @@ class mooduell {
         }
 
         return $categorydata;
-
-    }
-    private function test_populate_games($numberofgames) {
-
-        global $DB;
-
-        $logdata = "<div>Create $numberofgames for every registered user in course</div>";
-
-        $mooduellid = $this->cm->instance;
-        $listofusers = game_control::return_users_for_game($this);
-
-        $numberofusers = count($listofusers);
-
-        $logdata .= "<div>There are $numberofusers in this instance</div>";
-
-        $game = new game_control($this);
-
-        $counter = 0;
-        while ($counter < $numberofgames) {
-            foreach ($listofusers as $user) {
-                $game->start_new_game($user->id);
-            }
-            ++$counter;
-        }
-
-        $data = $DB->get_records('mooduell_questions', array('playeraanswered' => null));
-
-        $gameid = 0;
-        $counter = 0;
-        $maxvalue = 0;
-
-        foreach ($data as $item) {
-            $setresult = true;
-
-            if ($gameid == $item->gameid) {
-                ++$counter;
-                if ($counter >= $maxvalue) {
-                    $setresult = false;
-                }
-
-            } else {
-                $counter = 0;
-                $gameid = $item->gameid;
-                $maxvalue = rand(3,9);
-            }
-
-            if ($setresult) {
-                $item->playeraanswered = rand(1,2);
-                $item->playerbanswered = rand(1,2);
-
-                $DB->update_record('mooduell_questions', $item);
-            }
-        }
-
-        $data = $DB->get_records('mooduell_games', array('mooduellid' => $this->cm->instance, 'status' => 1));
-
-        $numberofgames = count($data);
-
-        foreach ($data as $item) {
-
-            $game = new game_control($this, $item->id);
-
-            $game->get_questions();
-
-            $game->save_my_turn_status();
-
-        }
-
-        return $logdata;
-
 
     }
 
