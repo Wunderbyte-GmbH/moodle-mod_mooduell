@@ -312,6 +312,8 @@ class mooduell {
      */
     public function return_list_of_games($student = false) {
 
+        global $DB;
+
         $returnwarnings = $this->check_quiz();
         $finishedreturngames = [];
         $openreturngames = [];
@@ -321,8 +323,25 @@ class mooduell {
 
         foreach ($games as $game) {
 
+            if ($game->gamedata->playeraresults == null
+                    || $game->gamedata->playerbresults == null) {
+
+                $result = $game->return_status();
+                $game->gamedata->playeraresults = $result[0];
+                $game->gamedata->playerbresults = $result[1];
+
+                $update = new stdClass();
+                $update->id = $game->gamedata->gameid;
+                $update->playeraresults = $result[0];
+                $update->playerbresults = $result[1];
+
+                $DB->update_record('mooduell_games',$update);
+            }
+
             // $results = $game->return_status();
             if ($game->gamedata->status != 3) {
+
+
                 $openreturngames[] = [
                         'mooduellid' => $this->cm->id,
                         'gameid' => $game->gamedata->gameid,
