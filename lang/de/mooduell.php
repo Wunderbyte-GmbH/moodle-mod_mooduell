@@ -104,6 +104,8 @@ $string['score'] = 'Punkte';
 $string['correctlyanswered'] = 'Korrekt';
 $string['correctlyansweredpercentage'] = '% korrekt';
 
+$string['downloadhighscores'] = 'Lade Highscores als csv Datei';
+
 $string['notenoughquestions'] = 'Es gibt nicht genug Fragen in diesem Spiel. Füge der gewählten Fragenkategorie mehr Fragen hinzu oder wechsle die Kategorie.';
 $string['nowarnings'] = 'Dein Spiel sieht gut aus, es gibt keine Warnungen.';
 $string['questiontexttooshort'] = 'ID {$a}: Text der Frage ist zu kurz';

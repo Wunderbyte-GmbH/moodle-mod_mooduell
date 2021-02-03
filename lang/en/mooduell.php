@@ -106,6 +106,8 @@ $string['score'] = 'score';
 $string['correctlyanswered'] = 'correctly answered';
 $string['correctlyansweredpercentage'] = '% correctly answered';
 
+$string['downloadhighscores'] = 'Download highscores as csv file';
+
 $string['notenoughquestions'] = 'There are not enough questions in the chosen category. Choose another category or add more questions to the existing one.';
 $string['nowarnings'] = 'Your game seems fine, there are currently no warnings';
 $string['questiontexttooshort'] = 'ID {$a}: Questiontext is too short';

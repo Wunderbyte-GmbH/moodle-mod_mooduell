@@ -59,6 +59,8 @@ switch ($action) {
         break;
     case 'populatedb':  // A way to create games in DB without much hassle for performance testing.
         $pagename = 'populatedb';
+    case 'downloadhighscores':
+        $pagename = 'downloadhighscores';
 }
 
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {

@@ -260,6 +260,7 @@ class mooduell {
                 $data = $this->return_list_of_games();
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
+                $data['mooduellid'] = $this->cm->id;
                 // Add the list of questions
                 $data['questions'] = $this->return_list_of_all_questions_in_quiz();
                 $data['highscores'] = $this->return_list_of_highscores();
@@ -276,6 +277,7 @@ class mooduell {
                 // Use the viewquestions renderer template
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
+                $data['mooduellid'] = $this->cm->id;
                 $viewquestions = new viewquestions($data);
                 $out .= $output->render_viewquestions($viewquestions);
                 break;
@@ -292,6 +294,17 @@ class mooduell {
                 $logdata = $this->test_populate_games(0);
                 $out .= $logdata;
                 break;
+            case 'downloadhighscores':
+                $listofhighscores = $this->return_list_of_highscores();
+                $headline = [get_string('username', 'mod_mooduell'),
+                        get_string('gamesplayed', 'mod_mooduell'),
+                        get_string('gameswon', 'mod_mooduell'),
+                        get_string('gameslost', 'mod_mooduell'),
+                        get_string('score', 'mod_mooduell'),
+                        get_string('correctlyanswered', 'mod_mooduell'),
+                        get_string('correctlyansweredpercentage', 'mod_mooduell')
+                        ];
+                $this->export_data_as_csv($headline, $listofhighscores);
         }
 
         if (!$inline) {
@@ -949,4 +962,40 @@ class mooduell {
 
 
     }
+
+    /**
+     * Function to export Data as CSV
+     * It is necessary to add a headline, ie headline & data must have the same amount of columns.
+     * @param $headline
+     * @param $data
+     */
+    function export_data_as_csv($headline, $data) {
+        global $CFG;
+
+        require_once ($CFG->libdir . '/csvlib.class.php');
+
+        // Make sure data is valid:
+
+        $headlinecount = count ($headline);
+
+        $csvexport = new \csv_export_writer( 'semicolon' );
+        $filename = $this->cm->name . '_highscores';
+        $csvexport->set_filename ($filename, '.csv');
+
+        $csvexport->add_data($headline);
+
+        foreach ($data as $item) {
+            if ($headlinecount != count($item)) {
+                printf('data of this line is wrong', json_encode($item));
+                continue;
+            }
+            $csvexport->add_data($item);
+        }
+
+        $csvexport->download_file();
+
+
+    }
+
+
 }
