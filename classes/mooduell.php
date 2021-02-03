@@ -278,7 +278,7 @@ class mooduell {
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $data['mooduellid'] = $this->cm->id;
-                $viewquestions = new viewquestions($data);
+                $viewquestions = new viewpage($data);
                 $out .= $output->render_viewquestions($viewquestions);
                 break;
             case 'studentsview':
