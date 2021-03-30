@@ -866,10 +866,9 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * @return external_multiple_structure
+     * @return external_single_structure
      */
-    public
-    static function giveup_game_returns() {
+    public static function giveup_game_returns() {
         return new external_single_structure(array(
                         'status' => new external_value(PARAM_INT, 'status')
                 )
