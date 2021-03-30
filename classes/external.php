@@ -875,4 +875,75 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
+    public static function update_profile_picture($filename, $filecontent) {
+
+        global $USER, $CFG, $DB;
+
+
+        $fileinfo = self::validate_parameters(self::update_profile_picture_parameters(), array('filename' => $filename, 'filecontent' => $filecontent));
+
+        if (!isset($fileinfo['filecontent'])) {
+            throw new moodle_exception('nofile');
+        }
+        // Saving file.
+        $dir = make_temp_directory('wsupload').'/';
+
+        if (empty($fileinfo['filename'])) {
+            $filename = uniqid('wsupload', true).'_'.time().'.tmp';
+        } else {
+            $filename = $fileinfo['filename'];
+        }
+
+        if (file_exists($dir.$filename)) {
+            $savedfilepath = $dir.uniqid('m').$filename;
+        } else {
+            $savedfilepath = $dir.$filename;
+        }
+
+        $fileinfo['filecontent'] = strtr($fileinfo['filecontent'], '._-', '+/=');
+
+        file_put_contents($savedfilepath, base64_decode($fileinfo['filecontent']));
+        // file_put_contents($savedfilepath, $fileinfo['filecontent']);
+
+        require_once( $CFG->libdir . '/gdlib.php' );
+
+        //upload avatar from the temporary file
+        $usericonid = process_new_icon( context_user::instance( $USER->id, MUST_EXIST ), 'user', 'icon', 0, $savedfilepath );
+        //specify icon id for the desired user with id $newuser->id (in our case)
+        if ( $usericonid ) {
+            $DB->set_field( 'user', 'picture', $usericonid, array( 'id' => $USER->id ) );
+        }
+
+        @chmod($savedfilepath, $CFG->filepermissions);
+        unset($fileinfo['filecontent']);
+
+        //delete temporary files
+        unset( $savedfilepath );
+
+        //$USER->picture =
+
+        return ['status' => 1];
+
+
+    }
+
+    public static function update_profile_picture_parameters() {
+        return new external_function_parameters(array(
+                        'filename'  => new external_value(PARAM_FILE, 'file name'),
+                        'filecontent' => new external_value(PARAM_TEXT, 'file content'),
+                )
+        );
+    }
+
+
+    /**
+     * @return external_single_structure
+     */
+    public static function update_profile_picture_returns() {
+        return new external_single_structure(array(
+                        'status' => new external_value(PARAM_INT, 'status')
+                )
+        );
+    }
+
 }
