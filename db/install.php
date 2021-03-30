@@ -30,5 +30,40 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_mooduell_install() {
 
+    // On the installation we include new Profile fields to allow user suspension date stamps.
+    global $DB;
+
+    $sql = 'SELECT MAX(sortorder) FROM {user_info_field}';
+
+    if (!$maxsortorder = $DB->get_field_sql($sql)) {
+        $maxsortorder = 1;
+    } else {
+        ++$maxsortorder;
+    }
+
+    $mooduellalias = [
+            'shortname' => 'mooduell_alias',
+            'name' => 'MooDuell Alias',
+            'datatype' => 'text',
+            'description' => 'MooDuell Alias',
+            'descriptionformat' => 1,
+            'categoryid' => 1,
+            'sortorder' => $maxsortorder,
+            'required' => 0,
+            'locked' => 0,
+            'visible' => 0,
+            'forceunique' => 0,
+            'signup' => 0,
+            'defaultdata' => null,
+            'defaultdataformat' => 0,
+            'param1' => 30,
+            'param2' => 2048
+    ];
+
+    if (!$DB->record_exists('user_info_field', array('shortname' => $mooduellalias['shortname']))) {
+        $DB->insert_record('user_info_field', $mooduellalias);
+    }
+
+
     return true;
 }
