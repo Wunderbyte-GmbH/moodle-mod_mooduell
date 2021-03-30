@@ -767,9 +767,17 @@ class mooduell {
         // Get user record of user
         $user = $DB->get_record('user', array('id' => $userid));
 
+
+        profile_load_custom_fields($user);
+
+        if (!$user->profile_field_mooduell_alias && strlenstrlen($user->alternatename) > 0) {
+            $user->profile_field_mooduell_alias = $user->alternatename;
+            profile_save_data($user);
+        }
+
         if ($usefullnames != 1) {
-            if ($user->alternatename && strlen($user->alternatename) > 0) {
-                return $user->alternatename;
+            if ($user->profile_field_mooduell_alias && strlen($user->profile_field_mooduell_alias) > 0) {
+                return $user->profile_field_mooduell_alias;
             } else {
                 return get_string('userhasnonickname', 'mod_mooduell');
             }

@@ -19,6 +19,7 @@ namespace mod_mooduell;
 defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/enrollib.php");
+require_once("$CFG->dirroot/user/lib.php");
 
 use DateTime;
 use dml_exception;
@@ -110,7 +111,7 @@ class game_control {
      */
     public static function return_users_for_game($mooduell) {
 
-        global $PAGE;
+        global $PAGE, $USER;
 
         $context = $mooduell->context;
         $users = get_enrolled_users($context);
@@ -119,9 +120,20 @@ class game_control {
 
         foreach ($users as $user) {
 
+            profile_load_custom_fields($user);
+
+            // We want to make sure we have no disruption in the transition, so we use alternate name...
+            // ... when there is no moodle alias name.
+
+            if (!$user->profile_field_mooduell_alias && strlenstrlen($user->alternatename) > 0) {
+                $user->profile_field_mooduell_alias = $user->alternatename;
+                profile_save_data($user);
+            }
+
+
             //First we check if the user needs an alternatename and if he has one
             if ($mooduell->settings->usefullnames == 0
-            && strlen($user->alternatename) == 0) {
+            && strlen($user->profile_field_mooduell_alias) == 0) {
                 continue;
             }
 
@@ -149,17 +161,22 @@ class game_control {
         try {
             // Get all the games where player was either Player A or Player B AND game is finished.
             $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
-                    ') AND status = 3');
-            $returnarray['playedgames'] = count($data);
+                    ')');
 
             $wongames = 0;
             $lostgames = 0;
+            $playedgames = 0;
             $correctlyanswered = 0;
             foreach ($data as $entry) {
-                if ($entry->winnerid == $userid) {
-                    ++$wongames;
-                } else if ($entry->winnerid !== 0) {
-                    ++$lostgames;
+                // We count won and lost games only when they are finished
+
+                if ($data->status === 3) {
+                    ++$playedgames;
+                    if ($entry->winnerid == $userid) {
+                        ++$wongames;
+                    } else if ($entry->winnerid !== 0) {
+                        ++$lostgames;
+                    }
                 }
                 if ($entry->playeraid == $userid) {
                     $correctlyanswered += $entry->playeracorrect;
@@ -167,6 +184,7 @@ class game_control {
                     $correctlyanswered += $entry->playerbcorrect;
                 }
             }
+            $returnarray['playedgames'] = $playedgames;
             $returnarray['wongames'] = $wongames;
             $returnarray['lostgames'] = $lostgames;
             $returnarray['correctlyanswered'] = $correctlyanswered;
@@ -582,14 +600,17 @@ class game_control {
         $users = get_enrolled_users($this->mooduell->context);
 
         foreach ($users as $user) {
+
+            profile_load_custom_fields($user);
+
             if ($user->id === $this->gamedata->playeraid) {
                 $playerAName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->alternatename;
+                        $user->firstname + ' ' +$user->lastname: $user->profile_field_mooduell_alias;
                 $playerA = $user;
             }
             if ($user->id === $this->gamedata->playerbid) {
                 $playerBName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->alternatename;
+                        $user->firstname + ' ' +$user->lastname: $user->profile_field_mooduell_alias;
                 $playerB = $user;
             }
         }
@@ -902,6 +923,9 @@ class game_control {
         $playerastring = '';
         $playerbstring = '';
 
+        $playeracount = 0;
+        $playerbcount = 0;
+
         foreach ($this->gamedata->questions as $question) {
 
             if ($question->playeraanswered == null) {
@@ -954,7 +978,7 @@ class game_control {
 
 
     private function sendPushNotification($messagetype)
-    {   
+    {
         $pushenabled = get_config('mooduell','enablepush');
 
         if($pushenabled) {
