@@ -535,6 +535,11 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      */
     public static function set_alternatename($userid, $alternatename) {
+
+        global $CFG;
+
+        require_once("$CFG->dirroot/user/profile/lib.php");
+
         $params = array(
                 'userid' => $userid,
                 'alternatename' => $alternatename

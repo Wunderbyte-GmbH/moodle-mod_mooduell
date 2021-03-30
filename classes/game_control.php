@@ -20,6 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/enrollib.php");
 require_once("$CFG->dirroot/user/lib.php");
+require_once("$CFG->dirroot/user/profile/lib.php");
 
 use DateTime;
 use dml_exception;
@@ -125,7 +126,7 @@ class game_control {
             // We want to make sure we have no disruption in the transition, so we use alternate name...
             // ... when there is no moodle alias name.
 
-            if (!$user->profile_field_mooduell_alias && strlenstrlen($user->alternatename) > 0) {
+            if (!property_exists($user, 'profile_field_mooduell_alias') && strlen($user->alternatename) > 0) {
                 $user->profile_field_mooduell_alias = $user->alternatename;
                 profile_save_data($user);
             }
@@ -834,14 +835,17 @@ class game_control {
 
             list($update->winnerid, $update->playeracorrect, $update->playerbcorrect) = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
-
-
-
-        } else if ($this->is_it_active_users_turn()) {
-            $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
         } else {
-            $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
+            if ($this->is_it_active_users_turn()) {
+                $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
+            } else {
+                $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
+            }
+            // Even if the game is not finished, we still want to update correct answers for this game.
+            list($update->playeracorrect, $update->playerbcorrect) = $this->return_correctanswers();
         }
+
+
 
         $result = $this->return_status();
         $update->playeraresults = $result[0];

@@ -770,7 +770,7 @@ class mooduell {
 
         profile_load_custom_fields($user);
 
-        if (!$user->profile_field_mooduell_alias && strlenstrlen($user->alternatename) > 0) {
+        if (!property_exists($user, 'profile_field_mooduell_alias') && strlen($user->alternatename) > 0) {
             $user->profile_field_mooduell_alias = $user->alternatename;
             profile_save_data($user);
         }
