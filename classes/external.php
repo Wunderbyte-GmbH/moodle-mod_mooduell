@@ -550,9 +550,11 @@ class mod_mooduell_external extends external_api {
                     "Course module id:" . $params['quizid']);
         }
 
-        $USER->alternatename = core_user::clean_field($params['alternatename'], 'alternatename');
+        $newuser = $USER;
 
-        $DB->update_record('user', $USER);
+        $newuser->profile_field_mooduell_alias = core_user::clean_field($params['alternatename'], 'alternatename');
+
+        profile_save_data($newuser);
 
         return array('status' => 1);
     }
@@ -602,7 +604,7 @@ class mod_mooduell_external extends external_api {
                                 'firstname' => new external_value(PARAM_RAW, 'firstname'),
                                 'lastname' => new external_value(PARAM_RAW, 'lastname'),
                                 'username' => new external_value(PARAM_RAW, 'username'),
-                                'alternatename' => new external_value(PARAM_RAW, 'nickname'),
+                                'alternatename' => new external_value(PARAM_RAW, 'nickname, stored as custom profile filed mooduell_alias'),
                                 'lang' => new external_value(PARAM_RAW, 'language'),
                                 'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
                         )
