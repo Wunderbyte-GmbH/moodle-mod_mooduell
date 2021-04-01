@@ -126,7 +126,7 @@ class game_control {
             // We want to make sure we have no disruption in the transition, so we use alternate name...
             // ... when there is no moodle alias name.
 
-            if (!property_exists($user, 'profile_field_mooduell_alias') && strlen($user->alternatename) > 0) {
+            if (!$user->profile['mooduell_alias'] && strlen($user->alternatename) > 0) {
                 $user->profile_field_mooduell_alias = $user->alternatename;
                 profile_save_data($user);
             }
@@ -134,8 +134,12 @@ class game_control {
 
             //First we check if the user needs an alternatename and if he has one
             if ($mooduell->settings->usefullnames == 0
-            && strlen($user->profile_field_mooduell_alias) == 0) {
+            && strlen($user->profile['mooduell_alias']) == 0) {
                 continue;
+            } else {
+                // For backward compatibility we didn't change the "alternatename" key, but we now return ...
+                // ...custom profile field mooduell_alias instead of alternatename.
+                $user->alternatename = $user->profile['mooduell_alias'];
             }
 
             // We need to specifiy userid already when calling modinfo.
