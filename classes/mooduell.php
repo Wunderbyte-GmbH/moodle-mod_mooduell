@@ -603,7 +603,8 @@ class mooduell {
                 'userid' => $userid,
                 'model' => $model,
                 'identifier' => $identifier,
-                'pushtoken' => $pushtoken
+                'pushtoken' => $pushtoken,
+                'numberofnotifications' => 0
         ];
 
         if ($data) {
@@ -770,16 +771,16 @@ class mooduell {
 
         profile_load_custom_fields($user);
 
-        if (!property_exists($user, 'profile_field_mooduell_alias') && strlen($user->alternatename) > 0) {
+        if (!$user->profile['mooduell_alias'] && strlen($user->alternatename) > 0) {
             $user->profile_field_mooduell_alias = $user->alternatename;
             profile_save_data($user);
         }
 
         if ($usefullnames != 1) {
-            if ($user->profile_field_mooduell_alias && strlen($user->profile_field_mooduell_alias) > 0) {
-                return $user->profile_field_mooduell_alias;
+            if ($user->profile['mooduell_alias'] && strlen($user->profile['mooduell_alias']) > 0) {
+                return $user->profile['mooduell_alias'];
             } else {
-                return get_string('userhasnonickname', 'mod_mooduell');
+                return get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;
             }
 
         } else {

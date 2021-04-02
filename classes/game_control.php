@@ -610,12 +610,12 @@ class game_control {
 
             if ($user->id === $this->gamedata->playeraid) {
                 $playerAName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->profile_field_mooduell_alias;
+                        $user->firstname + ' ' +$user->lastname: $user->profile['mooduell_alias'];
                 $playerA = $user;
             }
             if ($user->id === $this->gamedata->playerbid) {
                 $playerBName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->profile_field_mooduell_alias;
+                        $user->firstname + ' ' +$user->lastname: $user->profile['mooduell_alias'];
                 $playerB = $user;
             }
         }

@@ -526,7 +526,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Set alternate name of user
+     * Set alternate name of user. Actually, this doesn't save to alternatename but to the user profile filed "mooduell_alias"
      * @param $userid
      * @param $alternatename
      * @return bool
