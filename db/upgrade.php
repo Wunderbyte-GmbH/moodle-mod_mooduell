@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/upgradelib.php');
+require_once(__DIR__ . '/install.php');
 
 /**
  * Execute mod_mooduell upgrade from the given old version.
@@ -96,6 +97,14 @@ function xmldb_mooduell_upgrade($oldversion) {
 
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021012201, 'mooduell');
+    }
+
+    // Make sure we have the necessary profile fields installed from here on
+    if ($oldversion < 2021040200) {
+
+        xmldb_mooduell_install();
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021040200, 'mooduell');
     }
 
     return true;
