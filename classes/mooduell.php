@@ -639,9 +639,9 @@ class mooduell {
                 throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
                         "This MooDuell Instance does not exist.");
             }
-            $data = $DB->get_records('mooduell_games', array('status' => 3, 'mooduellid' => $mooduellrecord->instance));
+            $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellrecord->instance));
         } else {
-            $data = $DB->get_records('mooduell_games', array('status' => 3));
+            $data = $DB->get_records('mooduell_games');
         }
 
 
@@ -654,50 +654,59 @@ class mooduell {
             $playera = new stdClass();
             $playerb = new stdClass();
 
-            $playera->played = 1;
-            $playerb->played = 1;
-
+            // We count correct even if the game was not finsihed
             $playera->correct = $entry->playeracorrect;
             $playerb->correct = $entry->playerbcorrect;
-            // $playera->correctlyanswere
+            $playera->played = 0;
+            $playerb->played = 0;
+            $playera->won = 0;
+            $playera->lost = 0;
+            $playerb->lost = 0;
+            $playerb->won = 0;
+            $playera->score = 0;
+            $playerb->score = 0;
 
+            if ($entry->status == 3) {
+                $playera->played = 1;
+                $playerb->played = 1;
 
-            switch ($entry->winnerid) {
-                case 0:
-                    $playera->won = 0;
-                    $playera->lost = 0;
-                    $playerb->lost = 0;
-                    $playerb->won = 0;
-                    $playera->score = 1;
-                    $playerb->score = 1;
-                    break;
-                case ($entry->winnerid === $entry->playeraid):
-                    $playera->won = 1;
-                    $playera->lost = 0;
-                    $playerb->lost = 1;
-                    $playerb->won = 0;
-                    $playera->score = 3;
-                    $playerb->score = 0;
-                    break;
-                case ($entry->winnerid === $entry->playerbid):
-                    $playera->won = 0;
-                    $playera->lost = 1;
-                    $playerb->lost = 0;
-                    $playerb->won = 1;
-                    $playera->score = 0;
-                    $playerb->score = 3;
-                    break;
-            }
-
-            // If the game is not a draw and active User is not the winner...
-            if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
-
-                if (!array_key_exists($entry->winnerid, $nemesis)) {
-                    $nemesis[$entry->winnerid] = 1;
-                } else {
-                    ++$nemesis[$entry->winnerid];
+                switch ($entry->winnerid) {
+                    case 0:
+                        $playera->won = 0;
+                        $playera->lost = 0;
+                        $playerb->lost = 0;
+                        $playerb->won = 0;
+                        $playera->score = 1;
+                        $playerb->score = 1;
+                        break;
+                    case ($entry->winnerid === $entry->playeraid):
+                        $playera->won = 1;
+                        $playera->lost = 0;
+                        $playerb->lost = 1;
+                        $playerb->won = 0;
+                        $playera->score = 3;
+                        $playerb->score = 0;
+                        break;
+                    case ($entry->winnerid === $entry->playerbid):
+                        $playera->won = 0;
+                        $playera->lost = 1;
+                        $playerb->lost = 0;
+                        $playerb->won = 1;
+                        $playera->score = 0;
+                        $playerb->score = 3;
+                        break;
                 }
 
+                // If the game is not a draw and active User is not the winner...
+                if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
+
+                    if (!array_key_exists($entry->winnerid, $nemesis)) {
+                        $nemesis[$entry->winnerid] = 1;
+                    } else {
+                        ++$nemesis[$entry->winnerid];
+                    }
+
+                }
             }
 
             if (!array_key_exists($entry->playeraid, $temparray)) {
@@ -728,7 +737,12 @@ class mooduell {
             $entry['lost'] = $value->lost;
             $entry['played'] = $value->played;
             $entry['correct'] = $value->correct;
-            $entry['correctpercentage'] = number_format((($value->correct / ($value->played * 9))* 100), 1);
+            if ($value->played > 0) {
+                $entry['correctpercentage'] = number_format((($value->correct / ($value->played * 9))* 100), 1);
+            } else {
+                $entry['correctpercentage'] = 0;
+            }
+
             $entry['nemesis'] = reset($nemesis);
             $returnarray[] = $entry;
         }
