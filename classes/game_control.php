@@ -235,6 +235,9 @@ class game_control {
         if (!$returnarray['wongames']) {
             $returnarray['wongames'] = 0;
         }
+        if (!$returnarray['playedquestions']) {
+            $returnarray['playedquestions'] = 0;
+        }
 
         return $returnarray;
     }
@@ -836,8 +839,8 @@ class game_control {
             $this->gamedata->status = 3;
 
             // Set winnerid
-
-            list($update->winnerid, $update->playeracorrect, $update->playerbcorrect) = $this->return_winnerid_and_correct_answers();
+            list($update->winnerid, $update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
+                = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
         } else {
             if ($this->is_it_active_users_turn()) {
@@ -845,8 +848,9 @@ class game_control {
             } else {
                 $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
             }
-            // Even if the game is not finished, we still want to update correct answers for this game.
-            list($update->playeracorrect, $update->playerbcorrect) = $this->return_correctanswers();
+            // Even if the game is not finished, we still want to update correct (and played) answers for this game.
+            list($update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
+                = $this->return_correct_and_played_answers();
         }
 
 
@@ -891,7 +895,7 @@ class game_control {
      */
     private function return_winnerid_and_correct_answers() {
 
-        list($playeracorrect, $playerbcorrect) = $this->return_correctanswers();
+        list($playeracorrect, $playerbcorrect, $playeraqplayed, $playerbqplayed) = $this->return_correct_and_played_answers();
 
         $winnerid = 0;
 
@@ -901,12 +905,14 @@ class game_control {
             $winnerid = $this->gamedata->playeraid;
         }
 
-        return [$winnerid, $playeracorrect, $playerbcorrect];
+        return [$winnerid, $playeracorrect, $playerbcorrect, $playeraqplayed, $playerbqplayed];
     }
 
-    private function return_correctanswers() {
+    private function return_correct_and_played_answers() {
         $playerascore = 0;
         $playerbscore = 0;
+        $playeraqplayed = 0;
+        $playerbqplayed = 0;
         foreach($this->gamedata->questions as $question) {
             if ($question->playeraanswered == 2) {
                 ++$playerascore;
@@ -914,8 +920,14 @@ class game_control {
             if ($question->playerbanswered == 2) {
                 ++$playerbscore;
             }
+            if (!empty($question->playeraanswered)) {
+                ++$playeraqplayed;
+            }
+            if (!empty($question->playerbanswered)) {
+                ++$playerbqplayed;
+            }
         }
-        return [$playerascore, $playerbscore];
+        return [$playerascore, $playerbscore, $playeraqplayed, $playerbqplayed];
     }
 
     /**

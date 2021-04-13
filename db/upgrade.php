@@ -99,6 +99,26 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021012201, 'mooduell');
     }
 
+    if ($oldversion < 2021041300) {
+        // Define field waitinglist to be added to booking_answers.
+        $table = new xmldb_table('mooduell_games');
+
+        $field = new xmldb_field('playeraqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('playerbqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        // Conditionally launch add field .
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021041300, 'mooduell');
+    }
+
     // Make sure we have the necessary profile fields installed from here on
     if ($oldversion < 2021040200) {
 

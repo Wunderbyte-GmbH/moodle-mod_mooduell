@@ -54,6 +54,10 @@
                        COMMENT="Number of correctly answered questions."/>
                 <FIELD NAME="playerbcorrect" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Number of correctly answered questions."/>
+                <FIELD NAME="playeraqplayed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Number of player A's played questions."/>
+                <FIELD NAME="playerbqplayed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Number of player B's played questions."/>
                 <FIELD NAME="playeraresults" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"
                        COMMENT="The result of the user as string"/>
                 <FIELD NAME="playerbresults" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"
