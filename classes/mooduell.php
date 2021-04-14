@@ -435,7 +435,8 @@ class mooduell {
                     'gameslost' => $entry->lost,
                     'score' => $entry->score,
                     'correct' => $entry->correct,
-                    'correctpercentage' => $entry->correctpercentage
+                    'correctpercentage' => $entry->correctpercentage,
+                    'qplayed' => $entry->qplayed
             ];
         }
 
@@ -661,7 +662,8 @@ class mooduell {
             // If we updated from the old version, we have null as default at this place...
             // ... and we have to calculate the qplaed
             if (!$entry->playeraqplayed) {
-                $playera->qplayed = 9 - substr_count('-',$entry->playeraresults);
+                $notplayed = substr_count($entry->playeraresults, '-');
+                $playera->qplayed = 9 - $notplayed;
             } else {
                 $playera->qplayed = $entry->playeraqplayed;
             }
@@ -669,7 +671,8 @@ class mooduell {
             // If we updated from the old version, we have null as default at this place...
             // ... and we have to calculate the qplaed
             if (!$entry->playerbqplayed) {
-                $playerb->qplayed = 9 - substr_count('-',$entry->playerbresults);
+                $notplayed = substr_count($entry->playerbresults, '-');
+                $playerb->qplayed = 9 - $notplayed;
             } else {
                 $playerb->qplayed = $entry->playerbqplayed;
             }
@@ -757,8 +760,10 @@ class mooduell {
             if (!empty($value->qplayed) and $value->qplayed > 0) {
                 // determine percentage of correctly answered questions by division through played questions
                 $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed )* 100), 1);
+                $entry['qplayed'] = $value->qplayed;
             } else {
                 $entry['correctpercentage'] = 0;
+                $entry['qplayed'] = 0;
             }
 
             $entry['nemesis'] = reset($nemesis);
