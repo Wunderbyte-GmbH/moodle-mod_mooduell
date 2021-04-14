@@ -176,7 +176,7 @@ class game_control {
             foreach ($data as $entry) {
                 // We count won and lost games only when they are finished
 
-                if ($data->status === 3) {
+                if ($entry->status == 3) {
                     ++$playedgames;
                     if ($entry->winnerid == $userid) {
                         ++$wongames;
