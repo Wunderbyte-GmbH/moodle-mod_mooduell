@@ -172,6 +172,7 @@ class game_control {
             $lostgames = 0;
             $playedgames = 0;
             $correctlyanswered = 0;
+            $playedquestions = 0;
             foreach ($data as $entry) {
                 // We count won and lost games only when they are finished
 
@@ -185,14 +186,17 @@ class game_control {
                 }
                 if ($entry->playeraid == $userid) {
                     $correctlyanswered += $entry->playeracorrect;
+                    $playedquestions += $entry->playeraqplayed;
                 } else {
                     $correctlyanswered += $entry->playerbcorrect;
+                    $playedquestions += $entry->playerbqplayed;
                 }
             }
             $returnarray['playedgames'] = $playedgames;
             $returnarray['wongames'] = $wongames;
             $returnarray['lostgames'] = $lostgames;
             $returnarray['correctlyanswered'] = $correctlyanswered;
+            $returnarray['playedquestions'] = $playedquestions;
 
             /*$data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE winnerid = ' . $userid);
             $returnarray['wongames'] = count($data);*/
