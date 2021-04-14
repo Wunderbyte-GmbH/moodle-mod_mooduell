@@ -44,6 +44,12 @@ class question_control {
      *
      * @var string
      */
+    public $imagetext;
+
+    /**
+     *
+     * @var string
+     */
     public $questiontext = '';
 
     /**
@@ -305,9 +311,11 @@ class question_control {
 
         $images = $dom->getElementsByTagName('img');
         $url = '';
+        $alttext = '';
 
         foreach ($images as $image) {
             $url = $image->getAttribute('src');
+            $alttext = $image->getAttribute('alt');
             break;
         }
         // No HTML Text anymore
@@ -316,6 +324,8 @@ class question_control {
         $this->questiontext = format_text($this->questiontext, 4);
         $this->length = strlen($this->questiontext);
         $this->imageurl = $url;
+
+        $this->imagetext = $alttext;
     }
 
     private function check_for_right_number_of_answers() {

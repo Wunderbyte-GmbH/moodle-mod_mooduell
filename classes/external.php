@@ -476,6 +476,7 @@ class mod_mooduell_external extends external_api {
                                                 'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
                                                 'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
                                                 'imageurl' => new external_value(PARAM_RAW, 'image URL'),
+                                                'imagetext' => new external_value(PARAM_RAW, 'image Text'),
                                                 'answers' => new external_multiple_structure(new external_single_structure(array(
                                                                         'id' => new external_value(PARAM_INT, 'answerid'),
                                                                         'answertext' => new external_value(PARAM_RAW,
