@@ -33,8 +33,6 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
-                <KEY NAME="fk_quizid" TYPE="foreign" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="mooduell_games" COMMENT="Stores the mooduell game progress.">
@@ -54,9 +52,9 @@
                        COMMENT="Number of correctly answered questions."/>
                 <FIELD NAME="playerbcorrect" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Number of correctly answered questions."/>
-                <FIELD NAME="playeraqplayed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                <FIELD NAME="playeraqplayed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
                        COMMENT="Number of player A's played questions."/>
-                <FIELD NAME="playerbqplayed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"
+                <FIELD NAME="playerbqplayed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
                        COMMENT="Number of player B's played questions."/>
                 <FIELD NAME="playeraresults" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"
                        COMMENT="The result of the user as string"/>
@@ -76,9 +74,6 @@
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
                 <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
-                <KEY NAME="fk_playera" TYPE="foreign" FIELDS="playeraid" REFTABLE="user" REFFIELDS="id"/>
-                <KEY NAME="fk_playerb" TYPE="foreign" FIELDS="playerbid" REFTABLE="user" REFFIELDS="id"/>
-                <KEY NAME="fk_winnerid" TYPE="foreign" FIELDS="winnerid" REFTABLE="user" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="mooduell_categories"
@@ -94,8 +89,6 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
-                <KEY NAME="fk_category" TYPE="foreign" FIELDS="category" REFTABLE="question_categories" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="mooduell_questions" COMMENT="Stores all the questions linked to this quiz">
@@ -114,9 +107,6 @@
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
-                <KEY NAME="fk_questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
-                <KEY NAME="fk_gameid" TYPE="foreign" FIELDS="gameid" REFTABLE="mooduell_games" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="mooduell_pushtokens" COMMENT="Stores all the pushtokens for all the users">

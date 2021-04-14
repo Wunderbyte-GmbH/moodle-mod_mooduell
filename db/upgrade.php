@@ -103,13 +103,13 @@ function xmldb_mooduell_upgrade($oldversion) {
         // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell_games');
 
-        $field = new xmldb_field('playeraqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'playerbcorrect');
+        $field = new xmldb_field('playeraqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'playerbcorrect');
         // Conditionally launch add field.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('playerbqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'playeraqplayed');
+        $field = new xmldb_field('playerbqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'playeraqplayed');
         // Conditionally launch add field .
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
