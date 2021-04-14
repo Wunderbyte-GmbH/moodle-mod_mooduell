@@ -657,8 +657,23 @@ class mooduell {
             // We count correct and played questions even if the game was not finsihed
             $playera->correct = $entry->playeracorrect;
             $playerb->correct = $entry->playerbcorrect;
-            $playera->qplayed = $entry->playeraqplayed; // questions played
-            $playerb->qplayed = $entry->playerbqplayed; // questions played
+
+            // If we updated from the old version, we have null as default at this place...
+            // ... and we have to calculate the qplaed
+            if (!$entry->playeraqplayed) {
+                $playera->qplayed = 9 - substr_count('-',$entry->playeraresults);
+            } else {
+                $playera->qplayed = $entry->playeraqplayed;
+            }
+
+            // If we updated from the old version, we have null as default at this place...
+            // ... and we have to calculate the qplaed
+            if (!$entry->playerbqplayed) {
+                $playerb->qplayed = 9 - substr_count('-',$entry->playerbresults);
+            } else {
+                $playerb->qplayed = $entry->playerbqplayed;
+            }
+
             $playera->played = 0; // games played
             $playerb->played = 0; // games played
             $playera->won = 0;

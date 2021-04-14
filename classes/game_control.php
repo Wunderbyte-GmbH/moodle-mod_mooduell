@@ -186,10 +186,25 @@ class game_control {
                 }
                 if ($entry->playeraid == $userid) {
                     $correctlyanswered += $entry->playeracorrect;
-                    $playedquestions += $entry->playeraqplayed;
+
+                    // If we updated from the old version, we have null as default at this place...
+                    // ... and we have to calculate the qplaed
+                    if (!$entry->playeraqplayed) {
+                        $playedquestions += 9 - substr_count('-',$entry->playeraresults);
+                    } else {
+                        $playedquestions += $entry->playeraqplayed;
+                    }
+
                 } else {
                     $correctlyanswered += $entry->playerbcorrect;
-                    $playedquestions += $entry->playerbqplayed;
+
+                    // If we updated from the old version, we have null as default at this place...
+                    // ... and we have to calculate the qplaed
+                    if (!$entry->playerbqplayed) {
+                        $playedquestions += 9 - substr_count('-',$entry->playerbresults);
+                    } else {
+                        $playedquestions += $entry->playerbqplayed;
+                    }
                 }
             }
             $returnarray['playedgames'] = $playedgames;
