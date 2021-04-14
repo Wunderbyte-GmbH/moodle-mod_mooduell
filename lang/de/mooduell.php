@@ -64,6 +64,7 @@ $string['important'] = 'Wichtig!';
 $string['nomessage'] = 'Es gibt keine Nachrichten.';
 $string['foundthesegames'] = 'Diese Spiele wurden gefunden:';
 $string['noopengames'] = 'Es gibt noch keine offenen Spiele.';
+$string['nostatistics'] = 'Es tut uns leid, die Statistik konnte nicht geladen werden.';
 
 $string['listofquestions'] = 'Alle Fragen im Quiz:';
 $string['playera'] = 'Spieler/in A';
@@ -77,6 +78,7 @@ $string['warnings'] = 'Warnungen';
 $string['status'] = 'Status';
 $string['category'] = 'Kategorie';
 
+$string['statistics'] = 'Statistik';
 $string['opengames'] = 'Offene Spiele';
 $string['finishedgames'] = 'Beendete Spiele';
 $string['highscores'] = 'Highscores';

@@ -265,6 +265,7 @@ class mooduell {
                 $data['questions'] = $this->return_list_of_all_questions_in_quiz();
                 $data['highscores'] = $this->return_list_of_highscores();
                 $data['categories'] = $this->return_list_of_categories();
+                $data['statistics'] = $this->return_list_of_statistics();
                 // Use the viewpage renderer template
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpage($viewpage);
@@ -933,7 +934,38 @@ class mooduell {
         }
 
         return $categorydata;
+    }
 
+    /**
+     * Helper function to generate statistical data
+     * for tab "Statistics"
+     *
+     * @return array a list of statistics
+     */
+    private function return_list_of_statistics() {
+        global $DB;
+
+        $list_of_statistics = array();
+
+        /* Statistik:
+         * Aktive Studierende,
+         * Gesamte spiele,
+         * fragen insgesamt beantwortet,
+         * wie viele Prozent der Fragen richtig,
+         * oft falsch beantwortete Fragen,
+         * oft richtig beantwortete Fragen */
+        $sql = "select count(*) active_users from (
+                    select playeraid playerid from {mooduell_games}
+                    union
+                    select playerbid playerid from {mooduell_games}
+                ) s"; // info: union selects only distinct records
+
+        $number_of_active_users = $DB->get_record_sql($sql)->active_users;
+
+        $list_of_statistics = [];
+        $list_of_statistics['number_of_active_users'] = $number_of_active_users;
+
+        return $list_of_statistics;
     }
 
     /**

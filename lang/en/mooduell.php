@@ -64,7 +64,7 @@ $string['important'] = 'Important!';
 $string['nomessage'] = 'There is nothing to say';
 $string['foundthesegames'] = 'We found these games:';
 $string['noopengames'] = 'There are no open games yet.';
-
+$string['nostatistics'] = 'Sorry, statistics could\'nt be loaded.';
 
 $string['listofquestions'] = 'List of questions:';
 $string['playera'] = 'Player A';
@@ -79,11 +79,12 @@ $string['warnings'] = 'Warnings';
 $string['status'] = 'Status';
 $string['category'] = 'Category';
 
+$string['statistics'] = 'Statistics';
 $string['opengames'] = 'Open games';
 $string['finishedgames'] = 'Finished games';
 $string['highscores'] = 'Highscores';
 $string['students'] = 'Students';
-$string['questions'] = 'questions';
+$string['questions'] = 'Questions';
 
 $string['questionid'] = 'ID';
 $string['questiontext'] = 'Text';

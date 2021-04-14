@@ -695,8 +695,8 @@ class mod_mooduell_external extends external_api {
                                 'userid' => new external_value(PARAM_INT, 'userid'),
                                 'won' => new external_value(PARAM_INT, 'won'), // games won
                                 'lost' => new external_value(PARAM_INT, 'lost'), // games lost
-                                'score' => new external_value(PARAM_INT, 'firstname'), // games played
-                                'played' => new external_value(PARAM_INT, 'played')
+                                'score' => new external_value(PARAM_INT, 'firstname'),
+                                'played' => new external_value(PARAM_INT, 'played') // games played
                         )
                 )
         );
