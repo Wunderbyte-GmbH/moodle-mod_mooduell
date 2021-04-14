@@ -657,10 +657,10 @@ class mooduell {
             // We count correct and played questions even if the game was not finsihed
             $playera->correct = $entry->playeracorrect;
             $playerb->correct = $entry->playerbcorrect;
-            $playera->qplayed = $entry->playeraqplayed;
-            $playerb->qplayed = $entry->playerbqplayed;
-            $playera->played = 0;
-            $playerb->played = 0;
+            $playera->qplayed = $entry->playeraqplayed; // questions played
+            $playerb->qplayed = $entry->playerbqplayed; // questions played
+            $playera->played = 0; // games played
+            $playerb->played = 0; // games played
             $playera->won = 0;
             $playera->lost = 0;
             $playerb->lost = 0;
@@ -740,7 +740,6 @@ class mooduell {
             $entry['played'] = $value->played;
             $entry['correct'] = $value->correct;
             if (!empty($value->qplayed) and $value->qplayed > 0) {
-                //$entry['correctpercentage'] = number_format((($value->correct / ($value->played * 9))* 100), 1);
                 // determine percentage of correctly answered questions by division through played questions
                 $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed )* 100), 1);
             } else {
@@ -769,6 +768,7 @@ class mooduell {
         $storedplayer->lost += $newentry->lost;
         $storedplayer->played += $newentry->played;
         $storedplayer->correct += $newentry->correct;
+        $storedplayer->qplayed += $newentry->qplayed;
     }
 
     /**
