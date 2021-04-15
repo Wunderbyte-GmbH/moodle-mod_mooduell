@@ -22,53 +22,70 @@
     * headings - array: An array of table headings.
     * rows - array: An array of content rows for the table.
     }}
-    <div>
     {{#statistics}}
-        Active users: {{number_of_active_users}}<br>
-        Games played: {{number_of_games_played}}<br>
-        Questions answered: {{number_of_answers}}<br>
-        Correctly answered: {{percentage_of_correct_answers}}%<br>
-        Easiest question ({{eq_correct_count}} times right):
-        <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{eq_id}}" target="_blank">
-        {{eq_name}}
-        </a><br>
-        Hardest question ({{hq_incorrect_count}} times wrong):
-        <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{hq_id}}" target="_blank">
-        {{hq_name}}
-        </a><br>
-    {{/statistics}}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Card Deck -->
+    <div class="card-deck" style="margin-top: 25px; text-align: center;">
+        <div class="card">
+            <div class="card-body bg-primary text-white">
+                <h1 class="card-title" style="font-size: 80px;"> {{number_of_active_users}} </h1>
+                <p class="card-text" style="font-size: 30px;">{{#str}} stat_active_users, mod_mooduell {{/str}}</p>
+                <p class="card-text"><small>{{#str}} stat_active_users_desc, mod_mooduell {{/str}}</small></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body bg-dark text-white">
+                <h1 class="card-title" style="font-size: 80px;"> {{number_of_games_played}} </h1>
+                <p class="card-text" style="font-size: 30px;">{{#str}} stat_games_played, mod_mooduell {{/str}}</p>
+                <p class="card-text"><small>{{#str}} stat_games_played_desc, mod_mooduell {{/str}}</small></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body bg-warning text-black">
+                <h1 class="card-title" style="font-size: 80px;"> {{number_of_answers}} </h1>
+                <p class="card-text" style="font-size: 30px;">{{#str}} stat_questions_answered, mod_mooduell {{/str}}</p>
+                <p class="card-text"><small>{{#str}} stat_questions_answered_desc, mod_mooduell {{/str}}</small></p>
+            </div>
+        </div>
     </div>
-
-
-<!--<table class="generaltable fullwidth fieldslist">
-    <thead>
-    <tr>
-        <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
-        <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#opengames}}
-        <tr class="field">
-            <td>{{playera}}</td>
-            <td>{{playeraresults}}</td>
-            <td>{{playerb}}</td>
-            <td>{{playerbresults}}</td>
-            <td class="text-right">
-                {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
-                    t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                <a href="view.php?action=viewquestions&id={{mooduellid}}&gameid={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
-                t/viewdetails, core, {{#str}} view, moodle {{/str}} {{/pix}}</a>
-                <a href="view.php?action=delete&id={{mooduellid}}&gameid={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
-                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
-            </td>
-        </tr>
-    {{/opengames}}
-    </tbody>
-</table>-->
+    <div class="card-deck" style="margin-top: 25px; margin-bottom: 25px; text-align: center;">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h1 class="card-title" style="font-size: 85px;">{{percentage_of_correct_answers}}%</h1>
+                <p class="card-text" style="font-size: 30px;">{{#str}} stat_answered_correctly, mod_mooduell {{/str}}</p>
+                <p class="card-text"><small>{{#str}} stat_answered_correctly_desc, mod_mooduell {{/str}}</small></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body bg-info text-white">
+                <h1 class="card-title">{{#str}} stat_easiest_question, mod_mooduell {{/str}}</h1>
+                <p class="card-text text-white" style="font-size: 20px;">{{eq_name}}</p>
+                <p class="card-text"><small>
+                    {{#str}} stat_easiest_question_desc1, mod_mooduell {{/str}}{{eq_correct_count}}{{#str}} stat_easiest_question_desc2, mod_mooduell {{/str}}
+                </small></p>
+                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{eq_id}}"
+                    target="_blank" class="btn btn-primary bg-light text-info" style="border-style: none;">
+                {{#str}} stat_edit_question, mod_mooduell {{/str}}
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body bg-danger text-white">
+                <h1 class="card-title">{{#str}} stat_hardest_question, mod_mooduell {{/str}}</h1>
+                <p class="card-text text-white" style="font-size: 20px;">{{hq_name}}</p>
+                <p class="card-text"><small>
+                    {{#str}} stat_hardest_question_desc1, mod_mooduell {{/str}}{{hq_incorrect_count}}{{#str}} stat_hardest_question_desc2, mod_mooduell {{/str}}
+                </small></p>
+                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{hq_id}}"
+                    target="_blank" class="btn btn-primary bg-light text-danger" style="border-style: none;">
+                {{#str}} stat_edit_question, mod_mooduell {{/str}}
+                </a>
+            </div>
+        </div>
+    </div>
+    {{/statistics}}
 
 {{^statistics}}
     {{#str}} nostatistics, mod_mooduell {{/str}}
