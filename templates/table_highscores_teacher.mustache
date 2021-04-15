@@ -48,9 +48,8 @@
             <td class="text-right">{{correctpercentage}} %</td>
         </tr>
     {{/highscores}}
+    {{^highscores}}
+        {{#str}} noopengames, mod_mooduell {{/str}}
+    {{/highscores}}
     </tbody>
 </table>
-
-{{^highscores}}
-    {{#str}} noopengames, mod_mooduell {{/str}}
-{{/highscores}}

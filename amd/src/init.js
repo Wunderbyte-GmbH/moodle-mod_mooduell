@@ -3,21 +3,14 @@
 define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notification) {
 
     return {
-
-
         init: function () {
-
             var getUrlParameter = function getUrlParameter(sParam) {
-
                 var sPageURL = window.location.search.substring(1),
                     sURLVariables = sPageURL.split('&'),
                     sParameterName,
                     i;
-
-
                 for (i = 0; i < sURLVariables.length; i++) {
                     sParameterName = sURLVariables[i].split('=');
-
                     if (sParameterName[0] === sParam) {
                         return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
                     }
@@ -56,7 +49,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
             function loadQuestions() {
                 var id = getUrlParameter('id');
                 ajax.call([{
-                    methodname: "mod_mooduell_load_question_data",
+                    methodname: "mod_mooduell_load_questions_data",
                     args: {
                         'quizid': id
                     },

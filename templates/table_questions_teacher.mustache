@@ -89,9 +89,8 @@
             <td>{{status}}</td>
         </tr>
     {{/questions}}
+    {{^questions}}
+        {{#str}} noopengames, mod_mooduell {{/str}}
+    {{/questions}}
     </tbody>
 </table>
-
-{{^questions}}
-    {{#str}} noopengames, mod_mooduell {{/str}}
-{{/questions}}
