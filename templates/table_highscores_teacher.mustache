@@ -23,6 +23,11 @@
     * rows - array: An array of content rows for the table.
 
     }}
+<div class="d-flex justify-content-center" id="hsspinner">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 
 <table class="generaltable fullwidth fieldslist">
     <thead>
@@ -47,9 +52,6 @@
             <td class="text-right">{{correct}}</td>
             <td class="text-right">{{correctpercentage}} %</td>
         </tr>
-    {{/highscores}}
-    {{^highscores}}
-        {{#str}} noopengames, mod_mooduell {{/str}}
     {{/highscores}}
     </tbody>
 </table>

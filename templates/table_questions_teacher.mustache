@@ -33,8 +33,12 @@
     </li>
 {{/categories}}
 </ul>
-
-<table class="generaltable fullwidth fieldslist">
+<div class="d-flex justify-content-center" id="qspinner">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<table class="generaltable fullwidth fieldslist hidden" id="questionstable">
     <thead>
     <tr>
         <th scope="col">{{#str}} questionid, mod_mooduell {{/str}}</th>
@@ -47,7 +51,7 @@
         <th scope="col">{{#str}} questionstatus, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
-    <tbody id="questionstable">
+    <tbody>
     {{#questions}}
         <tr class="field">
             <td>
@@ -88,9 +92,6 @@
             </td>
             <td>{{status}}</td>
         </tr>
-    {{/questions}}
-    {{^questions}}
-        {{#str}} noopengames, mod_mooduell {{/str}}
     {{/questions}}
     </tbody>
 </table>

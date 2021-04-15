@@ -1045,6 +1045,7 @@ class mod_mooduell_external extends external_api {
                                 'questiontext' => new external_value(PARAM_RAW, 'questiontext'), // questiontext
                                 'questiontype' => new external_value(PARAM_RAW, 'questiontype'), // questiontype
                                 'category' => new external_value(PARAM_RAW, 'category'), // category
+                                'courseid' => new external_value(PARAM_INT, 'courseid'),
                                 'status' => new external_value(PARAM_RAW, 'status'), // status
                                 'warnings' => new external_multiple_structure(new external_single_structure(array(
                                                 'message' => new external_value(PARAM_RAW, 'message'))

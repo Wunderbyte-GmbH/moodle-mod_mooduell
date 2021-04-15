@@ -20,6 +20,10 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
 
             function loadHighScores() {
                 var id = getUrlParameter('id');
+
+                $('#hsspinner div').removeClass('hidden');
+                $('#highscorestable').addClass('hidden');
+
                 ajax.call([{
                     methodname: "mod_mooduell_load_highscore_data",
                     args: {
@@ -41,6 +45,9 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '</tr>';
                         });
                         $('#highscorestable').html(tablebody);
+
+                        $('#hsspinner div').addClass('hidden');
+                        $('#highscorestable').removeClass('hidden');
                     },
                     fail: notification.exception
                 }]);
@@ -48,6 +55,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
 
             function loadQuestions() {
                 var id = getUrlParameter('id');
+
+                $('#qspinner div').removeClass('hidden');
+                $('#questionstable').addClass('hidden');
+
+
                 ajax.call([{
                     methodname: "mod_mooduell_load_questions_data",
                     args: {
@@ -58,17 +70,39 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                         var tablebody = '';
 
                         res.forEach(item => {
+                            var image = 'no image';
+                            if (item.imageurl && item.imageurl.length > 0) {
+                                image = '<a href="' + item.imageurl +
+                                    '"><img src="' + item.imageurl + '" alt="' +
+                                    item.imagetext + '" width="100px"></img></a>';
+                            }
+                            var strlength = item.length;
+                            if (!strlength || strlength.length == 0) {
+                                strlength = item.questiontext.length;
+                            }
+
+                            var warnings = '<ul>';
+                            item.warnings.forEach(item => {
+                                warnings += '<li><span style="color:red;">' + item.message + '</span></li>';
+                            });
+                            warnings += '</ul>';
+
                             tablebody += '<tr>' +
-                                '<td>' + item.username + '</td>' +
-                                '<td class="text-right">' + item.gamesplayed + '</td>' +
-                                '<td class="text-right">' + item.gameswon + '</td>' +
-                                '<td class="text-right">' + item.gameslost + '</td>' +
-                                '<td class="text-right">' + item.score + '</td>' +
-                                '<td class="text-right">' + item.correct + '</td>' +
-                                '<td class="text-right">' + item.correctpercentage + '%</td>' +
+                                '<td><a href="../../question/question.php?returnurl=/question/edit.php?courseid='+
+                                item.courseid + '&courseid='+ item.courseid + '&id='+ item.questionid + '">' +
+                               item.questionid + '</a></td>' +
+                                '<td>' + image + '</td>' +
+                                '<td class="text-left">' + item.questiontext + '</td>' +
+                                '<td class="text-right">' + item.questiontype + '</td>' +
+                                '<td class="text-right">' + strlength + '</td>' +
+                                '<td class="text-right">' + item.category + '</td>' +
+                                '<td class="text-right">' + warnings + '</td>' +
+                                '<td class="text-right">' + item.status + '</td>' +
                                 '</tr>';
                         });
-                        $('#questionstable').html(tablebody);
+                        $('#questionstable tbody').html(tablebody);
+                        $('#qspinner div').addClass('hidden');
+                        $('#questionstable').removeClass('hidden');
                     },
                     fail: notification.exception
                 }]);

@@ -94,7 +94,9 @@ class mooduell {
      * @throws moodle_exception
      */
     public function __construct(int $id = null) {
-        global $DB;
+        global $DB, $PAGE;
+
+        global $PAGE;
 
         if (!$this->cm = get_coursemodule_from_id('mooduell', $id)) {
             throw new moodle_exception('invalidcoursemodule ' . $id, 'mooduell', null, null, "Course module id: $id");
@@ -108,6 +110,8 @@ class mooduell {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
         $this->context = context_module::instance($this->cm->id);
+
+        $PAGE->set_context($this->context);
     }
 
     /**
