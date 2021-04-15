@@ -206,4 +206,22 @@ $functions = array(
                         MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
+        'mod_mooduell_load_highscore_data' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'load_highscore_data',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Ajax load list of highscores',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:view',
+                'ajax' => true,
+        ),
+        'mod_mooduell_load_questions_data' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'load_questions_data',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Ajax load list of questions',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:view',
+                'ajax' => true,
+        ),
 );

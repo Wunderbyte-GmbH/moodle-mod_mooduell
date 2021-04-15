@@ -101,3 +101,10 @@
     </div>
     <div><a class="btn btn-primary" href="view.php?id={{mooduellid}}&action=downloadhighscores">{{#str}} downloadhighscores, mod_mooduell {{/str}}</a></div>
 </div>
+
+
+{{#js}}
+    require(['mod_mooduell/init'], function($) {
+    $.init();
+    });
+{{/js}}

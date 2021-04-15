@@ -954,4 +954,104 @@ class mod_mooduell_external extends external_api {
         );
     }
 
+
+    /**
+     * @param $quizid
+     * @return array[]
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
+    public static function load_highscore_data($quizid) {
+        global $DB, $USER;
+
+        $params = array(
+                'quizid' => $quizid,
+        );
+
+        $params = self::validate_parameters(self::load_highscore_data_parameters(), $params);
+
+        $mooduell = new mooduell($params['quizid']);
+
+        return $mooduell->return_list_of_highscores();
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function load_highscore_data_parameters() {
+        return new external_function_parameters(array(
+                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function load_highscore_data_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'username' => new external_value(PARAM_RAW, 'username'),
+                                'gamesplayed' => new external_value(PARAM_INT, 'played'),
+                                'gameswon' => new external_value(PARAM_INT, 'won'), // games won
+                                'gameslost' => new external_value(PARAM_INT, 'lost'), // games lost
+                                'score' => new external_value(PARAM_INT, 'firstname'), // games played
+                                'correct' => new external_value(PARAM_INT, 'correct'), // games played
+                                'correctpercentage' => new external_value(PARAM_FLOAT, 'percentagecorrect')
+                        )
+                )
+        );
+    }
+
+    /**
+     * @param $quizid
+     * @return array[]
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
+    public static function load_questions_data($quizid) {
+        global $DB, $USER;
+
+        $params = array(
+                'quizid' => $quizid,
+        );
+
+        $params = self::validate_parameters(self::load_questions_data_parameters(), $params);
+
+        $mooduell = new mooduell($params['quizid']);
+
+        return $mooduell->return_list_of_all_questions_in_quiz();
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function load_questions_data_parameters() {
+        return new external_function_parameters(array(
+                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function load_questions_data_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'questionid' => new external_value(PARAM_INT, 'question id'),
+                                'imageurl' => new external_value(PARAM_RAW, 'iamgeurl'),
+                                'imagetext' => new external_value(PARAM_RAW, 'iamgetext'),
+                                'questiontext' => new external_value(PARAM_RAW, 'questiontext'), // questiontext
+                                'questiontype' => new external_value(PARAM_RAW, 'questiontype'), // questiontype
+                                'category' => new external_value(PARAM_RAW, 'category'), // category
+                                'status' => new external_value(PARAM_RAW, 'status'), // status
+                                'warnings' => new external_multiple_structure(new external_single_structure(array(
+                                                'message' => new external_value(PARAM_RAW, 'message'))
+                                ))
+                        )
+                )
+        );
+    }
+
 }

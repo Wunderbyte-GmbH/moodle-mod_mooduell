@@ -257,13 +257,13 @@ class mooduell {
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
-                $data = $this->return_list_of_games();
+                $data = []; // $this->return_list_of_games();
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $data['mooduellid'] = $this->cm->id;
                 // Add the list of questions
-                $data['questions'] = $this->return_list_of_all_questions_in_quiz();
-                $data['highscores'] = $this->return_list_of_highscores();
+                $data['questions'] = []; // $this->return_list_of_all_questions_in_quiz();
+                $data['highscores'] = []; // $this->return_list_of_highscores();
                 $data['categories'] = $this->return_list_of_categories();
                 $data['statistics'] = $this->return_list_of_statistics();
                 // Use the viewpage renderer template
@@ -422,7 +422,7 @@ class mooduell {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    private function return_list_of_highscores() {
+    public function return_list_of_highscores() {
 
         $list = self::get_highscores($this->cm->id);
         $returnarray = [];
@@ -800,13 +800,14 @@ class mooduell {
      * @throws dml_exception
      */
     public function return_name_by_id(int $userid) {
-        global $DB;
+        global $DB, $CFG;
+
+        require_once("$CFG->dirroot/user/profile/lib.php");
 
         $usefullnames = $this->settings->usefullnames;
 
         // Get user record of user
         $user = $DB->get_record('user', array('id' => $userid));
-
 
         profile_load_custom_fields($user);
 
