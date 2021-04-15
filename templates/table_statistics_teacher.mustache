@@ -22,13 +22,24 @@
     * headings - array: An array of table headings.
     * rows - array: An array of content rows for the table.
     }}
-
+    <div>
     {{#statistics}}
-        Active users: {{number_of_active_users}}
-        <!-- TODO: continue here with statistics -->
+        Active users: {{number_of_active_users}}<br>
+        Games played: {{number_of_games_played}}<br>
+        Questions answered: {{number_of_answers}}<br>
+        Correctly answered: {{percentage_of_correct_answers}}%<br>
+        Easiest question ({{eq_correct_count}} times right):
+        <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{eq_id}}" target="_blank">
+        {{eq_name}}
+        </a><br>
+        Hardest question ({{hq_incorrect_count}} times wrong):
+        <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{hq_id}}" target="_blank">
+        {{hq_name}}
+        </a><br>
     {{/statistics}}
+    </div>
 
-<!-- TODO: remove this when finished... -->
+
 <!--<table class="generaltable fullwidth fieldslist">
     <thead>
     <tr>

@@ -945,25 +945,71 @@ class mooduell {
     private function return_list_of_statistics() {
         global $DB;
 
-        $list_of_statistics = array();
+        $list_of_statistics = [];
+        $list_of_statistics['courseid'] = $this->course->id;
 
-        /* Statistik:
-         * Aktive Studierende,
-         * Gesamte spiele,
-         * fragen insgesamt beantwortet,
-         * wie viele Prozent der Fragen richtig,
-         * oft falsch beantwortete Fragen,
-         * oft richtig beantwortete Fragen */
+        // number of distinct users who have played a MooDuell game
         $sql = "select count(*) active_users from (
                     select playeraid playerid from {mooduell_games}
                     union
                     select playerbid playerid from {mooduell_games}
                 ) s"; // info: union selects only distinct records
-
         $number_of_active_users = $DB->get_record_sql($sql)->active_users;
-
-        $list_of_statistics = [];
         $list_of_statistics['number_of_active_users'] = $number_of_active_users;
+
+        // number of MooDuell games played
+        $sql = "select count(*) games_played from {mooduell_games}";
+        $number_of_games_played = $DB->get_record_sql($sql)->games_played;
+        $list_of_statistics['number_of_games_played'] = $number_of_games_played;
+
+        // number of answers returned to MooDuell questions
+        $sql = "select sum(s.answers) answers from
+                (select count(playeraanswered) answers from {mooduell_questions} where playeraanswered is not null
+                union all
+                select count(playerbanswered) answers from {mooduell_questions} where playerbanswered is not null) s";
+        $number_of_answers = $DB->get_record_sql($sql)->answers;
+        $list_of_statistics['number_of_answers'] = $number_of_answers;
+
+        // percentage of correctly answered questions
+        // step 1: find out the number of correct answers returned to MooDuell questions
+        $sql = "select sum(s.correct_answers) correct_answers from
+                (select count(playeraanswered) correct_answers from {mooduell_questions} where playeraanswered = 2
+                union all
+                select count(playerbanswered) correct_answers from {mooduell_questions} where playerbanswered = 2) s";
+        $number_of_correct_answers = $DB->get_record_sql($sql)->correct_answers;
+        // step 2: calculate the percentage
+        $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_answers )* 100), 1);
+        $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
+
+        // easiest question = question which has been answered correctly most often
+        $sql = "select s.questionid, q.name questionname, count(*) correct_count from
+                (select * from {mooduell_questions} where playeraanswered = 2
+                union all
+                select * from {mooduell_questions} where playerbanswered = 2) s
+                inner join mdl_question q
+                on q.id = s.questionid
+                group by s.questionid
+                order by correct_count desc
+                limit 1";
+        $entry = $DB->get_record_sql($sql);
+        $list_of_statistics['eq_id'] = $entry->questionid;
+        $list_of_statistics['eq_name'] = $entry->questionname;
+        $list_of_statistics['eq_correct_count'] = $entry->correct_count;
+
+        // hardest question = question which has been answered incorrectly most often
+        $sql = "select s.questionid, q.name questionname, count(*) incorrect_count from
+                (select * from {mooduell_questions} where playeraanswered = 1
+                union all
+                select * from {mooduell_questions} where playerbanswered = 1) s
+                inner join mdl_question q
+                on q.id = s.questionid
+                group by s.questionid
+                order by incorrect_count desc
+                limit 1";
+        $entry = $DB->get_record_sql($sql);
+        $list_of_statistics['hq_id'] = $entry->questionid;
+        $list_of_statistics['hq_name'] = $entry->questionname;
+        $list_of_statistics['hq_incorrect_count'] = $entry->incorrect_count;
 
         return $list_of_statistics;
     }
