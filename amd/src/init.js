@@ -108,6 +108,70 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                 }]);
             }
 
+            function loadOpengames() {
+                var id = getUrlParameter('id');
+
+                $('#ogspinner div').removeClass('hidden');
+                $('#opengamestable').addClass('hidden');
+
+
+                ajax.call([{
+                    methodname: "mod_mooduell_load_opengames_data",
+                    args: {
+                        'quizid': id
+                    },
+                    done: function (res) {
+                        //$('#continue').attr("href", link);
+                        var tablebody = '';
+
+                        res.forEach(item => {
+                            tablebody += '<tr>' +
+                                '<td>' + item.playera + '</td>' +
+                                '<td>' + item.playeraresults + '</td>' +
+                                '<td>' + item.playerb + '</td>' +
+                                '<td>' + item.playerbresults + '</td>' +
+                                '</tr>';
+                        });
+                        $('#opengamestable tbody').html(tablebody);
+                        $('#ogspinner div').addClass('hidden');
+                        $('#opengamestable').removeClass('hidden');
+                    },
+                    fail: notification.exception
+                }]);
+            }
+
+            function loadFinishedgames() {
+                var id = getUrlParameter('id');
+
+                $('#fgspinner div').removeClass('hidden');
+                $('#finishedgamestable').addClass('hidden');
+
+
+                ajax.call([{
+                    methodname: "mod_mooduell_load_finishedgames_data",
+                    args: {
+                        'quizid': id
+                    },
+                    done: function (res) {
+                        //$('#continue').attr("href", link);
+                        var tablebody = '';
+
+                        res.forEach(item => {
+                            tablebody += '<tr>' +
+                                '<td>' + item.playera + '</td>' +
+                                '<td>' + item.playeraresults + '</td>' +
+                                '<td>' + item.playerb + '</td>' +
+                                '<td>' + item.playerbresults + '</td>' +
+                                '</tr>';
+                        });
+                        $('#finishedgamestable tbody').html(tablebody);
+                        $('#fgspinner div').addClass('hidden');
+                        $('#finishedgamestable').removeClass('hidden');
+                    },
+                    fail: notification.exception
+                }]);
+            }
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
                 var tabname = e.target.toString();
@@ -123,7 +187,10 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                         loadQuestions();
                         break;
                     case 'opengames':
-                        alert('open');
+                        loadOpengames();
+                        break;
+                    case 'finishedgames':
+                        loadFinishedgames();
                         break;
                 }
             });

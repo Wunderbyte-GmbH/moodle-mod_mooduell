@@ -224,4 +224,22 @@ $functions = array(
                 'capabilities' => 'mod/mooduell:view',
                 'ajax' => true,
         ),
+        'mod_mooduell_load_opengames_data' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'load_opengames_data',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Ajax load list of opengames',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:view',
+                'ajax' => true,
+        ),
+        'mod_mooduell_load_finishedgames_data' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'load_finishedgames_data',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Ajax load list of finishedgames',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:view',
+                'ajax' => true,
+        ),
 );

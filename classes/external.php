@@ -249,7 +249,7 @@ class mod_mooduell_external extends external_api {
             // We create the game_controller Instance.
             // This function is used by the external webservice, here we only provide studentsview.
             // This means we only provide games where the active player is involved.
-            $games = $mooduell->return_games_for_this_instance(true, $timemodified);
+            $games = $mooduell->return_games_for_this_instance(true, null, $timemodified);
 
             if ($games && count($games) > 0) {
 
@@ -1050,6 +1050,121 @@ class mod_mooduell_external extends external_api {
                                 'warnings' => new external_multiple_structure(new external_single_structure(array(
                                                 'message' => new external_value(PARAM_RAW, 'message'))
                                 ))
+                        )
+                )
+        );
+    }
+    /**
+     * @param $quizid
+     * @return array[]
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
+    public static function load_opengames_data($quizid) {
+        global $DB, $USER;
+
+        $params = array(
+                'quizid' => $quizid,
+        );
+
+        $params = self::validate_parameters(self::load_opengames_data_parameters(), $params);
+
+        $mooduell = new mooduell($params['quizid']);
+
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
+                    "Course module id:" . $params['quizid']);
+        }
+        $context = context_module::instance($cm->id);
+        self::validate_context($context);
+
+        if (has_capability('moodle/course:manageactivities', $context)) {
+            $isstudent = false;
+        } else {
+            $isstudent = true;
+        }
+
+        return $mooduell->return_list_of_games($isstudent, false);
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function load_opengames_data_parameters() {
+        return new external_function_parameters(array(
+                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function load_opengames_data_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'playera' => new external_value(PARAM_RAW, 'player a name'),
+                                'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
+                                'playerb' => new external_value(PARAM_RAW, 'player b name'),
+                                'playerbresults' => new external_value(PARAM_RAW, 'player b results')
+                        )
+                )
+        );
+    }
+
+    /**
+     * @param $quizid
+     * @return array[]
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
+    public static function load_finishedgames_data($quizid) {
+        global $DB, $USER;
+
+        $params = array(
+                'quizid' => $quizid,
+        );
+
+        $params = self::validate_parameters(self::load_finishedgames_data_parameters(), $params);
+
+        $mooduell = new mooduell($params['quizid']);
+
+        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
+                    "Course module id:" . $params['quizid']);
+        }
+        $context = context_module::instance($cm->id);
+        self::validate_context($context);
+
+        if (has_capability('moodle/course:manageactivities', $context)) {
+            $isstudent = false;
+        } else {
+            $isstudent = true;
+        }
+
+        return $mooduell->return_list_of_games($isstudent, true);
+    }
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function load_finishedgames_data_parameters() {
+        return new external_function_parameters(array(
+                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                )
+        );
+    }
+
+    /**
+     * @return external_multiple_structure
+     */
+    public static function load_finishedgames_data_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'playera' => new external_value(PARAM_RAW, 'player a name'),
+                                'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
+                                'playerb' => new external_value(PARAM_RAW, 'player b name'),
+                                'playerbresults' => new external_value(PARAM_RAW, 'player b results')
                         )
                 )
         );

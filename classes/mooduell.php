@@ -261,7 +261,11 @@ class mooduell {
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
-                $data = []; // $this->return_list_of_games();
+                // $data = []; // $this->return_list_of_games();
+                $data['opengames'] = $this->return_list_of_games(false, false);
+                $data['finishedgames'] = $this->return_list_of_games(false, true);
+                $data['warnings'] = $this->check_quiz();
+
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $data['mooduellid'] = $this->cm->id;
@@ -288,7 +292,8 @@ class mooduell {
                 break;
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
-                $data = $this->return_list_of_games(true);
+                $data['opengames'] = $this->return_games_for_this_instance(true, false);
+                $data['finishedgames'] = $this->return_games_for_this_instance(true, true);
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $data['highscores'] = $this->return_list_of_highscores();
@@ -324,65 +329,27 @@ class mooduell {
      *
      * @return array
      */
-    public function return_list_of_games($student = false) {
+    public function return_list_of_games($student = false, $finished = null, $timemodified = 0) {
 
         global $DB;
 
-        $returnwarnings = $this->check_quiz();
-        $finishedreturngames = [];
-        $openreturngames = [];
 
-        $games = $this->return_games_for_this_instance($student);
+        $games = $this->return_games_for_this_instance($student, $finished, $timemodified);
 
+        $returngames = [];
 
         foreach ($games as $game) {
 
-            if ($game->gamedata->playeraresults == null
-                    || $game->gamedata->playerbresults == null) {
-
-                $result = $game->return_status();
-                $game->gamedata->playeraresults = $result[0];
-                $game->gamedata->playerbresults = $result[1];
-
-                $update = new stdClass();
-                $update->id = $game->gamedata->gameid;
-                $update->playeraresults = $result[0];
-                $update->playerbresults = $result[1];
-
-                $DB->update_record('mooduell_games',$update);
-            }
-
-            // $results = $game->return_status();
-            if ($game->gamedata->status != 3) {
-
-
-                $openreturngames[] = [
-                        'mooduellid' => $this->cm->id,
-                        'gameid' => $game->gamedata->gameid,
-                        "playera" => $this->return_name_by_id($game->gamedata->playeraid),
-                        'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
-                        'playeraresults' => $game->gamedata->playeraresults,
-                        'playerbresults' => $game->gamedata->playerbresults
-                ];
-            } else {
-                $finishedreturngames[] = [
-                        'mooduellid' => $this->cm->id,
-                        'gameid' => $game->gamedata->gameid,
-                        "playera" => $this->return_name_by_id($game->gamedata->playeraid),
-                        'playerb' => $this->return_name_by_id($game->gamedata->playerbid),
-                        'playeraresults' => $game->gamedata->playeraresults,
-                        'playerbresults' => $game->gamedata->playerbresults
-                ];
-            }
+            $returngames[] = [
+                    'mooduellid' => $game->mooduellid,
+                    'gameid' => $game->id,
+                    "playera" => $this->return_name_by_id($game->playeraid),
+                    'playerb' => $this->return_name_by_id($game->playerbid),
+                    'playeraresults' => $game->playeraresults,
+                    'playerbresults' => $game->playerbresults
+            ];
         }
-
-        $returnobject = [
-                'opengames' => $openreturngames,
-                'finishedgames' => $finishedreturngames,
-                'warnings' => $returnwarnings
-        ];
-
-        return $returnobject;
+        return $returngames;
     }
 
     /**
@@ -525,41 +492,41 @@ class mooduell {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function return_games_for_this_instance($studentview = false, $timemodified = -1) {
+    public function return_games_for_this_instance($studentview = false, $finished = false, $timemodified = -1) {
         global $DB;
         global $USER;
 
         $returnedgames = array();
 
-        $games = $DB->get_records('mooduell_games', [
-                'mooduellid' => $this->cm->instance
-        ]);
+        $instanceid = $this->cm->instance;
 
-        if ($games && count($games) > 0) {
+        $sql = "SELECT * FROM {mooduell_games} WHERE mooduellid = $instanceid";
 
-            foreach ($games as $gamedata) {
-
-                // If we only want to deal with games that were added since the last time we checked.
-                if ($timemodified > $gamedata->timemodified) {
-                    continue;
-                }
-
-                // If we are a student, we only want to include games where the user is active
-                // We only want to include games where the active user is involved.
-                if ($studentview) {
-                    if ($gamedata->playeraid != $USER->id && $gamedata->playerbid != $USER->id) {
-                        continue;
-                    }
-                }
-
-                // First we create a game instance for every game.
-                $game = new game_control($this, null, $gamedata);
-
-                $returnedgames[] = $game;
-            }
+        if ($studentview) {
+                $sql .= " AND (playeraid = $USER->id OR playerbid = $USER->id)";
+        };
+        if ($timemodified > 0) {
+            $sql .= " AND timemodified > $timemodified";
+        };
+        if ($finished === null) {
+            // do nothing -> return finished and unfinished games
+        } else if ($finished) {
+            $sql .= " AND status = 3";
+        } else {
+            $sql .= " AND status <> 3";
         }
 
-        return $returnedgames;
+        $games = $DB->get_records_sql($sql);
+
+        /*$games = $DB->get_records('mooduell_games', [
+                'mooduellid' => $this->cm->instance
+        ]);*/
+
+        if ($games && count($games) > 0) {
+            return $games;
+        } else {
+            return [];
+        }
     }
 
 
