@@ -86,14 +86,16 @@ $string['students'] = 'Studierende';
 $string['questions'] = 'Fragen';
 
 $string['stat_active_users'] = 'Aktive User*innen';
-$string['stat_games_played'] = 'Spiele gespielt';
+$string['stat_games_started'] = 'Spiele begonnen';
+$string['stat_games_finished'] = 'Spiele beendet';
 $string['stat_questions_answered'] = 'Fragen beantwortet';
 $string['stat_answered_correctly'] = 'Fragen richtig';
 $string['stat_easiest_question'] = 'Einfachste Frage';
 $string['stat_hardest_question'] = 'Schwierigste Frage';
 
 $string['stat_active_users_desc'] = 'So viele unterschiedliche Benutzer*innen haben bereits mindestens ein Spiel gestartet.';
-$string['stat_games_played_desc'] = 'So viele Spiele wurden bereits gespielt.';
+$string['stat_games_played_desc'] = 'So viele Spiele wurden bereits gestartet.';
+$string['stat_games_finished_desc'] = 'So viele Spiele wurden bereits beendet.';
 $string['stat_questions_answered_desc'] = 'So viele Antworten wurden bereits insgesamt abgegeben.';
 $string['stat_answered_correctly_desc'] = 'So viel Prozent der abgegebenen Antworten waren richtig.';
 $string['stat_easiest_question_desc1'] = 'Diese Frage wurde <b>';

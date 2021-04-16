@@ -1,6 +1,6 @@
 
 
-define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notification) {
+define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
     return {
         init: function () {
@@ -21,13 +21,13 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
             function loadHighScores() {
                 var id = getUrlParameter('id');
 
-                $('#hsspinner div').removeClass('hidden');
+                $('#spinner div').removeClass('hidden');
                 $('#highscorestable').addClass('hidden');
 
                 var downloadHighscores = '<div><a class="btn btn-primary" href="view.php?id=' +
                     id + '&action=downloadhighscores">Download Highscores</a></div>';
 
-
+                $('#spinner div').removeClass('hidden');
                 ajax.call([{
                     methodname: "mod_mooduell_load_highscore_data",
                     args: {
@@ -51,20 +51,23 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                         $('#highscorestable').html(tablebody);
                         $('#highscorestable').append(downloadHighscores);
 
-                        $('#hsspinner div').addClass('hidden');
+                        $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
                     },
-                    fail: notification.exception
+                    fail: function () {
+                        $('#spinner div').addClass('hidden');
+                        $('#highscorestable').removeClass('hidden');
+                    }
                 }]);
             }
 
             function loadQuestions() {
                 var id = getUrlParameter('id');
 
-                $('#qspinner div').removeClass('hidden');
+                $('#spinner div').removeClass('hidden');
                 $('#questionstable').addClass('hidden');
 
-
+                $('#spinner div').removeClass('hidden');
                 ajax.call([{
                     methodname: "mod_mooduell_load_questions_data",
                     args: {
@@ -92,12 +95,21 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                             });
                             warnings += '</ul>';
 
+                            var answers = '<ul>';
+                            item.answers.forEach(item => {
+
+                                var style = item.fraction > 0 ? ' style="font-weight:bold"' : '';
+
+                                answers += '<li><span' + style + '>' + item.answertext + '</span></li>';
+                            });
+                            answers += '</ul>';
+
                             tablebody += '<tr>' +
                                 '<td><a href="../../question/question.php?returnurl=/question/edit.php?courseid='+
                                 item.courseid + '&courseid='+ item.courseid + '&id='+ item.questionid + '">' +
                                item.questionid + '</a></td>' +
                                 '<td>' + image + '</td>' +
-                                '<td class="text-left">' + item.questiontext + '</td>' +
+                                '<td class="text-left">' + item.questiontext + answers + '</td>' +
                                 '<td class="text-right">' + item.questiontype + '</td>' +
                                 '<td class="text-right">' + strlength + '</td>' +
                                 '<td class="text-right">' + item.category + '</td>' +
@@ -106,20 +118,23 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '</tr>';
                         });
                         $('#questionstable tbody').html(tablebody);
-                        $('#qspinner div').addClass('hidden');
+                        $('#spinner div').addClass('hidden');
                         $('#questionstable').removeClass('hidden');
                     },
-                    fail: notification.exception
+                    fail: function () {
+                        $('#spinner div').addClass('hidden');
+                        $('#questionstable').removeClass('hidden');
+                    }
                 }]);
             }
 
             function loadOpengames() {
                 var id = getUrlParameter('id');
 
-                $('#ogspinner div').removeClass('hidden');
+                $('#spinner div').removeClass('hidden');
                 $('#opengamestable').addClass('hidden');
 
-
+                $('#spinner div').removeClass('hidden');
                 ajax.call([{
                     methodname: "mod_mooduell_load_opengames_data",
                     args: {
@@ -135,28 +150,32 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
                                 '<td>' + item.playerbresults + '</td>' +
-                                '<td><a href="view.php?action=viewquestions&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.id +
-                                '" data-role="deletefield">view</a>\n' +
+                                '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
+                                id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.gameid +
+                                '" data-role="viewfield">view</a>\n' +
                                 '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.id + '" data-role="deletefield">delete</a></td>' +
+                                '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>' +
                                 '</tr>';
                         });
                         $('#opengamestable tbody').html(tablebody);
-                        $('#ogspinner div').addClass('hidden');
+                        $('#spinner div').addClass('hidden');
                         $('#opengamestable').removeClass('hidden');
                     },
-                    fail: notification.exception
+                    fail: function () {
+                        $('#spinner div').addClass('hidden');
+                        $('#opengamestable').removeClass('hidden');
+                    }
                 }]);
             }
 
             function loadFinishedgames() {
                 var id = getUrlParameter('id');
 
-                $('#fgspinner div').removeClass('hidden');
+                $('#spinner div').removeClass('hidden');
                 $('#finishedgamestable').addClass('hidden');
 
-
+                $('#spinner div').removeClass('hidden');
                 ajax.call([{
                     methodname: "mod_mooduell_load_finishedgames_data",
                     args: {
@@ -172,17 +191,21 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
                                 '<td>' + item.playerbresults + '</td>' +
-                                '<td><a href="view.php?action=viewquestions&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.id + '" data-role="deletefield">view</a>\n' +
+                                '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
+                                id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.gameid + '" data-role="viewfield">view</a>\n' +
                                 '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.id + '" data-role="deletefield">delete</a></td>' +
+                                '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>' +
                                 '</tr>';
                         });
                         $('#finishedgamestable tbody').html(tablebody);
-                        $('#fgspinner div').addClass('hidden');
+                        $('#spinner div').addClass('hidden');
                         $('#finishedgamestable').removeClass('hidden');
                     },
-                    fail: notification.exception
+                    fail: function () {
+                        $('#spinner div').addClass('hidden');
+                        $('#finishedgamestable').removeClass('hidden');
+                    }
                 }]);
             }
 
@@ -208,6 +231,14 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                         break;
                 }
             });
+
+            // If we have a gameid param, we can unhide the table
+            var gameid = getUrlParameter('gameid');
+            if (gameid) {
+                $('#spinner div').addClass('hidden');
+                $('#questionstable').removeClass('hidden');
+            }
+
         },
     };
 });

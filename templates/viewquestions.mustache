@@ -29,3 +29,15 @@
 <h3>{{#str}} listofquestions, mod_mooduell {{/str}}</h3>
 
 {{> mooduell/table_questions_teacher }}
+
+<div class="d-flex justify-content-center" id="spinner">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+{{#js}}
+    require(['mod_mooduell/init_questions'], function($) {
+    $.init();
+    });
+{{/js}}

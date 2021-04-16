@@ -370,10 +370,8 @@ class mooduell {
 
         $questions = array();
 
-
         $listofquestions = $this->return_list_of_questions();
         $listofanswers = $this->return_list_of_answers();
-
 
         foreach ($listofquestions as $entry) {
             $newQuestion = new question_control($entry, $listofanswers);
@@ -933,10 +931,15 @@ class mooduell {
         $number_of_active_users = $DB->get_record_sql($sql)->active_users;
         $list_of_statistics['number_of_active_users'] = $number_of_active_users;
 
-        // number of MooDuell games played
+        // number of MooDuell games started
         $sql = "select count(*) games_played from {mooduell_games} where mooduellid = $mooduellid";
-        $number_of_games_played = $DB->get_record_sql($sql)->games_played;
-        $list_of_statistics['number_of_games_played'] = $number_of_games_played;
+        $number_of_games_started = $DB->get_record_sql($sql)->games_played;
+        $list_of_statistics['number_of_games_started'] = $number_of_games_started;
+
+        // number of MooDuell games played
+        $sql = "select count(*) games_finished from {mooduell_games} where mooduellid = $mooduellid and status = 3";
+        $number_of_games_finished = $DB->get_record_sql($sql)->games_finished;
+        $list_of_statistics['number_of_games_finished'] = $number_of_games_finished;
 
         // number of answers returned to MooDuell questions
         $sql = "select sum(s.answers) answers from

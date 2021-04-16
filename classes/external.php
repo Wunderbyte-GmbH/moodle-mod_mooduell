@@ -1049,6 +1049,10 @@ class mod_mooduell_external extends external_api {
                                 'status' => new external_value(PARAM_RAW, 'status'), // status
                                 'warnings' => new external_multiple_structure(new external_single_structure(array(
                                                 'message' => new external_value(PARAM_RAW, 'message'))
+                                )),
+                                'answers' => new external_multiple_structure(new external_single_structure(array(
+                                                'answertext' => new external_value(PARAM_RAW, 'answertext'),
+                                                'fraction' => new external_value(PARAM_RAW, 'fraction'))
                                 ))
                         )
                 )
