@@ -262,8 +262,8 @@ class mooduell {
             case null:
                 // Create the list of open games we can pass on to the renderer.
                 // $data = []; // $this->return_list_of_games();
-                $data['opengames'] = $this->return_list_of_games(false, false);
-                $data['finishedgames'] = $this->return_list_of_games(false, true);
+                $data['opengames'] = []; // $this->return_list_of_games(false, false);
+                $data['finishedgames'] = []; // $this->return_list_of_games(false, true);
                 $data['warnings'] = $this->check_quiz();
 
                 // Add the Name of the instance

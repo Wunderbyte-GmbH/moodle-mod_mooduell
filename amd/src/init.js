@@ -24,6 +24,10 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                 $('#hsspinner div').removeClass('hidden');
                 $('#highscorestable').addClass('hidden');
 
+                var downloadHighscores = '<div><a class="btn btn-primary" href="view.php?id=' +
+                    id + '&action=downloadhighscores">Download Highscores</a></div>';
+
+
                 ajax.call([{
                     methodname: "mod_mooduell_load_highscore_data",
                     args: {
@@ -45,6 +49,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '</tr>';
                         });
                         $('#highscorestable').html(tablebody);
+                        $('#highscorestable').append(downloadHighscores);
 
                         $('#hsspinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
@@ -130,6 +135,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
                                 '<td>' + item.playerbresults + '</td>' +
+                                '<td><a href="view.php?action=viewquestions&id=' + id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.id +
+                                '" data-role="deletefield">view</a>\n' +
+                                '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.id + '" data-role="deletefield">delete</a></td>' +
                                 '</tr>';
                         });
                         $('#opengamestable tbody').html(tablebody);
@@ -162,6 +172,10 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax, notifica
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
                                 '<td>' + item.playerbresults + '</td>' +
+                                '<td><a href="view.php?action=viewquestions&id=' + id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.id + '" data-role="deletefield">view</a>\n' +
+                                '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
+                                '" data-id="' + item.id + '" data-role="deletefield">delete</a></td>' +
                                 '</tr>';
                         });
                         $('#finishedgamestable tbody').html(tablebody);

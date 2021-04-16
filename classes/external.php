@@ -1106,7 +1106,8 @@ class mod_mooduell_external extends external_api {
                                 'playera' => new external_value(PARAM_RAW, 'player a name'),
                                 'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
                                 'playerb' => new external_value(PARAM_RAW, 'player b name'),
-                                'playerbresults' => new external_value(PARAM_RAW, 'player b results')
+                                'playerbresults' => new external_value(PARAM_RAW, 'player b results'),
+                                'gameid' => new external_value(PARAM_INT, 'id of game'),
                         )
                 )
         );
@@ -1164,7 +1165,8 @@ class mod_mooduell_external extends external_api {
                                 'playera' => new external_value(PARAM_RAW, 'player a name'),
                                 'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
                                 'playerb' => new external_value(PARAM_RAW, 'player b name'),
-                                'playerbresults' => new external_value(PARAM_RAW, 'player b results')
+                                'playerbresults' => new external_value(PARAM_RAW, 'player b results'),
+                                'gameid' => new external_value(PARAM_INT, 'id of game'),
                         )
                 )
         );
