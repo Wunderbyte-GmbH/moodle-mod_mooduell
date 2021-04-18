@@ -347,6 +347,8 @@ class mod_mooduell_external extends external_api {
                     } else {
                         $quizdetails['isteacher'] = 0;
                     }
+                } else {
+                    $quizdetails['isteacher'] = 0;
                 }
                 $returnedquizzes[] = $quizdetails;
             }
