@@ -127,5 +127,20 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021040200, 'mooduell');
     }
 
+    if ($oldversion < 2021041305) {
+        // Define field waitinglist to be added to booking_answers.
+        $table = new xmldb_table('mooduell');
+
+        $field = new xmldb_field('content', XMLDB_TYPE_TEXT, null, null, null, null, null, 'introformat');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021041305, 'mooduell');
+    }
+
+
     return true;
 }

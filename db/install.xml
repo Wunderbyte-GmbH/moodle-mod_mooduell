@@ -14,6 +14,7 @@
                 <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
                 <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="The format of the intro field."/>
+                <FIELD NAME="content" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Content text"/>
                 <FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
                        COMMENT="ID of the quiz this mooduell instance is linked to. Null until quiz is linked to mooduell."/>
                 <FIELD NAME="usefullnames" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
