@@ -256,15 +256,15 @@ class mod_mooduell_external extends external_api {
                 foreach ($games as $game) {
 
                     $quiz['games'][] = [
-                            'gameid' => $game->gamedata->gameid,
-                            'playeraid' => $game->gamedata->playeraid,
-                            'playerbid' => $game->gamedata->playerbid,
-                            'playeratime' => $game->gamedata->playeratime,
-                            'playerbtime' => $game->gamedata->playerbtime,
-                            'winnerid' => $game->gamedata->winnerid,
-                            'status' => $game->gamedata->status,
-                            'timecreated' => $game->gamedata->timecreated,
-                            'timemodified' => $game->gamedata->timemodified
+                            'gameid' => $game->id,
+                            'playeraid' => $game->playeraid,
+                            'playerbid' => $game->playerbid,
+                            'playeratime' => $game->playeratime,
+                            'playerbtime' => $game->playerbtime,
+                            'winnerid' => $game->winnerid,
+                            'status' => $game->status,
+                            'timecreated' => $game->timecreated,
+                            'timemodified' => $game->timemodified
                     ];
                 }
             } else {
