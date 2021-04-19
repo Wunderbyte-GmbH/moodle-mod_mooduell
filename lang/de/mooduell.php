@@ -51,7 +51,7 @@ $string['xseconds'] = '{$a} Sekunden';
 $string['showcontinuebutton'] = 'Zeige "Weiter"-Button';
 $string['showcorrectanswer'] = 'Zeige die korrekten Antworten';
 $string['waitfornextquestion'] = 'Zeit um die korrekten Antworten zu sehen.';
-$string['clicktomoveon'] = 'Warte bis zum nächsten KLick.';
+$string['clicktomoveon'] = 'Warte bis zum nächsten Klick';
 
 $string['pluginadministration'] = 'Plugin Administration';
 $string['questionscategory'] = 'Kategorie für Zufallsfragen';
