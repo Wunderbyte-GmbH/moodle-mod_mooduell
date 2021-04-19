@@ -51,7 +51,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                                 '</tr>';
                         });
                         $('#highscorestable').html(tablebody);
-                        $('#highscorestable').parent().after(downloadHighscores);
+
+                        // only show the Download button in teacher view
+                        if (role === 'teacher'){
+                            $('#highscorestable').parent().after(downloadHighscores);
+                        }
 
                         $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
