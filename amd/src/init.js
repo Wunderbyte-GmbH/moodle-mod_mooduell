@@ -39,11 +39,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                         res.forEach(item => {
                             tablebody += '<tr>' +
-                                '<td>' + item.username + '</td>' +
+                                '<td class="text-right">' + item.rank + '</td>' +
+                                '<td class="text-left" >' + item.username + '</td>' +
                                 '<td class="text-right">' + item.gamesplayed + '</td>' +
                                 '<td class="text-right">' + item.gameswon + '</td>' +
                                 '<td class="text-right">' + item.gameslost + '</td>' +
-                                '<td class="text-right">' + item.rank + '</td>' +
                                 '<td class="text-right">' + item.score + '</td>' +
                                 '<td class="text-right">' + item.correct + '</td>' +
                                 '<td class="text-right">' + item.correctpercentage + '%</td>' +

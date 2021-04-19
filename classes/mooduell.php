@@ -302,11 +302,12 @@ class mooduell {
                 break;
             case 'downloadhighscores':
                 $listofhighscores = $this->return_list_of_highscores();
-                $headline = [get_string('username', 'mod_mooduell'),
+                $headline = [
+                        get_string('rank', 'mod_mooduell'),
+                        get_string('username', 'mod_mooduell'),
                         get_string('gamesplayed', 'mod_mooduell'),
                         get_string('gameswon', 'mod_mooduell'),
                         get_string('gameslost', 'mod_mooduell'),
-                        get_string('rank', 'mod_mooduell'),
                         get_string('score', 'mod_mooduell'),
                         get_string('correctlyanswered', 'mod_mooduell'),
                         get_string('correctlyansweredpercentage', 'mod_mooduell')
@@ -400,11 +401,11 @@ class mooduell {
         foreach ($list as $entry) {
             $entry = (object) $entry;
             $returnarray[] = [
+                    'rank' => $entry->rank,
                     'username' => $this->return_name_by_id($entry->userid),
                     'gamesplayed' => $entry->played,
                     'gameswon' => $entry->won,
                     'gameslost' => $entry->lost,
-                    'rank' => $entry->rank,
                     'score' => $entry->score,
                     'correct' => $entry->correct,
                     'correctpercentage' => $entry->correctpercentage,
@@ -755,7 +756,7 @@ class mooduell {
         foreach($array_without_ranks as $record){
             $index++;
             // same rank if the scores are the same
-            if ($previous_score !== false && $previous_rank !== false && $previous_score == $record['score']){
+            if ($previous_score == $record['score']){
                 $record['rank'] = $previous_rank;
             }
             // in all other cases use index as rank

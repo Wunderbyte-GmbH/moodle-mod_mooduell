@@ -27,11 +27,11 @@
 <table class="generaltable fullwidth fieldslist">
     <thead>
     <tr>
-        <th scope="col">{{#str}} username, mod_mooduell {{/str}}</th>
+        <th class="text-right" scope="col">{{#str}} rank, mod_mooduell {{/str}}</th>
+        <th class="text-left"  scope="col">{{#str}} username, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} gamesplayed, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} gameswon, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} gameslost, mod_mooduell {{/str}}</th>
-        <th class="text-right" scope="col">{{#str}} rank, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} score, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} correctlyanswered, mod_mooduell {{/str}}</th>
         <th class="text-right" scope="col">{{#str}} correctlyansweredpercentage, mod_mooduell {{/str}}</th>
@@ -40,11 +40,11 @@
     <tbody id="highscorestable">
     {{#highscores}}
         <tr class="field">
-            <td>{{username}}</td>
+            <td class="text-right">{{rank}}</td>
+            <td class="text-left" >{{username}}</td>
             <td class="text-right">{{gamesplayed}}</td>
             <td class="text-right">{{gameswon}}</td>
             <td class="text-right">{{gameslost}}</td>
-            <td class="text-right">{{rank}}</td>
             <td class="text-right">{{score}}</td>
             <td class="text-right">{{correct}}</td>
             <td class="text-right">{{correctpercentage}} %</td>
