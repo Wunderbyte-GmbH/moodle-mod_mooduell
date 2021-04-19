@@ -755,7 +755,7 @@ class mooduell {
         foreach($array_without_ranks as $record){
             $index++;
             // same rank if the scores are the same
-            if ($previous_score && $previous_rank && $previous_score == $record['score']){
+            if ($previous_score !== false && $previous_rank !== false && $previous_score == $record['score']){
                 $record['rank'] = $previous_rank;
             }
             // in all other cases use index as rank
