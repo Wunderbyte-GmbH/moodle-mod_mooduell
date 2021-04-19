@@ -126,6 +126,7 @@ $string['rank'] = 'Platz';
 $string['score'] = 'Punkte';
 $string['correctlyanswered'] = 'Korrekt';
 $string['correctlyansweredpercentage'] = '% korrekt';
+$string['questions_played'] = 'Fragen beantwortet';
 
 $string['downloadhighscores'] = 'Lade Highscores als csv Datei';
 

@@ -128,6 +128,7 @@ $string['rank'] = 'Ranking';
 $string['score'] = 'Score';
 $string['correctlyanswered'] = 'Correctly answered';
 $string['correctlyansweredpercentage'] = '% correctly answered';
+$string['questions_played'] = 'Questions answered';
 
 $string['downloadhighscores'] = 'Download highscores as csv file';
 

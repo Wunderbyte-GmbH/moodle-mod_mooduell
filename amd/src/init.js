@@ -3,7 +3,7 @@
 define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
     return {
-        init: function () {
+        init: function (role='undefined') {
             var getUrlParameter = function getUrlParameter(sParam) {
                 var sPageURL = window.location.search.substring(1),
                     sURLVariables = sPageURL.split('&'),
@@ -18,13 +18,14 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 return false;
             };
 
-            function loadHighScores() {
+            function loadHighScores(role='undefined') {
                 var id = getUrlParameter('id');
+                var role = role;
 
                 $('#spinner div').removeClass('hidden');
                 $('#highscorestable').addClass('hidden');
 
-                var downloadHighscores = '<div><a class="btn btn-primary" href="view.php?id=' +
+                var downloadHighscores = '<div style="margin-top: 20px;"><a class="btn btn-primary" href="view.php?id=' +
                     id + '&action=downloadhighscores">Download Highscores</a></div>';
 
                 $('#spinner div').removeClass('hidden');
@@ -50,7 +51,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                                 '</tr>';
                         });
                         $('#highscorestable').html(tablebody);
-                        $('#highscorestable').append(downloadHighscores);
+
+                        // only show the Download button in teacher view
+                        if (role === 'teacher'){
+                            $('#highscorestable').append(downloadHighscores);
+                        }
 
                         $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
@@ -219,7 +224,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 }
                 switch (tabname[1]) {
                     case 'highscores':
-                        loadHighScores();
+                        loadHighScores(role);
                         break;
                     case 'questions':
                         loadQuestions();

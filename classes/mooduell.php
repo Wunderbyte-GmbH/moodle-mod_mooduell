@@ -310,7 +310,8 @@ class mooduell {
                         get_string('gameslost', 'mod_mooduell'),
                         get_string('score', 'mod_mooduell'),
                         get_string('correctlyanswered', 'mod_mooduell'),
-                        get_string('correctlyansweredpercentage', 'mod_mooduell')
+                        get_string('correctlyansweredpercentage', 'mod_mooduell'),
+                        get_string('questions_played', 'mod_mooduell')
                         ];
                 $this->export_data_as_csv($headline, $listofhighscores);
         }
