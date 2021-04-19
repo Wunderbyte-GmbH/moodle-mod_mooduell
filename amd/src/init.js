@@ -50,7 +50,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                                 '</tr>';
                         });
                         $('#highscorestable').html(tablebody);
-                        $('#highscorestable').append(downloadHighscores);
+                        $('#highscorestable').parent().after(downloadHighscores);
 
                         $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
