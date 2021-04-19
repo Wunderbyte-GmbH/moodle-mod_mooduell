@@ -103,6 +103,7 @@ $string['stat_easiest_question_desc2'] = ' Mal</b> richtig beantwortet.';
 $string['stat_hardest_question_desc1'] = 'Diese Frage wurde <b>';
 $string['stat_hardest_question_desc2'] = ' Mal</b> falsch beantwortet.';
 $string['stat_edit_question'] = 'Frage bearbeiten';
+$string['stat_question_undefined'] = 'Kann noch nicht festgestellt werden.';
 
 $string['questionid'] = 'ID';
 $string['questiontext'] = 'Text';

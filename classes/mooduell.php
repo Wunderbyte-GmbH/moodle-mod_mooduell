@@ -956,9 +956,14 @@ class mooduell {
                 union all
                 select count(playerbanswered) correct_answers from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s";
         $number_of_correct_answers = $DB->get_record_sql($sql)->correct_answers;
-        // step 2: calculate the percentage
-        $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_answers )* 100), 1);
-        $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
+
+        if(!empty($number_of_correct_answers)){
+            // step 2: calculate the percentage
+            $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_answers )* 100), 1);
+            $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
+        } else {
+            $list_of_statistics['percentage_of_correct_answers'] = false;
+        }
 
         // easiest question = question which has been answered correctly most often
         $sql = "select s.questionid, q.name questionname, count(*) correct_count from
@@ -970,10 +975,17 @@ class mooduell {
                 group by s.questionid
                 order by correct_count desc
                 limit 1";
+
+        $list_of_statistics['eq_id'] = false;
+        $list_of_statistics['eq_name'] = "";
+        $list_of_statistics['eq_correct_count'] = 0;
+
         $entry = $DB->get_record_sql($sql);
-        $list_of_statistics['eq_id'] = $entry->questionid;
-        $list_of_statistics['eq_name'] = $entry->questionname;
-        $list_of_statistics['eq_correct_count'] = $entry->correct_count;
+        if(!empty($entry)) {
+            $list_of_statistics['eq_id'] = $entry->questionid;
+            $list_of_statistics['eq_name'] = $entry->questionname;
+            $list_of_statistics['eq_correct_count'] = $entry->correct_count;
+        }
 
         // hardest question = question which has been answered incorrectly most often
         $sql = "select s.questionid, q.name questionname, count(*) incorrect_count from
@@ -985,10 +997,17 @@ class mooduell {
                 group by s.questionid
                 order by incorrect_count desc
                 limit 1";
+
+        $list_of_statistics['hq_id'] = false;
+        $list_of_statistics['hq_name'] = "";
+        $list_of_statistics['hq_incorrect_count'] = 0;
+
         $entry = $DB->get_record_sql($sql);
-        $list_of_statistics['hq_id'] = $entry->questionid;
-        $list_of_statistics['hq_name'] = $entry->questionname;
-        $list_of_statistics['hq_incorrect_count'] = $entry->incorrect_count;
+        if(!empty($entry)){
+            $list_of_statistics['hq_id'] = $entry->questionid;
+            $list_of_statistics['hq_name'] = $entry->questionname;
+            $list_of_statistics['hq_incorrect_count'] = $entry->incorrect_count;
+        }
 
         return $list_of_statistics;
     }

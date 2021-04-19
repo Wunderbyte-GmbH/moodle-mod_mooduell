@@ -60,7 +60,10 @@
     <div class="card-deck" style="margin-top: 25px; margin-bottom: 25px; text-align: center;">
         <div class="card bg-success text-white">
             <div class="card-body">
-                <h1 class="card-title" style="font-size: 85px;">{{percentage_of_correct_answers}}%</h1>
+                <h1 class="card-title" style="font-size: 85px;">
+                    {{#percentage_of_correct_answers}}{{.}}%{{/percentage_of_correct_answers}}
+                    {{^percentage_of_correct_answers}}0%{{/percentage_of_correct_answers}}
+                </h1>
                 <p class="card-text" style="font-size: 30px;">{{#str}} stat_answered_correctly, mod_mooduell {{/str}}</p>
                 <p class="card-text"><small>{{#str}} stat_answered_correctly_desc, mod_mooduell {{/str}}</small></p>
             </div>
@@ -68,27 +71,37 @@
         <div class="card">
             <div class="card-body bg-info text-white">
                 <h1 class="card-title">{{#str}} stat_easiest_question, mod_mooduell {{/str}}</h1>
-                <p class="card-text text-white" style="font-size: 20px;">{{eq_name}}</p>
-                <p class="card-text"><small>
-                    {{#str}} stat_easiest_question_desc1, mod_mooduell {{/str}}{{eq_correct_count}}{{#str}} stat_easiest_question_desc2, mod_mooduell {{/str}}
-                </small></p>
-                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{eq_id}}"
+                {{#eq_id}}
+                    <p class="card-text text-white" style="font-size: 20px;">{{eq_name}}</p>
+                    <p class="card-text"><small>
+                        {{#str}} stat_easiest_question_desc1, mod_mooduell {{/str}}{{eq_correct_count}}{{#str}} stat_easiest_question_desc2, mod_mooduell {{/str}}
+                    </small></p>
+                    <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{eq_id}}"
                     target="_blank" class="btn btn-primary bg-light text-info" style="border-style: none;">
-                {{#str}} stat_edit_question, mod_mooduell {{/str}}
-                </a>
+                    {{#str}} stat_edit_question, mod_mooduell {{/str}}
+                    </a>
+                {{/eq_id}}
+                {{^eq_id}}
+                    {{#str}} stat_question_undefined, mod_mooduell {{/str}}
+                {{/eq_id}}
             </div>
         </div>
         <div class="card">
             <div class="card-body bg-danger text-white">
                 <h1 class="card-title">{{#str}} stat_hardest_question, mod_mooduell {{/str}}</h1>
-                <p class="card-text text-white" style="font-size: 20px;">{{hq_name}}</p>
-                <p class="card-text"><small>
-                    {{#str}} stat_hardest_question_desc1, mod_mooduell {{/str}}{{hq_incorrect_count}}{{#str}} stat_hardest_question_desc2, mod_mooduell {{/str}}
-                </small></p>
-                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{hq_id}}"
-                    target="_blank" class="btn btn-primary bg-light text-danger" style="border-style: none;">
-                {{#str}} stat_edit_question, mod_mooduell {{/str}}
-                </a>
+                {{#hq_id}}
+                    <p class="card-text text-white" style="font-size: 20px;">{{hq_name}}</p>
+                    <p class="card-text"><small>
+                        {{#str}} stat_hardest_question_desc1, mod_mooduell {{/str}}{{hq_incorrect_count}}{{#str}} stat_hardest_question_desc2, mod_mooduell {{/str}}
+                    </small></p>
+                    <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{hq_id}}"
+                        target="_blank" class="btn btn-primary bg-light text-danger" style="border-style: none;">
+                    {{#str}} stat_edit_question, mod_mooduell {{/str}}
+                    </a>
+                {{/hq_id}}
+                {{^hq_id}}
+                    {{#str}} stat_question_undefined, mod_mooduell {{/str}}
+                {{/hq_id}}
             </div>
         </div>
     </div>

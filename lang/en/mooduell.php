@@ -105,6 +105,7 @@ $string['stat_easiest_question_desc2'] = ' times</b>.';
 $string['stat_hardest_question_desc1'] = 'This question was answered incorrectly <b>';
 $string['stat_hardest_question_desc2'] = ' times</b>.';
 $string['stat_edit_question'] = 'Edit question';
+$string['stat_question_undefined'] = 'Cannot be determined yet.';
 
 $string['questionid'] = 'ID';
 $string['questiontext'] = 'Text';
