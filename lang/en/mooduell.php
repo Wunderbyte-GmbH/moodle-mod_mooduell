@@ -120,12 +120,13 @@ $string['downloaduniviemoduell'] = 'Dowload your app and start playing now!';
 $string['univiemooduellappstore'] = 'Get it on Apple App Store:';
 $string['univiemooduellplaystore'] = 'Get it on Google Play Store:';
 
-$string['username'] = 'name';
-$string['gamesplayed'] = 'games played';
-$string['gameswon'] = 'games won';
-$string['gameslost'] = 'games lost';
-$string['score'] = 'score';
-$string['correctlyanswered'] = 'correctly answered';
+$string['username'] = 'Name';
+$string['gamesplayed'] = 'Games played';
+$string['gameswon'] = 'Games won';
+$string['gameslost'] = 'Games lost';
+$string['rank'] = 'Ranking';
+$string['score'] = 'Score';
+$string['correctlyanswered'] = 'Correctly answered';
 $string['correctlyansweredpercentage'] = '% correctly answered';
 
 $string['downloadhighscores'] = 'Download highscores as csv file';

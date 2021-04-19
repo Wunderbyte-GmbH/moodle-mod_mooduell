@@ -997,6 +997,7 @@ class mod_mooduell_external extends external_api {
                                 'gamesplayed' => new external_value(PARAM_INT, 'played'),
                                 'gameswon' => new external_value(PARAM_INT, 'won'), // games won
                                 'gameslost' => new external_value(PARAM_INT, 'lost'), // games lost
+                                'rank' => new external_value(PARAM_INT, 'rank'), // games played
                                 'score' => new external_value(PARAM_INT, 'firstname'), // games played
                                 'correct' => new external_value(PARAM_INT, 'correct'), // games played
                                 'correctpercentage' => new external_value(PARAM_FLOAT, 'percentagecorrect')

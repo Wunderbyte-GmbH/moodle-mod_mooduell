@@ -306,6 +306,7 @@ class mooduell {
                         get_string('gamesplayed', 'mod_mooduell'),
                         get_string('gameswon', 'mod_mooduell'),
                         get_string('gameslost', 'mod_mooduell'),
+                        get_string('rank', 'mod_mooduell'),
                         get_string('score', 'mod_mooduell'),
                         get_string('correctlyanswered', 'mod_mooduell'),
                         get_string('correctlyansweredpercentage', 'mod_mooduell')
@@ -403,6 +404,7 @@ class mooduell {
                     'gamesplayed' => $entry->played,
                     'gameswon' => $entry->won,
                     'gameslost' => $entry->lost,
+                    'rank' => $entry->rank,
                     'score' => $entry->score,
                     'correct' => $entry->correct,
                     'correctpercentage' => $entry->correctpercentage,
@@ -630,7 +632,7 @@ class mooduell {
             $playerb->correct = $entry->playerbcorrect;
 
             // If we updated from the old version, we have null as default at this place...
-            // ... and we have to calculate the qplaed
+            // ... and we have to calculate the qplayed
             if (!$entry->playeraqplayed) {
                 $notplayed = substr_count($entry->playeraresults, '-');
                 $playera->qplayed = 9 - $notplayed;
@@ -647,13 +649,16 @@ class mooduell {
                 $playerb->qplayed = $entry->playerbqplayed;
             }
 
+            //Player A
             $playera->played = 0; // games played
-            $playerb->played = 0; // games played
             $playera->won = 0;
             $playera->lost = 0;
-            $playerb->lost = 0;
-            $playerb->won = 0;
             $playera->score = 0;
+
+            //Player B
+            $playerb->played = 0; // games played
+            $playerb->won = 0;
+            $playerb->lost = 0;
             $playerb->score = 0;
 
             if ($entry->status == 3) {
@@ -710,7 +715,7 @@ class mooduell {
                 self::add_score($temparray[$entry->playerbid], $playerb);
             }
         }
-        $returnarray = [];
+        $array_without_ranks = [];
         arsort($nemesis);
         foreach ($temparray as $key => $value) {
 
@@ -737,13 +742,32 @@ class mooduell {
             }
 
             $entry['nemesis'] = reset($nemesis);
-            $returnarray[] = $entry;
+            $array_without_ranks[] = $entry;
         }
 
-        usort($returnarray, self::build_sorter('score'));
+        usort($array_without_ranks, self::build_sorter('score'));
 
-        return $returnarray;
+        // now add the correct ranks to the sorted array
+        $array_with_ranking = [];
+        $previous_score = false;
+        $previous_rank = false;
+        $index = 0;
+        foreach($array_without_ranks as $record){
+            $index++;
+            // same rank if the scores are the same
+            if ($previous_score && $previous_rank && $previous_score == $record['score']){
+                $record['rank'] = $previous_rank;
+            }
+            // in all other cases use index as rank
+            else {
+                $record['rank'] = $index;
+            }
+            $previous_score = $record['score'];
+            $previous_rank = $record['rank'];
+            $array_with_ranking[] = $record;
+        }
 
+        return $array_with_ranking;
     }
 
     /**

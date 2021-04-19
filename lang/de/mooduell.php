@@ -122,6 +122,7 @@ $string['username'] = 'Name';
 $string['gamesplayed'] = 'Gespielte Spiele';
 $string['gameswon'] = 'Gewonnene Spiele';
 $string['gameslost'] = 'Verlorene Spiele';
+$string['rank'] = 'Platz';
 $string['score'] = 'Punkte';
 $string['correctlyanswered'] = 'Korrekt';
 $string['correctlyansweredpercentage'] = '% korrekt';
