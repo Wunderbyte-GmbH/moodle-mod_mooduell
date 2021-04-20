@@ -31,27 +31,21 @@
         <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
         <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
-        <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
     </tr>
     </thead>
-    <tbody>
-    {{#finishedgames}}
-        <tr class="field">
-            <td>{{playera}}</td>
-            <td>{{playeraresults}}</td>
-            <td>{{playerb}}</td>
-            <td>{{playerbresults}}</td>
-            <td class="text-right">
-                {{! <a href="{{editfieldurl}" data-role="editfield">{{#pix}
-                    t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                <a href="view.php?action=delete&id={{mooduellid}}&gameid={{gameid}}" data-id="{{id}}" data-role="deletefield">{{#pix}}
-                t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
-            </td>
-        </tr>
-    {{/finishedgames}}
-    </tbody>
-</table>
 
-{{^finishedgames}}
-    {{#str}} noopengames, mod_mooduell {{/str}}
-{{/finishedgames}}
+    <!-- this table body will be dynamically filled by an AJAX function in init.js -->
+    <tbody/>
+
+    <!-- template without AJAX (students view without action links): -->
+    <!-- <tbody>
+    {{! #finishedgames}}
+        <tr class="field">
+            <td>{{! playera}}</td>
+            <td>{{! playeraresults}}</td>
+            <td>{{! playerb}}</td>
+            <td>{{! playerbresults}}</td>
+        </tr>
+    {{! /finishedgames}}
+    </tbody> -->
+</table>

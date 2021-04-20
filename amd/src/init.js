@@ -134,8 +134,9 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 }]);
             }
 
-            function loadOpengames() {
+            function loadOpengames(role='undefined') {
                 var id = getUrlParameter('id');
+                var role = role;
 
                 $('#spinner div').removeClass('hidden');
                 $('#opengamestable').addClass('hidden');
@@ -155,14 +156,17 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                                 '<td>' + item.playera + '</td>' +
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
-                                '<td>' + item.playerbresults + '</td>' +
-                                '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
-                                id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.gameid +
-                                '" data-role="viewfield">view</a>\n' +
-                                '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>' +
-                                '</tr>';
+                                '<td>' + item.playerbresults + '</td>';
+                            if (role === 'teacher'){
+                                tablebody +=
+                                    '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
+                                    id + '&gameid=' + item.gameid +
+                                    '" data-id="' + item.gameid +
+                                    '" data-role="viewfield">view</a>\n' +
+                                    '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
+                                    '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>';
+                            }
+                            tablebody += '</tr>';
                         });
                         $('#opengamestable tbody').html(tablebody);
                         $('#spinner div').addClass('hidden');
@@ -175,8 +179,9 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 }]);
             }
 
-            function loadFinishedgames() {
+            function loadFinishedgames(role='undefined') {
                 var id = getUrlParameter('id');
+                var role = role;
 
                 $('#spinner div').removeClass('hidden');
                 $('#finishedgamestable').addClass('hidden');
@@ -196,13 +201,16 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                                 '<td>' + item.playera + '</td>' +
                                 '<td>' + item.playeraresults + '</td>' +
                                 '<td>' + item.playerb + '</td>' +
-                                '<td>' + item.playerbresults + '</td>' +
-                                '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
-                                id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.gameid + '" data-role="viewfield">view</a>\n' +
-                                '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
-                                '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>' +
-                                '</tr>';
+                                '<td>' + item.playerbresults + '</td>';
+                            if (role === 'teacher') {
+                                tablebody +=
+                                    '<td class="text-right"><a href="view.php?action=viewquestions&id=' +
+                                    id + '&gameid=' + item.gameid +
+                                    '" data-id="' + item.gameid + '" data-role="viewfield">view</a>\n' +
+                                    '                <a href="view.php?action=delete&id=' + id + '&gameid=' + item.gameid +
+                                    '" data-id="' + item.gameid + '" data-role="deletefield">delete</a></td>';
+                            }
+                            tablebody += '</tr>';
                         });
                         $('#finishedgamestable tbody').html(tablebody);
                         $('#spinner div').addClass('hidden');
@@ -230,10 +238,10 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                         loadQuestions();
                         break;
                     case 'opengames':
-                        loadOpengames();
+                        loadOpengames(role);
                         break;
                     case 'finishedgames':
-                        loadFinishedgames();
+                        loadFinishedgames(role);
                         break;
                 }
             });

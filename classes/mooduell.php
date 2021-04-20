@@ -292,11 +292,11 @@ class mooduell {
                 break;
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
-                $data['opengames'] = $this->return_games_for_this_instance(true, false);
-                $data['finishedgames'] = $this->return_games_for_this_instance(true, true);
+                $data['opengames'] = []; //$this->return_games_for_this_instance(true, false);
+                $data['finishedgames'] = []; //$this->return_games_for_this_instance(true, true);
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
-                $data['highscores'] = $this->return_list_of_highscores();
+                $data['highscores'] = []; //$this->return_list_of_highscores();
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;
@@ -335,7 +335,6 @@ class mooduell {
     public function return_list_of_games($student = false, $finished = null, $timemodified = 0) {
 
         global $DB;
-
 
         $games = $this->return_games_for_this_instance($student, $finished, $timemodified);
 
@@ -498,8 +497,6 @@ class mooduell {
         global $DB;
         global $USER;
 
-        $returnedgames = array();
-
         $instanceid = $this->cm->instance;
 
         $sql = "SELECT * FROM {mooduell_games} WHERE mooduellid = $instanceid";
@@ -519,10 +516,6 @@ class mooduell {
         }
 
         $games = $DB->get_records_sql($sql);
-
-        /*$games = $DB->get_records('mooduell_games', [
-                'mooduellid' => $this->cm->instance
-        ]);*/
 
         if ($games && count($games) > 0) {
             return $games;
