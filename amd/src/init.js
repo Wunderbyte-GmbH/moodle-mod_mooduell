@@ -54,7 +54,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                         // only show the Download button in teacher view
                         if (role === 'teacher'){
-                            $('#highscorestable').parent().after(downloadHighscores);
+                            $('#hsdownloadbutton').html(downloadHighscores);
                         }
 
                         $('#spinner div').addClass('hidden');
