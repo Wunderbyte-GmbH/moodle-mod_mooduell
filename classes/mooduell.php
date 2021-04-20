@@ -294,9 +294,9 @@ class mooduell {
                 // Create the list of open games we can pass on to the renderer.
                 $data['opengames'] = []; //$this->return_games_for_this_instance(true, false);
                 $data['finishedgames'] = []; //$this->return_games_for_this_instance(true, true);
+                $data['highscores'] = []; //$this->return_list_of_highscores();
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
-                $data['highscores'] = []; //$this->return_list_of_highscores();
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;
