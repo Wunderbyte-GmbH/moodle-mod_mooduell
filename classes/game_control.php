@@ -189,7 +189,7 @@ class game_control {
 
                     // If we updated from the old version, we have null as default at this place...
                     // ... and we have to calculate the qplaed
-                    if (!$entry->playeraqplayed) {
+                    if ($entry->playeraqplayed === null) {
                         $playedquestions += 9 - substr_count('-',$entry->playeraresults);
                     } else {
                         $playedquestions += $entry->playeraqplayed;
@@ -199,8 +199,8 @@ class game_control {
                     $correctlyanswered += $entry->playerbcorrect;
 
                     // If we updated from the old version, we have null as default at this place...
-                    // ... and we have to calculate the qplaed
-                    if (!$entry->playerbqplayed) {
+                    // ... and we have to calculate the qplayed
+                    if ($entry->playerbqplayed === null) {
                         $playedquestions += 9 - substr_count('-',$entry->playerbresults);
                     } else {
                         $playedquestions += $entry->playerbqplayed;
