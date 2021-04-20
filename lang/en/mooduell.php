@@ -93,7 +93,14 @@ $string['stat_questions_answered'] = 'Questions answered';
 $string['stat_answered_correctly'] = 'Correct answers';
 $string['stat_easiest_question'] = 'Easiest question';
 $string['stat_hardest_question'] = 'Hardest question';
-
+$string['stat_question_undefined'] = 'Cannot be determined yet.';
+$string['stat_edit_question'] = 'Edit question';
+$string['stat_student_opponents'] = 'Opponents';
+$string['stat_student_open_games'] = 'Open games';
+$string['stat_student_finished_games'] = 'Finished games';
+$string['stat_student_games_won'] = 'Games won';
+$string['stat_student_correct_answers'] = 'Correct answers';
+$string['stat_student_correct_percentage'] = 'Correctly answered';
 
 $string['stat_active_users_desc'] = 'That\'s the number of different users who have started at least one game yet.';
 $string['stat_games_started_desc'] = 'That\'s how many games have been started yet.';
@@ -104,8 +111,12 @@ $string['stat_easiest_question_desc1'] = 'This question was answered correctly <
 $string['stat_easiest_question_desc2'] = ' times</b>.';
 $string['stat_hardest_question_desc1'] = 'This question was answered incorrectly <b>';
 $string['stat_hardest_question_desc2'] = ' times</b>.';
-$string['stat_edit_question'] = 'Edit question';
-$string['stat_question_undefined'] = 'Cannot be determined yet.';
+$string['stat_student_opponents_desc'] = 'That\'s the number of different users you have already played against.';
+$string['stat_student_open_games_desc'] = 'That\'s the number of games you\'re currently playing.';
+$string['stat_student_finished_games_desc'] = 'That\'s the number of games you have already finished.';
+$string['stat_student_games_won_desc'] = 'That\'s the number of games you have won.';
+$string['stat_student_correct_answers_desc'] = 'That\'s the number of questions you have answered correctly.';
+$string['stat_student_correct_percentage_desc'] = 'That\'s the percentage of questions you have answered correctly.';
 
 $string['questionid'] = 'ID';
 $string['questiontext'] = 'Text';

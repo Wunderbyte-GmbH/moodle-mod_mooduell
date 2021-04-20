@@ -28,6 +28,7 @@ use coding_exception;
 use context_module;
 use core_customfield\category;
 use dml_exception;
+use mod_mooduell\game_control;
 use mod_mooduell\output\viewpage;
 use mod_mooduell\output\viewpagestudents;
 use mod_mooduell\output\viewquestions;
@@ -273,7 +274,7 @@ class mooduell {
                 $data['questions'] = []; // $this->return_list_of_all_questions_in_quiz();
                 $data['highscores'] = []; // $this->return_list_of_highscores();
                 $data['categories'] = $this->return_list_of_categories();
-                $data['statistics'] = $this->return_list_of_statistics();
+                $data['statistics'] = $this->return_list_of_statistics_teacher();
                 // Use the viewpage renderer template
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpage($viewpage);
@@ -292,6 +293,7 @@ class mooduell {
                 break;
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
+                $data['statistics'] = $this->return_list_of_statistics_student();
                 $data['opengames'] = []; //$this->return_games_for_this_instance(true, false);
                 $data['finishedgames'] = []; //$this->return_games_for_this_instance(true, true);
                 $data['highscores'] = []; //$this->return_list_of_highscores();
@@ -614,7 +616,7 @@ class mooduell {
 
 
         $temparray = [];
-        $nemesis = [];
+        //$nemesis = [];
 
         foreach ($data as $entry) {
             // Get the scores.
@@ -688,15 +690,14 @@ class mooduell {
                 }
 
                 // If the game is not a draw and active User is not the winner...
-                if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
+                /*if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
 
                     if (!array_key_exists($entry->winnerid, $nemesis)) {
                         $nemesis[$entry->winnerid] = 1;
                     } else {
                         ++$nemesis[$entry->winnerid];
                     }
-
-                }
+                }*/
             }
 
             if (!array_key_exists($entry->playeraid, $temparray)) {
@@ -711,7 +712,7 @@ class mooduell {
             }
         }
         $array_without_ranks = [];
-        arsort($nemesis);
+        //arsort($nemesis);
         foreach ($temparray as $key => $value) {
 
             // if quizid = 0, we only return active user, else we return all users
@@ -736,7 +737,7 @@ class mooduell {
                 $entry['qplayed'] = 0;
             }
 
-            $entry['nemesis'] = reset($nemesis);
+            //$entry['nemesis'] = reset($nemesis);
             $array_without_ranks[] = $entry;
         }
 
@@ -927,11 +928,11 @@ class mooduell {
 
     /**
      * Helper function to generate statistical data
-     * for tab "Statistics"
+     * for tab "Statistics" (teacher view)
      *
      * @return array a list of statistics
      */
-    private function return_list_of_statistics() {
+    private function return_list_of_statistics_teacher() {
         global $DB;
 
         $mooduellid = $this->cm->instance;
@@ -1027,6 +1028,65 @@ class mooduell {
             $list_of_statistics['hq_name'] = $entry->questionname;
             $list_of_statistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
+
+        return $list_of_statistics;
+    }
+
+    /**
+     * Helper function to generate statistical data
+     * for tab "Statistics" (student view)
+     *
+     * @return array a list of statistics
+     */
+    private function return_list_of_statistics_student() {
+        global $DB;
+        global $USER;
+
+        $mooduellid = $this->cm->instance;
+
+        $list_of_statistics = [];
+        $list_of_statistics['courseid'] = $this->course->id;
+
+        // get user statistics
+        $user_stats = game_control::get_user_stats( $USER->id );
+
+        // number of distinct opponents who have played a MooDuell game
+        // against the current user
+        $sql = "select count(*)-1 opponents 
+                from (
+                  select playeraid playerid from {mooduell_games}
+                  where mooduellid = $mooduellid
+                  and (playeraid = $USER->id or playerbid = $USER->id)
+                  union
+                  select playerbid playerid from {mooduell_games}
+                  where mooduellid = $mooduellid
+                  and (playeraid = $USER->id or playerbid = $USER->id)
+                ) s"; // info: union selects only distinct records
+        $number_of_opponents = $DB->get_record_sql($sql)->opponents;
+        $list_of_statistics['number_of_opponents'] = $number_of_opponents;
+
+        // number of unfinished (open) MooDuell games having the current user involved
+        $sql = "select count(*) open_games from {mooduell_games}
+                where mooduellid = $mooduellid 
+                and (playeraid = $USER->id or playerbid = $USER->id)
+                and status <> 3";
+        $number_of_open_games = $DB->get_record_sql($sql)->open_games;
+        $list_of_statistics['number_of_open_games'] = $number_of_open_games;
+
+        // number of finished MooDuell games having the current user involved
+        $list_of_statistics['number_of_games_finished'] = $user_stats['playedgames'];
+
+        // number of games won by the user
+        $list_of_statistics['number_of_games_won'] = $user_stats['wongames'];
+
+        // number of correct answers (given by the user)
+        $list_of_statistics['number_of_correct_answers'] = $user_stats['correctlyanswered'];
+
+        // percentage of correctly answered questions
+        $number_of_correct_answers = $user_stats['correctlyanswered'];
+        $number_of_played_questions = $user_stats['playedquestions'];
+        $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_played_questions )* 100), 1);
+        $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
 
         return $list_of_statistics;
     }

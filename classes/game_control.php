@@ -217,8 +217,8 @@ class game_control {
             $returnarray['wongames'] = count($data);*/
 
             // To find out the id of our nemesis, we first have to get all the records where we lost.
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
-                    ') AND status = 3 AND winnerid !=' . $userid . ' AND winnerid != 0');
+            /*$data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
+                    ') AND status = 3 AND winnerid !=' . $userid . ' AND winnerid != 0');*/
 
         } catch (exception $e) {
             throw new moodle_exception('nomooduellinstance', 'mooduell', null, null,
@@ -226,7 +226,7 @@ class game_control {
         }
 
         // Now we collect all our enemies in an array and increase the count whenever we stumble upon them again.
-
+        /*
         $enemiesarray = [];
         foreach ($data as $entry) {
 
@@ -243,11 +243,12 @@ class game_control {
         $maxs = array_keys($enemiesarray, max($enemiesarray));
         $returnarray['nemesisuserid'] = $maxs[0];
 
-        // We don't want to return undefined, so we check if we have to fix something.
-
         if (!$returnarray['nemesisuserid']) {
             $returnarray['nemesisuserid'] = 0;
         }
+        */
+
+        // We don't want to return undefined, so we check if we have to fix something.
         if (!$returnarray['playedgames']) {
             $returnarray['playedgames'] = 0;
         }

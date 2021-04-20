@@ -657,8 +657,8 @@ class mod_mooduell_external extends external_api {
                         'wongames' => new external_value(PARAM_INT, 'wongames'),
                         'lostgames' => new external_value(PARAM_INT, 'lostgames'),
                         'correctlyanswered' => new external_value(PARAM_INT, 'correctlyanswered'),
-                        'playedquestions' => new external_value(PARAM_INT, 'playedquestions'),
-                        'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
+                        'playedquestions' => new external_value(PARAM_INT, 'playedquestions')
+                        //'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
                 )
         );
     }
