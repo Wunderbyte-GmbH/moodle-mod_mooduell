@@ -28,6 +28,8 @@ use moodle_exception;
 use stdClass;
 use user_picture;
 
+define("EMPTY_RESULT", "- - - - - - - - -");
+
 class game_control {
 
     /**
@@ -283,6 +285,11 @@ class game_control {
         $data->status = 1; // This means that it's player As turn
         $data->mooduellid = $this->mooduell->cm->instance;
 
+        // set the result string to their initial value, so we don't get null
+        //$result_array = $this->return_status();
+        $data->playeraresults = EMPTY_RESULT;
+        $data->playerbresults = EMPTY_RESULT;
+
         // We get exactly nine questions from the right categories.
         // We run this before we save our game...
         // ... because it will throw an error if we don't receive the right number of questions.
@@ -303,9 +310,8 @@ class game_control {
             $DB->insert_record('mooduell_questions', $data);
         }
 
-        //return $this->get_questions();
-
         $this->gamedata->questions = $questions;
+
         return $this->gamedata;
     }
 
