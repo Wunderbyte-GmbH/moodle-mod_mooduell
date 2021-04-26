@@ -282,6 +282,8 @@ class question_control {
         global $DB;
         global $CFG;
 
+        require_once($CFG->libdir . '/filelib.php');
+
         $context = \context_course::instance($this->courseid);
 
         // require_once($CFG->libdir . '/coursecatlib.php');
