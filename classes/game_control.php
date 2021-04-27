@@ -26,7 +26,7 @@ use DateTime;
 use dml_exception;
 use moodle_exception;
 use stdClass;
-use user_picture;
+use tool_dataprivacy\context_instance;use user_picture;
 
 define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
@@ -178,7 +178,27 @@ class game_control {
             foreach ($data as $entry) {
                 // We count won and lost games only when they are finished
 
-                if ($entry->status == 3) {
+                // check if user has the right to access
+
+                $moduleid = $DB->get_field('modules', 'id', array('name' => 'mooduell'));
+                $cm = $DB->get_record('course_modules', array('instance' => $entry->mooduellid, 'module' => $moduleid));
+
+                $modinfo = get_fast_modinfo($cm->course);
+                $cm = $modinfo->get_cm($cm->id);
+
+                if (!$cm->uservisible) {
+                    continue;
+                }
+
+
+                //$context = \context_module::instance($cmid);
+                //
+                //if (!has_capability('mod/mooduell:viewinstance', $context)) {
+                //    continue;
+                //}
+
+
+                    if ($entry->status == 3) {
                     ++$playedgames;
                     if ($entry->winnerid == $userid) {
                         ++$wongames;

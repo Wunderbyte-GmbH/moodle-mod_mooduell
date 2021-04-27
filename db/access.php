@@ -37,6 +37,17 @@ $capabilities = [
                         'teacher' => CAP_ALLOW,
                 ],
         ],
+        'mod/mooduell:viewinstance' => [
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'view',
+                'contextlevel' => CONTEXT_MODULE,
+                'archetypes' => [
+                        'student' => CAP_ALLOW,
+                        'manager' => CAP_ALLOW,
+                        'editingteacher' => CAP_ALLOW,
+                        'teacher' => CAP_ALLOW,
+                ],
+        ],
 
         'mod/mooduell:managemooduellsettings' => [
                 'captype' => 'write',
@@ -54,7 +65,6 @@ $capabilities = [
                 'contextlevel' => CONTEXT_MODULE,
                 'archetypes' => [
                         'manager' => CAP_ALLOW,
-                        'editingteacher' => CAP_ALLOW,
                         'editingteacher' => CAP_ALLOW,
                         'teacher' => CAP_ALLOW,
                 ],
