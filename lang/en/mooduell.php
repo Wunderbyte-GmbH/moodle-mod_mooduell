@@ -87,7 +87,7 @@ $string['students'] = 'Students';
 $string['questions'] = 'Questions';
 
 $string['stat_active_users'] = 'Active users';
-$string['stat_games_started'] = 'Games started or finished';
+$string['stat_games_started'] = 'Games started';
 $string['stat_games_finished'] = 'Games finished';
 $string['stat_questions_answered'] = 'Questions answered';
 $string['stat_answered_correctly'] = 'Correct answers';
@@ -103,7 +103,7 @@ $string['stat_student_correct_answers'] = 'Correct answers';
 $string['stat_student_correct_percentage'] = 'Correctly answered';
 
 $string['stat_active_users_desc'] = 'That\'s the number of different users who have started at least one game yet.';
-$string['stat_games_started_desc'] = 'That\'s how many games have been started or completed yet.';
+$string['stat_games_started_desc'] = 'That\'s how many games have been started yet.';
 $string['stat_games_finished_desc'] = 'That\'s how many games have been finished yet.';
 $string['stat_questions_answered_desc'] = 'That\'s how many responses have already been submitted in total.';
 $string['stat_answered_correctly_desc'] = 'This is the percentage of correct answers given.';
