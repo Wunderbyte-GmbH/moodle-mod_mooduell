@@ -26,53 +26,73 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <style>
+        div.card-deck {
+            margin-top: 25px;
+            text-align: center;
+        }
+        div.wbblue {
+            background-color: #263683;
+        }
+        div.wborange {
+                    background-color: #ed8701;
+                }
+        h1 {
+            font-size: 4vw;
+        }
+
+        .card-body .card-text.subheader {
+            font-size: 2vw;
+        }
+    </style>
+
     <!-- Card Deck -->
-    <div class="card-deck" style="margin-top: 25px; text-align: center;">
+    <div class="card-deck">
         <div class="card">
-            <div class="card-body text-white" style="background-color: #263683;">
-                <h1 class="card-title" style="font-size: 80px;"> {{number_of_opponents}} </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_opponents, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_opponents_desc, mod_mooduell {{/str}}</small></p>
+            <div class="card-body wbblue text-white">
+                <h1 class="card-title"> {{number_of_opponents}} </h1>
+                <p class="card-text subheader">{{#str}} stat_student_opponents, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_opponents_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
         <div class="card">
-            <div class="card-body text-white" style="background-color: #ed8701;">
-                <h1 class="card-title" style="font-size: 80px;"> {{number_of_open_games}} </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_open_games, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_open_games_desc, mod_mooduell {{/str}}</small></p>
+            <div class="card-body wborange text-white">
+                <h1 class="card-title"> {{number_of_open_games}} </h1>
+                <p class="card-text subheader">{{#str}} stat_student_open_games, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_open_games_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
         <div class="card">
             <div class="card-body bg-primary text-white">
-                <h1 class="card-title" style="font-size: 80px;"> {{number_of_games_finished}} </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_finished_games, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_finished_games_desc, mod_mooduell {{/str}}</small></p>
+                <h1 class="card-title"> {{number_of_games_finished}} </h1>
+                <p class="card-text subheader">{{#str}} stat_student_finished_games, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_finished_games_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
     </div>
-    <div class="card-deck" style="margin-top: 25px; margin-bottom: 25px; text-align: center;">
+    <div class="card-deck">
         <div class="card">
             <div class="card-body bg-warning text-black">
-                <h1 class="card-title" style="font-size: 80px;"> {{number_of_games_won}} </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_games_won, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_games_won_desc, mod_mooduell {{/str}}</small></p>
+                <h1 class="card-title"> {{number_of_games_won}} </h1>
+                <p class="card-text subheader">{{#str}} stat_student_games_won, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_games_won_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
         <div class="card">
             <div class="card-body bg-info text-white">
-                <h1 class="card-title" style="font-size: 80px;"> {{number_of_correct_answers}} </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_correct_answers, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_correct_answers_desc, mod_mooduell {{/str}}</small></p>
+                <h1 class="card-title"> {{number_of_correct_answers}} </h1>
+                <p class="card-text subheader">{{#str}} stat_student_correct_answers, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_correct_answers_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
         <div class="card">
             <div class="card-body bg-success text-white">
-                <h1 class="card-title" style="font-size: 85px;">
+                <h1 class="card-title">
                     {{#percentage_of_correct_answers}}{{.}}%{{/percentage_of_correct_answers}}
                     {{^percentage_of_correct_answers}}0%{{/percentage_of_correct_answers}}
                 </h1>
-                <p class="card-text" style="font-size: 30px;">{{#str}} stat_student_correct_percentage, mod_mooduell {{/str}}</p>
-                <p class="card-text"><small>{{#str}} stat_student_correct_percentage_desc, mod_mooduell {{/str}}</small></p>
+                <p class="card-text subheader">{{#str}} stat_student_correct_percentage, mod_mooduell {{/str}}</p>
+                <p class="card-text">{{#str}} stat_student_correct_percentage_desc, mod_mooduell {{/str}}</p>
             </div>
         </div>
     </div>

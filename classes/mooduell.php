@@ -1065,6 +1065,8 @@ class mooduell {
         $number_of_opponents = $DB->get_record_sql($sql)->opponents;
         // No game played yet
         if ($number_of_opponents == -1) {
+            // This is a small trick, we create an array with an entry...
+            // ... this allows us to control information in the mustache-template.
             $list_of_statistics['nogames'] = [1];
             $number_of_opponents = 0;
         }
