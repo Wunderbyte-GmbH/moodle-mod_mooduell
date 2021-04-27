@@ -160,7 +160,7 @@ class game_control {
         return $filteredusers;
     }
 
-    public static function get_user_stats($userid) {
+    public static function get_user_stats($userid, $mooduellid = null) {
 
         global $DB;
 
@@ -179,6 +179,10 @@ class game_control {
                 // We count won and lost games only when they are finished
 
                 // check if user has the right to access
+
+                if ($mooduellid != null && $mooduellid !== $entry->mooduellid) {
+                    continue;
+                }
 
                 $moduleid = $DB->get_field('modules', 'id', array('name' => 'mooduell'));
                 $cm = $DB->get_record('course_modules', array('instance' => $entry->mooduellid, 'module' => $moduleid));

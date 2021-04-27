@@ -25,29 +25,32 @@
     }}
 
 <h2>{{quizname}}</h2>
-{{^opengames}}
+
+{{#statistics}}
+{{#nogames}}
 {{#str}} downloaduniviemoduell, mod_mooduell {{/str}}
-<br>
-<br>
-<table class="fullwidth">
-    <tr>
-        <td>
-            {{#str}} univiemooduellappstore, mod_mooduell {{/str}}
-        </td>
-        <td align="center">
-            <a href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img width="150px"  alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{#str}} univiemooduellplaystore, mod_mooduell {{/str}}
-        </td>
-        <td align="center">
-            <a href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="170px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
-        </td>
-    </tr>
-</table>
-{{/opengames}}
+    <br>
+    <br>
+    <table class="fullwidth">
+        <tr>
+            <td>
+                {{#str}} univiemooduellappstore, mod_mooduell {{/str}}
+            </td>
+            <td align="center">
+                <a href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img width="150px"  alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{#str}} univiemooduellplaystore, mod_mooduell {{/str}}
+            </td>
+            <td align="center">
+                <a href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="170px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+            </td>
+        </tr>
+    </table>
+{{/nogames}}
+{{/statistics}}
 
 <ul class="nav nav-tabs" id="mooduellTab" role="tablist">
     <li class="nav-item">

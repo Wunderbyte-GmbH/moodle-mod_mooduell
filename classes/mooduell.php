@@ -1048,7 +1048,7 @@ class mooduell {
         $list_of_statistics['courseid'] = $this->course->id;
 
         // get user statistics
-        $user_stats = game_control::get_user_stats( $USER->id );
+        $user_stats = game_control::get_user_stats( $USER->id, $mooduellid);
 
         // number of distinct opponents who have played a MooDuell game
         // against the current user
@@ -1063,6 +1063,12 @@ class mooduell {
                   and (playeraid = $USER->id or playerbid = $USER->id)
                 ) s"; // info: union selects only distinct records
         $number_of_opponents = $DB->get_record_sql($sql)->opponents;
+        // No game played yet
+        if ($number_of_opponents == -1) {
+            $list_of_statistics['nogames'] = [1];
+            $number_of_opponents = 0;
+        }
+
         $list_of_statistics['number_of_opponents'] = $number_of_opponents;
 
         // number of unfinished (open) MooDuell games having the current user involved
@@ -1085,7 +1091,12 @@ class mooduell {
         // percentage of correctly answered questions
         $number_of_correct_answers = $user_stats['correctlyanswered'];
         $number_of_played_questions = $user_stats['playedquestions'];
-        $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_played_questions )* 100), 1);
+        if ($number_of_correct_answers != 0) {
+            $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_played_questions )* 100), 1);
+        } else {
+            $correct_answers_percentage = 0;
+        }
+
         $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
 
         return $list_of_statistics;
