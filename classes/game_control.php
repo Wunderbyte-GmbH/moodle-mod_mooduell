@@ -28,7 +28,7 @@ use moodle_exception;
 use stdClass;
 use user_picture;
 
-define("EMPTY_RESULT", "- - - - - - - - -");
+define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
 class game_control {
 
@@ -289,6 +289,10 @@ class game_control {
         //$result_array = $this->return_status();
         $data->playeraresults = EMPTY_RESULT;
         $data->playerbresults = EMPTY_RESULT;
+
+        // also initialize the number of questions played for both players with 0
+        $data->playeraqplayed = 0;
+        $data->playerbqplayed = 0;
 
         // We get exactly nine questions from the right categories.
         // We run this before we save our game...
