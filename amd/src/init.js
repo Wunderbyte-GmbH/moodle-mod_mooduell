@@ -104,7 +104,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                             var answers = '<ul>';
                             item.answers.forEach(item => {
 
-                                var style = item.fraction > 0 ? ' style="font-weight:bold"' : '';
+                                var style = item.fraction > 0 ? ' style="color: green;"' : '';
 
                                 answers += '<li><span' + style + '>' + item.answertext + '</span></li>';
                             });
