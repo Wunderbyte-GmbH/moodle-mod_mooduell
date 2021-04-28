@@ -87,6 +87,11 @@ class mooduell {
     public $questions = array();
 
     /**
+     * @var array
+     */
+    public $usernames = array();
+
+    /**
      * Mooduell constructor.
      * Fetches MooDuell settings from DB.
      * @param int $id
@@ -793,6 +798,12 @@ class mooduell {
 
         require_once("$CFG->dirroot/user/profile/lib.php");
 
+        // Caching to speed things up significantly
+        if (array_key_exists($userid, $this->usernames)) {
+            return $this->usernames[$userid];
+        }
+
+
         $usefullnames = $this->settings->usefullnames;
 
         // Get user record of user
@@ -805,16 +816,22 @@ class mooduell {
             profile_save_data($user);
         }
 
+        $returnstring = '';
         if ($usefullnames != 1) {
             if ($user->profile['mooduell_alias'] && strlen($user->profile['mooduell_alias']) > 0) {
-                return $user->profile['mooduell_alias'];
+                $returnstring = $user->profile['mooduell_alias'];
             } else {
-                return get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;
+                $returnstring = get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;
             }
 
         } else {
-            return "$user->firstname $user->lastname";
+            $returnstring = "$user->firstname $user->lastname";
         }
+
+        // Cache if we have to fetch it again
+        $this->usernames[$userid] = $returnstring;
+
+        return $returnstring;
     }
 
     /**
