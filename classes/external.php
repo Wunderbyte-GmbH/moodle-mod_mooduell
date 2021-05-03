@@ -844,11 +844,21 @@ class mod_mooduell_external extends external_api {
         $entry = $DB->get_record('mooduell_games', array('id' => $params['gameid']));
 
         if ($entry) {
-
+            // player A gives up
             if ($entry->playeraid === $USER->id) {
+                // ...so player B is the winner
                 $entry->winnerid = $entry->playerbid;
-            } else if ($entry->playerbid === $USER->id) {
+                // set 9 played questions for player A so the percentage
+                // of correct answers will be calculated correctly
+                $entry->playeraqplayed = 9;
+            }
+            // player B gives up
+            else if ($entry->playerbid === $USER->id) {
+                // ...so player A is the winner
                 $entry->winnerid = $entry->playeraid;
+                // set 9 played questions for player B so the percentage
+                // of correct answers will be calculated correctly
+                $entry->playerbqplayed = 9;
             } else {
                 return ['status' => 0];
             }
