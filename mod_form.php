@@ -39,21 +39,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function definition() {
         global $CFG;
-        global $DB;
 
-
-        $config = get_config('mooduell');
         $mform = $this->_form;
-
-        // Get MooDuell id.
-        // Get MooDuell id.
-        $cm = $this->get_coursemodule();
-
-        if ($cm && property_exists($cm, 'instance')) {
-            $mooduellid = $cm->instance;
-        } else {
-            $mooduellid = 0;
-        }
 
 
         // Adding the "general" fieldset, where all the common settings are shown.
@@ -77,8 +64,39 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Adding the standard "intro" and "introformat" fields.
         $this->standard_intro_elements();
 
+        // Add mooduell elements.
+        $this->mooduell_elements();
+
         // Add standard elements.
         $this->standard_coursemodule_elements();
+
+
+        // Add standard buttons.
+        $this->add_action_buttons();
+    }
+
+
+    /**
+     * Add Mooduell setting elements.
+     * @throws coding_exception
+     */
+    private function mooduell_elements() {
+
+        global $DB;
+
+        // Get MooDuell id.
+        // Get MooDuell id.
+        $cm = $this->get_coursemodule();
+
+        if ($cm && property_exists($cm, 'instance')) {
+            $mooduellid = $cm->instance;
+        } else {
+            $mooduellid = 0;
+        }
+
+        $config = get_config('mooduell');
+
+        $mform = $this->_form;
 
         // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
         $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
@@ -96,7 +114,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
                 $this->return_move_on_options());
         $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
-           
+
         $this->apply_admin_defaults();
 
         // We add the categories for the random question.
@@ -143,13 +161,9 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $mform->addElement('static', 'warning', get_string('important', 'mod_mooduell'),
                     get_string('nocategories', 'mod_mooduell'));
         }
-        // Add standard buttons.
-        $this->add_action_buttons();
     }
 
     /**
-     * Because of get_string, this has to be a function.
-     *
      * @return array
      * @throws coding_exception
      */
