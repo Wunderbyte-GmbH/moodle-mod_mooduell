@@ -106,7 +106,8 @@ class game_control {
     }
 
     /**
-     * This fucntion first get_enrolled_users and filteres this list by module visibility of the active module.
+     * This function first get_enrolled_users and filters this list by module visibility of the active module.
+     * Users who are not allowed to see the current MooDuell instance will be skipped too.
      * This is needed to give us a valid list of potential partners for a new game.
      *
      * @return array
@@ -122,12 +123,17 @@ class game_control {
         $filteredusers = array();
 
         foreach ($users as $user) {
+            // We need to skip users who are missing the capability
+            // to view the current MooDuell instance (3rd parameter of is_enrolled)
+            // also skip users with no active enrolement status (4th parameter of is_enrolled)
+            if (!is_enrolled($context, $user, 'mod/mooduell:viewinstance', true)){
+                continue;
+            }
 
             profile_load_custom_fields($user);
 
             // We want to make sure we have no disruption in the transition, so we use alternate name...
             // ... when there is no moodle alias name.
-
             if (!$user->profile['mooduell_alias'] && strlen($user->alternatename) > 0) {
                 $user->profile_field_mooduell_alias = $user->alternatename;
                 profile_save_data($user);
@@ -202,11 +208,13 @@ class game_control {
                 //}
 
 
-                    if ($entry->status == 3) {
+                if ($entry->status == 3) {
                     ++$playedgames;
+
                     if ($entry->winnerid == $userid) {
                         ++$wongames;
-                    } else if ($entry->winnerid !== 0) {
+                    }
+                    else if ($entry->winnerid !== 0) {
                         ++$lostgames;
                     }
                 }
