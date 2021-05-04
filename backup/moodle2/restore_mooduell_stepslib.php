@@ -70,7 +70,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         $data = (object)$data;
 
         $data->mooduellid = $this->get_new_parentid('mooduell');
-        // $data->category = $this->get_mappingid('question_categories', $data->category);
+        $data->category = $this->get_mappingid('question_category', $data->category);
 
         $newitemid = $DB->insert_record('mooduell_categories', $data);
         // No need to save this mapping as far as nothing depend on it
