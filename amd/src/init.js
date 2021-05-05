@@ -294,7 +294,6 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                 $.each(arrayOfItems, function() {
                     if ($(this).prop("tagName") == 'FORM') {
-                        var url = $(this).attr('action');
                         var quizid = getUrlParameter('id');
                         $(this).append('<input type="hidden" name="quizid" value="' + quizid + '">');
                         $(this).append('<input type="hidden" name="action" value="' + action + '">');
