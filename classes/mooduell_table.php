@@ -84,9 +84,18 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_action() {
+    function col_action($game) {
+        $cmid = $this->mooduell->cm->id;
 
-        return 'action';
+        $link = '<a href="view.php?action=viewquestions&id=' . $cmid . '&gameid=' . $game->id .'">' .
+                '<i class="fa fa-info"></i>'
+                . '</a>';
+        $link .= " ";
+        $link .= '<a href="view.php?action=delete&id=' . $cmid . '&gameid=' . $game->id .'">' .
+                '<i class="fa fa-trash"></i>'
+                . '</a>';
+
+        return $link;
     }
 
 
