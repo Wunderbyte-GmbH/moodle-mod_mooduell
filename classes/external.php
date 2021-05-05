@@ -981,7 +981,7 @@ class mod_mooduell_external extends external_api {
             $tshow = null,
             $tdir = null,
             $treset = null) {
-        global $DB, $USER, $CFG;
+        global $DB, $USER, $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1006,6 +1006,14 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'highscores';
         $_POST['quizid'] = $params['quizid'];
 
+        // differentiate between teacher and student views
+        $context = context_course::instance($COURSE->id);
+        $view = 'student'; // default
+        if (has_capability('moodle/course:manageactivities', $context)) {
+            $view = 'teacher'; // because of the capability to manage activities
+        }
+        // now we set the view parameter for tablelib to fetch it
+        $_POST['view'] = $view;
 
         ob_start();
 
@@ -1105,7 +1113,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      */
     public static function load_opengames_data($quizid, $pageid = null, $tsort = null, $thide = null, $tshow = null, $tdir = null, $treset = null) {
-        global $DB, $USER, $CFG;
+        global $DB, $USER, $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1130,6 +1138,14 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'opengames';
         $_POST['quizid'] = $params['quizid'];
 
+        // differentiate between teacher and student views
+        $context = context_course::instance($COURSE->id);
+        $view = 'student'; // default
+        if (has_capability('moodle/course:manageactivities', $context)) {
+            $view = 'teacher'; // because of the capability to manage activities
+        }
+        // now we set the view parameter for tablelib to fetch it
+        $_POST['view'] = $view;
 
         ob_start();
 
@@ -1180,7 +1196,7 @@ class mod_mooduell_external extends external_api {
             $tshow = null,
             $tdir = null,
             $treset = null) {
-        global $DB, $USER, $CFG;
+        global $DB, $USER, $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1205,6 +1221,14 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'finishedgames';
         $_POST['quizid'] = $params['quizid'];
 
+        // differentiate between teacher and student views
+        $context = context_course::instance($COURSE->id);
+        $view = 'student'; // default
+        if (has_capability('moodle/course:manageactivities', $context)) {
+            $view = 'teacher'; // because of the capability to manage activities
+        }
+        // now we set the view parameter for tablelib to fetch it
+        $_POST['view'] = $view;
 
         ob_start();
 

@@ -41,6 +41,7 @@ $PAGE->set_url('/mooduell_table.php');
 $download = optional_param('download', '', PARAM_ALPHA);
 $action = optional_param('action', '', PARAM_ALPHA);
 $quizid = optional_param('quizid', '', PARAM_INT);
+$view = optional_param('view', '', PARAM_ALPHA); // values: 'teacher' or 'student'
 
 
 $mooduell_instance = new mooduell($quizid);
@@ -61,15 +62,15 @@ if (!$table->is_downloading()) {
 switch($action){
     case 'opengames':
         // generate the tabledata for open games
-        $tabledata = loadOpenGamesTableData($mooduellid, $table);
+        $tabledata = loadOpenGamesTableData($mooduellid, $table, $view);
         break;
     case 'finishedgames':
         // generate the tabledata for finished games
-        $tabledata = loadFinishedGamesTableData($mooduellid, $table);
+        $tabledata = loadFinishedGamesTableData($mooduellid, $table, $view);
         break;
     case 'highscores':
         // generate the tabledata for highscores
-        $tabledata = loadHighscoresTableData($mooduellid, $table);
+        $tabledata = loadHighscoresTableData($mooduellid, $table, $view);
         break;
     default:
         break;
@@ -94,12 +95,23 @@ if (!$table->is_downloading()) {
  * @param $table
  * @return stdClass an object containing columns, headers and help (for headers)
  */
-function loadOpenGamesTableData($mooduellid, $table){
+function loadOpenGamesTableData($mooduellid, $table, $view){
+    global $USER;
     // Work out the sql for the table.
     $fields = "*";
     $from = "{mooduell_games}";
-    $where = "mooduellid = :mooduellid1 AND status <> 3";
-    $params = array('mooduellid1' => $mooduellid);
+    switch($view){
+        case 'teacher':
+            $where = "mooduellid = :mooduellid1 AND status <> 3";
+            $params = array('mooduellid1' => $mooduellid);
+            break;
+        // student view is the default view
+        default:
+            // we need to pass 2 userids because each one can only be used once for some strange reason
+            $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+            $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
+            break;
+    }
 
     $table->set_sql($fields, $from, $where, $params);
 
@@ -143,12 +155,25 @@ function loadOpenGamesTableData($mooduellid, $table){
  * @param $table
  * @return stdClass an object containing columns, headers and help (for headers)
  */
-function loadFinishedGamesTableData($mooduellid, $table){
+function loadFinishedGamesTableData($mooduellid, $table, $view){
+    global $USER;
+
     // Work out the sql for the table.
     $fields = "*";
     $from = "{mooduell_games}";
-    $where = "mooduellid = :mooduellid1 AND status = 3";
-    $params = array('mooduellid1' => $mooduellid);
+
+    switch($view){
+        case 'teacher':
+            $where = "mooduellid = :mooduellid1 AND status = 3";
+            $params = array('mooduellid1' => $mooduellid);
+            break;
+        //student view is the default view
+        default:
+            // we need to pass 2 userids because each one can only be used once for some strange reason
+            $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+            $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
+            break;
+    }
 
     $table->set_sql($fields, $from, $where, $params);
 
@@ -193,7 +218,7 @@ function loadFinishedGamesTableData($mooduellid, $table){
  * @param $table
  * @return stdClass an object containing columns, headers and help (for headers)
  */
-function loadHighscoresTableData($mooduellid, $table){
+function loadHighscoresTableData($mooduellid, $table, $view){
     //TODO: implement this
 
     // Work out the sql for the table.
