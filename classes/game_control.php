@@ -1042,6 +1042,7 @@ class game_control {
 
         $mooduell = $this->mooduell;
 
+        // We do questions fetching only once. If we have cached questions, we use those.
         if ($mooduell->questions && count($this->mooduell->questions) > 0) {
 
         } else {

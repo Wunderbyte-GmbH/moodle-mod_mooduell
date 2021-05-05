@@ -974,18 +974,46 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function load_highscore_data($quizid) {
-        global $DB, $USER;
+    public static function load_highscore_data($quizid,
+            $pageid = null,
+            $tsort = null,
+            $thide = null,
+            $tshow = null,
+            $tdir = null,
+            $treset = null) {
+        global $DB, $USER, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
+                'pageid' => $pageid,
+                'tsort' => $tsort,
+                'thide' => $thide,
+                'tshow' => $tshow,
+                'tdir' => $tdir,
+                'treset' => $treset
         );
 
         $params = self::validate_parameters(self::load_highscore_data_parameters(), $params);
 
-        $mooduell = new mooduell($params['quizid']);
+        // We set the (optional) parameters for tablelib to fetch them
+        $_POST['page'] = $params['pageid'];
+        $_POST['tsort'] = $params['tsort'];
+        $_POST['thide'] = $params['thide'];
+        $_POST['tshow'] = $params['tshow'];
+        $_POST['tdir'] = $params['tdir'];
+        $_POST['treset'] = $params['treset'];
 
-        return $mooduell->return_list_of_highscores();
+        $_POST['action'] = 'highscores';
+        $_POST['quizid'] = $params['quizid'];
+
+
+        ob_start();
+
+        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
+
+        $result['content'] = ob_get_clean();
+
+        return $result;
     }
 
     /**
@@ -993,7 +1021,13 @@ class mod_mooduell_external extends external_api {
      */
     public static function load_highscore_data_parameters() {
         return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
+                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
+                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
+                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
+                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
+                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
+                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
                 )
         );
     }
@@ -1002,16 +1036,8 @@ class mod_mooduell_external extends external_api {
      * @return external_multiple_structure
      */
     public static function load_highscore_data_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-                                'rank' => new external_value(PARAM_INT, 'rank'), // games played
-                                'username' => new external_value(PARAM_RAW, 'username'),
-                                'gamesplayed' => new external_value(PARAM_INT, 'played'),
-                                'gameswon' => new external_value(PARAM_INT, 'won'), // games won
-                                'gameslost' => new external_value(PARAM_INT, 'lost'), // games lost
-                                'score' => new external_value(PARAM_INT, 'firstname'), // games played
-                                'correct' => new external_value(PARAM_INT, 'correct'), // games played
-                                'correctpercentage' => new external_value(PARAM_FLOAT, 'percentagecorrect')
-                        )
+        return new external_single_structure(array(
+                        'content' => new external_value(PARAM_RAW, 'content of table')
                 )
         );
     }
@@ -1078,31 +1104,40 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function load_opengames_data($quizid) {
-        global $DB, $USER;
+    public static function load_opengames_data($quizid, $pageid = null, $tsort = null, $thide = null, $tshow = null, $tdir = null, $treset = null) {
+        global $DB, $USER, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
+                'pageid' => $pageid,
+                'tsort' => $tsort,
+                'thide' => $thide,
+                'tshow' => $tshow,
+                'tdir' => $tdir,
+                'treset' => $treset
         );
 
         $params = self::validate_parameters(self::load_opengames_data_parameters(), $params);
 
-        $mooduell = new mooduell($params['quizid']);
+        // We set the (optional) parameters for tablelib to fetch them
+        $_POST['page'] = $params['pageid'];
+        $_POST['tsort'] = $params['tsort'];
+        $_POST['thide'] = $params['thide'];
+        $_POST['tshow'] = $params['tshow'];
+        $_POST['tdir'] = $params['tdir'];
+        $_POST['treset'] = $params['treset'];
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
-        }
-        $context = context_module::instance($cm->id);
-        self::validate_context($context);
+        $_POST['action'] = 'opengames';
+        $_POST['quizid'] = $params['quizid'];
 
-        if (has_capability('moodle/course:manageactivities', $context)) {
-            $isstudent = false;
-        } else {
-            $isstudent = true;
-        }
 
-        return $mooduell->return_list_of_games($isstudent, false);
+        ob_start();
+
+        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
+
+        $result['content'] = ob_get_clean();
+
+        return $result;
     }
 
     /**
@@ -1110,7 +1145,13 @@ class mod_mooduell_external extends external_api {
      */
     public static function load_opengames_data_parameters() {
         return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
+                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
+                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
+                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
+                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
+                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
+                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
                 )
         );
     }
@@ -1119,13 +1160,8 @@ class mod_mooduell_external extends external_api {
      * @return external_multiple_structure
      */
     public static function load_opengames_data_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-                                'playera' => new external_value(PARAM_RAW, 'player a name'),
-                                'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
-                                'playerb' => new external_value(PARAM_RAW, 'player b name'),
-                                'playerbresults' => new external_value(PARAM_RAW, 'player b results'),
-                                'gameid' => new external_value(PARAM_INT, 'id of game'),
-                        )
+        return new external_single_structure(array(
+                        'content' => new external_value(PARAM_RAW, 'content of table')
                 )
         );
     }
@@ -1137,31 +1173,46 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function load_finishedgames_data($quizid) {
-        global $DB, $USER;
+    public static function load_finishedgames_data($quizid,
+            $pageid = null,
+            $tsort = null,
+            $thide = null,
+            $tshow = null,
+            $tdir = null,
+            $treset = null) {
+        global $DB, $USER, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
+                'pageid' => $pageid,
+                'tsort' => $tsort,
+                'thide' => $thide,
+                'tshow' => $tshow,
+                'tdir' => $tdir,
+                'treset' => $treset
         );
 
         $params = self::validate_parameters(self::load_finishedgames_data_parameters(), $params);
 
-        $mooduell = new mooduell($params['quizid']);
+        // We set the (optional) parameters for tablelib to fetch them
+        $_POST['page'] = $params['pageid'];
+        $_POST['tsort'] = $params['tsort'];
+        $_POST['thide'] = $params['thide'];
+        $_POST['tshow'] = $params['tshow'];
+        $_POST['tdir'] = $params['tdir'];
+        $_POST['treset'] = $params['treset'];
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
-        }
-        $context = context_module::instance($cm->id);
-        self::validate_context($context);
+        $_POST['action'] = 'finishedgames';
+        $_POST['quizid'] = $params['quizid'];
 
-        if (has_capability('moodle/course:manageactivities', $context)) {
-            $isstudent = false;
-        } else {
-            $isstudent = true;
-        }
 
-        return $mooduell->return_list_of_games($isstudent, true);
+        ob_start();
+
+        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
+
+        $result['content'] = ob_get_clean();
+
+        return $result;
     }
 
     /**
@@ -1169,7 +1220,13 @@ class mod_mooduell_external extends external_api {
      */
     public static function load_finishedgames_data_parameters() {
         return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
+                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
+                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
+                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
+                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
+                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
+                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
+                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
                 )
         );
     }
@@ -1178,13 +1235,8 @@ class mod_mooduell_external extends external_api {
      * @return external_multiple_structure
      */
     public static function load_finishedgames_data_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-                                'playera' => new external_value(PARAM_RAW, 'player a name'),
-                                'playeraresults' => new external_value(PARAM_RAW, 'player a results'),
-                                'playerb' => new external_value(PARAM_RAW, 'player b name'),
-                                'playerbresults' => new external_value(PARAM_RAW, 'player b results'),
-                                'gameid' => new external_value(PARAM_INT, 'id of game'),
-                        )
+        return new external_single_structure(array(
+                    'content' => new external_value(PARAM_RAW, 'html content')
                 )
         );
     }

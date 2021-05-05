@@ -79,6 +79,8 @@ $string['warnings'] = 'Warnings';
 $string['status'] = 'Status';
 $string['category'] = 'Category';
 
+$string['lastplayed'] = 'Last time played';
+
 $string['statistics'] = 'Statistics';
 $string['opengames'] = 'Open games';
 $string['finishedgames'] = 'Finished games';

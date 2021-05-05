@@ -24,37 +24,4 @@
 
     }}
 
-<table class="generaltable fullwidth fieldslist" id="finishedgamestable">
-    <thead>
-    <tr>
-        <th scope="col">{{#str}} playera, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playeraresults, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerb, mod_mooduell {{/str}}</th>
-        <th scope="col">{{#str}} playerbresults, mod_mooduell {{/str}}</th>
-        <th scope="col" class="text-right">{{#str}} action, mod_mooduell {{/str}}</th>
-    </tr>
-    </thead>
-
-    <!-- this table body will be dynamically filled by an AJAX function in init.js -->
-    <tbody/>
-
-    <!-- template without AJAX (teacher's view with action links): -->
-    <!-- <tbody>
-    {{! #finishedgames}}
-        <tr class="field">
-            <td>{{! playera}}</td>
-            <td>{{! playeraresults}}</td>
-            <td>{{! playerb}}</td>
-            <td>{{! playerbresults}}</td>
-            <td class="text-right">
-                {{! <a href="{{! editfieldurl}" data-role="editfield">{{#pix}
-                    t/edit, core, {{#str} edit, moodle {{/str} {{/pix}</a> }}
-                <a href="view.php?action=viewquestions&id={{! mooduellid}}&gameid={{! gameid}}" data-id="{{! id}}" data-role="deletefield">{{! #pix}}
-                t/viewdetails, core, {{! #str}} view, moodle {{! /str}} {{! /pix}}</a>
-                <a href="view.php?action=delete&id={{! mooduellid}}&gameid={{! gameid}}" data-id="{{! id}}" data-role="deletefield">{{! #pix}}
-                t/delete, core, {{! #str}} delete, moodle {{! /str}} {{! /pix}}</a>
-            </td>
-        </tr>
-    {{! /finishedgames}}
-    </tbody> -->
-</table>
+<div id="finishedgamestable"></div>
