@@ -197,7 +197,6 @@ function loadFinishedGamesTableData($mooduellid, $table, $view){
     $headers[]= get_string('playeraresults', 'mooduell');
     $help[] = NULL;
 
-
     $columns[]= 'action';
     $headers[]= get_string('action', 'mooduell');
     $help[] = NULL;

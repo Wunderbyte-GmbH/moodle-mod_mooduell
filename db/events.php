@@ -41,4 +41,10 @@ $observers = array(
                 'callback' => 'leg_finished',
                 'internal' => false,
         ),
+
+        array(
+            'eventname' => 'mod_mooduell\event\game_finished',
+            'callback' => 'game_finished',
+            'internal' => false,
+        )
 );

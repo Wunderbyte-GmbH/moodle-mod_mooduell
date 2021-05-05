@@ -425,9 +425,6 @@ class mooduell {
         return $returnarray;
     }
 
-
-
-
     /**
      * Function to fetch all questions for this instance, but before runnig through instantiation.
      * @return array
@@ -550,13 +547,10 @@ class mooduell {
             }
         }
 
-
-
         return [
                 'userid' => $userid,
                 'pushtokens' => $returndata,
         ];
-
 }
 
     /**
@@ -589,15 +583,8 @@ class mooduell {
             $DB->insert_record('mooduell_pushtokens', $update_data);
         }
 
-
-
-
-
         return ['status' => 1];
     }
-
-
-
 
     public static function get_highscores($quizid) {
 
@@ -621,7 +608,6 @@ class mooduell {
 
 
         $temparray = [];
-        //$nemesis = [];
 
         foreach ($data as $entry) {
             // Get the scores.
@@ -693,16 +679,6 @@ class mooduell {
                         $playerb->score = 3;
                         break;
                 }
-
-                // If the game is not a draw and active User is not the winner...
-                /*if ($entry->winnerid != 0 && $entry->winnerid != $USER->id) {
-
-                    if (!array_key_exists($entry->winnerid, $nemesis)) {
-                        $nemesis[$entry->winnerid] = 1;
-                    } else {
-                        ++$nemesis[$entry->winnerid];
-                    }
-                }*/
             }
 
             if (!array_key_exists($entry->playeraid, $temparray)) {
@@ -717,7 +693,6 @@ class mooduell {
             }
         }
         $array_without_ranks = [];
-        //arsort($nemesis);
         foreach ($temparray as $key => $value) {
 
             // if quizid = 0, we only return active user, else we return all users
@@ -733,6 +708,7 @@ class mooduell {
             $entry['lost'] = $value->lost;
             $entry['played'] = $value->played;
             $entry['correct'] = $value->correct;
+
             if (!empty($value->qplayed) and $value->qplayed > 0) {
                 // determine percentage of correctly answered questions by division through played questions
                 $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed )* 100), 1);
@@ -742,7 +718,6 @@ class mooduell {
                 $entry['qplayed'] = 0;
             }
 
-            //$entry['nemesis'] = reset($nemesis);
             $array_without_ranks[] = $entry;
         }
 
