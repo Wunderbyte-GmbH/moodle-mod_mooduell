@@ -24,13 +24,13 @@
 
 global $CFG, $PAGE;
 
+use mod_mooduell\mooduell;
 
 if (!$CFG) {
     require_once("../../config.php");
 }
 
 require "$CFG->libdir/tablelib.php";
-
 
 require_once("$CFG->dirroot/mod/mooduell/classes/mooduell_table.php");
 
@@ -39,13 +39,13 @@ $PAGE->set_context($context);
 $PAGE->set_url('/mooduell_table.php');
 
 $download = optional_param('download', '', PARAM_ALPHA);
-$uniqueid = optional_param('action', '', PARAM_ALPHA);
+$action = optional_param('action', '', PARAM_ALPHA);
 $quizid = optional_param('quizid', '', PARAM_INT);
 
 
-$table = new mooduell_table($uniqueid);
-$table->mooduell = new \mod_mooduell\mooduell($quizid);
-$table->is_downloading($download, $uniqueid, $uniqueid);
+$mooduell_instance = new mooduell($quizid);
+$table = new mooduell_table($mooduell_instance, $action);
+$table->is_downloading($download, $action, $action);
 
 $mooduellid = $table->mooduell->cm->instance;
 
@@ -58,47 +58,26 @@ if (!$table->is_downloading()) {
     // echo $OUTPUT->header();
 }
 
-// Work out the sql for the table.
+switch($action){
+    case 'opengames':
+        // generate the tabledata for open games
+        $tabledata = loadOpenGamesTableData($mooduellid, $table);
+        break;
+    case 'finishedgames':
+        // generate the tabledata for finished games
+        $tabledata = loadFinishedGamesTableData($mooduellid, $table);
+        break;
+    case 'highscores':
+        // generate the tabledata for highscores
+        $tabledata = loadHighscoresTableData($mooduellid, $table);
+        break;
+    default:
+        break;
+}
 
-$fields = "*";
-$from = "{mooduell_games}";
-$where = "mooduellid = :mooduellid1";
-$params = array('mooduellid1' => $mooduellid);
-
-$table->set_sql($fields, $from, $where, $params);
-
-//$columns[]= 'mooduellid';
-//$headers[]= get_string('mooduell', 'mooduell');
-//$help[] = NULL;
-
-$columns[]= 'timemodified';
-$headers[]= get_string('lastplayed', 'mooduell');
-$help[] = NULL;
-
-$columns[]= 'playeraid';
-$headers[]= get_string('playera', 'mooduell');
-$help[] = NULL;
-
-$columns[]= 'playeraresults';
-$headers[]= get_string('playeraresults', 'mooduell');
-$help[] = NULL;
-
-$columns[]= 'playerbid';
-$headers[]= get_string('playerb', 'mooduell');
-$help[] = NULL;
-
-$columns[]= 'playerbresults';
-$headers[]= get_string('playeraresults', 'mooduell');
-$help[] = NULL;
-
-
-$columns[]= 'action';
-$headers[]= get_string('action', 'mooduell');
-$help[] = NULL;
-
-$table->define_columns($columns);
-$table->define_headers($headers);
-$table->define_help_for_headers($help);
+$table->define_columns($tabledata->columns);
+$table->define_headers($tabledata->headers);
+$table->define_help_for_headers($tabledata->help);
 
 $table->define_baseurl("$CFG->wwwroot/mod/mooduell/mooduell_table.php");
 
@@ -108,4 +87,152 @@ if (!$table->is_downloading()) {
     // echo $OUTPUT->footer();
 }
 
-// $mooduell = new \mod_mooduell\mooduell();
+/**
+ * Function to set the SQL and load the data for open games into the mooduell_table
+ *
+ * @param $mooduellid
+ * @param $table
+ * @return stdClass an object containing columns, headers and help (for headers)
+ */
+function loadOpenGamesTableData($mooduellid, $table){
+    // Work out the sql for the table.
+    $fields = "*";
+    $from = "{mooduell_games}";
+    $where = "mooduellid = :mooduellid1 AND status <> 3";
+    $params = array('mooduellid1' => $mooduellid);
+
+    $table->set_sql($fields, $from, $where, $params);
+
+    $columns[]= 'timemodified';
+    $headers[]= get_string('lastplayed', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraid';
+    $headers[]= get_string('playera', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbid';
+    $headers[]= get_string('playerb', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+
+    $columns[]= 'action';
+    $headers[]= get_string('action', 'mooduell');
+    $help[] = NULL;
+
+    $tabledata = new stdClass();
+    $tabledata->columns = $columns;
+    $tabledata->headers = $headers;
+    $tabledata->help = $help;
+
+    return $tabledata;
+}
+
+/**
+ * Function to set the SQL and load the data for finished games into the mooduell_table
+ *
+ * @param $mooduellid
+ * @param $table
+ * @return stdClass an object containing columns, headers and help (for headers)
+ */
+function loadFinishedGamesTableData($mooduellid, $table){
+    // Work out the sql for the table.
+    $fields = "*";
+    $from = "{mooduell_games}";
+    $where = "mooduellid = :mooduellid1 AND status = 3";
+    $params = array('mooduellid1' => $mooduellid);
+
+    $table->set_sql($fields, $from, $where, $params);
+
+    $columns[]= 'timemodified';
+    $headers[]= get_string('lastplayed', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraid';
+    $headers[]= get_string('playera', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbid';
+    $headers[]= get_string('playerb', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+
+    $columns[]= 'action';
+    $headers[]= get_string('action', 'mooduell');
+    $help[] = NULL;
+
+    $tabledata = new stdClass();
+    $tabledata->columns = $columns;
+    $tabledata->headers = $headers;
+    $tabledata->help = $help;
+
+    return $tabledata;
+}
+
+
+/**
+ * Function to set the SQL and load the data for highscores into the mooduell_table
+ *
+ * @param $mooduellid
+ * @param $table
+ * @return stdClass an object containing columns, headers and help (for headers)
+ */
+function loadHighscoresTableData($mooduellid, $table){
+    //TODO: implement this
+
+    // Work out the sql for the table.
+    $fields = "*";
+    $from = "{mooduell_games}";
+    $where = "mooduellid = :mooduellid1 AND status = 3";
+    $params = array('mooduellid1' => $mooduellid);
+
+    $table->set_sql($fields, $from, $where, $params);
+
+    $columns[]= 'timemodified';
+    $headers[]= get_string('lastplayed', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraid';
+    $headers[]= get_string('playera', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playeraresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbid';
+    $headers[]= get_string('playerb', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'playerbresults';
+    $headers[]= get_string('playeraresults', 'mooduell');
+    $help[] = NULL;
+
+
+    $columns[]= 'action';
+    $headers[]= get_string('action', 'mooduell');
+    $help[] = NULL;
+
+    $tabledata = new stdClass();
+    $tabledata->columns = $columns;
+    $tabledata->headers = $headers;
+    $tabledata->help = $help;
+
+    return $tabledata;
+}

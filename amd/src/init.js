@@ -127,7 +127,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                         var dom_nodes = $($.parseHTML(res.content));
 
                         if (dom_nodes.length != 1) {
-                            replaceDownloadLink(id, dom_nodes);
+                            replaceDownloadLink(id, dom_nodes, 'opengames');
                             replaceResetTableLink(id, dom_nodes, callLoadOpenGames);
                             replacePaginationLinks(id, dom_nodes, callLoadOpenGames);
                             replaceSortColumLinks(id, dom_nodes, callLoadOpenGames);
@@ -172,7 +172,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                         var dom_nodes = $($.parseHTML(res.content));
 
                         if (dom_nodes.length != 1) {
-                            replaceDownloadLink(id, dom_nodes);
+                            replaceDownloadLink(id, dom_nodes, 'finishedgames');
                             replaceResetTableLink(id, dom_nodes, callLoadFinishedGames);
                             replacePaginationLinks(id, dom_nodes, callLoadFinishedGames);
                             replaceSortColumLinks(id, dom_nodes, callLoadFinishedGames);
@@ -211,7 +211,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                         var dom_nodes = $($.parseHTML(res.content));
 
                         if (dom_nodes.length != 1) {
-                            replaceDownloadLink(id, dom_nodes);
+                            replaceDownloadLink(id, dom_nodes, 'highscores');
                             replaceResetTableLink(id, dom_nodes, callLoadHighScores);
                             replacePaginationLinks(id, dom_nodes, callLoadHighScores);
                             replaceSortColumLinks(id, dom_nodes, callLoadHighScores);
@@ -256,7 +256,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     // make sure we only return int
                     sortorder = parseInt(sortorder);
 
-                    $(this).attr('href', '# si: ' + sortid + ' th: ' + thide + ' so: ' + sortorder);
+                    $(this).attr('href', '#');
                     $(this).click(function () {
                         functionToCall(id, null, sortid, thide, tshow, sortorder);
                     });
@@ -283,7 +283,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 });
             }
 
-            function replaceDownloadLink(id, dom_nodes) {
+            function replaceDownloadLink(id, dom_nodes, action) {
                 var arrayOfItems = dom_nodes.find("form");
 
                 // Strangely it wasn't possible to get the first div by class, we have to run all the nodes
@@ -295,7 +295,9 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 $.each(arrayOfItems, function() {
                     if ($(this).prop("tagName") == 'FORM') {
                         var url = $(this).attr('action');
-                        $(this).attr('action', url + "?quizid=226&action=opengames");
+                        var quizid = getUrlParameter('id');
+                        $(this).append('<input type="hidden" name="quizid" value="' + quizid + '">');
+                        $(this).append('<input type="hidden" name="action" value="' + action + '">');
                     }
                 });
             }

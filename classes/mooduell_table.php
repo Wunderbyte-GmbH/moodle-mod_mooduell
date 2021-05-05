@@ -31,6 +31,22 @@ class mooduell_table extends table_sql {
      */
     var $mooduell = null;
 
+    /**
+     * Parameter to store the action (what to show in the mooduell_table)
+     * @var String action ('opengames'|'finishedgames'|'questions'|'highscores')
+     */
+    var $action = null;
+
+    /** TODO
+     * mooduell_table constructor.
+     * @param null $mooduell
+     */
+    public function __construct($mooduell, $action)
+    {
+        parent::__construct($action);
+        $this->mooduell = $mooduell;
+        $this->action = $action;
+    }
 
     function col_playeraid($game) {
         if ($game->playeraid) {
