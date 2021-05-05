@@ -104,6 +104,8 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         $data->mooduellid = $this->get_new_parentid('mooduell');
         $data->gameid = $this->get_mappingid('mooduell_game', $data->gameid);
 
+        $data->questionid = $this->get_mappingid('question', $data->questionid);
+
         // Skip treating this record if there is not id to match (game has been deleted already)
         if (!$data->gameid) {
             return;

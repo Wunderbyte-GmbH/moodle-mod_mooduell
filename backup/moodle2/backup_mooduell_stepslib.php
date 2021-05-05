@@ -102,6 +102,9 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $game->annotate_ids('user', 'playeraid');
         $game->annotate_ids('user', 'playerbid');
 
+        $category->annotate_ids('question_categories', 'category');
+        $question->annotate_ids('question', 'questionid');
+
         // Define file annotations
         $mooduell->annotate_files('mod_mooduell', 'intro', null); // This file areas haven't itemid
         // $mooduell->annotate_files('mod_mooduell', 'content', null); // This file areas haven't itemid
