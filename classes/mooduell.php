@@ -264,8 +264,9 @@ class mooduell {
         if (!$inline) {
             $out .= $output->header();
 
+            $cmid = $this->cm->id;
             // Debugging buttons for events
-            $game_finished_url = new moodle_url('/mod/mooduell/view.php?id=61&triggered_event=game_finished');
+            $game_finished_url = new moodle_url("/mod/mooduell/view.php?id=$cmid&triggered_event=game_finished");
             $out .= "<a class='btn btn-primary' href='$game_finished_url' role='button'>Trigger game_finished event</a>";
         }
 
