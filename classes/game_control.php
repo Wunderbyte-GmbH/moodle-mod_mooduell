@@ -24,6 +24,7 @@ require_once("$CFG->dirroot/user/profile/lib.php");
 
 use DateTime;
 use dml_exception;
+use mod_mooduell\event\game_finished;
 use moodle_exception;
 use stdClass;
 use tool_dataprivacy\context_instance;use user_picture;
@@ -896,7 +897,7 @@ class game_control {
         $update->id = $this->gamedata->gameid;
 
         if ($this->is_game_finished()) {
-            // We might want to trigger some event here.
+            // set the status to 3 which means finished
             $update->status = 3;
             $this->gamedata->status = 3;
 
@@ -904,7 +905,12 @@ class game_control {
             list($update->winnerid, $update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
-        } else {
+
+            // TODO: trigger the game_finished event
+            //$game_finished_event = new game_finished();
+            //$game_finished_event->trigger();
+        }
+        else {
             if ($this->is_it_active_users_turn()) {
                 $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
             } else {

@@ -24,6 +24,9 @@
 
 namespace mod_mooduell;
 
+defined('MOODLE_INTERNAL') || die();
+
+use \moodle_url;
 use coding_exception;
 use context_module;
 use core_customfield\category;
@@ -36,9 +39,7 @@ use mod_mooduell_mod_form;
 use moodle_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
-
+global $CFG;
 
 // Question Health constants
 
@@ -262,6 +263,10 @@ class mooduell {
         $out = '';
         if (!$inline) {
             $out .= $output->header();
+
+            // Debugging buttons for events
+            $game_finished_url = new moodle_url('/mod/mooduell/view.php?id=61&triggered_event=game_finished');
+            $out .= "<a class='btn btn-primary' href='$game_finished_url' role='button'>Trigger game_finished event</a>";
         }
 
         switch ($pagename) {

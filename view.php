@@ -41,7 +41,15 @@ $mooduell->view_page();
 
 $context = $mooduell->context;
 
-
+// Event debugging:
+$triggered_event = optional_param('triggered_event', null, PARAM_RAW);
+if ($triggered_event === 'game_finished'){
+    // TODO: solve this
+    // TODO: in the future we might pass different parameters
+    $event = \mod_mooduell\event\game_finished::create(array('context' => $context, 'objectid' => $id));
+    $event->trigger();
+}
+// End of event debugging
 
 // Use the view.php for different actions and views.
 switch ($action) {
