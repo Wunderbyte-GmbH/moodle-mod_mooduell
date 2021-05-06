@@ -32,19 +32,16 @@ $observers = array(
 
         array(
                 'eventname' => 'mod_mooduell\event\user_challenged',
-                'callback' => 'user_challenged',
-                'internal' => false
+                'callback' => 'mod_mooduell_observer::user_challenged'
         ),
 
         array(
                 'eventname' => 'mod_mooduell\event\leg_finished',
-                'callback' => 'leg_finished',
-                'internal' => false
+                'callback' => 'mod_mooduell_observer::leg_finished'
         ),
 
         array(
                 'eventname' => 'mod_mooduell\event\game_finished',
-                'callback' => 'game_finished',
-                'internal' => false
+                'callback' => 'mod_mooduell_observer::game_finished'
         )
 );
