@@ -379,6 +379,7 @@ class mooduell {
 
         if ($this->questions && count($this->questions) > 0) {
             return $this->questions;
+            return $this->questions;
         }
 
         global $DB;
@@ -488,7 +489,7 @@ class mooduell {
      * @param $key
      * @return \Closure
      */
-    private static function build_sorter($key) {
+    public static function build_sorter($key) {
         return function ($a, $b) use ($key) {
             return $a[$key] < $b[$key];
         };

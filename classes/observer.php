@@ -47,11 +47,7 @@ class mod_mooduell_observer {
         // For more information about the Events API, please visit:
         // https://docs.moodle.org/dev/Event_2
 
-        echo "xxxx";
-
-        // TODO: pass correct mooduellid
-
-        //TODO: game_finished::update_highscores_table();
+        game_finished::update_highscores_table($event->objectid);
 
         return true;
     }

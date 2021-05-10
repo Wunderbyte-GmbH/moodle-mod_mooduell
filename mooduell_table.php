@@ -45,7 +45,10 @@ $view = optional_param('view', '', PARAM_ALPHA); // values: 'teacher' or 'studen
 
 
 $mooduell_instance = new mooduell($quizid);
+
 $table = new mooduell_table($mooduell_instance, $action);
+
+
 $table->is_downloading($download, $action, $action);
 
 $mooduellid = $table->mooduell->cm->instance;
@@ -70,7 +73,7 @@ switch($action){
         break;
     case 'highscores':
         // generate the tabledata for highscores
-        $tabledata = loadHighscoresTableData($mooduellid, $table, $view);
+        $tabledata = loadHighscoresTableData($mooduellid, $table);
         break;
     default:
         break;
@@ -217,41 +220,22 @@ function loadFinishedGamesTableData($mooduellid, $table, $view){
  * @param $table
  * @return stdClass an object containing columns, headers and help (for headers)
  */
-function loadHighscoresTableData($mooduellid, $table, $view){
+function loadHighscoresTableData($mooduellid, $table){
     //TODO: implement this
 
     // Work out the sql for the table.
+    //$fields = "*, round((qcorrect/qplayed), 2) qcorrectpercentage";
     $fields = "*";
-    $from = "{mooduell_games}";
-    $where = "mooduellid = :mooduellid1 AND status = 3";
+    $from = "{mooduell_highscores}";
+    $where = "mooduellid = :mooduellid1";
     $params = array('mooduellid1' => $mooduellid);
 
     $table->set_sql($fields, $from, $where, $params);
 
-    $columns[]= 'timemodified';
-    $headers[]= get_string('lastplayed', 'mooduell');
+    $columns[]= 'ranking';
+    $headers[]= get_string('rank', 'mooduell');
     $help[] = NULL;
 
-    $columns[]= 'playeraid';
-    $headers[]= get_string('playera', 'mooduell');
-    $help[] = NULL;
-
-    $columns[]= 'playeraresults';
-    $headers[]= get_string('playeraresults', 'mooduell');
-    $help[] = NULL;
-
-    $columns[]= 'playerbid';
-    $headers[]= get_string('playerb', 'mooduell');
-    $help[] = NULL;
-
-    $columns[]= 'playerbresults';
-    $headers[]= get_string('playeraresults', 'mooduell');
-    $help[] = NULL;
-
-
-    $columns[]= 'action';
-    $headers[]= get_string('action', 'mooduell');
-    $help[] = NULL;
 
     $tabledata = new stdClass();
     $tabledata->columns = $columns;

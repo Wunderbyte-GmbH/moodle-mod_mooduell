@@ -32,7 +32,7 @@ class game_finished extends \core\event\base {
      * Set basic properties for the event.
      */
     protected function init() {
-        $this->data['objecttable'] = 'mooduell_games'; //TODO: change this to mooduell_highscores as soon as it's available!
+        $this->data['objecttable'] = 'mooduell_highscores';
         $this->data['crud'] = 'u'; // the event will update and insert new highscores data
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }

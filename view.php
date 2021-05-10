@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+global $CFG, $PAGE;
+
 use mod_mooduell\mooduell;
 
 require(__DIR__ . '/../../config.php');
@@ -44,8 +46,6 @@ $context = $mooduell->context;
 // Event debugging:
 $triggered_event = optional_param('triggered_event', null, PARAM_RAW);
 if ($triggered_event === 'game_finished'){
-    // TODO: solve this
-    // TODO: in the future we might pass different parameters
     $event = \mod_mooduell\event\game_finished::create(array('context' => $context, 'objectid' => $id));
     $event->trigger();
 }

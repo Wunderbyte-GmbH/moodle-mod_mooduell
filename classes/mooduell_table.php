@@ -98,5 +98,13 @@ class mooduell_table extends table_sql {
         return $link;
     }
 
+    function col_ranking($highscore_entry) {
+        if ($highscore_entry->ranking) {
+
+            $ranking = $highscore_entry->ranking;
+
+            return $ranking;
+        }
+    }
 
 }
