@@ -22,10 +22,11 @@ class game_finished
      *
      * @param $mooduellid the id of the current MooDuell instance
      */
-    public static function update_highscores_table($mooduellid){
+    public static function update_highscores_table($cmid){
         global $DB;
 
-        $mooduell = new mooduell($mooduellid);
+        $mooduell = new mooduell($cmid);
+        $mooduellid = $mooduell->cm->instance;
 
         // at first, delete old highscores for the MooDuell instance
         $DB->delete_records('mooduell_highscores', ['mooduellid' => $mooduellid]);

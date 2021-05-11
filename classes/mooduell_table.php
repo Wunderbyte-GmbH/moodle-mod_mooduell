@@ -48,6 +48,8 @@ class mooduell_table extends table_sql {
         $this->action = $action;
     }
 
+    /* COLUMNS for OPEN GAMES and FINISHED GAMES */
+
     function col_playeraid($game) {
         if ($game->playeraid) {
 
@@ -98,12 +100,77 @@ class mooduell_table extends table_sql {
         return $link;
     }
 
+    /* COLUMNS for HIGHSCORES */
+
     function col_ranking($highscore_entry) {
         if ($highscore_entry->ranking) {
 
             $ranking = $highscore_entry->ranking;
 
             return $ranking;
+        }
+    }
+
+    function col_userid($highscore_entry) {
+        if ($highscore_entry->userid) {
+
+            $username = $this->mooduell->return_name_by_id($highscore_entry->userid);
+
+            return $username;
+        }
+    }
+
+    function col_score($highscore_entry) {
+        if ($highscore_entry->score !== null) {
+
+            $score = $highscore_entry->score;
+
+            return $score;
+        }
+    }
+
+    function col_gamesplayed($highscore_entry) {
+        if ($highscore_entry->gamesplayed !== null) {
+
+            $gamesplayed = $highscore_entry->gamesplayed;
+
+            return $gamesplayed;
+        }
+    }
+
+    function col_gameswon($highscore_entry) {
+        if ($highscore_entry->gameswon !== null) {
+
+            $gameswon = $highscore_entry->gameswon;
+
+            return $gameswon;
+        }
+    }
+
+    function col_gameslost($highscore_entry) {
+        if ($highscore_entry->gameslost !== null) {
+
+            $gameslost = $highscore_entry->gameslost;
+
+            return $gameslost;
+        }
+    }
+
+    function col_qcorrect($highscore_entry) {
+        if ($highscore_entry->qcorrect !== null) {
+
+            $qcorrect = $highscore_entry->qcorrect;
+
+            return $qcorrect;
+        }
+    }
+
+    function col_qplayed($highscore_entry) {
+        if ($highscore_entry->qplayed !== null) {
+
+            $qplayed = $highscore_entry->qplayed;
+
+            return $qplayed;
         }
     }
 

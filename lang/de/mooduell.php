@@ -138,7 +138,7 @@ $string['gameswon'] = 'Gewonnene Spiele';
 $string['gameslost'] = 'Verlorene Spiele';
 $string['rank'] = 'Platz';
 $string['score'] = 'Punkte';
-$string['correctlyanswered'] = 'Korrekt';
+$string['correctlyanswered'] = 'Fragen richtig';
 $string['correctlyansweredpercentage'] = '% korrekt';
 $string['questions_played'] = 'Fragen beantwortet';
 

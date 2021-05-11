@@ -236,6 +236,37 @@ function loadHighscoresTableData($mooduellid, $table){
     $headers[]= get_string('rank', 'mooduell');
     $help[] = NULL;
 
+    $columns[]= 'userid';
+    $headers[]= get_string('username', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'score';
+    $headers[]= get_string('score', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'gamesplayed';
+    $headers[]= get_string('gamesplayed', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'gameswon';
+    $headers[]= get_string('gameswon', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'gameslost';
+    $headers[]= get_string('gameslost', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'qcorrect';
+    $headers[]= get_string('correctlyanswered', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'qplayed';
+    $headers[]= get_string('questions_played', 'mooduell');
+    $help[] = NULL;
+
+    /*
+    $string['correctlyansweredpercentage'] = '% korrekt';
+    */
 
     $tabledata = new stdClass();
     $tabledata->columns = $columns;

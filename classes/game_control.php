@@ -876,11 +876,8 @@ class game_control {
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
 
-            // set context and mooduellid
-            // ...then trigger the game_finished event
-            $context = $this->mooduell->context;
-            $mooduellid = $this->mooduell->cm->instance;
-            $event = game_finished::create(array('context' => $context, 'objectid' => $mooduellid));
+            // trigger the game_finished event
+            $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
             $event->trigger();
         }
         else {
