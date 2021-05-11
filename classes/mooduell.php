@@ -603,12 +603,12 @@ class mooduell {
         // If we have a quizid, we only get highscore for one special game
         // if there is no quiz id, we get highscore for all the games
         if ($quizid != 0) {
-            $mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
-            if (!$mooduellrecord || !$mooduellrecord->instance) {
-                throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
-                        "This MooDuell Instance does not exist.");
-            }
-            $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellrecord->instance));
+            //$mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
+            //if (!$mooduellrecord || !$mooduellrecord->instance) {
+            //    throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
+            //            "This MooDuell Instance does not exist.");
+            //}
+            $data = $DB->get_records('mooduell_games', array('mooduellid' => $quizid));
         } else {
             $data = $DB->get_records('mooduell_games');
         }
