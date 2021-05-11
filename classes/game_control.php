@@ -875,10 +875,6 @@ class game_control {
             list($update->winnerid, $update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
-
-            // trigger the game_finished event
-            $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
-            $event->trigger();
         }
         else {
             if ($this->is_it_active_users_turn()) {
@@ -891,8 +887,6 @@ class game_control {
                 = $this->return_correct_and_played_answers();
         }
 
-
-
         $result = $this->return_status();
         $update->playeraresults = $result[0];
         $update->playerbresults = $result[1];
@@ -901,8 +895,14 @@ class game_control {
         $now = new DateTime("now", \core_date::get_server_timezone_object());
         $update->timemodified = $now->getTimestamp();
 
-        $status = $DB->update_record('mooduell_games', $update);
+        $update_status = $DB->update_record('mooduell_games', $update);
 
+        // now the mooduell_games table has been updated
+        // ... so we can trigger the game_finished event
+        if ($update_status && $this->is_game_finished()){
+            $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
+            $event->trigger();
+        }
     }
 
     /**

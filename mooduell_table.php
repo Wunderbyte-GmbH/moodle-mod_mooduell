@@ -74,6 +74,11 @@ switch($action){
     case 'highscores':
         // generate the tabledata for highscores
         $tabledata = loadHighscoresTableData($mooduellid, $table);
+
+        // sort the table by descending score by default
+        $table->sort_default_column = 'score';
+        $table->sort_default_order = SORT_DESC;
+
         break;
     default:
         break;
@@ -221,10 +226,7 @@ function loadFinishedGamesTableData($mooduellid, $table, $view){
  * @return stdClass an object containing columns, headers and help (for headers)
  */
 function loadHighscoresTableData($mooduellid, $table){
-    //TODO: implement this
-
-    // Work out the sql for the table.
-    //$fields = "*, round((qcorrect/qplayed), 2) qcorrectpercentage";
+    // generate the SQL for the table
     $fields = "*";
     $from = "{mooduell_highscores}";
     $where = "mooduellid = :mooduellid1";
@@ -264,9 +266,13 @@ function loadHighscoresTableData($mooduellid, $table){
     $headers[]= get_string('questions_played', 'mooduell');
     $help[] = NULL;
 
-    /*
-    $string['correctlyansweredpercentage'] = '% korrekt';
-    */
+    $columns[]= 'qcorrectpercentage';
+    $headers[]= get_string('correctlyansweredpercentage', 'mooduell');
+    $help[] = NULL;
+
+    $columns[]= 'timemodified';
+    $headers[]= get_string('timemodified', 'mooduell');
+    $help[] = NULL;
 
     $tabledata = new stdClass();
     $tabledata->columns = $columns;

@@ -25,6 +25,7 @@
 global $CFG, $PAGE;
 
 use mod_mooduell\mooduell;
+use \mod_mooduell\event\game_finished;
 
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
@@ -43,11 +44,10 @@ $mooduell->view_page();
 
 $context = $mooduell->context;
 
-// Event debugging:
+// Event debugging (will be triggered by the button in classes/mooduell.php)
 $triggered_event = optional_param('triggered_event', null, PARAM_RAW);
 if ($triggered_event === 'game_finished'){
-    $event = \mod_mooduell\event\game_finished::create(array('context' => $context,
-                                                             'objectid' => $mooduell->cm->id));
+    $event = game_finished::create(array('context' => $context, 'objectid' => $mooduell->cm->id));
     $event->trigger();
 }
 // End of event debugging

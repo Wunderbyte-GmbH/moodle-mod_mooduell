@@ -141,6 +141,8 @@ $string['score'] = 'Punkte';
 $string['correctlyanswered'] = 'Fragen richtig';
 $string['correctlyansweredpercentage'] = '% korrekt';
 $string['questions_played'] = 'Fragen beantwortet';
+$string['timecreated'] = 'Erstellt';
+$string['timemodified'] = 'Zuletzt geändert';
 
 $string['downloadhighscores'] = 'Lade Highscores als csv Datei';
 

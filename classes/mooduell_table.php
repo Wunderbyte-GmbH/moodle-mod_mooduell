@@ -69,9 +69,14 @@ class mooduell_table extends table_sql {
     }
 
     function col_timemodified($game) {
+        global $SESSION;
         if ($game->timemodified) {
 
-            $name = date("F j, Y, g:i a", $game->timemodified);
+            if ($SESSION->lang === 'de'){
+                $name = date("d.m.Y, H:i:s", $game->timemodified);
+            } else {
+                $name = date("F j, Y, g:i:s a", $game->timemodified);
+            }
 
             return $name;
         }
@@ -174,4 +179,12 @@ class mooduell_table extends table_sql {
         }
     }
 
+    function col_qcorrectpercentage($highscore_entry) {
+        if ($highscore_entry->qcorrect !== null && $highscore_entry->qplayed !== null) {
+
+            $qcorrectpercentage = number_format((($highscore_entry->qcorrect / $highscore_entry->qplayed) * 100), 1);
+
+            return $qcorrectpercentage;
+        }
+    }
 }
