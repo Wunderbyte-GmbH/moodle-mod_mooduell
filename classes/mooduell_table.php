@@ -22,6 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+global $CFG;
 
 class mooduell_table extends table_sql {
 
@@ -69,11 +70,26 @@ class mooduell_table extends table_sql {
     }
 
     function col_timemodified($game) {
-        global $SESSION;
         if ($game->timemodified) {
-
-            if ($SESSION->lang === 'de'){
-                $name = date("d.m.Y, H:i:s", $game->timemodified);
+            if (current_language() === 'de'){
+                $monthnames_de = [
+                    1=>"Januar",
+                    2=>"Februar",
+                    3=>"März",
+                    4=>"April",
+                    5=>"Mai",
+                    6=>"Juni",
+                    7=>"Juli",
+                    8=>"August",
+                    9=>"September",
+                    10=>"Oktober",
+                    11=>"November",
+                    12=>"Dezember"
+                ];
+                // now build the German date string
+                $name = date("d. ", $game->timemodified);
+                $name .= $monthnames_de[date("n", $game->timemodified)];
+                $name .= date(" Y, H:i:s", $game->timemodified);
             } else {
                 $name = date("F j, Y, g:i:s a", $game->timemodified);
             }
@@ -179,12 +195,12 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_qcorrectpercentage($highscore_entry) {
-        if ($highscore_entry->qcorrect !== null && $highscore_entry->qplayed !== null) {
+    function col_qcpercentage($highscore_entry) {
+        if ($highscore_entry->qcpercentage !== null) {
 
-            $qcorrectpercentage = number_format((($highscore_entry->qcorrect / $highscore_entry->qplayed) * 100), 1);
+            $qcpercentage = number_format($highscore_entry->qcpercentage, 1).' %';
 
-            return $qcorrectpercentage;
+            return $qcpercentage;
         }
     }
 }

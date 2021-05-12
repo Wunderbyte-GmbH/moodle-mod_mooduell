@@ -176,7 +176,20 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021051000, 'mooduell');
     }
 
+    if ($oldversion < 2021051200) {
 
+        // Define field qcpercentage to be added to mooduell_highscores.
+        $table = new xmldb_table('mooduell_highscores');
+        $field = new xmldb_field('qcpercentage', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, '0', 'qplayed');
+
+        // Conditionally launch add field qcpercentage.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021051200, 'mooduell');
+    }
 
     return true;
 }

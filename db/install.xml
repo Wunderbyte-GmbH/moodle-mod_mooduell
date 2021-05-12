@@ -142,6 +142,7 @@
                 <FIELD NAME="score" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The user's score on the MooDuell instance."/>
                 <FIELD NAME="qcorrect" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The number of correctly answered questions (by the user, on the MooDuell instance)"/>
                 <FIELD NAME="qplayed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Number of played questions (by the user on this MooDuell instance)"/>
+                <FIELD NAME="qcpercentage" TYPE="number" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" DECIMALS="2" COMMENT="Percentage of correctly answered questions (by user on this MooDuell instance)"/>
                 <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the record was created."/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the record was last modified."/>
             </FIELDS>

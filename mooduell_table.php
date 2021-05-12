@@ -79,6 +79,9 @@ switch($action){
         $table->sort_default_column = 'score';
         $table->sort_default_order = SORT_DESC;
 
+        // turn off sorting by userid, as it will lead to confusion because real names or nicknames will be shown
+        $table->no_sorting('userid');
+
         break;
     default:
         break;
@@ -266,7 +269,7 @@ function loadHighscoresTableData($mooduellid, $table){
     $headers[]= get_string('questions_played', 'mooduell');
     $help[] = NULL;
 
-    $columns[]= 'qcorrectpercentage';
+    $columns[]= 'qcpercentage';
     $headers[]= get_string('correctlyansweredpercentage', 'mooduell');
     $help[] = NULL;
 

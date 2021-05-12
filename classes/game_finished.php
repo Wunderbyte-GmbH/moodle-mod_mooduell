@@ -45,6 +45,7 @@ class game_finished
                 'score' => $entry->score,
                 'qcorrect' => $entry->correct,
                 'qplayed'  => $entry->qplayed,
+                'qcpercentage' => $entry->correctpercentage,
                 'timecreated' => time(),
                 'timemodified' => time()
             ];
