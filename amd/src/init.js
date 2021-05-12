@@ -126,7 +126,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                         var dom_nodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length != 1) {
+                        if (dom_nodes.length > 2) {
                             replaceDownloadLink(id, dom_nodes, 'opengames');
                             replaceResetTableLink(id, dom_nodes, callLoadOpenGames);
                             replacePaginationLinks(id, dom_nodes, callLoadOpenGames);
@@ -171,7 +171,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                         var dom_nodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length != 1) {
+                        if (dom_nodes.length > 2) {
                             replaceDownloadLink(id, dom_nodes, 'finishedgames');
                             replaceResetTableLink(id, dom_nodes, callLoadFinishedGames);
                             replacePaginationLinks(id, dom_nodes, callLoadFinishedGames);
@@ -210,7 +210,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
 
                         var dom_nodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length != 1) {
+                        if (dom_nodes.length > 2) {
                             replaceDownloadLink(id, dom_nodes, 'highscores');
                             replaceResetTableLink(id, dom_nodes, callLoadHighScores);
                             replacePaginationLinks(id, dom_nodes, callLoadHighScores);
