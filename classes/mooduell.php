@@ -409,7 +409,7 @@ class mooduell {
      */
     public function return_list_of_highscores() {
 
-        $list = self::get_highscores($this->cm->id);
+        $list = self::get_highscores($this->cm->instance);
         $returnarray = [];
 
         foreach ($list as $entry) {
@@ -593,22 +593,39 @@ class mooduell {
         return ['status' => 1];
     }
 
-    public static function get_highscores($quizid) {
+    /**
+     * This function takes mooduell or $cmid, depending on the context.
+     *
+     * @param $mooduellid
+     * @param null $cmid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_highscores($mooduellid = null, $cmid = null) {
 
         global $DB, $USER;
+
+        // If there was not mooduellid, we have to retrieve it here
+        if (!$mooduellid) {
+            if (!$mooduellid = $DB->get_field('course_modules', 'instance', array('id' => $cmid))) {
+                throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
+                        "This MooDuell Instance does not exist.");
+            }
+        }
+
 
         $temparray = [];
 
         // Get all the finished games.
         // If we have a quizid, we only get highscore for one special game
         // if there is no quiz id, we get highscore for all the games
-        if ($quizid != 0) {
+        if ($mooduellid != 0) {
             //$mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
             //if (!$mooduellrecord || !$mooduellrecord->instance) {
             //    throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
             //            "This MooDuell Instance does not exist.");
             //}
-            $data = $DB->get_records('mooduell_games', array('mooduellid' => $quizid));
+            $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellid));
         } else {
             $data = $DB->get_records('mooduell_games');
         }
@@ -703,12 +720,12 @@ class mooduell {
         foreach ($temparray as $key => $value) {
 
             // if quizid = 0, we only return active user, else we return all users
-            if ($quizid == 0 && $key != $USER->id) {
+            if ($mooduellid == 0 && $key != $USER->id) {
                 continue;
             }
 
             $entry = [];
-            $entry['quizid'] = $quizid;
+            $entry['quizid'] = $cmid ? $cmid : $mooduellid;
             $entry['userid'] = $key;
             $entry['score'] = $value->score;
             $entry['won'] = $value->won;

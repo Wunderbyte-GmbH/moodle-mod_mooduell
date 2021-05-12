@@ -669,14 +669,16 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      */
     public static function get_highscores($quizid) {
+
+        global $DB;
+
         $params = array(
                 'quizid' => $quizid
         );
 
         $params = self::validate_parameters(self::get_highscores_parameters(), $params);
 
-        return mooduell::get_highscores($params['quizid']);
-
+        return mooduell::get_highscores(null, $params['quizid']);
     }
 
     /**
