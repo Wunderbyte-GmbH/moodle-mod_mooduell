@@ -22,28 +22,28 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once("../../config.php");
+
 global $CFG;
 
 class mooduell_table extends table_sql {
 
     /**
-     * // Only reason to extend this class is to make mooduell class instance available
-     * @var null
+     * @var stdClass
      */
-    var $mooduell = null;
+    public $mooduell;
 
     /**
      * Parameter to store the action (what to show in the mooduell_table)
      * @var String action ('opengames'|'finishedgames'|'questions'|'highscores')
      */
-    var $action = null;
+    public $action;
 
-    /** TODO
+    /**
      * mooduell_table constructor.
      * @param null $mooduell
      */
-    public function __construct($mooduell, $action)
-    {
+    public function __construct($mooduell, $action) {
         parent::__construct($action);
         $this->mooduell = $mooduell;
         $this->action = $action;
@@ -51,7 +51,7 @@ class mooduell_table extends table_sql {
 
     /* COLUMNS for OPEN GAMES and FINISHED GAMES */
 
-    function col_playeraid($game) {
+    public function col_playeraid($game) {
         if ($game->playeraid) {
 
             $name = $this->mooduell->return_name_by_id($game->playeraid);
@@ -60,7 +60,7 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_playerbid($game) {
+    public function col_playerbid($game) {
         if ($game->playerbid) {
 
             $name = $this->mooduell->return_name_by_id($game->playerbid);
@@ -69,26 +69,26 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_timemodified($game) {
+    public function col_timemodified($game) {
         if ($game->timemodified) {
-            if (current_language() === 'de'){
-                $monthnames_de = [
-                    1=>"Januar",
-                    2=>"Februar",
-                    3=>"März",
-                    4=>"April",
-                    5=>"Mai",
-                    6=>"Juni",
-                    7=>"Juli",
-                    8=>"August",
-                    9=>"September",
-                    10=>"Oktober",
-                    11=>"November",
-                    12=>"Dezember"
+            if (current_language() === 'de') {
+                $monthnamesde = [
+                    1 => "Januar",
+                    2 => "Februar",
+                    3 => "März",
+                    4 => "April",
+                    5 => "Mai",
+                    6 => "Juni",
+                    7 => "Juli",
+                    8 => "August",
+                    9 => "September",
+                    10 => "Oktober",
+                    11 => "November",
+                    12 => "Dezember"
                 ];
-                // now build the German date string
+                // Now build the German date string.
                 $name = date("d. ", $game->timemodified);
-                $name .= $monthnames_de[date("n", $game->timemodified)];
+                $name .= $monthnamesde[date("n", $game->timemodified)];
                 $name .= date(" Y, H:i:s", $game->timemodified);
             } else {
                 $name = date("F j, Y, g:i:s a", $game->timemodified);
@@ -98,7 +98,7 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_mooduellid($game) {
+    public function col_mooduellid($game) {
         if ($game->mooduellid) {
 
             $name = $game->mooduellid;
@@ -107,7 +107,7 @@ class mooduell_table extends table_sql {
         }
     }
 
-    function col_action($game) {
+    public function col_action($game) {
         $cmid = $this->mooduell->cm->id;
 
         $link = '<a href="view.php?action=viewquestions&id=' . $cmid . '&gameid=' . $game->id .'">' .
@@ -123,82 +123,82 @@ class mooduell_table extends table_sql {
 
     /* COLUMNS for HIGHSCORES */
 
-    function col_ranking($highscore_entry) {
-        if ($highscore_entry->ranking) {
+    public function col_ranking($highscoreentry) {
+        if ($highscoreentry->ranking) {
 
-            $ranking = $highscore_entry->ranking;
+            $ranking = $highscoreentry->ranking;
 
             return $ranking;
         }
     }
 
-    function col_userid($highscore_entry) {
-        if ($highscore_entry->userid) {
+    public function col_userid($highscoreentry) {
+        if ($highscoreentry->userid) {
 
-            $username = $this->mooduell->return_name_by_id($highscore_entry->userid);
+            $username = $this->mooduell->return_name_by_id($highscoreentry->userid);
 
             return $username;
         }
     }
 
-    function col_score($highscore_entry) {
-        if ($highscore_entry->score !== null) {
+    public function col_score($highscoreentry) {
+        if ($highscoreentry->score !== null) {
 
-            $score = $highscore_entry->score;
+            $score = $highscoreentry->score;
 
             return $score;
         }
     }
 
-    function col_gamesplayed($highscore_entry) {
-        if ($highscore_entry->gamesplayed !== null) {
+    public function col_gamesplayed($highscoreentry) {
+        if ($highscoreentry->gamesplayed !== null) {
 
-            $gamesplayed = $highscore_entry->gamesplayed;
+            $gamesplayed = $highscoreentry->gamesplayed;
 
             return $gamesplayed;
         }
     }
 
-    function col_gameswon($highscore_entry) {
-        if ($highscore_entry->gameswon !== null) {
+    public function col_gameswon($highscoreentry) {
+        if ($highscoreentry->gameswon !== null) {
 
-            $gameswon = $highscore_entry->gameswon;
+            $gameswon = $highscoreentry->gameswon;
 
             return $gameswon;
         }
     }
 
-    function col_gameslost($highscore_entry) {
-        if ($highscore_entry->gameslost !== null) {
+    public function col_gameslost($highscoreentry) {
+        if ($highscoreentry->gameslost !== null) {
 
-            $gameslost = $highscore_entry->gameslost;
+            $gameslost = $highscoreentry->gameslost;
 
             return $gameslost;
         }
     }
 
-    function col_qcorrect($highscore_entry) {
-        if ($highscore_entry->qcorrect !== null) {
+    public function col_qcorrect($highscoreentry) {
+        if ($highscoreentry->qcorrect !== null) {
 
-            $qcorrect = $highscore_entry->qcorrect;
+            $qcorrect = $highscoreentry->qcorrect;
 
             return $qcorrect;
         }
     }
 
-    function col_qplayed($highscore_entry) {
-        if ($highscore_entry->qplayed !== null) {
+    public function col_qplayed($highscoreentry) {
+        if ($highscoreentry->qplayed !== null) {
 
-            $qplayed = $highscore_entry->qplayed;
+            $qplayed = $highscoreentry->qplayed;
 
             return $qplayed;
         }
     }
 
-    function col_qcpercentage($highscore_entry) {
-        if ($highscore_entry->qcpercentage !== null) {
+    public function col_qcpercentage($highscoreentry) {
+        if ($highscoreentry->qcpercentage !== null) {
 
-            $qcpercentage = number_format($highscore_entry->qcpercentage, 1).' %';
+            $qcpercentage = number_format($highscoreentry->qcpercentage, 1).' %';
 
             return $qcpercentage;
         }

@@ -226,10 +226,8 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_games_by_courses($courseids, $timemodified) {
 
-
         $context = context_system::instance();
         self::validate_context($context);
-
 
         // We just call our function here to get all the quizzes.
         $returnedquizzes = self::get_quizzes_by_courses($courseids, $timemodified);
@@ -550,7 +548,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::set_alternatename_parameters(), $params);
 
-        global $USER, $DB;
+        global $USER;
 
         // Every user can only set his/her own name
         if ($params['userid'] != $USER->id) {
@@ -658,7 +656,6 @@ class mod_mooduell_external extends external_api {
                         'lostgames' => new external_value(PARAM_INT, 'lostgames'),
                         'correctlyanswered' => new external_value(PARAM_INT, 'correctlyanswered'),
                         'playedquestions' => new external_value(PARAM_INT, 'playedquestions')
-                        //'nemesisuserid' => new external_value(PARAM_INT, 'nemesisuserid')
                 )
         );
     }
@@ -669,8 +666,6 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      */
     public static function get_highscores($quizid) {
-
-        global $DB;
 
         $params = array(
                 'quizid' => $quizid
@@ -724,7 +719,7 @@ class mod_mooduell_external extends external_api {
         $activeuserid = $USER->id;
 
         // We only allow to set a pushToken for another user, if there is an active game going on.
-        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} 
+        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games}
             WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
             AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
             AND status != 3');
@@ -786,11 +781,9 @@ class mod_mooduell_external extends external_api {
 
         $activeuserid = $USER->id;
 
-
-
         if ($activeuserid != $params['userid']) {
             // We only allow to set a pushToken for another user, if there is an active game going on.
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} 
+            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games}
             WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
             AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
             AND status != 3');
@@ -802,7 +795,6 @@ class mod_mooduell_external extends external_api {
         }
 
         return mooduell::set_pushtoken($params['userid'], $params['identifier'], $params['model'], $params['pushtoken']);
-
     }
 
     /**
@@ -853,13 +845,12 @@ class mod_mooduell_external extends external_api {
                 // set 9 played questions for player A so the percentage
                 // of correct answers will be calculated correctly
                 $entry->playeraqplayed = 9;
-            }
-            // player B gives up
-            else if ($entry->playerbid === $USER->id) {
+            } else if ($entry->playerbid === $USER->id) {
+                // Player B gives up...
                 // ...so player A is the winner
                 $entry->winnerid = $entry->playeraid;
-                // set 9 played questions for player B so the percentage
-                // of correct answers will be calculated correctly
+                // Set 9 played questions for player B so the percentage...
+                // ... of correct answers will be calculated correctly.
                 $entry->playerbqplayed = 9;
             } else {
                 return ['status' => 0];
@@ -880,8 +871,7 @@ class mod_mooduell_external extends external_api {
     /**
      * @return external_function_parameters
      */
-    public
-    static function giveup_game_parameters() {
+    public static function giveup_game_parameters() {
         return new external_function_parameters(array(
                         'gameid' => new external_value(PARAM_INT, 'game id')
                 )
@@ -897,10 +887,17 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
+    /**
+     * @param $filename
+     * @param $filecontent
+     * @return int[]
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
     public static function update_profile_picture($filename, $filecontent) {
 
         global $USER, $CFG, $DB;
-
 
         $fileinfo = self::validate_parameters(self::update_profile_picture_parameters(), array('filename' => $filename, 'filecontent' => $filecontent));
 
@@ -929,9 +926,9 @@ class mod_mooduell_external extends external_api {
 
         require_once( $CFG->libdir . '/gdlib.php' );
 
-        //upload avatar from the temporary file
+        // Uppload avatar from the temporary file-
         $usericonid = process_new_icon( context_user::instance( $USER->id, MUST_EXIST ), 'user', 'icon', 0, $savedfilepath );
-        //specify icon id for the desired user with id $newuser->id (in our case)
+        // Specify icon id for the desired user with id $newuser->id (in our case).
         if ( $usericonid ) {
             $DB->set_field( 'user', 'picture', $usericonid, array( 'id' => $USER->id ) );
         }
@@ -939,16 +936,15 @@ class mod_mooduell_external extends external_api {
         @chmod($savedfilepath, $CFG->filepermissions);
         unset($fileinfo['filecontent']);
 
-        //delete temporary files
+        // Delete temporary files.
         unset( $savedfilepath );
 
-        //$USER->picture =
-
         return ['status' => 1];
-
-
     }
 
+    /**
+     * @return external_function_parameters
+     */
     public static function update_profile_picture_parameters() {
         return new external_function_parameters(array(
                         'filename'  => new external_value(PARAM_FILE, 'file name'),
@@ -983,7 +979,7 @@ class mod_mooduell_external extends external_api {
             $tshow = null,
             $tdir = null,
             $treset = null) {
-        global $DB, $USER, $COURSE, $CFG;
+        global $DB, $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1008,13 +1004,13 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'highscores';
         $_POST['quizid'] = $params['quizid'];
 
-        // differentiate between teacher and student views
+        // Differentiate between teacher and student views.
         $context = context_course::instance($COURSE->id);
-        $view = 'student'; // default
+        $view = 'student';
         if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // because of the capability to manage activities
+            $view = 'teacher'; // Because of the capability to manage activities.
         }
-        // now we set the view parameter for tablelib to fetch it
+        // Now we set the view parameter for tablelib to fetch it.
         $_POST['view'] = $view;
 
         ob_start();
@@ -1060,7 +1056,6 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      */
     public static function load_questions_data($quizid) {
-        global $DB, $USER;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1115,7 +1110,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      */
     public static function load_opengames_data($quizid, $pageid = null, $tsort = null, $thide = null, $tshow = null, $tdir = null, $treset = null) {
-        global $DB, $USER, $COURSE, $CFG;
+        global $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1129,7 +1124,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::load_opengames_data_parameters(), $params);
 
-        // We set the (optional) parameters for tablelib to fetch them
+        // We set the (optional) parameters for tablelib to fetch them.
         $_POST['page'] = $params['pageid'];
         $_POST['tsort'] = $params['tsort'];
         $_POST['thide'] = $params['thide'];
@@ -1140,13 +1135,13 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'opengames';
         $_POST['quizid'] = $params['quizid'];
 
-        // differentiate between teacher and student views
+        // Differentiate between teacher and student views.
         $context = context_course::instance($COURSE->id);
-        $view = 'student'; // default
+        $view = 'student'; // Default.
         if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // because of the capability to manage activities
+            $view = 'teacher'; // Because of the capability to manage activities.
         }
-        // now we set the view parameter for tablelib to fetch it
+        // Now we set the view parameter for tablelib to fetch it.
         $_POST['view'] = $view;
 
         ob_start();
@@ -1198,7 +1193,7 @@ class mod_mooduell_external extends external_api {
             $tshow = null,
             $tdir = null,
             $treset = null) {
-        global $DB, $USER, $COURSE, $CFG;
+        global $COURSE, $CFG;
 
         $params = array(
                 'quizid' => $quizid,
@@ -1212,7 +1207,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::load_finishedgames_data_parameters(), $params);
 
-        // We set the (optional) parameters for tablelib to fetch them
+        // We set the (optional) parameters for tablelib to fetch them.
         $_POST['page'] = $params['pageid'];
         $_POST['tsort'] = $params['tsort'];
         $_POST['thide'] = $params['thide'];
@@ -1223,13 +1218,13 @@ class mod_mooduell_external extends external_api {
         $_POST['action'] = 'finishedgames';
         $_POST['quizid'] = $params['quizid'];
 
-        // differentiate between teacher and student views
+        // Differentiate between teacher and student views.
         $context = context_course::instance($COURSE->id);
-        $view = 'student'; // default
+        $view = 'student'; // Default.
         if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // because of the capability to manage activities
+            $view = 'teacher'; // Because of the capability to manage activities.
         }
-        // now we set the view parameter for tablelib to fetch it
+        // Now we set the view parameter for tablelib to fetch it.
         $_POST['view'] = $view;
 
         ob_start();

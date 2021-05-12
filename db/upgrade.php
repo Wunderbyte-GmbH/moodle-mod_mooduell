@@ -56,14 +56,12 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-
-        // Booking savepoint reached.
+        // Savepoint reached.
         upgrade_mod_savepoint(true, 2020050416, 'mooduell');
     }
 
     if ($oldversion < 2020050417) {
 
-        // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell_pushtokens');
         $field = new xmldb_field('numberofnotifications', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
@@ -71,14 +69,12 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2020050417, 'mooduell');
     }
 
     if ($oldversion < 2021012201) {
 
-        // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell_games');
         $field = new xmldb_field('playeraresults', XMLDB_TYPE_CHAR, '255', null, null, null, null);
 
@@ -93,14 +89,11 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021012201, 'mooduell');
     }
 
     if ($oldversion < 2021041300) {
-        // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell_games');
 
         $field = new xmldb_field('playeraqplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'playerbcorrect');
@@ -114,7 +107,6 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021041300, 'mooduell');
     }
@@ -128,7 +120,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021041305) {
-        // Define field waitinglist to be added to booking_answers.
         $table = new xmldb_table('mooduell');
 
         $field = new xmldb_field('content', XMLDB_TYPE_TEXT, null, null, null, null, null, 'introformat');
@@ -136,13 +127,11 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021041305, 'mooduell');
     }
 
     if ($oldversion < 2021051000) {
-
         // Define table mooduell_highscores to be created.
         $table = new xmldb_table('mooduell_highscores');
 
@@ -171,7 +160,6 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021051000, 'mooduell');
     }
@@ -186,7 +174,6 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021051200, 'mooduell');
     }

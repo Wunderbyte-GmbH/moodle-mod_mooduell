@@ -305,9 +305,9 @@ class mooduell {
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
                 $data['statistics'] = $this->return_list_of_statistics_student();
-                $data['opengames'] = []; //$this->return_games_for_this_instance(true, false);
-                $data['finishedgames'] = []; //$this->return_games_for_this_instance(true, true);
-                $data['highscores'] = []; //$this->return_list_of_highscores();
+                $data['opengames'] = []; // $this->return_games_for_this_instance(true, false);
+                $data['finishedgames'] = []; // $this->return_games_for_this_instance(true, true);
+                $data['highscores'] = []; // $this->return_list_of_highscores();
                 // Add the Name of the instance
                 $data['quizname'] = $this->cm->name;
                 $viewpage = new viewpage($data);
@@ -390,8 +390,8 @@ class mooduell {
         $listofanswers = $this->return_list_of_answers();
 
         foreach ($listofquestions as $entry) {
-            $newQuestion = new question_control($entry, $listofanswers);
-            $questions[] = $newQuestion;
+            $newquestion = new question_control($entry, $listofanswers);
+            $questions[] = $newquestion;
         }
 
         $this->questions = $questions;
@@ -450,7 +450,6 @@ class mooduell {
                 ON q.category=qc.id
                 WHERE mc.mooduellid=$mooduellid";
 
-
         if (!$listofquestions = $DB->get_records_sql($sql)) {
             return [];
         }
@@ -477,13 +476,11 @@ class mooduell {
                 ON qa.question=q.id
                 WHERE mc.mooduellid=$mooduellid";
 
-
         if (!$listofanswers = $DB->get_records_sql($sql)) {
             return [];
         }
         return $listofanswers;
     }
-
 
     /**
      * @param $key
@@ -518,8 +515,10 @@ class mooduell {
         if ($timemodified > 0) {
             $sql .= " AND timemodified > $timemodified";
         };
+
         if ($finished === null) {
             // do nothing -> return finished and unfinished games
+            $sql .= "";
         } else if ($finished) {
             $sql .= " AND status = 3";
         } else {
@@ -535,30 +534,28 @@ class mooduell {
         }
     }
 
-
     public static function get_pushtokens($userid) {
 
         global $DB, $USER;
 
         $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
         $returndata = [];
-        if ($data && count($data) > 0)  {
-            foreach($data as $entry) {
+        if ($data && count($data) > 0) {
+            foreach ($data as $entry) {
 
                 $returndata[] = [
                         'identifier' => $entry->identifier,
                         'model' => $entry->model,
                         'pushtoken' => $entry->pushtoken,
                 ];
-
             }
         }
 
         return [
                 'userid' => $userid,
                 'pushtokens' => $returndata,
-        ];
-}
+                ];
+    }
 
     /**
      * Pushtokens have to be verified for validity.
@@ -575,7 +572,7 @@ class mooduell {
 
         $data = $DB->get_record('mooduell_pushtokens', array('userid' => $userid, 'identifier' => $identifier));
 
-        $update_data = [
+        $updatedata = [
                 'userid' => $userid,
                 'model' => $model,
                 'identifier' => $identifier,
@@ -584,10 +581,10 @@ class mooduell {
         ];
 
         if ($data) {
-            $update_data['id'] = $data->id;
-            $DB->update_record('mooduell_pushtokens', $update_data);
+            $updatedata['id'] = $data->id;
+            $DB->update_record('mooduell_pushtokens', $updatedata);
         } else {
-            $DB->insert_record('mooduell_pushtokens', $update_data);
+            $DB->insert_record('mooduell_pushtokens', $updatedata);
         }
 
         return ['status' => 1];
@@ -613,23 +610,16 @@ class mooduell {
             }
         }
 
-
         $temparray = [];
 
         // Get all the finished games.
         // If we have a quizid, we only get highscore for one special game
         // if there is no quiz id, we get highscore for all the games
         if ($mooduellid != 0) {
-            //$mooduellrecord = $DB->get_record('course_modules', array('id' => $quizid));
-            //if (!$mooduellrecord || !$mooduellrecord->instance) {
-            //    throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
-            //            "This MooDuell Instance does not exist.");
-            //}
             $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellid));
         } else {
             $data = $DB->get_records('mooduell_games');
         }
-
 
         $temparray = [];
 
@@ -639,12 +629,12 @@ class mooduell {
             $playera = new stdClass();
             $playerb = new stdClass();
 
-            // We count correct and played questions even if the game was not finsihed
+            // We count correct and played questions even if the game was not finsihed.
             $playera->correct = $entry->playeracorrect;
             $playerb->correct = $entry->playerbcorrect;
 
             // If we updated from the old version, we have null as default at this place...
-            // ... and we have to calculate the qplayed
+            // ... and we have to calculate the qplayed.
             if (!$entry->playeraqplayed) {
                 $notplayed = substr_count($entry->playeraresults, '-');
                 $playera->qplayed = 9 - $notplayed;
@@ -653,7 +643,7 @@ class mooduell {
             }
 
             // If we updated from the old version, we have null as default at this place...
-            // ... and we have to calculate the qplaed
+            // ... and we have to calculate the qplaed.
             if (!$entry->playerbqplayed) {
                 $notplayed = substr_count($entry->playerbresults, '-');
                 $playerb->qplayed = 9 - $notplayed;
@@ -661,13 +651,13 @@ class mooduell {
                 $playerb->qplayed = $entry->playerbqplayed;
             }
 
-            //Player A
+            // Player A
             $playera->played = 0; // games played
             $playera->won = 0;
             $playera->lost = 0;
             $playera->score = 0;
 
-            //Player B
+            // Player B
             $playerb->played = 0; // games played
             $playerb->won = 0;
             $playerb->lost = 0;
@@ -716,10 +706,10 @@ class mooduell {
                 self::add_score($temparray[$entry->playerbid], $playerb);
             }
         }
-        $array_without_ranks = [];
+        $arraywithoutranks = [];
         foreach ($temparray as $key => $value) {
 
-            // if quizid = 0, we only return active user, else we return all users
+            // If quizid = 0, we only return active user, else we return all users.
             if ($mooduellid == 0 && $key != $USER->id) {
                 continue;
             }
@@ -734,40 +724,38 @@ class mooduell {
             $entry['correct'] = $value->correct;
 
             if (!empty($value->qplayed) and $value->qplayed > 0) {
-                // determine percentage of correctly answered questions by division through played questions
-                $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed )* 100), 1);
+                // Determine percentage of correctly answered questions by division through played questions.
+                $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed ) * 100), 1);
                 $entry['qplayed'] = $value->qplayed;
             } else {
                 $entry['correctpercentage'] = 0;
                 $entry['qplayed'] = 0;
             }
 
-            $array_without_ranks[] = $entry;
+            $arraywithoutranks[] = $entry;
         }
 
-        usort($array_without_ranks, self::build_sorter('score'));
+        usort($arraywithoutranks, self::build_sorter('score'));
 
-        // now add the correct ranks to the sorted array
-        $array_with_ranking = [];
-        $previous_score = false;
-        $previous_rank = false;
+        // Now add the correct ranks to the sorted array.
+        $arraywithranking = [];
+        $previousscore = false;
+        $previousrank = false;
         $index = 0;
-        foreach($array_without_ranks as $record){
+        foreach ($arraywithoutranks as $record) {
             $index++;
-            // same rank if the scores are the same
-            if ($previous_score == $record['score']){
-                $record['rank'] = $previous_rank;
-            }
-            // in all other cases use index as rank
-            else {
+            // Same rank if the scores are the same.
+            if ($previousscore == $record['score']) {
+                $record['rank'] = $previousrank;
+            } else {
+                // In all other cases use index as rank.
                 $record['rank'] = $index;
             }
-            $previous_score = $record['score'];
-            $previous_rank = $record['rank'];
-            $array_with_ranking[] = $record;
+            $previousscore = $record['score'];
+            $previousrank = $record['rank'];
+            $arraywithranking[] = $record;
         }
-
-        return $array_with_ranking;
+        return $arraywithranking;
     }
 
     /**
@@ -802,10 +790,9 @@ class mooduell {
             return $this->usernames[$userid];
         }
 
-
         $usefullnames = $this->settings->usefullnames;
 
-        // Get user record of user
+        // Get user record of user.
         $user = $DB->get_record('user', array('id' => $userid));
 
         profile_load_custom_fields($user);
@@ -827,7 +814,7 @@ class mooduell {
             $returnstring = "$user->firstname $user->lastname";
         }
 
-        // Cache if we have to fetch it again
+        // Cache if we have to fetch it again.
         $this->usernames[$userid] = $returnstring;
 
         return $returnstring;
@@ -909,10 +896,6 @@ class mooduell {
                     'message' => get_string('notenoughquestions', 'mod_mooduell')];
         }
 
-        // TODO: Add further checks
-
-
-
         return $returnarray;
     }
 
@@ -953,10 +936,10 @@ class mooduell {
 
         $mooduellid = $this->cm->instance;
 
-        $list_of_statistics = [];
-        $list_of_statistics['courseid'] = $this->course->id;
+        $listofstatistics = [];
+        $listofstatistics['courseid'] = $this->course->id;
 
-        // number of distinct users who have played a MooDuell game
+        // Number of distinct users who have played a MooDuell game.
         $sql = "select count(*) active_users from (
                     select playeraid playerid from {mooduell_games}
                     where mooduellid = $mooduellid
@@ -964,44 +947,44 @@ class mooduell {
                     select playerbid playerid from {mooduell_games}
                     where mooduellid = $mooduellid
                 ) s"; // info: union selects only distinct records
-        $number_of_active_users = $DB->get_record_sql($sql)->active_users;
-        $list_of_statistics['number_of_active_users'] = $number_of_active_users;
+        $numberofactiveusers = $DB->get_record_sql($sql)->active_users;
+        $listofstatistics['number_of_active_users'] = $numberofactiveusers;
 
-        // number of MooDuell games started
+        // Number of MooDuell games started.
         $sql = "select count(*) games_played from {mooduell_games} where mooduellid = $mooduellid";
-        $number_of_games_started = $DB->get_record_sql($sql)->games_played;
-        $list_of_statistics['number_of_games_started'] = $number_of_games_started;
+        $numberofgamesstarted = $DB->get_record_sql($sql)->games_played;
+        $listofstatistics['number_of_games_started'] = $numberofgamesstarted;
 
-        // number of MooDuell games played
+        // Number of MooDuell games played.
         $sql = "select count(*) games_finished from {mooduell_games} where mooduellid = $mooduellid and status = 3";
-        $number_of_games_finished = $DB->get_record_sql($sql)->games_finished;
-        $list_of_statistics['number_of_games_finished'] = $number_of_games_finished;
+        $numberofgamesfinished = $DB->get_record_sql($sql)->games_finished;
+        $listofstatistics['number_of_games_finished'] = $numberofgamesfinished;
 
-        // number of answers returned to MooDuell questions
+        // Number of answers returned to MooDuell questions.
         $sql = "select sum(s.answers) answers from
                 (select count(playeraanswered) answers from {mooduell_questions} where playeraanswered is not null and mooduellid = $mooduellid
                 union all
                 select count(playerbanswered) answers from {mooduell_questions} where playerbanswered is not null and mooduellid = $mooduellid) s";
-        $number_of_answers = $DB->get_record_sql($sql)->answers;
-        $list_of_statistics['number_of_answers'] = $number_of_answers;
+        $numberofanswers = $DB->get_record_sql($sql)->answers;
+        $listofstatistics['number_of_answers'] = $numberofanswers;
 
-        // percentage of correctly answered questions
-        // step 1: find out the number of correct answers returned to MooDuell questions
+        // Percentage of correctly answered questions.
+        // Step 1: find out the number of correct answers returned to MooDuell questions.
         $sql = "select sum(s.correct_answers) correct_answers from
                 (select count(playeraanswered) correct_answers from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
                 union all
                 select count(playerbanswered) correct_answers from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s";
-        $number_of_correct_answers = $DB->get_record_sql($sql)->correct_answers;
+        $numberofcorrectanswers = $DB->get_record_sql($sql)->correct_answers;
 
-        if(!empty($number_of_correct_answers)){
-            // step 2: calculate the percentage
-            $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_answers )* 100), 1);
-            $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
+        if (!empty($numberofcorrectanswers)) {
+            // Step 2: calculate the percentage.
+            $correctanswerspercentage = number_format((( $numberofcorrectanswers / $numberofanswers ) * 100), 1);
+            $listofstatistics['percentage_of_correct_answers'] = $correctanswerspercentage;
         } else {
-            $list_of_statistics['percentage_of_correct_answers'] = false;
+            $listofstatistics['percentage_of_correct_answers'] = false;
         }
 
-        // easiest question = question which has been answered correctly most often
+        // Easiest question = question which has been answered correctly most often.
         $sql = "select s.questionid, q.name questionname, count(*) correct_count from
                 (select * from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
                 union all
@@ -1012,18 +995,18 @@ class mooduell {
                 order by correct_count desc
                 limit 1";
 
-        $list_of_statistics['eq_id'] = false;
-        $list_of_statistics['eq_name'] = "";
-        $list_of_statistics['eq_correct_count'] = 0;
+        $listofstatistics['eq_id'] = false;
+        $listofstatistics['eq_name'] = "";
+        $listofstatistics['eq_correct_count'] = 0;
 
         $entry = $DB->get_record_sql($sql);
-        if(!empty($entry)) {
-            $list_of_statistics['eq_id'] = $entry->questionid;
-            $list_of_statistics['eq_name'] = $entry->questionname;
-            $list_of_statistics['eq_correct_count'] = $entry->correct_count;
+        if (!empty($entry)) {
+            $listofstatistics['eq_id'] = $entry->questionid;
+            $listofstatistics['eq_name'] = $entry->questionname;
+            $listofstatistics['eq_correct_count'] = $entry->correct_count;
         }
 
-        // hardest question = question which has been answered incorrectly most often
+        // Hardest question = question which has been answered incorrectly most often.
         $sql = "select s.questionid, q.name questionname, count(*) incorrect_count from
                 (select * from {mooduell_questions} where playeraanswered = 1 and mooduellid = $mooduellid
                 union all
@@ -1034,18 +1017,18 @@ class mooduell {
                 order by incorrect_count desc
                 limit 1";
 
-        $list_of_statistics['hq_id'] = false;
-        $list_of_statistics['hq_name'] = "";
-        $list_of_statistics['hq_incorrect_count'] = 0;
+        $listofstatistics['hq_id'] = false;
+        $listofstatistics['hq_name'] = "";
+        $listofstatistics['hq_incorrect_count'] = 0;
 
         $entry = $DB->get_record_sql($sql);
-        if(!empty($entry)){
-            $list_of_statistics['hq_id'] = $entry->questionid;
-            $list_of_statistics['hq_name'] = $entry->questionname;
-            $list_of_statistics['hq_incorrect_count'] = $entry->incorrect_count;
+        if (!empty($entry)) {
+            $listofstatistics['hq_id'] = $entry->questionid;
+            $listofstatistics['hq_name'] = $entry->questionname;
+            $listofstatistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
 
-        return $list_of_statistics;
+        return $listofstatistics;
     }
 
     /**
@@ -1060,15 +1043,15 @@ class mooduell {
 
         $mooduellid = $this->cm->instance;
 
-        $list_of_statistics = [];
-        $list_of_statistics['courseid'] = $this->course->id;
+        $listofstatistics = [];
+        $listofstatistics['courseid'] = $this->course->id;
 
-        // get user statistics
-        $user_stats = game_control::get_user_stats( $USER->id, $mooduellid);
+        // Get user statistics.
+        $userstats = game_control::get_user_stats( $USER->id, $mooduellid);
 
-        // number of distinct opponents who have played a MooDuell game
-        // against the current user
-        $sql = "select count(*)-1 opponents 
+        // Number of distinct opponents who have played a MooDuell game...
+        // ... gainst the current user.
+        $sql = "select count(*)-1 opponents
                 from (
                   select playeraid playerid from {mooduell_games}
                   where mooduellid = $mooduellid
@@ -1078,46 +1061,51 @@ class mooduell {
                   where mooduellid = $mooduellid
                   and (playeraid = $USER->id or playerbid = $USER->id)
                 ) s"; // info: union selects only distinct records
-        $number_of_opponents = $DB->get_record_sql($sql)->opponents;
-        // No game played yet
-        if ($number_of_opponents == -1) {
+        $numberofopponents = $DB->get_record_sql($sql)->opponents;
+        // No game played yet.
+        if ($numberofopponents == -1) {
             // This is a small trick, we create an array with an entry...
             // ... this allows us to control information in the mustache-template.
-            $list_of_statistics['nogames'] = [1];
-            $number_of_opponents = 0;
+            $listofstatistics['nogames'] = [1];
+            $numberofopponents = 0;
         }
 
-        $list_of_statistics['number_of_opponents'] = $number_of_opponents;
+        $listofstatistics['number_of_opponents'] = $numberofopponents;
 
-        // number of unfinished (open) MooDuell games having the current user involved
+        // Number of unfinished (open) MooDuell games having the current user involved.
         $sql = "select count(*) open_games from {mooduell_games}
-                where mooduellid = $mooduellid 
+                where mooduellid = $mooduellid
                 and (playeraid = $USER->id or playerbid = $USER->id)
                 and status <> 3";
-        $number_of_open_games = $DB->get_record_sql($sql)->open_games;
-        $list_of_statistics['number_of_open_games'] = $number_of_open_games;
 
-        // number of finished MooDuell games having the current user involved
-        $list_of_statistics['number_of_games_finished'] = $user_stats['playedgames'];
-
-        // number of games won by the user
-        $list_of_statistics['number_of_games_won'] = $user_stats['wongames'];
-
-        // number of correct answers (given by the user)
-        $list_of_statistics['number_of_correct_answers'] = $user_stats['correctlyanswered'];
-
-        // percentage of correctly answered questions
-        $number_of_correct_answers = $user_stats['correctlyanswered'];
-        $number_of_played_questions = $user_stats['playedquestions'];
-        if ($number_of_correct_answers != 0) {
-            $correct_answers_percentage = number_format((( $number_of_correct_answers / $number_of_played_questions )* 100), 1);
+        if ($data = $DB->get_record_sql($sql)) {
+            $numberofopengames = $data->open_games;
         } else {
-            $correct_answers_percentage = 0;
+            $numberofopengames = 0;
+        }
+        $listofstatistics['number_of_open_games'] = $numberofopengames;
+
+        // Number of finished MooDuell games having the current user involved.
+        $listofstatistics['number_of_games_finished'] = $userstats['playedgames'];
+
+        // Number of games won by the user.
+        $listofstatistics['number_of_games_won'] = $userstats['wongames'];
+
+        // Number of correct answers (given by the user).
+        $listofstatistics['number_of_correct_answers'] = $userstats['correctlyanswered'];
+
+        // Percentage of correctly answered questions.
+        $numberofcorrectanswers = $userstats['correctlyanswered'];
+        $numberofplayedquestions = $userstats['playedquestions'];
+        if ($numberofcorrectanswers != 0) {
+            $correctanswerspercentage = number_format((( $numberofcorrectanswers / $numberofplayedquestions ) * 100), 1);
+        } else {
+            $correctanswerspercentage = 0;
         }
 
-        $list_of_statistics['percentage_of_correct_answers'] = $correct_answers_percentage;
+        $listofstatistics['percentage_of_correct_answers'] = $correctanswerspercentage;
 
-        return $list_of_statistics;
+        return $listofstatistics;
     }
 
     /**
@@ -1126,10 +1114,10 @@ class mooduell {
      * @param $headline
      * @param $data
      */
-    function export_data_as_csv($headline, $data) {
+    public function export_data_as_csv($headline, $data) {
         global $CFG;
 
-        require_once ($CFG->libdir . '/csvlib.class.php');
+        require_once($CFG->libdir . '/csvlib.class.php');
 
         // Make sure data is valid:
 
@@ -1150,9 +1138,5 @@ class mooduell {
         }
 
         $csvexport->download_file();
-
-
     }
-
-
 }

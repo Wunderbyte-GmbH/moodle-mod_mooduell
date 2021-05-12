@@ -131,9 +131,7 @@ class question_control {
      */
     public function __construct($data = null, $listofanswers = null) {
         // If we have $data, we automatically create all the relevant values for this question...
-        global $COURSE;
-        global $DB;
-
+        global $COURSE, $DB;
 
         if ($data) {
             $this->questionid = $data->id;
@@ -181,7 +179,6 @@ class question_control {
         }
 
         if ($listofanswers && count($listofanswers) > 0) {
-
 
             foreach ($listofanswers as $k => $val) {
                 if ($val->question == $this->questionid) {
@@ -249,10 +246,9 @@ class question_control {
     }
 
     /**
-     * Add warnings for every problem an set status accordingly.
+     * Add warnings for every problem and set status accordingly.
      */
     private function check_question() {
-
         // Check for correct number of answers and set status and qtype accordingly.
         $this->check_for_right_number_of_answers();
 
@@ -263,10 +259,8 @@ class question_control {
         $this->check_for_right_length_of_questiontext();
 
         if (count($this->warnings) == 0) {
-            $this->status =  get_string('ok', 'mod_mooduell');
+            $this->status = get_string('ok', 'mod_mooduell');
         }
-
-
     }
 
     /**
@@ -301,15 +295,10 @@ class question_control {
 
         $idstring = implode("/", [$quid->id, 1, $this->questionid]);
 
-
         $this->questiontext = file_rewrite_pluginfile_urls($this->questiontext, 'pluginfile.php', $this->contextid, 'question', 'questiontext', $idstring);
 
-
-
         $dom = new \DOMDocument();
-
         $dom->loadHTML($this->questiontext);
-
 
         $images = $dom->getElementsByTagName('img');
         $url = '';
@@ -326,7 +315,6 @@ class question_control {
         $this->questiontext = format_text($this->questiontext, 4);
         $this->length = strlen($this->questiontext);
         $this->imageurl = $url;
-
         $this->imagetext = $alttext;
     }
 
@@ -344,7 +332,7 @@ class question_control {
             $this->status = get_string('notok', 'mod_mooduell');
         } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
             $this->questiontype = 'singlechoice';
-        } // Else do nothing;
+        } // Else do nothing.
     }
 
     private function check_for_right_length_of_questiontext() {

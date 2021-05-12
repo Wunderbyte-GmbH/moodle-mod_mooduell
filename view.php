@@ -21,14 +21,16 @@
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 global $CFG, $PAGE;
 
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;
 
-require(__DIR__ . '/../../config.php');
+require_once('../../config.php');
 require_once(__DIR__ . '/lib.php');
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once("{$CFG->dirroot}/mod/mooduell/classes/mooduell.php");
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 
@@ -44,20 +46,20 @@ $mooduell->view_page();
 
 $context = $mooduell->context;
 
-// Event debugging (will be triggered by the button in classes/mooduell.php)
-$triggered_event = optional_param('triggered_event', null, PARAM_RAW);
-if ($triggered_event === 'game_finished'){
+// Event debugging - will be triggered by the button in classes/mooduell.php.
+$triggeredevent = optional_param('triggered_event', null, PARAM_RAW);
+if ($triggeredevent === 'game_finished') {
     $event = game_finished::create(array('context' => $context, 'objectid' => $mooduell->cm->id));
     $event->trigger();
 }
-// End of event debugging
+// End of event debugging.
 
 // Use the view.php for different actions and views.
 switch ($action) {
     case null:
         break;
     case 'delete':
-        // this check is not really necessary
+        // This check is not really necessary.
         if (has_capability('mod/mooduell:editgames', $context)) {
             $PAGE->set_url('/mod/mooduell/view.php', array('id' => $id));
             $mooduell->execute_action($action, $gameid);

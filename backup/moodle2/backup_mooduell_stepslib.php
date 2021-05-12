@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -49,7 +48,6 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $category = new backup_nested_element('category', array('id'), array(
                 'mooduellid', 'category', 'weight'));
 
-
         $games = new backup_nested_element('games');
 
         $game = new backup_nested_element('game', array('id'), array(
@@ -59,7 +57,6 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
                 'victorycoefficient', 'timemodified',
                 'timecreated', 'playeraresults', 'playerbresults',
                 'playeraqplayed', 'playerbqplayed'));
-
 
         $pushtokens = new backup_nested_element('pushtokens');
 
@@ -71,8 +68,7 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $question = new backup_nested_element('question', array('id'), array(
                 'mooduellid', 'gameid', 'questionid', 'playeraanswered', 'playerbanswered'));
 
-
-        // Build the tree
+        // Build the tree.
         $mooduell->add_child($categories);
         $categories->add_child($category);
 
@@ -85,31 +81,32 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $mooduell->add_child($questions);
         $questions->add_child($question);
 
-
-
-        // Define sources
+        // Define sources.
         $mooduell->set_source_table('mooduell', array('id' => backup::VAR_ACTIVITYID));
 
         $category->set_source_table('mooduell_categories', array('mooduellid' => backup::VAR_PARENTID));
 
-        $game->set_source_table('mooduell_games', array('mooduellid' => backup::VAR_PARENTID));
+        // Only if we include userinfo, we also include games, questions & pushtokens
+        if ($userinfo) {
+            $game->set_source_table('mooduell_games', array('mooduellid' => backup::VAR_PARENTID));
 
-        $question->set_source_table('mooduell_questions', array('mooduellid' => backup::VAR_PARENTID));
+            $question->set_source_table('mooduell_questions', array('mooduellid' => backup::VAR_PARENTID));
 
-        // $pushtoken->set_source_table('mooduell_pushtokens', array('mooduellid' => backup::VAR_PARENTID));
+            $pushtoken->set_source_table('mooduell_pushtokens', array('mooduellid' => backup::VAR_PARENTID));
 
-        // Define id annotations
-        $game->annotate_ids('user', 'playeraid');
-        $game->annotate_ids('user', 'playerbid');
+            // Define id annotations
+            $game->annotate_ids('user', 'playeraid');
+            $game->annotate_ids('user', 'playerbid');
+        }
 
         $category->annotate_ids('question_categories', 'category');
         $question->annotate_ids('question', 'questionid');
 
-        // Define file annotations
-        $mooduell->annotate_files('mod_mooduell', 'intro', null); // This file areas haven't itemid
-        // $mooduell->annotate_files('mod_mooduell', 'content', null); // This file areas haven't itemid
+        // Define file annotations.
+        // This file areas haven't itemid.
+        $mooduell->annotate_files('mod_mooduell', 'intro', null);
 
-        // Return the root element (mooduell), wrapped into standard activity structure
+        // Return the root element (mooduell), wrapped into standard activity structure.
         return $this->prepare_activity_structure($mooduell);
     }
 }

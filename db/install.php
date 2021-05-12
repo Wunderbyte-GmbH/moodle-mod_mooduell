@@ -64,6 +64,5 @@ function xmldb_mooduell_install() {
         $DB->insert_record('user_info_field', $mooduellalias);
     }
 
-
     return true;
 }

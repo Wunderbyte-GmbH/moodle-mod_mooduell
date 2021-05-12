@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -44,7 +43,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
             $paths[] = new restore_path_element('mooduell_games', '/activity/mooduell/games/game');
             $paths[] = new restore_path_element('mooduell_questions', '/activity/mooduell/questions/question');
         }
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -58,9 +57,9 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
         // See MDL-9367.
 
-        // insert the mooduell record
+        // Insert the mooduell record.
         $newitemid = $DB->insert_record('mooduell', $data);
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
 

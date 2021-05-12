@@ -93,7 +93,6 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
         $moduleinstance->usefullnames = 0;
     }
 
-
     return $DB->update_record('mooduell', $moduleinstance);
 }
 
@@ -135,7 +134,6 @@ function mooduell_delete_instance($id) {
  */
 function mooduell_question_pluginfile($course, $context, $component, $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) {
 
-
     // Note: We might get different context levels, (System, Course) so we don't check them.
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     /*if ($context->contextlevel != COURSE_MODULE) {
@@ -151,9 +149,9 @@ function mooduell_question_pluginfile($course, $context, $component, $filearea, 
     require_login($course, true);
 
     // Check the relevant capabilities - these may vary depending on the filearea being accessed.
-    if (!has_capability('mod/mooduell:view', $context)) {
+    // if (!has_capability('mod/mooduell:view', $context)) {
         // return false;
-    }
+    // }
 
     // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
     $itemid = array_shift($args); // The first item in the $args array.

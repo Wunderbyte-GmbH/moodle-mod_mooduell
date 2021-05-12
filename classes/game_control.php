@@ -116,7 +116,7 @@ class game_control {
      */
     public static function return_users_for_game($mooduell) {
 
-        global $PAGE, $USER;
+        global $PAGE;
 
         $context = $mooduell->context;
         $users = get_enrolled_users($context);
@@ -127,7 +127,7 @@ class game_control {
             // We need to skip users who are missing the capability
             // to view the current MooDuell instance (3rd parameter of is_enrolled)
             // also skip users with no active enrolement status (4th parameter of is_enrolled)
-            if (!is_enrolled($context, $user, 'mod/mooduell:viewinstance', true)){
+            if (!is_enrolled($context, $user, 'mod/mooduell:viewinstance', true)) {
                 continue;
             }
 
@@ -140,8 +140,7 @@ class game_control {
                 profile_save_data($user);
             }
 
-
-            //First we check if the user needs an alternatename and if he has one
+            // First we check if the user needs an alternatename and if he has one.
             if ($mooduell->settings->usefullnames == 0
             && strlen($user->profile['mooduell_alias']) == 0) {
                 continue;
@@ -183,10 +182,7 @@ class game_control {
             $correctlyanswered = 0;
             $playedquestions = 0;
             foreach ($data as $entry) {
-                // We count won and lost games only when they are finished
-
-                // check if user has the right to access
-
+                // Check if user has the right to access.
                 if ($mooduellid != null && $mooduellid !== $entry->mooduellid) {
                     continue;
                 }
@@ -201,42 +197,32 @@ class game_control {
                     continue;
                 }
 
-
-                //$context = \context_module::instance($cmid);
-                //
-                //if (!has_capability('mod/mooduell:viewinstance', $context)) {
-                //    continue;
-                //}
-
-
+                // We count won and lost games only when they are finished.
                 if ($entry->status == 3) {
                     ++$playedgames;
 
                     if ($entry->winnerid == $userid) {
                         ++$wongames;
-                    }
-                    else if ($entry->winnerid !== 0) {
+                    } else if ($entry->winnerid !== 0) {
                         ++$lostgames;
                     }
                 }
                 if ($entry->playeraid == $userid) {
                     $correctlyanswered += $entry->playeracorrect;
-
                     // If we updated from the old version, we have null as default at this place...
-                    // ... and we have to calculate the qplaed
+                    // ... and we have to calculate the qplayed.
                     if ($entry->playeraqplayed === null) {
-                        $playedquestions += 9 - substr_count('-',$entry->playeraresults);
+                        $playedquestions += 9 - substr_count('-', $entry->playeraresults);
                     } else {
                         $playedquestions += $entry->playeraqplayed;
                     }
-
                 } else {
                     $correctlyanswered += $entry->playerbcorrect;
 
                     // If we updated from the old version, we have null as default at this place...
-                    // ... and we have to calculate the qplayed
+                    // ... and we have to calculate the qplayed.
                     if ($entry->playerbqplayed === null) {
-                        $playedquestions += 9 - substr_count('-',$entry->playerbresults);
+                        $playedquestions += 9 - substr_count('-', $entry->playerbresults);
                     } else {
                         $playedquestions += $entry->playerbqplayed;
                     }
@@ -247,8 +233,7 @@ class game_control {
             $returnarray['lostgames'] = $lostgames;
             $returnarray['correctlyanswered'] = $correctlyanswered;
             $returnarray['playedquestions'] = $playedquestions;
-        }
-        catch (exception $e) {
+        } catch (exception $e) {
             throw new moodle_exception('nomooduellinstance', 'mooduell', null, null,
                     "No MooDuell instance seems to exist on your plattform");
         }
@@ -289,7 +274,6 @@ class game_control {
         $data->mooduellid = $this->mooduell->cm->instance;
 
         // set the result string to their initial value, so we don't get null
-        //$result_array = $this->return_status();
         $data->playeraresults = EMPTY_RESULT;
         $data->playerbresults = EMPTY_RESULT;
 
@@ -351,10 +335,9 @@ class game_control {
         }
 
         // Now we add the numbersofquestions key to each category.
-        $calculatedqnumber = 0;
+        // $calculatedqnumber = 0;
         foreach ($categories as $category) {
             $category->numberofquestions = (int) round(($category->weight / $sum) * $setnumberofquestions);
-            //$calculatedqnumber += $categories[$category->id]->numberofquestions;
 
             // We get all the available questions.
             $category->availableQuestions = $this->return_playable_questions_for_category($category);
@@ -420,26 +403,17 @@ class game_control {
                     "we received the wrong number of questions linked to our Mooduell game");
         }
 
-
         $questions = array();
-
-
         // If we have questions in our instance, we can return them right away.
         if ($this->mooduell->questions && count($this->mooduell->questions) > 0) {
-
             foreach ($mquestions as $mquestion) {
-                $found = false;
-                foreach($this->mooduell->questions as $item) {
+                foreach ($this->mooduell->questions as $item) {
                     if ($mquestion->questionid == $item->questionid) {
                         $item->playeraanswered = $mquestion->playeraanswered;
                         $item->playerbanswered = $mquestion->playerbanswered;
                         $questions[] = $item;
-                        $found = true;
                         break;
                     }
-                }
-                if (!$found) {
-
                 }
             }
             $this->gamedata->questions = $questions;
@@ -453,7 +427,6 @@ class game_control {
         $searcharray = substr($searcharray, 0, -2);
         $searcharray .= ')';
 
-
         $sql = "SELECT *
                 FROM {question} q
                 WHERE q.id IN $searcharray";
@@ -463,17 +436,11 @@ class game_control {
                     "we received the wrong number of questions linked to our Mooduell game");
         }
 
-
         foreach ($mquestions as $mquestion) {
-
             $question = new question_control($questionsdata[$mquestion->questionid]);
-
             $question->playeraanswered = $mquestion->playeraanswered;
             $question->playerbanswered = $mquestion->playerbanswered;
-
-            //$question->get_results($this->gamedata->gameid);
             $questions[] = $question;
-
         }
 
         $this->gamedata->questions = $questions;
@@ -484,17 +451,14 @@ class game_control {
         global $DB;
 
         $entries = $DB->get_records('question_usages', array('contextid' => $context->id, 'component' => 'mod_mooduell'));
-        if ($entries && count($entries) > 0) {
-            // Do nothing;
-        } else {
+        if (empty($entries)) {
             $data = new stdClass();
             $data->contextid = $context->id;
             $data->component = 'mod_mooduell';
             $data->preferredbehaviour = 'deferredfeedback';
             $DB->insert_records('question_usages', [$data]);
             return $data;
-        }
-
+        } // Else do nothing.
     }
 
     /**
@@ -531,7 +495,7 @@ class game_control {
 
             foreach ($questions as $question) {
                 if ($question->questionid == $questionid) {
-                    $answers = $question->answers;
+                    // $answers = $question->answers;
                     $activequestion = $question;
                     break;
                 }
@@ -609,23 +573,23 @@ class game_control {
             // Notify Player A
             if ($this->gamedata->winnerid === $this->gamedata->playeraid) {
                 // you won
-                $this->sendPushNotification('youwin');
+                $this->send_push_notification('youwin');
             } else if ($this->gamedata->winnerid === 0) {
                 // you played draw
-                $this->sendPushNotification('draw');
+                $this->send_push_notification('draw');
             } else if ($this->gamedata->winnerid === $this->gamedata->playerbid) {
                 // you lost
-                $this->sendPushNotification('youlose');
+                $this->send_push_notification('youlose');
             }
         } else if ($i === 3 && $j === 0) {
             // player b is challenged
-            $this->sendPushNotification('challenged');
+            $this->send_push_notification('challenged');
         } else if ($i === 3 && $j === 6) {
             // player a's turn
-            $this->sendPushNotification('YOURTURNA');
+            $this->send_push_notification('YOURTURNA');
         } else if ($i === 9 && $j === 6) {
             // player b's turn
-            $this->sendPushNotification('YOURTURNB');
+            $this->send_push_notification('YOURTURNB');
         }
     }
 
@@ -645,14 +609,14 @@ class game_control {
             profile_load_custom_fields($user);
 
             if ($user->id === $this->gamedata->playeraid) {
-                $playerAName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->profile['mooduell_alias'];
-                $playerA = $user;
+                $playeraname = $this->mooduell->usefullnames === 1 ?
+                        $user->firstname + ' ' + $user->lastname : $user->profile['mooduell_alias'];
+                $playera = $user;
             }
             if ($user->id === $this->gamedata->playerbid) {
-                $playerBName = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' +$user->lastname: $user->profile['mooduell_alias'];
-                $playerB = $user;
+                $playerbname = $this->mooduell->usefullnames === 1 ?
+                        $user->firstname + ' ' + $user->lastname : $user->profile['mooduell_alias'];
+                $playerb = $user;
             }
         }
 
@@ -660,28 +624,28 @@ class game_control {
 
         switch ($messagetype) {
             case 'youwin':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
-                $recepientid = $playerA->id;
+                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $recepientid = $playera->id;
                 break;
             case 'youlose':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
-                $recepientid = $playerA->id;
+                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $recepientid = $playera->id;
                 break;
             case 'draw':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerBName);
-                $recepientid = $playerA->id;
+                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $recepientid = $playera->id;
                 break;
             case 'YOURTURNA':
-                $message = get_string('yourturn', 'mod_mooduell',  $playerBName);
-                $recepientid = $playerA->id;
+                $message = get_string('yourturn', 'mod_mooduell',  $playerbname);
+                $recepientid = $playera->id;
                 break;
             case 'YOURTURNB':
-                $message = get_string('yourturn', 'mod_mooduell',  $playerAName);
-                $recepientid = $playerB->id;
+                $message = get_string('yourturn', 'mod_mooduell',  $playeraname);
+                $recepientid = $playerb->id;
                 break;
             case 'challenged':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerAName);
-                $recepientid = $playerB->id;
+                $message = get_string($messagetype, 'mod_mooduell',  $playeraname);
+                $recepientid = $playerb->id;
                 break;
         }
 
@@ -692,10 +656,10 @@ class game_control {
         }
         $fields = array
         (
-                'registration_ids'  => $tokens,
-                'data'          => array(
-                        "name"=>"xyz",
-                        'image'=>'https://www.example.com/images/minion.jpg'
+                'registration_ids' => $tokens,
+                'data' => array(
+                        "name" => "xyz",
+                        'image' => 'https://www.example.com/images/minion.jpg'
                 ),
                 'notification' => array(
                         'body' => $message,
@@ -707,8 +671,6 @@ class game_control {
         );
 
         return $fields;
-
-
     }
 
     /**
@@ -727,8 +689,9 @@ class game_control {
         $returnarray = [];
 
         if ($data && count($data) > 0) {
-            foreach ($data as $entry)
-            $returnarray[] = $entry->pushtoken;
+            foreach ($data as $entry) {
+                $returnarray[] = $entry->pushtoken;
+            }
         }
 
         return $returnarray;
@@ -875,8 +838,7 @@ class game_control {
             list($update->winnerid, $update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
-        }
-        else {
+        } else {
             if ($this->is_it_active_users_turn()) {
                 $update->status = $USER->id == $this->gamedata->playeraid ? 1 : 2;
             } else {
@@ -891,15 +853,14 @@ class game_control {
         $update->playeraresults = $result[0];
         $update->playerbresults = $result[1];
 
-
         $now = new DateTime("now", \core_date::get_server_timezone_object());
         $update->timemodified = $now->getTimestamp();
 
-        $update_status = $DB->update_record('mooduell_games', $update);
+        $updatestatus = $DB->update_record('mooduell_games', $update);
 
         // now the mooduell_games table has been updated
         // ... so we can trigger the game_finished event
-        if ($update_status && $this->is_game_finished()){
+        if ($updatestatus && $this->is_game_finished()) {
             $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
             $event->trigger();
         }
@@ -951,7 +912,7 @@ class game_control {
         $playerbscore = 0;
         $playeraqplayed = 0;
         $playerbqplayed = 0;
-        foreach($this->gamedata->questions as $question) {
+        foreach ($this->gamedata->questions as $question) {
             if ($question->playeraanswered == 2) {
                 ++$playerascore;
             }
@@ -981,9 +942,6 @@ class game_control {
         $playerastring = '';
         $playerbstring = '';
 
-        $playeracount = 0;
-        $playerbcount = 0;
-
         foreach ($this->gamedata->questions as $question) {
 
             if ($question->playeraanswered == null) {
@@ -1012,18 +970,15 @@ class game_control {
      * @throws dml_exception
      */
     private function return_playable_questions_for_category($category) {
-        global $DB;
 
         $returnarray = [];
 
         $mooduell = $this->mooduell;
 
         // We do questions fetching only once. If we have cached questions, we use those.
-        if ($mooduell->questions && count($this->mooduell->questions) > 0) {
-
-        } else {
+        if (empty($mooduell->questions)) {
             $mooduell->return_list_of_all_questions_in_quiz();
-        }
+        } // Else do nothing.
 
         foreach ($mooduell->questions as $question) {
             if ($question->category == $category->category
@@ -1036,11 +991,10 @@ class game_control {
     }
 
 
-    private function sendPushNotification($messagetype)
-    {
-        $pushenabled = get_config('mooduell','enablepush');
+    private function send_push_notification($messagetype) {
+        $pushenabled = get_config('mooduell', 'enablepush');
 
-        if($pushenabled) {
+        if ($pushenabled) {
 
             $fields = $this->gather_notifcation_data($messagetype);
 
@@ -1049,20 +1003,20 @@ class game_control {
                 return;
             }
 
-            $API_ACCESS_KEY = get_config('mooduell','pushtoken');
-            //$API_ACCESS_KEY = 'AAAA5opPaII:APA91bGdlnKYrw9B-8Ulu2IABFtlsVmAiA8RogciARSJL75mjU1HjHIYjtTL-f0zEysNiEB9isctOkUTPsPnilrkmSzT0HX_uz3T3E03YaCw7stn8xP0sbipyLAreY6D6iJxXIUKVMse';
+            $apiaccesskey = get_config('mooduell', 'pushtoken');
+
             $headers = array
             (
-                    'Authorization: key=' . $API_ACCESS_KEY,
+                    'Authorization: key=' . $apiaccesskey,
                     'Content-Type: application/json'
             );
             $ch = curl_init();
-            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch,CURLOPT_POST, true );
-            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            curl_setopt( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch, CURLOPT_POST, true );
+            curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
             $result = curl_exec($ch );
             curl_close( $ch );
             return $result;

@@ -15,14 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Quiz external functions and service definitions.
- *
  * @package mod_mooduell
  * @category external
  * @copyright 2020 Wunderbyte GmbH (info@wunderbyte.at)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 3.1
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 $functions = array(
         'mod_mooduell_start_attempt' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function
             // ... that the client will call.

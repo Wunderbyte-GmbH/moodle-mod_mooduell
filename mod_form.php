@@ -23,6 +23,8 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 /**
@@ -41,7 +43,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         global $CFG;
 
         $mform = $this->_form;
-
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -69,7 +70,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
-
 
         // Add standard buttons.
         $this->add_action_buttons();
@@ -119,7 +119,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         // We add the categories for the random question.
         $listofcategories = $this->get_categories_of_context_from_db();
-
 
         $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
@@ -241,7 +240,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
             if ($item->parent != 0) {
 
-                // Here we fetch the number of available questions from our DB:
+                // Here we fetch the number of available questions from our DB.
                 $numberofquestions = $DB->count_records('question', ['category' => $item->id]);
 
                 if ($numberofquestions == 0) {
@@ -322,13 +321,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
     private function get_categories_of_context_from_db() {
         global $DB;
 
-
         $context = $this->context;
         $listofcontextids = explode('/', $context->path);
 
         // Then the SQL query is built from the relevant categories.
         $sql = 'SELECT * FROM {question_categories} WHERE';
-        foreach ($listofcontextids as $key=>$entry) {
+        foreach ($listofcontextids as $key => $entry) {
             if ($entry != '') {
                 $sql .= ' contextid = ' . $entry;
                 if ($key < count($listofcontextids) - 1) {
