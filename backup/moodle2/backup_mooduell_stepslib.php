@@ -75,8 +75,8 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $mooduell->add_child($games);
         $games->add_child($game);
 
-        // $mooduell->add_child($pushtokens);
-        // $pushtokens->add_child($pushtoken);
+        $mooduell->add_child($pushtokens);
+        $pushtokens->add_child($pushtoken);
 
         $mooduell->add_child($questions);
         $questions->add_child($question);
