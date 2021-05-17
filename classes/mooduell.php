@@ -309,6 +309,10 @@ class mooduell {
                 $data['finishedgames'] = []; // $this->return_games_for_this_instance(true, true);
                 $data['highscores'] = []; // $this->return_list_of_highscores();
                 // Add the Name of the instance
+                $data['opengames'] = [];
+                $data['finishedgames'] = [];
+                $data['highscores'] = [];
+                // Add the name of the instance.
                 $data['quizname'] = $this->cm->name;
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
@@ -399,8 +403,6 @@ class mooduell {
         return $questions;
 
     }
-
-
 
     /**
      * @return array[]
@@ -511,7 +513,8 @@ class mooduell {
 
         if ($studentview) {
                 $sql .= " AND (playeraid = $USER->id OR playerbid = $USER->id)";
-        };
+        }
+
         if ($timemodified > 0) {
             $sql .= " AND timemodified > $timemodified";
         };
@@ -521,9 +524,9 @@ class mooduell {
             $sql .= "";
         } else if ($finished) {
             $sql .= " AND status = 3";
-        } else {
+        } else if ($finished === false) {
             $sql .= " AND status <> 3";
-        }
+        } // If finished is NULL, then do nothing -> return finished and unfinished games.
 
         $games = $DB->get_records_sql($sql);
 
@@ -546,7 +549,7 @@ class mooduell {
                 $returndata[] = [
                         'identifier' => $entry->identifier,
                         'model' => $entry->model,
-                        'pushtoken' => $entry->pushtoken,
+                        'pushtoken' => $entry->pushtoken
                 ];
             }
         }
@@ -602,7 +605,7 @@ class mooduell {
 
         global $DB, $USER;
 
-        // If there was not mooduellid, we have to retrieve it here
+        // If there was no mooduellid, we have to retrieve it here.
         if (!$mooduellid) {
             if (!$mooduellid = $DB->get_field('course_modules', 'instance', array('id' => $cmid))) {
                 throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
@@ -613,8 +616,8 @@ class mooduell {
         $temparray = [];
 
         // Get all the finished games.
-        // If we have a quizid, we only get highscore for one special game
-        // if there is no quiz id, we get highscore for all the games
+        // If we have a quizid, we only get highscore for one special game...
+        // ...if there is no quiz id, we get highscore for all the games.
         if ($mooduellid != 0) {
             $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellid));
         } else {
@@ -644,6 +647,7 @@ class mooduell {
 
             // If we updated from the old version, we have null as default at this place...
             // ... and we have to calculate the qplaed.
+            // ... and we have to calculate the qplayed.
             if (!$entry->playerbqplayed) {
                 $notplayed = substr_count($entry->playerbresults, '-');
                 $playerb->qplayed = 9 - $notplayed;
@@ -652,12 +656,14 @@ class mooduell {
             }
 
             // Player A
+            // Player A.
             $playera->played = 0; // games played
             $playera->won = 0;
             $playera->lost = 0;
             $playera->score = 0;
 
             // Player B
+            // Player B.
             $playerb->played = 0; // games played
             $playerb->won = 0;
             $playerb->lost = 0;
@@ -785,7 +791,7 @@ class mooduell {
 
         require_once("$CFG->dirroot/user/profile/lib.php");
 
-        // Caching to speed things up significantly
+        // Caching to speed things up significantly.
         if (array_key_exists($userid, $this->usernames)) {
             return $this->usernames[$userid];
         }
@@ -886,7 +892,7 @@ class mooduell {
 
         $returnarray = [];
 
-        // TODO: Check each question individually
+        // TODO: Check each question individually.
         $questions = $this->return_list_of_all_questions_in_quiz();
 
         // Are there enough questions in the categories added?
@@ -1051,7 +1057,9 @@ class mooduell {
 
         // Number of distinct opponents who have played a MooDuell game...
         // ... gainst the current user.
-        $sql = "select count(*)-1 opponents
+        // $sql = "select count(*)-1 opponents
+        // ...against the current user.
+        $sql = "select count(*)-1 opponents 
                 from (
                   select playeraid playerid from {mooduell_games}
                   where mooduellid = $mooduellid

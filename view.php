@@ -34,6 +34,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once("{$CFG->dirroot}/mod/mooduell/classes/mooduell.php");
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 
+defined('MOODLE_INTERNAL') || die();
+
+use \mod_mooduell\mooduell;
+use \mod_mooduell\event\game_finished;
+
 $id = required_param('id', PARAM_INT);
 $action = optional_param('action', '', PARAM_RAW);
 $gameid = optional_param('gameid', '', PARAM_INT);

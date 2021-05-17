@@ -111,7 +111,7 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021041300, 'mooduell');
     }
 
-    // Make sure we have the necessary profile fields installed from here on
+    // Make sure we have the necessary profile fields installed from here on.
     if ($oldversion < 2021040200) {
 
         xmldb_mooduell_install();

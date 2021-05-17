@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Quiz external functions and service definitions.
+ *
  * @package mod_mooduell
  * @category external
  * @copyright 2020 Wunderbyte GmbH (info@wunderbyte.at)
@@ -242,5 +244,5 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:view',
                 'ajax' => true,
-        ),
+        )
 );
