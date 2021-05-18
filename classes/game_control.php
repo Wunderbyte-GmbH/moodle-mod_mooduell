@@ -110,11 +110,13 @@ class game_control {
      * This function first get_enrolled_users and filters this list by module visibility of the active module.
      * Users who are not allowed to see the current MooDuell instance will be skipped too.
      * This is needed to give us a valid list of potential partners for a new game.
-     *
+     * @param $mooduell
+     * @param bool $loadprofile
      * @return array
+     * @throws \coding_exception
      * @throws moodle_exception
      */
-    public static function return_users_for_game($mooduell) {
+    public static function return_users_for_game($mooduell, $loadprofile = true) {
 
         global $PAGE;
 
@@ -158,10 +160,11 @@ class game_control {
                 $filteredusers[] = $user;
             }
 
-            $userpicture = new user_picture($user);
-            $userpicture->size = 1; // Size f1.
-            $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
-
+            if ($loadprofile) {
+                $userpicture = new user_picture($user);
+                $userpicture->size = 1; // Size f1.
+                $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
+            }
         }
         return $filteredusers;
     }
@@ -602,7 +605,7 @@ class game_control {
      */
     private function gather_notifcation_data($messagetype) {
 
-        $users = get_enrolled_users($this->mooduell->context);
+        $users = self::return_users_for_game($this->mooduell, false);
 
         foreach ($users as $user) {
 
