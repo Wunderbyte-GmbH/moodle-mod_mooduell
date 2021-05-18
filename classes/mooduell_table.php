@@ -110,11 +110,11 @@ class mooduell_table extends table_sql {
     public function col_action($game) {
         $cmid = $this->mooduell->cm->id;
 
-        $link = '<a href="view.php?action=viewquestions&id=' . $cmid . '&gameid=' . $game->id .'">' .
+        $link = '<a href="view.php?action=viewquestions&id=' . $cmid . '&gameid=' . $game->id .'" alt="' . get_string('viewgame', 'mod_mooduell') .'">' .
                 '<i class="fa fa-info"></i>'
                 . '</a>';
         $link .= " ";
-        $link .= '<a href="view.php?action=delete&id=' . $cmid . '&gameid=' . $game->id .'">' .
+        $link .= '<a href="view.php?action=delete&id=' . $cmid . '&gameid=' . $game->id .'" alt="' . get_string('deletegame', 'mod_mooduell') . '"' .
                 '<i class="fa fa-trash"></i>'
                 . '</a>';
 

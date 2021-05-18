@@ -48,6 +48,9 @@ $string['countdown'] = 'Countdown';
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';
 
+$string['viewgame'] = 'View game';
+$string['deletegame'] = 'Delete game';
+
 $string['showcontinuebutton'] = 'Show "Continue"-button';
 $string['showcorrectanswer'] = 'Show correct answer';
 $string['waitfornextquestion'] = 'Time to contemplate result after answering';
