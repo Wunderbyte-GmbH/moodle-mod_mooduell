@@ -40,11 +40,9 @@ $action = optional_param('action', '', PARAM_ALPHA);
 $quizid = optional_param('quizid', '', PARAM_INT);
 $view = optional_param('view', '', PARAM_ALPHA); // values: 'teacher' or 'student'
 
-
 $mooduellinstance = new mooduell($quizid);
 
 $table = new mooduell_table($mooduellinstance, $action);
-
 
 $table->is_downloading($download, $action, $action);
 
