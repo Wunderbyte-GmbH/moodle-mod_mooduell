@@ -39,10 +39,6 @@ class mooduell_table extends table_sql {
      */
     public $action;
 
-    // Parameter to store the action (what to show in the mooduell_table).
-    // Can be ('opengames'|'finishedgames'|'questions'|'highscores').
-    public $action = null;
-
     /**
      * mooduell_table constructor.
      * @param null $mooduell
