@@ -24,9 +24,9 @@
 
 use mod_mooduell\mooduell;
 
-global $CFG, $PAGE;
-
 require_once("../../config.php");
+
+global $CFG, $PAGE;
 
 require("$CFG->libdir/tablelib.php");
 require_once("$CFG->dirroot/mod/mooduell/classes/mooduell_table.php");

@@ -54,7 +54,7 @@ class backup_mooduell_activity_task extends backup_activity_task {
     public static function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of pxages.
         $search = "/(".$base."\/mod\/mooduell\/index.php\?id\=)([0-9]+)/";

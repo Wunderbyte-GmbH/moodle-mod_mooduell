@@ -1059,7 +1059,7 @@ class mooduell {
         // ... gainst the current user.
         // $sql = "select count(*)-1 opponents
         // ...against the current user.
-        $sql = "select count(*)-1 opponents 
+        $sql = "select count(*)-1 opponents
                 from (
                   select playeraid playerid from {mooduell_games}
                   where mooduellid = $mooduellid
