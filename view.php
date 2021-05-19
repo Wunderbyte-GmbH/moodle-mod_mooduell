@@ -21,7 +21,6 @@
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-global $CFG, $PAGE;
 
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;
