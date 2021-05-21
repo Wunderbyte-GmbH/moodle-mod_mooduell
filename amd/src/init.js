@@ -5,8 +5,13 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
     return {
         init: function () {
             var getUrlParameter = function getUrlParameter(sParam) {
-                var sPageURL = window.location.search.substring(1),
-                    sURLVariables = sPageURL.split('&'),
+                var sPageURL = window.location.search.substring(1);
+                 return getAdressParameter(sParam, sPageURL);
+            };
+            var getAdressParameter = function getAdressParameter(sParam, sPageURL) {
+                var params = sPageURL.split('?');
+                sPageURL = params.length > 1 ? params[1] : params[0];
+                var sURLVariables = sPageURL.split('&'),
                     sParameterName,
                     i;
                 for (i = 0; i < sURLVariables.length; i++) {
@@ -229,17 +234,31 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 }]);
             }
 
+            /**
+             * To provide for all themes, we get the right link from the data attribute
+             * @param id
+             * @param dom_nodes
+             * @param functionToCall
+             */
             function replacePaginationLinks(id, dom_nodes, functionToCall) {
                 var arrayOfPageItems = dom_nodes.find(".page-item");
                 $.each(arrayOfPageItems, function() {
-                    // First we disable all the links
-                    // $(this).removeAttr('href');
-                    var pageNumber = $(this).data('page-number');
+                    var element = $(this).find('a');
+                    var url =  element.attr("href");
+                    var pageNumber;
+                    if (url != undefined) {
 
-                    $(this).children('a').attr('href', '#');
-                    $(this).children('a').click(function () {
-                        functionToCall(id, pageNumber-1);
-                    });
+                        pageNumber = getAdressParameter('page', url);
+                    } else {
+                        pageNumber = +element.text();
+                        --pageNumber;
+                    }
+                    element.attr('href', '#');
+                    if (pageNumber) {
+                        $(this).children('a').click(function () {
+                            functionToCall(id, pageNumber);
+                        });
+                    }
                 });
             }
 
