@@ -39,6 +39,40 @@ function xmldb_mooduell_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
+    if ($oldversion < 2021051000) {
+        // Define table mooduell_highscores to be created.
+        $table = new xmldb_table('mooduell_highscores');
+
+        // Adding fields to table mooduell_highscores.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('mooduellid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('ranking', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('gamesplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('gameswon', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('gameslost', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('gamesstarted', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('gamesfinished', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('score', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('qcorrect', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('qplayed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table mooduell_highscores.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('fk_mooduellid', XMLDB_KEY_FOREIGN, ['mooduellid'], 'mooduell', ['id']);
+        $table->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+
+        // Conditionally launch create table for mooduell_highscores.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021051000, 'mooduell');
+    }
+
+
     if ($oldversion < 2021051200) {
 
         // Define field qcpercentage to be added to mooduell_highscores.
