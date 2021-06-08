@@ -995,7 +995,7 @@ class mooduell {
                 (select * from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
                 union all
                 select * from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s
-                inner join mdl_question q
+                inner join {question} q
                 on q.id = s.questionid
                 group by s.questionid
                 order by correct_count desc
@@ -1017,7 +1017,7 @@ class mooduell {
                 (select * from {mooduell_questions} where playeraanswered = 1 and mooduellid = $mooduellid
                 union all
                 select * from {mooduell_questions} where playerbanswered = 1 and mooduellid = $mooduellid) s
-                inner join mdl_question q
+                inner join {question} q
                 on q.id = s.questionid
                 group by s.questionid
                 order by incorrect_count desc
