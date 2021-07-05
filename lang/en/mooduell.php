@@ -168,3 +168,6 @@ $string['draw'] = 'You played draw against {$a}';
 $string['yourturn'] = 'It\'s your turn against {$a}';
 $string['challenged'] = '{$a} has challenged you';
 $string['userhasnonickname'] = 'User has no nickname';
+
+// Privacy API.
+$string['privacy:metadata'] = 'The Moodle Duell Activity only displays available data.';
