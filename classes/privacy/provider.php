@@ -204,6 +204,7 @@ class provider implements
 
         if ($cm = get_coursemodule_from_id('mooduell', $context->instanceid)) {
             $DB->delete_records('mooduell_games', ['mooduellid' => $cm->instance]);
+            $DB->delete_records('mooduell_highscores', ['mooduellid' => $cm->instance]);
         }
     }
 
@@ -230,7 +231,9 @@ class provider implements
             if (!$instanceid) {
                 continue;
             }
-            $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'userid' => $userid]);
+            $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playeraid' => $userid]);
+            $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playerbid' => $userid]);
+            $DB->delete_records('mooduell_highscores', ['mooduellid' => $instanceid, 'userid' => $userid]);
         }
     }
 
