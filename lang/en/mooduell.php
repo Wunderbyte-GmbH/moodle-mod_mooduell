@@ -29,6 +29,7 @@ $string['messageprovider:status'] = 'Game status changes';
 $string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell Game';
 $string['mooduell:viewstatistics'] = 'View game statistics';
 $string['mooduell:viewstudentnames'] = 'View full names of participants';
+$string['mooduell:viewinstance'] = 'View an instance of mooduell';
 $string['mooduell:editgames'] = 'Edit games';
 $string['pluginname'] = 'MooDuell';
 $string['modulenameplural'] = 'MooDuells';

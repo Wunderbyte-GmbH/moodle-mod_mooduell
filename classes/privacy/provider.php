@@ -138,15 +138,6 @@ class provider implements
             'useridb'        => $userid,
         ];
         $contextlist->add_from_sql($sql, $params);
-
-        /* SQL Query for testing.
-        SELECT * FROM `mdl_context` c
-        INNER JOIN mdl_course_modules cm ON cm.id = c.instanceid AND c.contextlevel = 80
-        INNER JOIN mdl_modules m ON m.id = cm.module AND m.name = 'mooduell'
-        INNER JOIN mdl_mooduell md ON md.id = cm.instance
-        INNER JOIN mdl_mooduell_games mdg ON mdg.mooduellid = md.id
-        WHERE mdg.playeraid = 4 OR mdg.playerbid = 4 ";
-        */
         
         // Look up all mooduell highscores of a specific user.
         $sql = "SELECT c.id
@@ -180,7 +171,7 @@ class provider implements
 
         $user = $contextlist->get_user();
 
-        // Export general information about all workshops.
+        // Export general information like introtext.
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel != CONTEXT_MODULE) {
                 continue;
@@ -192,6 +183,9 @@ class provider implements
 
         // Export all duells the user has participated in.
         static::export_all_mooduells($contextlist);
+
+        // Export all highscores.
+        static::export_all_highscores($contextlist);
 
     }
 
@@ -340,7 +334,7 @@ class provider implements
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userida'       => $user->id,
-            'useridb' => $user->id,
+            'useridb'       => $user->id,
         ];
         $params += $contextparams;
         
@@ -349,7 +343,7 @@ class provider implements
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
-            $subcontext = ['Game '.$record->id];
+            $subcontext = ['Game entry found: '.$record->id];
             
             // TODO: Some explanations would be nice, also remove unused elements.
             $data = (object) [
@@ -364,8 +358,54 @@ class provider implements
                 'playeraresults' => $record->playeraresults,
                 'playerbresults' => $record->playerbresults,
                 'winnerid' => $record->winnerid,
-                'victorycoefficient' => $record->victorycoefficient,
                 'status' => $record->status,
+            ];
+
+            $writer->export_data($subcontext, $data);
+
+        }
+
+        $rs->close();
+    }
+    
+    /**
+     * Export the highscores this user is mentioned in.
+     *
+     * @param approved_contextlist $contextlist List of contexts approved for export.
+     */
+    protected static function export_all_highscores(approved_contextlist $contextlist) {
+        global $DB;
+        $user = $contextlist->get_user();
+
+        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        
+        $sql = "SELECT *, cm.id AS cmid
+            FROM {course_modules} cm 
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname 
+            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+            JOIN {mooduell} md ON cm.instance = md.id
+            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid  
+            WHERE c.id {$contextsql}";
+            
+        $params = [
+            'modname'       => 'mooduell',
+            'contextlevel'  => CONTEXT_MODULE,
+            'userid'        => $user->id,
+        ];
+        $params += $contextparams;
+        
+        $rs = $DB->get_recordset_sql($sql, $params);
+        foreach ($rs as $record) {
+            \context_helper::preload_from_record($record);
+            $context = \context_module::instance($record->cmid);
+            $writer = \core_privacy\local\request\writer::with_context($context);
+            $subcontext = ['Highscore entry found: '.$record->id];
+            
+            $data = (object) [
+                'ranking' => $record->ranking,
+                'gamesplayed' => $record->gamesplayed,
+                'gameswon' => $record->gameswon,
+                'gameslost' => $record->gameslost,
             ];
 
             $writer->export_data($subcontext, $data);
