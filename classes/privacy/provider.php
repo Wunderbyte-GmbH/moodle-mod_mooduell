@@ -132,10 +132,10 @@ class provider implements
                   WHERE mdg.playeraid = :userida OR mdg.playerbid = :useridb";
 
         $params = [
-            'modname'       => 'mooduell',
-            'contextlevel'  => CONTEXT_MODULE,
-            'userida'        => $userid,
-            'useridb'        => $userid,
+            'modname'      => 'mooduell',
+            'contextlevel' => CONTEXT_MODULE,
+            'userida'      => $userid,
+            'useridb'      => $userid,
         ];
         $contextlist->add_from_sql($sql, $params);
         
@@ -186,6 +186,9 @@ class provider implements
 
         // Export all highscores.
         static::export_all_highscores($contextlist);
+        
+        // Export all pushtokens.
+        static::export_all_pushtokens($contextlist);
 
     }
 
@@ -413,6 +416,64 @@ class provider implements
 
             $writer->export_data($subcontext, $data);
 
+        }
+
+        $rs->close();
+    }
+
+    /**
+     * Export all pushtokens this user requested.
+     *
+     * @param approved_contextlist $contextlist List of contexts approved for export.
+     */
+    protected static function export_all_pushtokens(approved_contextlist $contextlist) {
+        global $DB;
+        $user = $contextlist->get_user();
+
+        // Get the context first.
+        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        
+        $sql = "SELECT *, cm.id AS cmid
+            FROM {course_modules} cm 
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname 
+            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+            JOIN {mooduell} md ON cm.instance = md.id
+            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid  
+            WHERE c.id {$contextsql}";
+            
+        $params = [
+            'modname'       => 'mooduell',
+            'contextlevel'  => CONTEXT_MODULE,
+            'userid'        => $user->id,
+        ];
+        $params += $contextparams;
+        
+        $rs = $DB->get_recordset_sql($sql, $params);
+        foreach ($rs as $record) {
+            \context_helper::preload_from_record($record);
+            $context = \context_module::instance($record->cmid);
+            break;
+        }
+        $rs->close();
+            
+        // Now add the pushtokens we can find.
+        $sql = "SELECT * 
+            FROM {mooduell_pushtokens} mp 
+            WHERE userid = :userid";
+            
+        $params = [
+            'userid'        => $user->id,
+        ];
+
+        $rs = $DB->get_recordset_sql($sql, $params);
+        foreach ($rs as $record) {
+            $subcontext = ['Pushtoken found: '.$record->id];
+            $data = (object) [
+                'identifier' => $record->identifier,
+                'model' => $record->model,
+                'numberofnotifications' => $record->numberofnotifications,
+            ];
+            writer::with_context($context)->export_data($subcontext, $data);
         }
 
         $rs->close();
