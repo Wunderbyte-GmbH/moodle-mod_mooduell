@@ -137,9 +137,11 @@ function load_open_games_table_data($mooduellid, $table, $view) {
     $headers[] = get_string('playeraresults', 'mooduell');
     $help[] = null;
 
-    $columns[] = 'action';
-    $headers[] = get_string('action', 'mooduell');
-    $help[] = null;
+    if ($view == 'teacher') {
+        $columns[] = 'action';
+        $headers[] = get_string('action', 'mooduell');
+        $help[] = null;
+    }
 
     $tabledata = new stdClass();
     $tabledata->columns = $columns;
@@ -198,9 +200,11 @@ function load_finished_games_table_data($mooduellid, $table, $view) {
     $headers[] = get_string('playeraresults', 'mooduell');
     $help[] = null;
 
-    $columns[] = 'action';
-    $headers[] = get_string('action', 'mooduell');
-    $help[] = null;
+    if ($view == 'teacher') {
+        $columns[] = 'action';
+        $headers[] = get_string('action', 'mooduell');
+        $help[] = null;
+    }
 
     $tabledata = new stdClass();
     $tabledata->columns = $columns;
