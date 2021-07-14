@@ -110,12 +110,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->setDefault('showcorrectanswer', $config->showcorrectanswer);
 
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
-        if (key_exists('countdown', $config)) {
+        if (isset($config->countdown)) {
             $mform->setDefault('countdown', $config->countdown);
         }
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
                 $this->return_move_on_options());
-        if (key_exists('waitfornextquestion', $config)) {
+        if (isset($config->waitfornextquestion)) {
             $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
         }
 

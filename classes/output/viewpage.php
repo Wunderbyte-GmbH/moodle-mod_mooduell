@@ -70,7 +70,7 @@ class viewpage implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = $this->data;
 
-        /*if (array_key_exists('questions', $data)) {
+        /*if (isset($data[''questions'])) {
             foreach ($data['questions'] as $question) {
                 $question->replace_category_id_by_name();
             }

@@ -701,12 +701,12 @@ class mooduell {
                 }
             }
 
-            if (!array_key_exists($entry->playeraid, $temparray)) {
+            if (!isset($temparray[$entry->playeraid])) {
                 $temparray[$entry->playeraid] = $playera;
             } else {
                 self::add_score($temparray[$entry->playeraid], $playera);
             }
-            if (!array_key_exists($entry->playerbid, $temparray)) {
+            if (!isset($temparray[$entry->playerbid])) {
                 $temparray[$entry->playerbid] = $playerb;
             } else {
                 self::add_score($temparray[$entry->playerbid], $playerb);
@@ -792,7 +792,7 @@ class mooduell {
         require_once("$CFG->dirroot/user/profile/lib.php");
 
         // Caching to speed things up significantly.
-        if (array_key_exists($userid, $this->usernames)) {
+        if (isset($this->usernames[$userid])) {
             return $this->usernames[$userid];
         }
 
