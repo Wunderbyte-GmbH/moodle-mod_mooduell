@@ -205,4 +205,3 @@ $string['privacy:metadata:mooduell_pushtokens:identifier'] = 'The unique device 
 $string['privacy:metadata:mooduell_pushtokens:model'] = 'Information about the device like model and screen size.';
 $string['privacy:metadata:mooduell_pushtokens:pushtoken'] = 'The pushtoken.';
 $string['privacy:metadata:mooduell_pushtokens:numberofnotifications'] = 'The number of notifications.';
-

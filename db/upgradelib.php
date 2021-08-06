@@ -35,5 +35,5 @@ function mod_mooduell_helper_function() {
     // level) database access exclusively, avoiding any use of the Moodle APIs.
     //
     // For more information please read the available Moodle documentation:
-    // https://docs.moodle.org/dev/Upgrade_API
+    // https://docs.moodle.org/dev/Upgrade_API.
 }

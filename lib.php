@@ -110,7 +110,7 @@ function mooduell_delete_instance($id) {
         return false;
     }
 
-    // TODO: Delete all entries belonging to this instance as well from db
+    // TODO: Delete all entries belonging to this instance as well from db.
 
     $DB->delete_records('mooduell', array('id' => $id));
     $DB->delete_records('mooduell_categories', array('mooduellid' => $id));
@@ -132,7 +132,16 @@ function mooduell_delete_instance($id) {
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function mooduell_question_pluginfile($course, $context, $component, $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) {
+function mooduell_question_pluginfile(
+        $course,
+        $context,
+        $component,
+        $filearea,
+        $qubaid,
+        $slot,
+        $args,
+        $forcedownload,
+        array $options=array()) {
 
     // Note: We might get different context levels, (System, Course) so we don't check them.
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
@@ -145,26 +154,22 @@ function mooduell_question_pluginfile($course, $context, $component, $filearea, 
         return false;
     }
 
-    // Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
+    // Make sure the user is logged in and has access to the module.
+    // Plugins that are not course modules should leave out the 'cm' part.
     require_login($course, true);
-
-    // Check the relevant capabilities - these may vary depending on the filearea being accessed.
-    // if (!has_capability('mod/mooduell:view', $context)) {
-        // return false;
-    // }
 
     // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
     $itemid = array_shift($args); // The first item in the $args array.
 
-    // Use the itemid to retrieve any relevant data records and perform any security checks to see if the
-    // user really does have access to the file in question.
+    // Use the itemid to retrieve any relevant data records and perform any security checks to see if the...
+    // ... user really does have access to the file in question.
 
     // Extract the filename / filepath from the $args array.
     $filename = array_pop($args); // The last item in the $args array.
     if (!$args) {
-        $filepath = '/'; // $args is empty => the path is '/'
+        $filepath = '/';
     } else {
-        $filepath = '/'.implode('/', $args).'/'; // $args contains elements of the filepath
+        $filepath = '/'.implode('/', $args).'/';
     }
 
     // Retrieve the file from the Files API.

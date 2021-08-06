@@ -72,7 +72,8 @@ class game_finished
             $entry = (object) $entry;
 
             // Let's have a look if the entry already exists in the DB.
-            $sql = 'select * from {mooduell_highscores} where mooduellid = '.$entry->mooduellid.' and userid = '.$entry->userid;
+            $sql = 'select * from {mooduell_highscores} where mooduellid = '.
+                    $entry->mooduellid.' and userid = '.$entry->userid;
             $data = $DB->get_record_sql($sql);
 
             // If the entry could be found in the database.
@@ -83,7 +84,7 @@ class game_finished
                 $entry->timemodified = time();
                 $DB->update_record('mooduell_highscores', $entry);
             } else {
-                // .. otherwise, insert a new record.
+                // ... otherwise, insert a new record.
                 $DB->insert_record('mooduell_highscores', $entry);
             }
         }

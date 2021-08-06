@@ -38,7 +38,7 @@ $PAGE->set_url('/mooduell_table.php');
 $download = optional_param('download', '', PARAM_ALPHA);
 $action = optional_param('action', '', PARAM_ALPHA);
 $quizid = optional_param('quizid', '', PARAM_INT);
-$view = optional_param('view', '', PARAM_ALPHA); // values: 'teacher' or 'student'
+$view = optional_param('view', '', PARAM_ALPHA); // Values: 'teacher' or 'student'.
 
 $mooduellinstance = new mooduell($quizid);
 
@@ -49,32 +49,31 @@ $table->is_downloading($download, $action, $action);
 $mooduellid = $table->mooduell->cm->instance;
 
 if (!$table->is_downloading()) {
-    // Only print headers if not asked to download data
-    // Print the page header
+    // Only print headers if not asked to download data.
+    // Print the page header.
     $PAGE->set_title('Testing');
     $PAGE->set_heading('Testing table class');
     $PAGE->navbar->add('Testing table class', new moodle_url('/mooduell_table.php'));
-    // echo $OUTPUT->header();
 }
 
 switch($action){
     case 'opengames':
-        // generate the tabledata for open games
+        // Generate the tabledata for open games.
         $tabledata = load_open_games_table_data($mooduellid, $table, $view);
         break;
     case 'finishedgames':
-        // generate the tabledata for finished games
+        // Generate the tabledata for finished games.
         $tabledata = load_finished_games_table_data($mooduellid, $table, $view);
         break;
     case 'highscores':
-        // generate the tabledata for highscores
+        // Generate the tabledata for highscores.
         $tabledata = load_highscores_table_data($mooduellid, $table);
 
-        // sort the table by descending score by default
+        // Sort the table by descending score by default.
         $table->sort_default_column = 'score';
         $table->sort_default_order = SORT_DESC;
 
-        // turn off sorting by userid, as it will lead to confusion because real names or nicknames will be shown
+        // Turn off sorting by userid, as it will lead to confusion because real names or nicknames will be shown.
         $table->no_sorting('userid');
 
         break;
@@ -107,9 +106,9 @@ function load_open_games_table_data($mooduellid, $table, $view) {
             $where = "mooduellid = :mooduellid1 AND status <> 3";
             $params = array('mooduellid1' => $mooduellid);
             break;
-        // student view is the default view
+        // Student view is the default view.
         default:
-            // we need to pass 2 userids because each one can only be used once for some strange reason
+            // We need to pass 2 userids because each one can only be used once for some strange reason.
             $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
             $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
             break;

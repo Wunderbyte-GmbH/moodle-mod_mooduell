@@ -33,7 +33,7 @@ class game_finished extends \core\event\base {
      */
     protected function init() {
         $this->data['objecttable'] = 'mooduell_highscores';
-        $this->data['crud'] = 'u'; // the event will update and insert new highscores data
+        $this->data['crud'] = 'u'; // The event will update and insert new highscores data.
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 }

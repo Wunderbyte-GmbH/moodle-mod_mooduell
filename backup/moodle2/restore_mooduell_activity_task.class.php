@@ -23,7 +23,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/restore_mooduell_stepslib.php'); // Because it exists (must)
+require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/restore_mooduell_stepslib.php'); // Because it exists (must).
 
 /**
  * mooduell restore task that provides all the settings and steps to perform one
@@ -32,14 +32,14 @@ require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/restore_mooduell_step
 class restore_mooduell_activity_task extends restore_activity_task {
 
     /**
-     * Define (add) particular settings this activity can have
+     * Define (add) particular settings this activity can have.
      */
     protected function define_my_settings() {
         // No particular settings for this activity.
     }
 
     /**
-     * Define (add) particular steps this activity can have
+     * Define (add) particular steps this activity can have.
      */
     protected function define_my_steps() {
         // Label only has one structure step.

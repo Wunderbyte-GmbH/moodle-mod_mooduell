@@ -72,8 +72,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         $data->category = $this->get_mappingid('question_category', $data->category);
 
         $newitemid = $DB->insert_record('mooduell_categories', $data);
-        // No need to save this mapping as far as nothing depend on it
-        // (child paths, file areas nor links decoder)
+        // No need to save this mapping as far as nothing depend on it like (child paths, file areas nor links decoder).
     }
 
     protected function process_mooduell_games($data) {
@@ -105,22 +104,19 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
         $data->questionid = $this->get_mappingid('question', $data->questionid);
 
-        // Skip treating this record if there is not id to match (game has been deleted already)
+        // Skip treating this record if there is not id to match (game has been deleted already).
         if (!$data->gameid) {
             return;
         }
 
-        // $data->questionid = $this->get_mappingid('question', $data->questionid);
-
         $newitemid = $DB->insert_record('mooduell_questions', $data);
-        // No need to save this mapping as far as nothing depend on it
-        // (child paths, file areas nor links decoder)
+        // No need to save this mapping as far as nothing depend on it like (child paths, file areas nor links decoder).
     }
 
 
 
     protected function after_execute() {
-        // Add mooduell related files, no need to match by itemname (just internally handled context)
+        // Add mooduell related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_mooduell', 'intro', null);
     }
 }

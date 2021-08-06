@@ -72,7 +72,6 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021051000, 'mooduell');
     }
 
-
     if ($oldversion < 2021051200) {
 
         // Define field qcpercentage to be added to mooduell_highscores.

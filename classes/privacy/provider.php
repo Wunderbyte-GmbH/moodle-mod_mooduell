@@ -50,7 +50,7 @@ class provider implements
      * @return collection the updated collection of metadata items.
      */
     public static function get_metadata(collection $collection) : collection {
-        
+
         // Stores the mooduell game progress.
         $collection->add_database_table(
             'mooduell_games',
@@ -70,7 +70,6 @@ class provider implements
             ],
             'privacy:metadata:mooduell_games'
         );
-        
         // Stores the mooduell highscore table.
         $collection->add_database_table(
             'mooduell_highscores',
@@ -85,16 +84,14 @@ class provider implements
                 'gamesfinished' => 'privacy:metadata:mooduell_highscores:gamesfinished',
                 'score' => 'privacy:metadata:mooduell_highscores:score',
                 'qcorrect' => 'privacy:metadata:mooduell_highscores:qcorrect',
-                
                 'qplayed' => 'privacy:metadata:mooduell_highscores:qplayed',
                 'qcpercentage' => 'privacy:metadata:mooduell_highscores:qcpercentage',
-                
                 'timemodified' => 'privacy:metadata:mooduell_highscores:timemodified',
                 'timecreated' => 'privacy:metadata:mooduell_highscores:timecreated',
             ],
-            'privacy:metadata:mooduell_highscores'    
+            'privacy:metadata:mooduell_highscores'
         );
-        
+
         // Stores the mooduell pushtokens.
         $collection->add_database_table(
             'mooduell_pushtokens',
@@ -105,13 +102,12 @@ class provider implements
                 'pushtoken' => 'privacy:metadata:mooduell_pushtokens:pushtoken',
                 'numberofnotifications' => 'privacy:metadata:mooduell_pushtokens:numberofnotifications',
             ],
-            'privacy:metadata:mooduell_pushtokens'    
+            'privacy:metadata:mooduell_pushtokens'
         );
 
         return $collection;
     }
 
-    
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
@@ -119,9 +115,9 @@ class provider implements
      * @return contextlist the list of contexts containing user info for the user.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
-        
+
         $contextlist = new contextlist();
-        
+
         // Look up all mooduell games of a specific user.
         $sql = "SELECT c.id
                   FROM {context} c
@@ -138,7 +134,7 @@ class provider implements
             'useridb'      => $userid,
         ];
         $contextlist->add_from_sql($sql, $params);
-        
+
         // Look up all mooduell highscores of a specific user.
         $sql = "SELECT c.id
                   FROM {context} c
@@ -186,7 +182,7 @@ class provider implements
 
         // Export all highscores.
         static::export_all_highscores($contextlist);
-        
+
         // Export all pushtokens.
         static::export_all_pushtokens($contextlist);
 
@@ -267,7 +263,7 @@ class provider implements
         ];
 
         $userlist->add_from_sql('userid', $sql, $params);
-        
+
         // Add all games where user is playerb.
         $sql = "SELECT mdg.playerbid
                   FROM {course_modules} cm
@@ -327,15 +323,15 @@ class provider implements
         $user = $contextlist->get_user();
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
-        
+
         $sql = "SELECT *, cm.id AS cmid
-            FROM {course_modules} cm 
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname 
+            FROM {course_modules} cm
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id AND mdg.playeraid = :userida OR  mdg.playerbid = :useridb 
+            JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id AND mdg.playeraid = :userida OR  mdg.playerbid = :useridb
             WHERE c.id {$contextsql}";
-            
+
         $params = [
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
@@ -343,14 +339,14 @@ class provider implements
             'useridb'       => $user->id,
         ];
         $params += $contextparams;
-        
+
         $rs = $DB->get_recordset_sql($sql, $params);
         foreach ($rs as $record) {
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
             $subcontext = ['Game entry found: '.$record->id];
-            
+
             // TODO: Some explanations would be nice, also remove unused elements.
             $data = (object) [
                 'playeraid' => $record->playeraid,
@@ -373,7 +369,7 @@ class provider implements
 
         $rs->close();
     }
-    
+
     /**
      * Export the highscores this user is mentioned in.
      *
@@ -384,29 +380,29 @@ class provider implements
         $user = $contextlist->get_user();
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
-        
+
         $sql = "SELECT *, cm.id AS cmid
-            FROM {course_modules} cm 
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname 
+            FROM {course_modules} cm
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid  
+            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid
             WHERE c.id {$contextsql}";
-            
+
         $params = [
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
         ];
         $params += $contextparams;
-        
+
         $rs = $DB->get_recordset_sql($sql, $params);
         foreach ($rs as $record) {
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
             $subcontext = ['Highscore entry found: '.$record->id];
-            
+
             $data = (object) [
                 'ranking' => $record->ranking,
                 'gamesplayed' => $record->gamesplayed,
@@ -432,22 +428,22 @@ class provider implements
 
         // Get the context first.
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
-        
+
         $sql = "SELECT *, cm.id AS cmid
-            FROM {course_modules} cm 
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname 
+            FROM {course_modules} cm
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid  
+            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid
             WHERE c.id {$contextsql}";
-            
+
         $params = [
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
         ];
         $params += $contextparams;
-        
+
         $rs = $DB->get_recordset_sql($sql, $params);
         foreach ($rs as $record) {
             \context_helper::preload_from_record($record);
@@ -455,12 +451,12 @@ class provider implements
             break;
         }
         $rs->close();
-            
+
         // Now add the pushtokens we can find.
-        $sql = "SELECT * 
-            FROM {mooduell_pushtokens} mp 
+        $sql = "SELECT *
+            FROM {mooduell_pushtokens} mp
             WHERE userid = :userid";
-            
+
         $params = [
             'userid'        => $user->id,
         ];
@@ -478,5 +474,4 @@ class provider implements
 
         $rs->close();
     }
-
 }

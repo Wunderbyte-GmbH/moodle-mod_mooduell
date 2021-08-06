@@ -26,187 +26,174 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$services = array(
+        'Wunderbyte MooDuell external' => array(
+                'functions' => array (
+                        'core_webservice_get_site_info',
+                        'mod_mooduell_start_attempt',
+                        'mod_mooduell_get_game_data',
+                        'mod_mooduell_get_quiz_users',
+                        'mod_mooduell_get_quizzes_by_courses',
+                        'mod_mooduell_get_games_by_courses',
+                        'mod_mooduell_answer_question',
+                        'mod_mooduell_get_user_stats',
+                        'mod_mooduell_get_highscores',
+                        'mod_mooduell_set_alternatename',
+                        'mod_mooduell_set_pushtokens',
+                        'mod_mooduell_giveup_game',
+                        'mod_mooduell_update_profile_picture'
+                        ),
+                'restrictedusers' => 0,
+                'shortname' => 'mod_mooduell_external',
+                'enabled' => 1,
+        )
+);
+
 $functions = array(
-        'mod_mooduell_start_attempt' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function
-            // ... that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external .
-                'methodname' => 'start_attempt', // Implement this function into the above class.
+        'mod_mooduell_start_attempt' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'start_attempt',
                 'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax.
-                'capabilities' => 'mod/mooduell:view',
+                'description' => 'Starts a new MooDuell game.',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                        'MOODUELL_EXTERNAL'
                 )
         ),
-        'mod_mooduell_get_game_data' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function ...
-            // ... that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_game_data', // Implement this function into the above class
+        'mod_mooduell_get_game_data' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_game_data',
                 'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                                  (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // the value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // true/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
+                'description' => 'Loads all the relevant data of the active MooDuell game for the active user.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                        'MOODUELL_EXTERNAL'
                 )
         ),
-        'mod_mooduell_get_quiz_users' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function ...
-            // ... that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_quiz_users', // Implement this function into the above class
+        'mod_mooduell_get_quiz_users' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_quiz_users',
                 'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                                  (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // the value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // true/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
+                'description' => 'Retrieve all the available co players for the active user in a MooDuell game.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                        'MOODUELL_EXTERNAL'
                 )
         ),
-        'mod_mooduell_get_quizzes_by_courses' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the web service function...
-            // ... that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_quizzes_by_courses', // Implement this function into the above class
+        'mod_mooduell_get_quizzes_by_courses' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_quizzes_by_courses',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Retrieves all the available quizzes without the games for a course or for all the courses.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_get_games_by_courses' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_games_by_courses',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Retrieves all the games avalable for the active user
+                ordered by quizzes within a course or for the whole site.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_answer_question' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'answer_question',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Answers the active question.',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_get_user_stats' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_user_stats',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Retrieves the stats of the active user.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_get_highscores' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_highscores',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Retrieves the highscores visible to the active user.',
+                'type' => 'read',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_set_alternatename' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'set_alternatename',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'This updates the custom field "MooDuell Alias" for the active user.',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_set_pushtokens' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'set_pushtokens',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'This sets a pushtoken for the active user and for the active device.',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_giveup_game' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'giveup_game',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Used to allow a user to give up a game.',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
+                'services' => array(
+                        'MOODUELL_EXTERNAL'
+                )
+        ),
+        'mod_mooduell_update_profile_picture' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'update_profile_picture',
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'This documentation will be displayed in the generated API documentation
                               (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax.
-                'capabilities' => 'mod/mooduell:view',
+                'type' => 'write',
+                'ajax' => true,
+                'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_get_games_by_courses' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_games_by_courses', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_answer_question' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'answer_question', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_get_user_stats' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_user_stats', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_get_highscores' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_highscores', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_set_alternatename' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'set_alternatename', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_set_pushtokens' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'set_pushtokens', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_get_pushtokens' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'get_pushtokens', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'read', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_giveup_game' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'giveup_game', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
-                )
-        ),
-        'mod_mooduell_update_profile_picture' => array( // ... local_PLUGINNAME_FUNCTIONNAME is the name of the ...
-            // ... web service function that the client will call.
-                'classname' => 'mod_mooduell_external', // Create this class in componentdir/classes/external
-                'methodname' => 'update_profile_picture', // Implement this function into the above class
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'This documentation will be displayed in the generated API documentation
-                              (Administration > Plugins > Webservices > API documentation)',
-                'type' => 'write', // The value is 'write' if your function does any database change, otherwise it is 'read'.
-                'ajax' => true, // True/false if you allow this web service function to be callable via ajax
-                'capabilities' => 'mod/mooduell:view',
-                'services' => array(
-                        MOODLE_OFFICIAL_MOBILE_SERVICE
+                        'MOODUELL_EXTERNAL'
                 )
         ),
         'mod_mooduell_load_highscore_data' => array(
@@ -215,7 +202,7 @@ $functions = array(
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'Ajax load list of highscores',
                 'type' => 'read',
-                'capabilities' => 'mod/mooduell:view',
+                'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
         'mod_mooduell_load_questions_data' => array(
@@ -224,7 +211,7 @@ $functions = array(
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'Ajax load list of questions',
                 'type' => 'read',
-                'capabilities' => 'mod/mooduell:view',
+                'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
         'mod_mooduell_load_opengames_data' => array(
@@ -233,7 +220,7 @@ $functions = array(
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'Ajax load list of opengames',
                 'type' => 'read',
-                'capabilities' => 'mod/mooduell:view',
+                'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
         'mod_mooduell_load_finishedgames_data' => array(
@@ -242,7 +229,7 @@ $functions = array(
                 'classpath' => 'mod/mooduell/classes/external.php',
                 'description' => 'Ajax load list of finishedgames',
                 'type' => 'read',
-                'capabilities' => 'mod/mooduell:view',
+                'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         )
 );

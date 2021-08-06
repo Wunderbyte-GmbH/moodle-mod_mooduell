@@ -22,7 +22,6 @@
  * @copyright   2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// namespace mod_mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -43,9 +42,6 @@ class mod_mooduell_observer {
      * @return bool True on success.
      */
     public static function game_finished($event) {
-
-        // For more information about the Events API, please visit:
-        // https://docs.moodle.org/dev/Event_2
 
         game_finished::update_highscores_table($event->objectid);
 

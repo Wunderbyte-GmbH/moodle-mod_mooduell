@@ -143,8 +143,9 @@ class question_control {
             $this->categoryname = isset($data->categoryname) ? $data->categoryname : null;
             $this->courseid = $COURSE->id;
 
-            // We need the context id, but it might be there already
-            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories', 'contextid', array('id' => $this->category));
+            // We need the context id, but it might be there already.
+            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories',
+                    'contextid', array('id' => $this->category));
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
             if (isset($data->playeraanswered)) {
@@ -216,7 +217,8 @@ class question_control {
         }
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
-                // If this is a correct answer, we want it in our array of correct answers OR we need to find it in our array of given answers.
+                // If this is a correct answer...
+                // ... we want it in our array of correct answers OR we need to find it in our array of given answers.
                 if ($showcorrectanswer) {
                     $resultarray[] = $answer->id;
                 } else {
@@ -230,7 +232,7 @@ class question_control {
                 // If we have on wrong answer in our answer array ...
                 // ... and only if we don't want to show the correct answers.
                 if (!$showcorrectanswer) {
-                    // we check if we have registered a wrong answer
+                    // We check if we have registered a wrong answer.
                     if (in_array($answer->id, $answerids)) {
                         $resultarray[] = 0;
                         break;
@@ -255,7 +257,7 @@ class question_control {
         // Check for the correct Typ of the question. Should be called AFTER right number of answers.
         $this->check_for_right_type_of_question();
 
-        // Check for the right questiontext length
+        // Check for the right questiontext length.
         $this->check_for_right_length_of_questiontext();
 
         if (count($this->warnings) == 0) {
@@ -280,7 +282,6 @@ class question_control {
 
         $context = \context_course::instance($this->courseid);
 
-        // require_once($CFG->libdir . '/coursecatlib.php');
         $course = get_course($this->courseid);
 
         // Retrieve the question usage id from Db.
@@ -295,7 +296,9 @@ class question_control {
 
         $idstring = implode("/", [$quid->id, 1, $this->questionid]);
 
-        $this->questiontext = file_rewrite_pluginfile_urls($this->questiontext, 'pluginfile.php', $this->contextid, 'question', 'questiontext', $idstring);
+        $this->questiontext = file_rewrite_pluginfile_urls($this->questiontext,
+                'pluginfile.php', $this->contextid, 'question',
+                'questiontext', $idstring);
 
         $dom = new \DOMDocument();
         $dom->loadHTML($this->questiontext);
@@ -309,9 +312,9 @@ class question_control {
             $alttext = $image->getAttribute('alt');
             break;
         }
-        // No HTML Text anymore
+        // No HTML Text anymore.
         $this->questiontext = strip_tags($this->questiontext);
-        // But markdown, if there is any. Even if it's not markdown formatted text
+        // But markdown, if there is any. Even if it's not markdown formatted text.
         $this->questiontext = format_text($this->questiontext, 4);
         $this->length = strlen($this->questiontext);
         $this->imageurl = $url;

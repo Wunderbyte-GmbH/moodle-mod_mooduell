@@ -41,9 +41,9 @@ use stdClass;
 
 global $CFG;
 
-// Question Health constants
+// Question Health constants.
 
-// Define the right length of questiontext
+// Define the right length of questiontext.
 const MAXLENGTH = 400;
 const MINLENGTH = 0;
 
@@ -204,7 +204,7 @@ class mooduell {
         // Write categories to categories table.
         if (count($categoriesarray) > 0) {
 
-            // First we have to check if we have any category entry for our Mooduell Id
+            // First we have to check if we have any category entry for our Mooduell Id.
             $foundrecords = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
             $newrecords = $categoriesarray;
 
@@ -213,7 +213,7 @@ class mooduell {
                 return;
             }
 
-            // Else we determine if we have more new or old records and set $i accordingly;
+            // Else we determine if we have more new or old records and set $i accordingly.
             $max = count($foundrecords) >= count($newrecords) ? count($foundrecords) : count($newrecords);
             $i = 0;
 
@@ -222,7 +222,7 @@ class mooduell {
                 $foundrecord = count($foundrecords) > 0 ? array_pop($foundrecords) : null;
                 $newrecord = count($newrecords) > 0 ? array_pop($newrecords) : null;
 
-                // If we have still a foundrecord left, we update it
+                // If we have still a foundrecord left, we update it.
                 if ($foundrecord && $newrecord) {
                     $data = new stdClass();
                     $data->id = $foundrecord->id;
@@ -264,29 +264,30 @@ class mooduell {
         if (!$inline) {
             $out .= $output->header();
 
-            // Uncomment this to have a button to debug the game_finished event
-            /*$cmid = $this->cm->id;
+            // Uncomment this to have a button to debug the game_finished event.
+            /*
+            $cmid = $this->cm->id;
             $game_finished_url = new moodle_url("/mod/mooduell/view.php?id=$cmid&triggered_event=game_finished");
-            $out .= "<a class='btn btn-primary' href='$game_finished_url' role='button'>Trigger game_finished event</a>";*/
+            $out .= "<a class='btn btn-primary' href='$game_finished_url' role='button'>Trigger game_finished event</a>";
+            */
         }
 
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
-                // $data = []; // $this->return_list_of_games();
-                $data['opengames'] = []; // $this->return_list_of_games(false, false);
-                $data['finishedgames'] = []; // $this->return_list_of_games(false, true);
+                $data['opengames'] = [];
+                $data['finishedgames'] = [];
                 $data['warnings'] = $this->check_quiz();
 
-                // Add the Name of the instance
+                // Add the Name of the instance.
                 $data['quizname'] = $this->cm->name;
                 $data['mooduellid'] = $this->cm->id;
-                // Add the list of questions
-                $data['questions'] = []; // $this->return_list_of_all_questions_in_quiz();
-                $data['highscores'] = []; // $this->return_list_of_highscores();
+                // Add the list of questions.
+                $data['questions'] = [];
+                $data['highscores'] = [];
                 $data['categories'] = $this->return_list_of_categories();
                 $data['statistics'] = $this->return_list_of_statistics_teacher();
-                // Use the viewpage renderer template
+                // Use the viewpage renderer template.
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpage($viewpage);
                 break;
@@ -295,8 +296,8 @@ class mooduell {
                 $mooduellgame = new game_control($this, $gameid);
                 $gamedata = $mooduellgame->get_questions();
                 $data['questions'] = $gamedata->questions;
-                // Use the viewquestions renderer template
-                // Add the Name of the instance
+                // Use the viewquestions renderer template.
+                // Add the Name of the instance.
                 $data['quizname'] = $this->cm->name;
                 $data['mooduellid'] = $this->cm->id;
                 $viewquestions = new viewpage($data);
@@ -305,10 +306,10 @@ class mooduell {
             case 'studentsview':
                 // Create the list of open games we can pass on to the renderer.
                 $data['statistics'] = $this->return_list_of_statistics_student();
-                $data['opengames'] = []; // $this->return_games_for_this_instance(true, false);
-                $data['finishedgames'] = []; // $this->return_games_for_this_instance(true, true);
-                $data['highscores'] = []; // $this->return_list_of_highscores();
-                // Add the Name of the instance
+                $data['opengames'] = [];
+                $data['finishedgames'] = [];
+                $data['highscores'] = [];
+                // Add the Name of the instance.
                 $data['opengames'] = [];
                 $data['finishedgames'] = [];
                 $data['highscores'] = [];
@@ -520,7 +521,7 @@ class mooduell {
         };
 
         if ($finished === null) {
-            // do nothing -> return finished and unfinished games
+            // Do nothing -> return finished and unfinished games.
             $sql .= "";
         } else if ($finished) {
             $sql .= " AND status = 3";
@@ -655,16 +656,15 @@ class mooduell {
                 $playerb->qplayed = $entry->playerbqplayed;
             }
 
-            // Player A
             // Player A.
-            $playera->played = 0; // games played
+            $playera->played = 0; // Games played.
             $playera->won = 0;
             $playera->lost = 0;
             $playera->score = 0;
 
             // Player B
             // Player B.
-            $playerb->played = 0; // games played
+            $playerb->played = 0; // Games played.
             $playerb->won = 0;
             $playerb->lost = 0;
             $playerb->score = 0;
@@ -952,7 +952,7 @@ class mooduell {
                     union
                     select playerbid playerid from {mooduell_games}
                     where mooduellid = $mooduellid
-                ) s"; // info: union selects only distinct records
+                ) s"; // Info: union selects only distinct records.
         $numberofactiveusers = $DB->get_record_sql($sql)->active_users;
         $listofstatistics['number_of_active_users'] = $numberofactiveusers;
 
@@ -968,18 +968,22 @@ class mooduell {
 
         // Number of answers returned to MooDuell questions.
         $sql = "select sum(s.answers) answers from
-                (select count(playeraanswered) answers from {mooduell_questions} where playeraanswered is not null and mooduellid = $mooduellid
+                (select count(playeraanswered) answers from {mooduell_questions}
+                where playeraanswered is not null and mooduellid = $mooduellid
                 union all
-                select count(playerbanswered) answers from {mooduell_questions} where playerbanswered is not null and mooduellid = $mooduellid) s";
+                select count(playerbanswered) answers from {mooduell_questions}
+                where playerbanswered is not null and mooduellid = $mooduellid) s";
         $numberofanswers = $DB->get_record_sql($sql)->answers;
         $listofstatistics['number_of_answers'] = $numberofanswers;
 
         // Percentage of correctly answered questions.
         // Step 1: find out the number of correct answers returned to MooDuell questions.
         $sql = "select sum(s.correct_answers) correct_answers from
-                (select count(playeraanswered) correct_answers from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
+                (select count(playeraanswered) correct_answers from {mooduell_questions}
+                where playeraanswered = 2 and mooduellid = $mooduellid
                 union all
-                select count(playerbanswered) correct_answers from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s";
+                select count(playerbanswered) correct_answers from {mooduell_questions}
+                where playerbanswered = 2 and mooduellid = $mooduellid) s";
         $numberofcorrectanswers = $DB->get_record_sql($sql)->correct_answers;
 
         if (!empty($numberofcorrectanswers)) {
@@ -1056,8 +1060,6 @@ class mooduell {
         $userstats = game_control::get_user_stats( $USER->id, $mooduellid);
 
         // Number of distinct opponents who have played a MooDuell game...
-        // ... gainst the current user.
-        // $sql = "select count(*)-1 opponents
         // ...against the current user.
         $sql = "select count(*)-1 opponents
                 from (
@@ -1068,7 +1070,7 @@ class mooduell {
                   select playerbid playerid from {mooduell_games}
                   where mooduellid = $mooduellid
                   and (playeraid = $USER->id or playerbid = $USER->id)
-                ) s"; // info: union selects only distinct records
+                ) s"; // Info: union selects only distinct records.
         $numberofopponents = $DB->get_record_sql($sql)->opponents;
         // No game played yet.
         if ($numberofopponents == -1) {
@@ -1127,7 +1129,7 @@ class mooduell {
 
         require_once($CFG->libdir . '/csvlib.class.php');
 
-        // Make sure data is valid:
+        // Make sure data is valid.
 
         $headlinecount = count ($headline);
 

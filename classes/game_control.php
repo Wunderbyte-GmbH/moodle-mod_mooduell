@@ -82,7 +82,7 @@ class game_control {
 
             $context = $mooduell->context;
 
-            // A Teacher can access a game where he/she is was not involved
+            // A Teacher can access a game where he/she is was not involved.
             if (!has_capability('mod/mooduell:managemooduellsettings', $context)
             && ($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
                 throw new moodle_exception('notallowedtoaccessthisgame', 'mooduell', null, null,
@@ -126,9 +126,9 @@ class game_control {
         $filteredusers = array();
 
         foreach ($users as $user) {
-            // We need to skip users who are missing the capability
-            // to view the current MooDuell instance (3rd parameter of is_enrolled)
-            // also skip users with no active enrolement status (4th parameter of is_enrolled)
+            // We need to skip users who are missing the capability ...
+            // ... to view the current MooDuell instance (3rd parameter of is_enrolled)
+            // Also skip users with no active enrolement status (4th parameter of is_enrolled).
             if (!is_enrolled($context, $user, 'mod/mooduell:viewinstance', true)) {
                 continue;
             }
@@ -176,7 +176,8 @@ class game_control {
         $returnarray = [];
         try {
             // Get all the games where player was either Player A or Player B AND game is finished.
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid .
+            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' .
+                    $userid . ' OR playerbid =' . $userid .
                     ')');
 
             $wongames = 0;
@@ -273,14 +274,14 @@ class game_control {
 
         $data = $this->gamedata;
         $data->playerbid = $playerbid;
-        $data->status = 1; // This means that it's player As turn
+        $data->status = 1; // This means that it's player As turn.
         $data->mooduellid = $this->mooduell->cm->instance;
 
-        // set the result string to their initial value, so we don't get null
+        // Set the result string to their initial value, so we don't get null.
         $data->playeraresults = EMPTY_RESULT;
         $data->playerbresults = EMPTY_RESULT;
 
-        // also initialize the number of questions played for both players with 0
+        // Also initialize the number of questions played for both players with 0.
         $data->playeraqplayed = 0;
         $data->playerbqplayed = 0;
 
@@ -295,7 +296,7 @@ class game_control {
         // Write all our questions to our DB and link it to our gameID.
         foreach ($questions as $question) {
 
-            // We set data back
+            // We set data back.
             $data = new stdClass();
             $data->questionid = $question->questionid;
             $data->mooduellid = $this->mooduell->cm->instance;
@@ -338,7 +339,6 @@ class game_control {
         }
 
         // Now we add the numbersofquestions key to each category.
-        // $calculatedqnumber = 0;
         foreach ($categories as $category) {
             $category->numberofquestions = (int) round(($category->weight / $sum) * $setnumberofquestions);
 
@@ -361,7 +361,7 @@ class game_control {
                     unset($categories[$key]->availableQuestions[$i]);
                     --$categories[$key]->numberofquestions;
                 }
-                // If we run out in one category, we enter bonus mode
+                // If we run out in one category, we enter bonus mode.
                 if (count($category->availableQuestions) == 0
                         && $category->numberofquestions > 0) {
                     $bonusmode = true;
@@ -377,7 +377,7 @@ class game_control {
         // We now have an "ordered" array of questions, categories are not mixed up.
         shuffle($questions);
 
-        // make sure we have no duplicates
+        // Make sure we have no duplicates.
 
         return $questions;
     }
@@ -396,7 +396,7 @@ class game_control {
 
         // We have to make sure we have all the questions added to the normal game data.
         // Also, we use the mquestions here because we find the results attached to every question.
-        // therefore, we update the question class instances we already have.
+        // Therefore, we update the question class instances we already have.
         $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid));
 
         // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
@@ -498,7 +498,6 @@ class game_control {
 
             foreach ($questions as $question) {
                 if ($question->questionid == $questionid) {
-                    // $answers = $question->answers;
                     $activequestion = $question;
                     break;
                 }
@@ -559,7 +558,7 @@ class game_control {
     }
 
     /**
-     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned
+     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned.
      */
     private function send_notifcation_if_necessary() {
 
@@ -573,25 +572,25 @@ class game_control {
         }
 
         if ($this->gamedata->status === 3) {
-            // Notify Player A
+            // Notify Player A.
             if ($this->gamedata->winnerid === $this->gamedata->playeraid) {
-                // you won
+                // You won.
                 $this->send_push_notification('youwin');
             } else if ($this->gamedata->winnerid === 0) {
-                // you played draw
+                // You played draw.
                 $this->send_push_notification('draw');
             } else if ($this->gamedata->winnerid === $this->gamedata->playerbid) {
-                // you lost
+                // You lost.
                 $this->send_push_notification('youlose');
             }
         } else if ($i === 3 && $j === 0) {
-            // player b is challenged
+            // Player b is challenged.
             $this->send_push_notification('challenged');
         } else if ($i === 3 && $j === 6) {
-            // player a's turn
+            // Player a's turn.
             $this->send_push_notification('YOURTURNA');
         } else if ($i === 9 && $j === 6) {
-            // player b's turn
+            // Player b's turn.
             $this->send_push_notification('YOURTURNB');
         }
     }
@@ -677,7 +676,7 @@ class game_control {
     }
 
     /**
-     * returns array of pushtoken strings from given user.
+     * Returns array of pushtoken strings from given user.
      * If there are non, we return empty array
      * @param $userid
      * @return array
@@ -700,9 +699,6 @@ class game_control {
         return $returnarray;
     }
 
-
-
-
     /**
      * Check if active player is allowed to answer questions.
      *
@@ -723,30 +719,30 @@ class game_control {
         // If we have incomplete packages, we can always go on...
         // ... else we have to have less or equal answered questions.
 
-        // For i playera & j playerb
+        // For i playera & j playerb.
         if ($i < 3 && $j == 0) {
-            // player a
+            // Player a.
             if ($USER->id == $this->gamedata->playeraid) {
                 return true;
             } else {
                 return false;
             }
         } else if ($i == 3 && $j < 6) {
-            // player b
+            // Player b.
             if ($USER->id == $this->gamedata->playeraid) {
                 return false;
             } else {
                 return true;
             }
         } else if ($i < 9 && $j == 6) {
-            // player a
+            // Player a.
             if ($USER->id == $this->gamedata->playeraid) {
                 return true;
             } else {
                 return false;
             }
         } else if ($i == 9 && $j < 9) {
-            // player b
+            // Player b.
             if ($USER->id == $this->gamedata->playeraid) {
                 return false;
             } else {
@@ -833,12 +829,16 @@ class game_control {
         $update->id = $this->gamedata->gameid;
 
         if ($this->is_game_finished()) {
-            // set the status to 3 which means finished
+            // Set the status to 3 which means finished.
             $update->status = 3;
             $this->gamedata->status = 3;
 
-            // Set winnerid
-            list($update->winnerid, $update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
+            // Set winnerid.
+            list($update->winnerid,
+                    $update->playeracorrect,
+                    $update->playerbcorrect,
+                    $update->playeraqplayed,
+                    $update->playerbqplayed)
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
         } else {
@@ -861,8 +861,8 @@ class game_control {
 
         $updatestatus = $DB->update_record('mooduell_games', $update);
 
-        // now the mooduell_games table has been updated
-        // ... so we can trigger the game_finished event
+        // Now the mooduell_games table has been updated.
+        // ... so we can trigger the game_finished event.
         if ($updatestatus && $this->is_game_finished()) {
             $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
             $event->trigger();

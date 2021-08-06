@@ -34,10 +34,10 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
 
     protected function define_structure() {
 
-        // To know if we are including userinfo
+        // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-        // Define each element separated
+        // Define each element separated.
         $mooduell = new backup_nested_element('mooduell', array('id'), array(
             'name', 'intro', 'introformat', 'quizid', 'usefullnames',
             'showcontinuebutton', 'showcorrectanswer', 'countdown', 'waitfornextquestion',
@@ -86,7 +86,7 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
 
         $category->set_source_table('mooduell_categories', array('mooduellid' => backup::VAR_PARENTID));
 
-        // Only if we include userinfo, we also include games, questions & pushtokens
+        // Only if we include userinfo, we also include games, questions & pushtokens.
         if ($userinfo) {
             $game->set_source_table('mooduell_games', array('mooduellid' => backup::VAR_PARENTID));
 
@@ -94,7 +94,7 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
 
             $pushtoken->set_source_table('mooduell_pushtokens', array('mooduellid' => backup::VAR_PARENTID));
 
-            // Define id annotations
+            // Define id annotations.
             $game->annotate_ids('user', 'playeraid');
             $game->annotate_ids('user', 'playerbid');
         }

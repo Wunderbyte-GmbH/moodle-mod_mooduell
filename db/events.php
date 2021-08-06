@@ -25,9 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// For more information about the Events API, please visit:
-// https://docs.moodle.org/dev/Event_2
-
 $observers = array(
 
         array(

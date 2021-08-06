@@ -29,8 +29,6 @@ use mod_mooduell\mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
-// require_once($CFG->libdir . '/externallib.php');
-// require_once $CFG->dirroot . '/mod/quiz/locallib.php';
 require_once('mooduell.php');
 
 /**
@@ -67,15 +65,13 @@ class mod_mooduell_external extends external_api {
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        // require_capability('moodle/course:managegroups', $context);
-
-        // we create Mooduell Instance.
+        // We create Mooduell Instance.
         $mooduell = new mooduell($params['quizid']);
 
-        // we create the game_controller Instance.
+        // We create the game_controller Instance.
         $gamecontroller = new game_control($mooduell);
 
-        // we create a new game: Save parameters to DB & trigger notification event.
+        // We create a new game: Save parameters to DB & trigger notification event.
         $startgameresult = $gamecontroller->start_new_game($params['playerbid']);
 
         // TODO: Trigger Notification for other User.
@@ -129,7 +125,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::answer_question_parameters(), $params);
 
-        // now security checks.
+        // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
             throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
@@ -138,12 +134,10 @@ class mod_mooduell_external extends external_api {
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        // require_capability('moodle/course:managegroups', $context);
-
-        // we create Mooduell Instance.
+        // We create Mooduell Instance.
         $mooduell = new mooduell($params['quizid']);
 
-        // we create the game_controller Instance.
+        // We create the game_controller Instance.
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         $result['response'] = $gamecontroller->validate_question($params['questionid'], $params['answerids']);
@@ -279,7 +273,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Get all the quizzes (Mooduell Instances) by courses
+     * Get all the quizzes (Mooduell Instances) by courses.
      *
      * @param $courseids
      * @param $timemodfied
@@ -340,7 +334,7 @@ class mod_mooduell_external extends external_api {
 
                     // Fields only for managers.
                     if (has_capability('moodle/course:manageactivities', $context)) {
-                        // we could do something here.
+                        // We could do something here.
                         $quizdetails['isteacher'] = 1;
                     } else {
                         $quizdetails['isteacher'] = 0;
@@ -438,7 +432,7 @@ class mod_mooduell_external extends external_api {
         // We create the game_controller Instance.
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
-        // We can now retrieve the questions and add them to our gamedata
+        // We can now retrieve the questions and add them to our gamedata.
         return $gamecontroller->get_questions();
     }
 
@@ -522,12 +516,13 @@ class mod_mooduell_external extends external_api {
         // We create Mooduell Instance.
         $mooduell = new mooduell($params['quizid']);
 
-        // We can now retrieve the questions and add them to our gamedata
+        // We can now retrieve the questions and add them to our gamedata.
         return game_control::return_users_for_game($mooduell);
     }
 
     /**
-     * Set alternate name of user. Actually, this doesn't save to alternatename but to the user profile filed "mooduell_alias"
+     * Set alternate name of user.
+     * Actually, this doesn't save to alternatename but to the user profile filed "mooduell_alias".
      * @param $userid
      * @param $alternatename
      * @return bool
@@ -550,7 +545,7 @@ class mod_mooduell_external extends external_api {
 
         global $USER;
 
-        // Every user can only set his/her own name
+        // Every user can only set his/her own name.
         if ($params['userid'] != $USER->id) {
             throw new moodle_exception('norighttosetnameofthisuser ' . $params['userid'], 'mooduell', null, null,
                     "Course module id:" . $params['quizid']);
@@ -610,7 +605,8 @@ class mod_mooduell_external extends external_api {
                                 'firstname' => new external_value(PARAM_RAW, 'firstname'),
                                 'lastname' => new external_value(PARAM_RAW, 'lastname'),
                                 'username' => new external_value(PARAM_RAW, 'username'),
-                                'alternatename' => new external_value(PARAM_RAW, 'nickname, stored as custom profile filed mooduell_alias'),
+                                'alternatename' => new external_value(PARAM_RAW,
+                                        'nickname, stored as custom profile filed mooduell_alias'),
                                 'lang' => new external_value(PARAM_RAW, 'language'),
                                 'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
                         )
@@ -635,7 +631,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Describes the parameters for get_user_stats
+     * Describes the parameters for get_user_stats.
      *
      * @return external_function_parameters
      * @since Moodle 3.1
@@ -692,10 +688,10 @@ class mod_mooduell_external extends external_api {
         return new external_multiple_structure(new external_single_structure(array(
                                 'quizid' => new external_value(PARAM_INT, 'quizid'),
                                 'userid' => new external_value(PARAM_INT, 'userid'),
-                                'won' => new external_value(PARAM_INT, 'won'), // games won
-                                'lost' => new external_value(PARAM_INT, 'lost'), // games lost
+                                'won' => new external_value(PARAM_INT, 'won'), // Games won.
+                                'lost' => new external_value(PARAM_INT, 'lost'), // Games lost.
                                 'score' => new external_value(PARAM_INT, 'firstname'),
-                                'played' => new external_value(PARAM_INT, 'played') // games played
+                                'played' => new external_value(PARAM_INT, 'played') // Games played.
                         )
                 )
         );
@@ -838,16 +834,16 @@ class mod_mooduell_external extends external_api {
         $entry = $DB->get_record('mooduell_games', array('id' => $params['gameid']));
 
         if ($entry) {
-            // player A gives up
+            // Player A gives up.
             if ($entry->playeraid === $USER->id) {
-                // ...so player B is the winner
+                // ... so player B is the winner.
                 $entry->winnerid = $entry->playerbid;
-                // set 9 played questions for player A so the percentage
-                // of correct answers will be calculated correctly
+                // Set 9 played questions for player A so the percentage ...
+                // ... of correct answers will be calculated correctly.
                 $entry->playeraqplayed = 9;
             } else if ($entry->playerbid === $USER->id) {
                 // Player B gives up...
-                // ...so player A is the winner
+                // ...so player A is the winner.
                 $entry->winnerid = $entry->playeraid;
                 // Set 9 played questions for player B so the percentage...
                 // ... of correct answers will be calculated correctly.
@@ -899,7 +895,8 @@ class mod_mooduell_external extends external_api {
 
         global $USER, $CFG, $DB;
 
-        $fileinfo = self::validate_parameters(self::update_profile_picture_parameters(), array('filename' => $filename, 'filecontent' => $filecontent));
+        $fileinfo = self::validate_parameters(self::update_profile_picture_parameters(), array(
+                'filename' => $filename, 'filecontent' => $filecontent));
 
         if (!isset($fileinfo['filecontent'])) {
             throw new moodle_exception('nofile');
@@ -922,11 +919,10 @@ class mod_mooduell_external extends external_api {
         $fileinfo['filecontent'] = strtr($fileinfo['filecontent'], '._-', '+/=');
 
         file_put_contents($savedfilepath, base64_decode($fileinfo['filecontent']));
-        // file_put_contents($savedfilepath, $fileinfo['filecontent']);
 
         require_once( $CFG->libdir . '/gdlib.php' );
 
-        // Uppload avatar from the temporary file-
+        // Uppload avatar from the temporary file.
         $usericonid = process_new_icon( context_user::instance( $USER->id, MUST_EXIST ), 'user', 'icon', 0, $savedfilepath );
         // Specify icon id for the desired user with id $newuser->id (in our case).
         if ( $usericonid ) {
@@ -993,7 +989,7 @@ class mod_mooduell_external extends external_api {
 
         $params = self::validate_parameters(self::load_highscore_data_parameters(), $params);
 
-        // We set the (optional) parameters for tablelib to fetch them
+        // We set the (optional) parameters for tablelib to fetch them.
         $_POST['page'] = $params['pageid'];
         $_POST['tsort'] = $params['tsort'];
         $_POST['thide'] = $params['thide'];
@@ -1086,11 +1082,11 @@ class mod_mooduell_external extends external_api {
                                 'questionid' => new external_value(PARAM_INT, 'question id'),
                                 'imageurl' => new external_value(PARAM_RAW, 'iamgeurl'),
                                 'imagetext' => new external_value(PARAM_RAW, 'iamgetext'),
-                                'questiontext' => new external_value(PARAM_RAW, 'questiontext'), // questiontext
-                                'questiontype' => new external_value(PARAM_RAW, 'questiontype'), // questiontype
-                                'category' => new external_value(PARAM_RAW, 'category'), // category
+                                'questiontext' => new external_value(PARAM_RAW, 'questiontext'),
+                                'questiontype' => new external_value(PARAM_RAW, 'questiontype'),
+                                'category' => new external_value(PARAM_RAW, 'category'),
                                 'courseid' => new external_value(PARAM_INT, 'courseid'),
-                                'status' => new external_value(PARAM_RAW, 'status'), // status
+                                'status' => new external_value(PARAM_RAW, 'status'),
                                 'warnings' => new external_multiple_structure(new external_single_structure(array(
                                                 'message' => new external_value(PARAM_RAW, 'message'))
                                 )),
@@ -1109,7 +1105,14 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function load_opengames_data($quizid, $pageid = null, $tsort = null, $thide = null, $tshow = null, $tdir = null, $treset = null) {
+    public static function load_opengames_data(
+            $quizid,
+            $pageid = null,
+            $tsort = null,
+            $thide = null,
+            $tshow = null,
+            $tdir = null,
+            $treset = null) {
         global $COURSE, $CFG;
 
         $params = array(
