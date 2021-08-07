@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin event observers are registered here.
+ * Table SQL class for displaying MooDuell games.
  *
  * @package mod_mooduell
  * @copyright 2020 Wunderbyte Gmbh <info@wunderbyte.at>
@@ -26,6 +26,9 @@ require_once("../../config.php");
 
 global $CFG;
 
+/**
+ * MooDuell Table sql class.
+ */
 class mooduell_table extends table_sql {
 
     /**
@@ -41,7 +44,8 @@ class mooduell_table extends table_sql {
 
     /**
      * mooduell_table constructor.
-     * @param null $mooduell
+     * @param $mooduell
+     * @param $action
      */
     public function __construct($mooduell, $action) {
         parent::__construct($action);
@@ -49,8 +53,10 @@ class mooduell_table extends table_sql {
         $this->action = $action;
     }
 
-    /* COLUMNS for OPEN GAMES and FINISHED GAMES */
-
+    /**
+     * Function to return the players name instead of id.
+     * @param $game
+     */
     public function col_playeraid($game) {
         if ($game->playeraid) {
 
@@ -60,6 +66,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the players name instead of id.
+     * @param $game
+     */
     public function col_playerbid($game) {
         if ($game->playerbid) {
 
@@ -69,6 +79,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the readable date instead of timestamp.
+     * @param $game
+     */
     public function col_timemodified($game) {
         if ($game->timemodified) {
             if (current_language() === 'de') {
@@ -98,6 +112,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the MooDuell id.
+     * @param $game
+     */
     public function col_mooduellid($game) {
         if ($game->mooduellid) {
 
@@ -107,6 +125,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return clickable action links.
+     * @param $game
+     */
     public function col_action($game) {
         $cmid = $this->mooduell->cm->id;
 
@@ -127,6 +149,10 @@ class mooduell_table extends table_sql {
 
     /* COLUMNS for HIGHSCORES */
 
+    /**
+     * Function to return the ranking of the player.
+     * @param $highscoreentry
+     */
     public function col_ranking($highscoreentry) {
         if ($highscoreentry->ranking) {
 
@@ -136,6 +162,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the name of the player.
+     * @param $highscoreentry
+     */
     public function col_userid($highscoreentry) {
         if ($highscoreentry->userid) {
 
@@ -145,6 +175,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the score of the player.
+     * @param $highscoreentry
+     */
     public function col_score($highscoreentry) {
         if ($highscoreentry->score !== null) {
 
@@ -154,6 +188,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the number of games played by the player.
+     * @param $highscoreentry
+     */
     public function col_gamesplayed($highscoreentry) {
         if ($highscoreentry->gamesplayed !== null) {
 
@@ -163,6 +201,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the number of games won by the player.
+     * @param $highscoreentry
+     */
     public function col_gameswon($highscoreentry) {
         if ($highscoreentry->gameswon !== null) {
 
@@ -172,6 +214,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the number of games lost by the player.
+     * @param $highscoreentry
+     */
     public function col_gameslost($highscoreentry) {
         if ($highscoreentry->gameslost !== null) {
 
@@ -181,6 +227,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the number of correctly answered questions by the player.
+     * @param $highscoreentry
+     */
     public function col_qcorrect($highscoreentry) {
         if ($highscoreentry->qcorrect !== null) {
 
@@ -190,6 +240,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the number of questions answered by the player.
+     * @param $highscoreentry
+     */
     public function col_qplayed($highscoreentry) {
         if ($highscoreentry->qplayed !== null) {
 
@@ -199,6 +253,10 @@ class mooduell_table extends table_sql {
         }
     }
 
+    /**
+     * Function to return the percentage of correctly answered questions by the player.
+     * @param $highscoreentry
+     */
     public function col_qcpercentage($highscoreentry) {
         if ($highscoreentry->qcpercentage !== null) {
 

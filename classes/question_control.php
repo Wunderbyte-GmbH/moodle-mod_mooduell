@@ -14,12 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Class question_control for mod_mooduell.
+ *
+ * @package mod_mooduell
+ * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace mod_mooduell;
 
 use dml_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class question_control for mod_mooduell.
+ *
+ * @package mod_mooduell
+ */
 class question_control {
 
     /**
@@ -123,11 +136,11 @@ class question_control {
      */
     public $warnings = [];
 
-
     /**
      * question_control constructor.
-     *
-     * @param mooduell $mooduell
+     * @param null $data
+     * @param null $listofanswers
+     * @throws dml_exception
      */
     public function __construct($data = null, $listofanswers = null) {
         // If we have $data, we automatically create all the relevant values for this question...
@@ -208,7 +221,12 @@ class question_control {
         }
     }
 
-
+    /**
+     * See if answer was correct.
+     * @param $answerids
+     * @param $showcorrectanswer
+     * @return int[]
+     */
     public function validate_question($answerids, $showcorrectanswer) {
 
         // If we don't have answers, something went wrong, we return error code -1.
@@ -249,6 +267,7 @@ class question_control {
 
     /**
      * Add warnings for every problem and set status accordingly.
+     * @throws \coding_exception
      */
     private function check_question() {
         // Check for correct number of answers and set status and qtype accordingly.
@@ -266,6 +285,8 @@ class question_control {
     }
 
     /**
+     * Stores the image parameters in the question_class.
+     * @throws \coding_exception
      * @throws dml_exception
      */
     private function extract_image() {
@@ -321,6 +342,10 @@ class question_control {
         $this->imagetext = $alttext;
     }
 
+    /**
+     * Make sure we have the right number of answers.
+     * @throws \coding_exception
+     */
     private function check_for_right_number_of_answers() {
         $countcorrectanswers = 0;
         foreach ($this->answers as $answer) {
@@ -338,6 +363,10 @@ class question_control {
         } // Else do nothing.
     }
 
+    /**
+     * Make sure questiontext is not too long.
+     * @throws \coding_exception
+     */
     private function check_for_right_length_of_questiontext() {
         if (strlen($this->questiontext) < MINLENGTH) {
             $this->warnings[] = [
@@ -352,6 +381,10 @@ class question_control {
         }
     }
 
+    /**
+     * Verify question type.
+     * @throws \coding_exception
+     */
     private function check_for_right_type_of_question() {
         if (!in_array($this->questiontype, ACCEPTEDTYPES)) {
             $this->warnings[] = [

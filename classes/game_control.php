@@ -29,8 +29,19 @@ use moodle_exception;
 use stdClass;
 use tool_dataprivacy\context_instance;use user_picture;
 
+/**
+ * Game control class for mod_mooduell.
+ *
+ * @package mod_mooduell
+ * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
+/**
+ * Class to store all the relevant game data and execute game relevant function.
+ */
 class game_control {
 
     /**
@@ -46,10 +57,13 @@ class game_control {
 
     /**
      * Game_control constructor.
-     *
      * We set all the data we have at this moment and make it available to the instance of this class.
-     *
      * @param mooduell $mooduell
+     * @param null $gameid
+     * @param null $gamedata
+     * @throws \coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function __construct(mooduell $mooduell, $gameid = null, $gamedata = null) {
         global $USER;
@@ -169,6 +183,14 @@ class game_control {
         return $filteredusers;
     }
 
+    /**
+     * Function to assemble stats of a given user.
+     * @param $userid
+     * @param null $mooduellid
+     * @return array
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
     public static function get_user_stats($userid, $mooduellid = null) {
 
         global $DB;
@@ -258,8 +280,9 @@ class game_control {
 
     /**
      * Create new game, set random question sequence and write to DB.
-     *
-     * @return integer quizid or 0 when no quizid is set
+     * @param $playerbid
+     * @return false|mixed|stdClass
+     * @throws dml_exception
      * @throws moodle_exception
      */
     public function start_new_game($playerbid) {
@@ -311,11 +334,11 @@ class game_control {
     }
 
     /**
-     * Get all available questions from the right categories in our question bank.
+     * Get all available questions from the right categories in our question bank and chose 9 of them.
      * We make sure we get them according to weight and number of categories linked to the mooduell instance.
      * Return the questions as instances of question_control.
-     *
-     * @return mixed[]
+     * @return array
+     * @throws dml_exception
      * @throws moodle_exception
      */
     private function set_random_questions() {
@@ -384,8 +407,8 @@ class game_control {
 
     /**
      * Get all questions and save them to gamedata.
-     *
-     * @return stdClass
+     * @return false|mixed|stdClass
+     * @throws dml_exception
      * @throws moodle_exception
      */
     public function get_questions() {
@@ -450,6 +473,13 @@ class game_control {
         return $this->gamedata;
     }
 
+    /**
+     * This is necessary to display questions in certain contexts.
+     * @param $context
+     * @return stdClass|void
+     * @throws \coding_exception
+     * @throws dml_exception
+     */
     public static function register_for_question_usage($context) {
         global $DB;
 
@@ -470,10 +500,10 @@ class game_control {
      * ... (validation will be up to the App)...
      * ... or we return 0 for false and 1 for correctly answered.
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
-     *
      * @param $questionid
      * @param $answerids
-     * @return array
+     * @return mixed
+     * @throws dml_exception
      * @throws moodle_exception
      */
     public function validate_question($questionid, $answerids) {
@@ -701,7 +731,6 @@ class game_control {
 
     /**
      * Check if active player is allowed to answer questions.
-     *
      * @return bool
      */
     private function is_it_active_users_turn() {
@@ -753,7 +782,6 @@ class game_control {
 
     /**
      * Write result to DB, 1 is false, 2 is correct.
-     *
      * @param $gameid
      * @param $questionid
      * @param $result
@@ -871,7 +899,6 @@ class game_control {
 
     /**
      * Check if active player is allowed to answer questions.
-     *
      * @return bool
      */
     private function is_game_finished() {
@@ -910,6 +937,10 @@ class game_control {
         return [$winnerid, $playeracorrect, $playerbcorrect, $playeraqplayed, $playerbqplayed];
     }
 
+    /**
+     * Returns correct and played answers as ids.
+     * @return int[]
+     */
     private function return_correct_and_played_answers() {
         $playerascore = 0;
         $playerbscore = 0;
@@ -933,7 +964,10 @@ class game_control {
     }
 
     /**
-     * @return mixed
+     * Returns string to display on website to see played and correct answers.
+     * @return array
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function return_status() {
 
@@ -970,7 +1004,8 @@ class game_control {
      * Function fetches questions from DB, creating question_control instances to check for status.
      * If status is not ok, question is not returned.
      * @param $category
-     * @throws dml_exception
+     * @return array
+     * @throws \coding_exception
      */
     private function return_playable_questions_for_category($category) {
 
@@ -993,7 +1028,13 @@ class game_control {
         return $returnarray;
     }
 
-
+    /**
+     * Sends push notifications to google Firebase.
+     * @param $messagetype
+     * @return bool|string|void
+     * @throws \coding_exception
+     * @throws dml_exception
+     */
     private function send_push_notification($messagetype) {
         $pushenabled = get_config('mooduell', 'enablepush');
 

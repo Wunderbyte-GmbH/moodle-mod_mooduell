@@ -19,8 +19,27 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * headings - array: An array of table headings.
-    * rows - array: An array of content rows for the table.
+    * statistics - array: An array with values.
+    * opengames - array: empty array, will be filled with JS.
+    * finsihedgames - array: empty array, will be filled with JS.
+    * highscores - array: empty array, will be filled with JS.
+
+    Example context (json):
+    {
+       "statistics": {
+          "courseid": "50",
+          "number_of_opponents": "2",
+          "number_of_open_games": "2",
+          "number_of_games_finished": 0,
+          "number_of_games_won": 0,
+          "number_of_correct_answers": 0,
+          "percentage_of_correct_answers": 0
+       },
+       "opengames": [],
+       "finishedgames": [],
+       "highscores": [],
+       "quizname": "test"
+    }
 
     }}
 
@@ -72,13 +91,13 @@
         {{> mooduell/table_statistics_students }}
     </div>
     <div class="tab-pane fade" id="opengames" role="tabpanel" aria-labelledby="opengames-tab">
-        {{> mooduell/table_open_games_students }}
+        <div id="opengamestable"></div>
     </div>
     <div class="tab-pane fade" id="finishedgames" role="tabpanel" aria-labelledby="finishedgames-tab">
-        {{> mooduell/table_finished_games_students }}
+        <div id="finishedgamestable"></div>
     </div>
     <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
-        {{> mooduell/table_highscores }}
+        <div id="highscorestable"></div>
     </div>
 </div>
 

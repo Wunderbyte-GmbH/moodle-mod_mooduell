@@ -19,33 +19,40 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * headings - array: An array of table headings.
-    * rows - array: An array of content rows for the table.
-    }}
-    {{#statistics}}
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    * statistics - array: An array of stat values.
 
-    <style>
-        div.card-deck {
-            margin-top: 25px;
-            text-align: center;
-        }
-        div.wbblue {
-            background-color: #263683;
-        }
-        div.wborange {
-                    background-color: #ed8701;
-                }
-        h1 {
-            font-size: 4vw;
-        }
+    Example context (json):
+    "statistics": {
+      "courseid": "50",
+      "number_of_opponents": "2",
+      "number_of_open_games": "2",
+      "number_of_games_finished": 0,
+      "number_of_games_won": 0,
+      "number_of_correct_answers": 0,
+      "percentage_of_correct_answers": 0
+    }
+}}
+<style>
+    div.card-deck {
+        margin-top: 25px;
+        text-align: center;
+    }
+    div.wbblue {
+        background-color: #263683;
+    }
+    div.wborange {
+                background-color: #ed8701;
+            }
+    h1 {
+        font-size: 4vw;
+    }
 
-        .card-body .card-text.subheader {
-            font-size: 2vw;
-        }
-    </style>
+    .card-body .card-text.subheader {
+        font-size: 2vw;
+    }
+</style>
 
+{{#statistics}}
     <!-- Card Deck -->
     <div class="card-deck">
         <div class="card">

@@ -19,37 +19,50 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * headings - array: An array of table headings.
-    * rows - array: An array of content rows for the table.
-    }}
-    {{#statistics}}
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    * statistics - array: Array of statistics values
+
+    Example context (json):
+    "statistics": {
+              "courseid": "50",
+              "number_of_active_users": "3",
+              "number_of_games_started": "2",
+              "number_of_games_finished": "0",
+              "number_of_answers": "4",
+              "percentage_of_correct_answers": false,
+              "eq_id": false,
+              "eq_name": "",
+              "eq_correct_count": 0,
+              "hq_id": "5",
+              "hq_name": "Wählen Sie alle FALSCHEN ANTWORTEN aus",
+              "hq_incorrect_count": "1"
+    }
+}}
 
 <style>
-        div.card-deck {
-            margin-top: 25px;
-            text-align: center;
-        }
-        div.wbblue {
-            background-color: #263683;
-        }
-        div.wborange {
-                    background-color: #ed8701;
-                }
-        h1 {
-            font-size: 3.5vw;
-        }
+    div.card-deck {
+        margin-top: 25px;
+        text-align: center;
+    }
+    div.wbblue {
+        background-color: #263683;
+    }
+    div.wborange {
+                background-color: #ed8701;
+            }
+    h1 {
+        font-size: 3.5vw;
+    }
 
-        h1.smallheader {
-                    font-size: 2.5vw;
-                }
+    h1.smallheader {
+                font-size: 2.5vw;
+            }
 
-        .card-body .card-text.subheader {
-            font-size: 1.7vw;
-        }
-    </style>
+    .card-body .card-text.subheader {
+        font-size: 1.7vw;
+    }
+</style>
 
+{{#statistics}}
     <!-- Card Deck -->
     <div class="card-deck">
         <div class="card">
@@ -129,7 +142,7 @@
             </div>
         </div>
     </div>
-    {{/statistics}}
+{{/statistics}}
 
 {{^statistics}}
     {{#str}} nostatistics, mod_mooduell {{/str}}

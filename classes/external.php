@@ -37,6 +37,7 @@ require_once('mooduell.php');
 class mod_mooduell_external extends external_api {
 
     /**
+     * Starts new game against another user.
      * @param $courseid
      * @param $quizid
      * @param $playerbid
@@ -82,6 +83,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the parameters for start_attempt.
      * @return external_function_parameters
      */
     public static function start_attempt_parameters() {
@@ -93,6 +95,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the return values for start_attempt.
      * @return external_single_structure
      */
     public static function start_attempt_returns() {
@@ -103,12 +106,11 @@ class mod_mooduell_external extends external_api {
      * We answer a question with the array of ids of the answers. Depending on the internal setting of the MooDuell Instance...
      * ... we might either retrieve an array of the correct answer-ids ...
      * ... or an array of with one value 0 for incorrect and 1 for correctly answered.
-     *
      * @param $quizid
      * @param $gameid
      * @param $questionid
      * @param $answerids
-     * @return mixed
+     * @return array
      * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
@@ -146,6 +148,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the paramters of answer_question.
      * @return external_function_parameters
      */
     public static function answer_question_parameters() {
@@ -159,6 +162,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the return value of answer_question.
      * @return external_single_structure
      */
     public static function answer_question_returns() {
@@ -167,42 +171,6 @@ class mod_mooduell_external extends external_api {
                         new external_value(PARAM_INT, 'ids of correct answers OR 0 if false, 1 if true')
                 )
         ));
-    }
-
-    /**
-     * @return external_single_structure
-     */
-    public static function get_quizzes_by_courses_returns() {
-        return new external_single_structure(array(
-                'quizzes' => new external_multiple_structure(new external_single_structure(array(
-                        'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
-                        'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
-                        'courseid' => new external_value(PARAM_INT, 'courseid'),
-                        'coursename' => new external_value(PARAM_RAW, 'coursename'),
-                        'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
-                        'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
-                        'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
-                        'countdown' => new external_value(PARAM_INT, 'countdown'),
-                        'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
-                        'isteacher' => new external_value(PARAM_INT, 'isteacher'),
-                )))
-        ));
-    }
-
-    /**
-     * Describes the parameters for get_games_by_courses.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
-     */
-    public static function get_games_by_courses_parameters() {
-        return new external_function_parameters(array(
-                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
-                                'Array of course ids', VALUE_DEFAULT, array()),
-                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
-                                VALUE_DEFAULT, -1),
-                )
-        );
     }
 
     /**
@@ -270,6 +238,53 @@ class mod_mooduell_external extends external_api {
         $result['quizzes'] = $returnedquizzes;
         $result['warnings'] = $warnings;
         return $result;
+    }
+
+    /**
+     * Describes the parameters for get_games_by_courses.
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_games_by_courses_parameters() {
+        return new external_function_parameters(array(
+                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
+                                'Array of course ids', VALUE_DEFAULT, array()),
+                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
+                                VALUE_DEFAULT, -1),
+                )
+        );
+    }
+
+    /**
+     * Describes the values returned by get_games_by_courses.
+     * @return external_single_structure
+     */
+    public static function get_games_by_courses_returns() {
+        return new external_single_structure(array(
+                'quizzes' => new external_multiple_structure(new external_single_structure(array(
+                        'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
+                        'quizname' => new external_value(PARAM_RAW, 'name of quiz'),
+                        'courseid' => new external_value(PARAM_INT, 'courseid'),
+                        'coursename' => new external_value(PARAM_RAW, 'coursename'),
+                        'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
+                        'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
+                        'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
+                        'countdown' => new external_value(PARAM_INT, 'countdown'),
+                        'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
+                        'isteacher' => new external_value(PARAM_INT, 'isteacher'),
+                        'games' => new external_multiple_structure(new external_single_structure(array(
+                                'gameid' => new external_value(PARAM_INT, 'id of game'),
+                                'playeraid' => new external_value(PARAM_INT, 'id of player A'),
+                                'playerbid' => new external_value(PARAM_INT, 'id of player B'),
+                                'playeratime' => new external_value(PARAM_INT, 'time of player B'),
+                                'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
+                                'status' => new external_value(PARAM_INT,
+                                        'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
+                                'winnerid' => new external_value(PARAM_INT, 'id of winner, 0 is not yet finished'),
+                                'timemodified' => new external_value(PARAM_INT, 'time modified')
+                        )))
+                )))
+        ));
     }
 
     /**
@@ -352,6 +367,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the parameters for get_quizzes_by_courses.
      * @return external_function_parameters
      */
     public static function get_quizzes_by_courses_parameters() {
@@ -365,9 +381,10 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Defines the return value of get_quizzes_by_courses.
      * @return external_single_structure
      */
-    public static function get_games_by_courses_returns() {
+    public static function get_quizzes_by_courses_returns() {
         return new external_single_structure(array(
                 'quizzes' => new external_multiple_structure(new external_single_structure(array(
                         'quizid' => new external_value(PARAM_INT, 'id of coursemodule'),
@@ -380,23 +397,12 @@ class mod_mooduell_external extends external_api {
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
-                        'games' => new external_multiple_structure(new external_single_structure(array(
-                                'gameid' => new external_value(PARAM_INT, 'id of game'),
-                                'playeraid' => new external_value(PARAM_INT, 'id of player A'),
-                                'playerbid' => new external_value(PARAM_INT, 'id of player B'),
-                                'playeratime' => new external_value(PARAM_INT, 'time of player B'),
-                                'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
-                                'status' => new external_value(PARAM_INT,
-                                        'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
-                                'winnerid' => new external_value(PARAM_INT, 'id of winner, 0 is not yet finished'),
-                                'timemodified' => new external_value(PARAM_INT, 'time modified')
-                        )))
                 )))
         ));
     }
 
     /**
-     * Return array of quiz data
+     * Returns data of active game.
      *
      * @param $courseid
      * @param $quizid
@@ -451,6 +457,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return values for get_game_data.
      * @return external_single_structure
      */
     public static function get_game_data_returns() {
@@ -486,7 +493,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Return array of quiz data
+     * Returns available users for quiz.
      * @param $courseid
      * @param $quizid
      * @return array
@@ -518,6 +525,38 @@ class mod_mooduell_external extends external_api {
 
         // We can now retrieve the questions and add them to our gamedata.
         return game_control::return_users_for_game($mooduell);
+    }
+
+    /**
+     * Describes the parameters for get_quiz_users.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.1
+     */
+    public static function get_quiz_users_parameters() {
+        return new external_function_parameters(array(
+                'courseid' => new external_value(PARAM_INT, 'course id'),
+                'quizid' => new external_value(PARAM_INT, 'quizid id')
+        ));
+    }
+
+    /**
+     * Describes the return values for get_quiz_users.
+     * @return external_multiple_structure
+     */
+    public static function get_quiz_users_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+                                'id' => new external_value(PARAM_INT, 'userid'),
+                                'firstname' => new external_value(PARAM_RAW, 'firstname'),
+                                'lastname' => new external_value(PARAM_RAW, 'lastname'),
+                                'username' => new external_value(PARAM_RAW, 'username'),
+                                'alternatename' => new external_value(PARAM_RAW,
+                                        'nickname, stored as custom profile filed mooduell_alias'),
+                                'lang' => new external_value(PARAM_RAW, 'language'),
+                                'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
+                        )
+                )
+        );
     }
 
     /**
@@ -574,6 +613,10 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
+    /**
+     * Describes the return value for set_alternatename.
+     * @return external_single_structure
+     */
     public static function set_alternatename_returns() {
         return new external_single_structure(array(
                         'status' => new external_value(PARAM_INT, 'status')
@@ -581,40 +624,8 @@ class mod_mooduell_external extends external_api {
         );
     }
 
-
-
     /**
-     * Describes the parameters for get_quiz_users.
-     *
-     * @return external_function_parameters
-     * @since Moodle 3.1
-     */
-    public static function get_quiz_users_parameters() {
-        return new external_function_parameters(array(
-                'courseid' => new external_value(PARAM_INT, 'course id'),
-                'quizid' => new external_value(PARAM_INT, 'quizid id')
-        ));
-    }
-
-    /**
-     * @return external_multiple_structure
-     */
-    public static function get_quiz_users_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-                                'id' => new external_value(PARAM_INT, 'userid'),
-                                'firstname' => new external_value(PARAM_RAW, 'firstname'),
-                                'lastname' => new external_value(PARAM_RAW, 'lastname'),
-                                'username' => new external_value(PARAM_RAW, 'username'),
-                                'alternatename' => new external_value(PARAM_RAW,
-                                        'nickname, stored as custom profile filed mooduell_alias'),
-                                'lang' => new external_value(PARAM_RAW, 'language'),
-                                'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
-                        )
-                )
-        );
-    }
-
-    /**
+     * Retrieves some stats about the user.
      * @param $userid
      * @return array
      * @throws invalid_parameter_exception
@@ -643,6 +654,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return values for get_user_stats.
      * @return external_single_structure
      */
     public static function get_user_stats_returns() {
@@ -657,6 +669,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Retrieves the highscore list for a given quiz.
      * @param $quizid
      * @return mixed
      * @throws invalid_parameter_exception
@@ -673,6 +686,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the parameters of get_highscores.
      * @return external_function_parameters
      */
     public static function get_highscores_parameters() {
@@ -682,6 +696,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return values of get_highscores.
      * @return external_multiple_structure
      */
     public static function get_highscores_returns() {
@@ -698,6 +713,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Returns the availalbe pushtokens for a given user.
      * @param $quizid
      * @return mixed
      * @throws invalid_parameter_exception
@@ -730,6 +746,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the parameters of get_pushtokens.
      * @return external_function_parameters
      */
     public static function get_pushtokens_parameters() {
@@ -739,6 +756,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value of get_pushtokens.
      * @return external_multiple_structure
      */
     public static function get_pushtokens_returns() {
@@ -755,12 +773,15 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Sets the pushtokens for a user.
      * @param $userid
-     * @param $model
      * @param $identifier
+     * @param $model
      * @param $pushtoken
      * @return int[]
+     * @throws dml_exception
      * @throws invalid_parameter_exception
+     * @throws moodle_exception
      */
     public static function set_pushtokens($userid, $identifier, $model, $pushtoken) {
 
@@ -794,6 +815,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for set_pushtokens.
      * @return external_function_parameters
      */
     public static function set_pushtokens_parameters() {
@@ -807,6 +829,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value for set_pushtokens.
      * @return external_multiple_structure
      */
     public static function set_pushtokens_returns() {
@@ -817,6 +840,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Allows a user to give up a game.
      * @param $gameid
      * @return mixed
      * @throws invalid_parameter_exception
@@ -865,6 +889,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for giveup_game.
      * @return external_function_parameters
      */
     public static function giveup_game_parameters() {
@@ -875,6 +900,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value for giveup_game.
      * @return external_single_structure
      */
     public static function giveup_game_returns() {
@@ -884,6 +910,7 @@ class mod_mooduell_external extends external_api {
         );
     }
     /**
+     * Updates the profile picture of a user.
      * @param $filename
      * @param $filecontent
      * @return int[]
@@ -939,6 +966,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for update_profile_picture.
      * @return external_function_parameters
      */
     public static function update_profile_picture_parameters() {
@@ -951,6 +979,7 @@ class mod_mooduell_external extends external_api {
 
 
     /**
+     * Describes the return value for update_profile_picture.
      * @return external_single_structure
      */
     public static function update_profile_picture_returns() {
@@ -962,6 +991,7 @@ class mod_mooduell_external extends external_api {
 
 
     /**
+     * Loads highscore data via ajax to display on the website.
      * @param $quizid
      * @return array[]
      * @throws dml_exception
@@ -1019,6 +1049,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for load_highscore_data.
      * @return external_function_parameters
      */
     public static function load_highscore_data_parameters() {
@@ -1035,6 +1066,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value for load_highscore_data.
      * @return external_multiple_structure
      */
     public static function load_highscore_data_returns() {
@@ -1045,6 +1077,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Loads question data to display on the website.
      * @param $quizid
      * @return array[]
      * @throws dml_exception
@@ -1065,6 +1098,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for load_question_data.
      * @return external_function_parameters
      */
     public static function load_questions_data_parameters() {
@@ -1075,6 +1109,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value for load_highscore_data.
      * @return external_multiple_structure
      */
     public static function load_questions_data_returns() {
@@ -1099,6 +1134,7 @@ class mod_mooduell_external extends external_api {
         );
     }
     /**
+     * Returns the list of open games to display on the website.
      * @param $quizid
      * @return array[]
      * @throws dml_exception
@@ -1157,6 +1193,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for load_opengames_data.
      * @return external_function_parameters
      */
     public static function load_opengames_data_parameters() {
@@ -1173,6 +1210,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return value for load_question_data.
      * @return external_multiple_structure
      */
     public static function load_opengames_data_returns() {
@@ -1183,6 +1221,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Returns list of finished games to display on the website.
      * @param $quizid
      * @return array[]
      * @throws dml_exception
@@ -1240,6 +1279,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the paramters for load_finishedgames_data.
      * @return external_function_parameters
      */
     public static function load_finishedgames_data_parameters() {
@@ -1256,6 +1296,7 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Describes the return values for load_finished_data.
      * @return external_multiple_structure
      */
     public static function load_finishedgames_data_returns() {

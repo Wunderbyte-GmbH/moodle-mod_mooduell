@@ -14,10 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Quiz answer class for mod_mooduell.
+ *
+ * @package mod_mooduell
+ * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 namespace mod_mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class for MooDuell answers.
+ * @package mod_mooduell
+ */
 class answer_control {
 
     /**
@@ -50,14 +61,12 @@ class answer_control {
     public $correct;
 
     /**
-     * question_control constructor.
-     *
-     * @param mooduell $mooduell
+     * Constructor for answer_control class.
+     * @param null $data
      */
     public function __construct($data = null) {
 
         // If we have $data, we automatically create all the relevant values for this answer...
-
         if ($data) {
             $this->id = $data->id;
             // No HTML Tags anymore!

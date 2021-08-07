@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * backup stepslib class.
  * @package   mod_mooduell
  * @category  backup
  * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
@@ -32,6 +33,12 @@ defined('MOODLE_INTERNAL') || die;
  */
 class backup_mooduell_activity_structure_step extends backup_activity_structure_step {
 
+    /**
+     * define structure.
+     * @return backup_nested_element
+     * @throws base_element_struct_exception
+     * @throws base_step_exception
+     */
     protected function define_structure() {
 
         // To know if we are including userinfo.

@@ -32,8 +32,8 @@ use templatable;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- *
- * @author georgmaisser
+ * viewpage class to display view.php
+ * @package mod_mooduell
  *
  */
 class viewpage implements renderable, templatable {
@@ -53,9 +53,8 @@ class viewpage implements renderable, templatable {
     protected $rows;
 
     /**
-     * Contruct
-     *
-     * @param array $headings An array of renderable headings
+     * Constructor.
+     * @param $data
      */
     public function __construct($data) {
         $this->data = $data;

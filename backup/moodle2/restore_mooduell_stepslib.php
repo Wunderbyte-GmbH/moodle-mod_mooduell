@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * restore stepslib
  * @package   mod_mooduell
  * @category  backup
  * @copyright 2021 Wunderbyte Gmbh <georg.maisser@wudnerbyte.at>
@@ -30,6 +31,11 @@
  */
 class restore_mooduell_activity_structure_step extends restore_activity_structure_step {
 
+    /**
+     * define structure
+     * @return mixed
+     * @throws base_step_exception
+     */
     protected function define_structure() {
 
         $paths = array();
@@ -47,6 +53,12 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * process mooduell table
+     * @param $data
+     * @throws base_step_exception
+     * @throws dml_exception
+     */
     protected function process_mooduell($data) {
         global $DB;
 
@@ -63,6 +75,11 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * Process mooduell categories table
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_mooduell_categories($data) {
         global $DB;
 
@@ -75,6 +92,12 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         // No need to save this mapping as far as nothing depend on it like (child paths, file areas nor links decoder).
     }
 
+    /**
+     * process mooduell_games table
+     * @param $data
+     * @throws dml_exception
+     * @throws restore_step_exception
+     */
     protected function process_mooduell_games($data) {
         global $DB;
 
@@ -94,6 +117,11 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
     }
 
+    /**
+     * process mooduell_questions table
+     * @param $data
+     * @throws dml_exception
+     */
     protected function process_mooduell_questions($data) {
         global $DB;
 
@@ -113,8 +141,9 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         // No need to save this mapping as far as nothing depend on it like (child paths, file areas nor links decoder).
     }
 
-
-
+    /**
+     * function which is run after execution.
+     */
     protected function after_execute() {
         // Add mooduell related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_mooduell', 'intro', null);

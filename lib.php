@@ -122,15 +122,19 @@ function mooduell_delete_instance($id) {
 
 /**
  * Serve the files from the mooduell file areas
- *
- * @param stdClass $course the course object
- * @param stdClass $cm the course module object
- * @param stdClass $context the context
- * @param string $filearea the name of the file area
- * @param array $args extra arguments (itemid, path)
- * @param bool $forcedownload whether or not force download
- * @param array $options additional options affecting the file serving
- * @return bool false if the file not found, just send the file otherwise and do not return anything
+ * @param $course
+ * @param $context
+ * @param $component
+ * @param $filearea
+ * @param $qubaid
+ * @param $slot
+ * @param $args
+ * @param $forcedownload
+ * @param array $options
+ * @return false|void
+ * @throws coding_exception
+ * @throws moodle_exception
+ * @throws require_login_exception
  */
 function mooduell_question_pluginfile(
         $course,
@@ -142,12 +146,6 @@ function mooduell_question_pluginfile(
         $args,
         $forcedownload,
         array $options=array()) {
-
-    // Note: We might get different context levels, (System, Course) so we don't check them.
-    // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
-    /*if ($context->contextlevel != COURSE_MODULE) {
-        return false;
-    }*/
 
     // Make sure the filearea is one of those used by the plugin.
     if ($filearea !== 'questiontext') {

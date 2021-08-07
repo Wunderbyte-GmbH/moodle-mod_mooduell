@@ -30,9 +30,8 @@ use templatable;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- *
- * @author georgmaisser
- *
+ * Renderer class.
+ * @package mod_mooduell
  */
 class renderer extends plugin_renderer_base {
 
@@ -48,6 +47,7 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
+     * Render viewpage students.
      * @param templatable $viewpage
      * @return bool|string
      * @throws \moodle_exception
@@ -59,9 +59,9 @@ class renderer extends plugin_renderer_base {
 
     /**
      * Render a mooduell list of questions
-     *
-     * @param templatable $viewquestions
-     * @return string|boolean
+     * @param templatable $viewpage
+     * @return bool|string
+     * @throws \moodle_exception
      */
     public function render_viewquestions(templatable $viewpage) {
         $data = $viewpage->export_for_template($this);

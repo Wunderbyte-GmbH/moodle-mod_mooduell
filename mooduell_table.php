@@ -24,9 +24,10 @@
 
 use mod_mooduell\mooduell;
 
-require_once("../../config.php");
+global $CFG, $PAGE, $COURSE;
+require_login($COURSE);
 
-global $CFG, $PAGE;
+require_once("../../config.php");
 
 require("$CFG->libdir/tablelib.php");
 require_once("$CFG->dirroot/mod/mooduell/classes/mooduell_table.php");
@@ -91,10 +92,11 @@ $table->out(40, true);
 
 /**
  * Function to set the SQL and load the data for open games into the mooduell_table
- *
  * @param $mooduellid
  * @param $table
- * @return stdClass an object containing columns, headers and help (for headers)
+ * @param $view
+ * @return stdClass
+ * @throws coding_exception
  */
 function load_open_games_table_data($mooduellid, $table, $view) {
     global $USER;
@@ -152,10 +154,11 @@ function load_open_games_table_data($mooduellid, $table, $view) {
 
 /**
  * Function to set the SQL and load the data for finished games into the mooduell_table
- *
  * @param $mooduellid
  * @param $table
- * @return stdClass an object containing columns, headers and help (for headers)
+ * @param $view
+ * @return stdClass
+ * @throws coding_exception
  */
 function load_finished_games_table_data($mooduellid, $table, $view) {
     global $USER;
@@ -213,13 +216,12 @@ function load_finished_games_table_data($mooduellid, $table, $view) {
     return $tabledata;
 }
 
-
 /**
  * Function to set the SQL and load the data for highscores into the mooduell_table
- *
  * @param $mooduellid
  * @param $table
- * @return stdClass an object containing columns, headers and help (for headers)
+ * @return stdClass
+ * @throws coding_exception
  */
 function load_highscores_table_data($mooduellid, $table) {
     // Generate the SQL for the table.

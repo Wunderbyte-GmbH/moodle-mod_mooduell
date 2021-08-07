@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * restore class
  * @package   mod_mooduell
  * @category  backup
  * @copyright 2021 Wunderbyte Gmbh <georg.maisser@wudnerbyte.at>
@@ -26,8 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/restore_mooduell_stepslib.php'); // Because it exists (must).
 
 /**
- * mooduell restore task that provides all the settings and steps to perform one
- * complete restore of the activity
+ * mooduell restore task that provides all the settings and steps to perform one complete restore of the activity
  */
 class restore_mooduell_activity_task extends restore_activity_task {
 
@@ -75,9 +75,7 @@ class restore_mooduell_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
-     * mooduell logs. It must return one array
-     * of {@link restore_log_rule} objects
+     * @return array
      */
     public static function define_restore_log_rules() {
         $rules = array();

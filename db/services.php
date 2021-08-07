@@ -43,6 +43,7 @@ $services = array(
                         'mod_mooduell_giveup_game',
                         'mod_mooduell_update_profile_picture'
                         ),
+                'requiredcapability' => '',
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
                 'enabled' => 1,

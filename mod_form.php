@@ -199,6 +199,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
         ];
     }
 
+    /**
+     * Possibility to add another category.
+     * @param $counter
+     * @param $selectedcategory
+     * @param $listofcategories
+     * @param $mform
+     * @throws coding_exception
+     */
     private function add_categories_group($counter, $selectedcategory, $listofcategories, $mform) {
 
         $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
@@ -220,6 +228,13 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addGroup($formgroup, 'categoriesgroup' . $counter, get_string('questionscategorygroup', 'mod_mooduell'));
     }
 
+    /**
+     * Build the categories list.
+     * @param $list
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     private function return_list_of_category_options($list) {
 
         global $DB;
@@ -263,6 +278,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $names;
     }
 
+    /**
+     * Returns the parent of an item in list.
+     * @param $list
+     * @param $item
+     * @return mixed
+     */
     private function return_parent_for_item_in_list($list, $item) {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
@@ -274,6 +295,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     /**
+     * Generate a sorted list.
      * @param $listofcategories
      * @return array
      */
@@ -294,6 +316,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $sortedcategories;
     }
 
+    /**
+     * Returns children in list.
+     * @param $parent
+     * @param $list
+     * @return array
+     */
     private function return_children_in_list($parent, $list) {
         $children = array();
 
@@ -311,6 +339,10 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $children;
     }
 
+    /**
+     * Returns list of category weight options.
+     * @return string[]
+     */
     private function return_list_of_category_weight_options() {
         return array(
                 0 => '0',
@@ -322,6 +354,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
         );
     }
 
+    /**
+     * Get categories of context from db.
+     * @return array
+     * @throws dml_exception
+     */
     private function get_categories_of_context_from_db() {
         global $DB;
 

@@ -95,8 +95,8 @@ class mooduell {
     /**
      * Mooduell constructor.
      * Fetches MooDuell settings from DB.
-     * @param int $id
-     *            course module id
+     * @param int|null $id
+     * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
      */
@@ -123,10 +123,11 @@ class mooduell {
 
     /**
      * Get MooDuell object by instanceid (id of mooduell table)
-     *
-     * @param
-     *            int
+     * @param int $instanceid
      * @return mooduell
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public static function get_mooduell_by_instance(int $instanceid) {
         $cm = get_coursemodule_from_instance('mooduell', $instanceid);
@@ -135,10 +136,9 @@ class mooduell {
 
     /**
      * Create a mooduell instance.
-     *
      * @param stdClass $formdata
-     * @param mod_mooduell_mod_form $mform
      * @return bool|int
+     * @throws dml_exception
      */
     public static function add_instance(stdClass $formdata) {
         global $DB;
@@ -171,7 +171,6 @@ class mooduell {
      * Function is called on creating or updating MooDuell Quiz Settings.
      * One Quiz can have one or more categories-entries.
      * This function has to make sure creating and updating results in the correct DB entries.
-     *
      * @param $mooduellid
      * @param $formdata
      * @return void|null
@@ -248,11 +247,14 @@ class mooduell {
     }
 
     /**
-     * Get the html of the view page.
-     *
-     * @param bool $inline
-     *            Display without header and footer?
+     * Function to display page.
+     * @param bool|null $inline
+     * @param string|null $pagename
+     * @param string $gameid
      * @return string
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function display_page(bool $inline = null, string $pagename = null, $gameid = '') {
         global $PAGE;
@@ -263,13 +265,6 @@ class mooduell {
         $out = '';
         if (!$inline) {
             $out .= $output->header();
-
-            // Uncomment this to have a button to debug the game_finished event.
-            /*
-            $cmid = $this->cm->id;
-            $game_finished_url = new moodle_url("/mod/mooduell/view.php?id=$cmid&triggered_event=game_finished");
-            $out .= "<a class='btn btn-primary' href='$game_finished_url' role='button'>Trigger game_finished event</a>";
-            */
         }
 
         switch ($pagename) {
@@ -347,8 +342,12 @@ class mooduell {
      * - tableheading (heading for the colums of the table)
      * - games (for every game a row with multiple columns)
      * - warning (if necessary)
-     *
+     * @param false $student
+     * @param null $finished
+     * @param int $timemodified
      * @return array
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function return_list_of_games($student = false, $finished = null, $timemodified = 0) {
 
@@ -379,6 +378,8 @@ class mooduell {
      * This function is meant for display on browser, not for webservice.
      * It replaces category-id already with category-name.
      * It stores the list of questions in $this->questions for performance.
+     * @return array
+     * @throws dml_exception
      */
     public function return_list_of_all_questions_in_quiz() {
 
@@ -406,9 +407,9 @@ class mooduell {
     }
 
     /**
-     * @return array[]
+     * Returns list of highscores.
+     * @return array
      * @throws dml_exception
-     * @throws moodle_exception
      */
     public function return_list_of_highscores() {
 
@@ -436,8 +437,9 @@ class mooduell {
     }
 
     /**
-     * Function to fetch all questions for this instance, but before runnig through instantiation.
+     * Returns list of question.
      * @return array
+     * @throws dml_exception
      */
     private function return_list_of_questions() {
 
@@ -462,6 +464,7 @@ class mooduell {
     /**
      * Function to fetch all answers for this instance, but before runnig through instantiation.
      * @return array
+     * @throws dml_exception
      */
     private function return_list_of_answers() {
 
@@ -486,6 +489,7 @@ class mooduell {
     }
 
     /**
+     * Sorter function.
      * @param $key
      * @return \Closure
      */
@@ -497,12 +501,11 @@ class mooduell {
 
     /**
      * Retrieve all games linked to this MooDuell instance from $DB and return them as an array of std.
-     *
      * @param false $studentview
+     * @param false $finished
      * @param int $timemodified
      * @return array
      * @throws dml_exception
-     * @throws moodle_exception
      */
     public function return_games_for_this_instance($studentview = false, $finished = false, $timemodified = -1) {
         global $DB;
@@ -538,6 +541,12 @@ class mooduell {
         }
     }
 
+    /**
+     * Get pushtokens for user.
+     * @param $userid
+     * @return array
+     * @throws dml_exception
+     */
     public static function get_pushtokens($userid) {
 
         global $DB, $USER;
@@ -568,7 +577,11 @@ class mooduell {
      * Therefore, this function allows users to set push tokens of other users.
      * This is not great, but it works for the moment.
      * @param $userid
-     * @param $pushtokens
+     * @param $model
+     * @param $identifier
+     * @param $pushtoken
+     * @return int[]
+     * @throws dml_exception
      */
     public static function set_pushtoken($userid, $model, $identifier, $pushtoken) {
 
@@ -596,11 +609,11 @@ class mooduell {
 
     /**
      * This function takes mooduell or $cmid, depending on the context.
-     *
-     * @param $mooduellid
+     * @param null $mooduellid
      * @param null $cmid
      * @return array
      * @throws dml_exception
+     * @throws moodle_exception
      */
     public static function get_highscores($mooduellid = null, $cmid = null) {
 
@@ -766,7 +779,6 @@ class mooduell {
 
     /**
      * Helper function for get_highscores
-     *
      * @param $storedplayer
      * @param $newentry
      */
@@ -781,9 +793,9 @@ class mooduell {
 
     /**
      * Allows us to securely retrieve the (user)name of a user by id.
-     *
      * @param int $userid
-     * @return string
+     * @return mixed|string
+     * @throws coding_exception
      * @throws dml_exception
      */
     public function return_name_by_id(int $userid) {
@@ -828,7 +840,6 @@ class mooduell {
 
     /**
      * Set base params for page and trigger module viewed event.
-     *
      * @throws coding_exception
      */
     public function view_page() {
@@ -851,10 +862,9 @@ class mooduell {
 
     /**
      * Check if user exists.
-     *
-     * @param
-     *            int
+     * @param int $userid
      * @return bool
+     * @throws dml_exception
      */
     public function user_exists(int $userid) {
         global $DB;
@@ -864,7 +874,6 @@ class mooduell {
 
     /**
      * This function deals with different actions we can call from settings.
-     *
      * @param $action
      * @param $gameid
      * @throws dml_exception
@@ -877,7 +886,6 @@ class mooduell {
 
     /**
      * This function allows the teacher to delete games entirely from DB, including randomly selected questions.
-     *
      * @param $gameid
      * @throws dml_exception
      */
@@ -888,6 +896,12 @@ class mooduell {
         $DB->delete_records('mooduell_questions', array('gameid' => $gameid));
     }
 
+    /**
+     * Check if quiz is playable.
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function check_quiz() {
 
         $returnarray = [];
@@ -905,6 +919,11 @@ class mooduell {
         return $returnarray;
     }
 
+    /**
+     * Returns list of category.
+     * @return array
+     * @throws dml_exception
+     */
     private function return_list_of_categories() {
 
         global $DB;
@@ -934,8 +953,8 @@ class mooduell {
     /**
      * Helper function to generate statistical data
      * for tab "Statistics" (teacher view)
-     *
-     * @return array a list of statistics
+     * @return array
+     * @throws dml_exception
      */
     private function return_list_of_statistics_teacher() {
         global $DB;
@@ -1044,8 +1063,9 @@ class mooduell {
     /**
      * Helper function to generate statistical data
      * for tab "Statistics" (student view)
-     *
-     * @return array a list of statistics
+     * @return array
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     private function return_list_of_statistics_student() {
         global $DB;

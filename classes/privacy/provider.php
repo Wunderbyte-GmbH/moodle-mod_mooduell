@@ -17,7 +17,7 @@
 /**
  * Privacy provider implementation for mod_mooduell.
  *
- * @package mooduell
+ * @package mod_mooduell
  * @copyright 2021 Michael Pollak <moodle@michaelpollak.org>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,6 +34,10 @@ use core_privacy\local\request\helper;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
+/**
+ * The privacy provider class of mod_mooduell.
+ * @package mod_mooduell
+ */
 class provider implements
         // This plugin stores personal data.
         \core_privacy\local\metadata\provider,
@@ -45,12 +49,10 @@ class provider implements
         \core_privacy\local\request\core_userlist_provider {
     /**
      * Return the fields which contain personal data.
-     *
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
     public static function get_metadata(collection $collection) : collection {
-
         // Stores the mooduell game progress.
         $collection->add_database_table(
             'mooduell_games',

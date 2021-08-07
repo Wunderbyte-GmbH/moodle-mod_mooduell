@@ -19,8 +19,19 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * headings - array: An array of table headings.
-    * rows - array: An array of content rows for the table.
+    Example context (json):
+    {
+        'categories' : [
+            [
+               {
+                  "catid":"7",
+                  "contextid":"1",
+                  "catname":"MooDuell Pr\u00e4sentation",
+                  "courseid":"50"
+               }
+            ]
+        ]
+    }
 
     }}
 
@@ -47,46 +58,5 @@
     </tr>
     </thead>
     <tbody>
-    {{#questions}}
-        <tr class="field">
-            <td>
-                <a href="../../question/question.php?returnurl=/question/edit.php?courseid={{courseid}}&courseid={{courseid}}&id={{questionid}}">
-                {{questionid}}
-                </a>
-            </td>
-            <td>
-            {{#imageurl}}
-                <a href="{{imageurl}}"><img src="{{imageurl}}" width="100px"></img></a>
-                <p>{{imagetext}}</p>
-            {{/imageurl}}
-            </td>
-            <td>
-                {{{questiontext}}}
-
-                {{#answers}}
-                    <ul>
-                        <li>{{#correct}}
-                        <span style="font-weight:bold">
-                        {{/correct}}{{{answertext}}} {{#correct}}
-                        </span>
-                        {{/correct}}</li>
-                    </ul>
-                {{/answers}}
-            </td>
-            <td>{{questiontype}}</td>
-            <td>{{length}}</td>
-            <td>{{categoryname}}</td>
-            <td>
-                <ul>
-                    {{#warnings}}
-                    <li>
-                        <span style="color: red">{{message}}</span>
-                    </li>
-                    {{/warnings}}
-                </ul>
-            </td>
-            <td>{{status}}</td>
-        </tr>
-    {{/questions}}
     </tbody>
 </table>
