@@ -26,30 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$services = array(
-        'Wunderbyte MooDuell external' => array(
-                'functions' => array (
-                        'core_webservice_get_site_info',
-                        'mod_mooduell_start_attempt',
-                        'mod_mooduell_get_game_data',
-                        'mod_mooduell_get_quiz_users',
-                        'mod_mooduell_get_quizzes_by_courses',
-                        'mod_mooduell_get_games_by_courses',
-                        'mod_mooduell_answer_question',
-                        'mod_mooduell_get_user_stats',
-                        'mod_mooduell_get_highscores',
-                        'mod_mooduell_set_alternatename',
-                        'mod_mooduell_set_pushtokens',
-                        'mod_mooduell_giveup_game',
-                        'mod_mooduell_update_profile_picture'
-                        ),
-                'requiredcapability' => '',
-                'restrictedusers' => 0,
-                'shortname' => 'mod_mooduell_external',
-                'enabled' => 1,
-        )
-);
-
 $functions = array(
         'mod_mooduell_start_attempt' => array(
                 'classname' => 'mod_mooduell_external',
@@ -60,7 +36,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_game_data' => array(
@@ -72,7 +48,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_quiz_users' => array(
@@ -84,7 +60,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_quizzes_by_courses' => array(
@@ -96,7 +72,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_games_by_courses' => array(
@@ -109,7 +85,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_answer_question' => array(
@@ -121,7 +97,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_user_stats' => array(
@@ -133,7 +109,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_get_highscores' => array(
@@ -145,7 +121,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_set_alternatename' => array(
@@ -157,7 +133,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_set_pushtokens' => array(
@@ -169,7 +145,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_giveup_game' => array(
@@ -181,7 +157,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_update_profile_picture' => array(
@@ -194,7 +170,7 @@ $functions = array(
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => array(
-                        'MOODUELL_EXTERNAL'
+                        MOODLE_OFFICIAL_MOBILE_SERVICE
                 )
         ),
         'mod_mooduell_load_highscore_data' => array(
