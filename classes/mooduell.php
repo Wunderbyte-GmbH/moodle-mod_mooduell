@@ -42,12 +42,21 @@ use stdClass;
 global $CFG;
 
 // Question Health constants.
-
-// Define the right length of questiontext.
+/**
+ * @var int MAXLENGTH of question text
+ */
 const MAXLENGTH = 400;
+/**
+ * @var int MINLENGTH of question text
+ */
 const MINLENGTH = 0;
-
+/**
+ * @var bool NEEDIMAGE question needs image
+ */
 const NEEDIMAGE = false;
+/**
+ * @var array ACCEPTEDTYPES accepted question types
+ */
 const ACCEPTEDTYPES = [
         'truefalse',
         'multichoice',
@@ -171,12 +180,12 @@ class mooduell {
      * Function is called on creating or updating MooDuell Quiz Settings.
      * One Quiz can have one or more categories-entries.
      * This function has to make sure creating and updating results in the correct DB entries.
-     * @param $mooduellid
-     * @param $formdata
+     * @param int $mooduellid
+     * @param object $formdata
      * @return void|null
      * @throws dml_exception
      */
-    public static function update_categories($mooduellid, $formdata) {
+    public static function update_categories(int $mooduellid, object $formdata) {
         global $DB;
 
         $categoriesarray = [];
@@ -490,10 +499,10 @@ class mooduell {
 
     /**
      * Sorter function.
-     * @param $key
+     * @param string $key
      * @return \Closure
      */
-    public static function build_sorter($key) {
+    public static function build_sorter(string $key) {
         return function ($a, $b) use ($key) {
             return $a[$key] < $b[$key];
         };
@@ -543,11 +552,11 @@ class mooduell {
 
     /**
      * Get pushtokens for user.
-     * @param $userid
+     * @param int $userid
      * @return array
      * @throws dml_exception
      */
-    public static function get_pushtokens($userid) {
+    public static function get_pushtokens(int $userid) {
 
         global $DB, $USER;
 
@@ -576,14 +585,14 @@ class mooduell {
      * If a push token is no longer connected to a device, it return an error.
      * Therefore, this function allows users to set push tokens of other users.
      * This is not great, but it works for the moment.
-     * @param $userid
-     * @param $model
-     * @param $identifier
-     * @param $pushtoken
+     * @param int $userid
+     * @param string $model
+     * @param string $identifier
+     * @param string $pushtoken
      * @return int[]
      * @throws dml_exception
      */
-    public static function set_pushtoken($userid, $model, $identifier, $pushtoken) {
+    public static function set_pushtoken(int $userid, string $model, string $identifier, string $pushtoken) {
 
         global $DB, $USER;
 
@@ -609,8 +618,8 @@ class mooduell {
 
     /**
      * This function takes mooduell or $cmid, depending on the context.
-     * @param null $mooduellid
-     * @param null $cmid
+     * @param int|null $mooduellid
+     * @param int|null $cmid
      * @return array
      * @throws dml_exception
      * @throws moodle_exception
@@ -779,10 +788,10 @@ class mooduell {
 
     /**
      * Helper function for get_highscores
-     * @param $storedplayer
-     * @param $newentry
+     * @param stdClass $storedplayer
+     * @param stdClass $newentry
      */
-    private static function add_score($storedplayer, $newentry) {
+    private static function add_score(stdClass $storedplayer, stdClass $newentry) {
         $storedplayer->score += $newentry->score;
         $storedplayer->won += $newentry->won;
         $storedplayer->lost += $newentry->lost;
@@ -874,11 +883,11 @@ class mooduell {
 
     /**
      * This function deals with different actions we can call from settings.
-     * @param $action
-     * @param $gameid
+     * @param string $action
+     * @param int $gameid
      * @throws dml_exception
      */
-    public function execute_action($action, $gameid) {
+    public function execute_action(string $action, int $gameid) {
         if ($action === 'delete' && $gameid) {
             $this->delete_game_by_id($gameid);
         }
@@ -886,10 +895,10 @@ class mooduell {
 
     /**
      * This function allows the teacher to delete games entirely from DB, including randomly selected questions.
-     * @param $gameid
+     * @param int $gameid
      * @throws dml_exception
      */
-    private function delete_game_by_id($gameid) {
+    private function delete_game_by_id(int $gameid) {
         global $DB;
 
         $DB->delete_records('mooduell_games', array('id' => $gameid));

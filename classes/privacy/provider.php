@@ -49,7 +49,7 @@ class provider implements
         \core_privacy\local\request\core_userlist_provider {
     /**
      * Return the fields which contain personal data.
-     * @param collection $items a reference to the collection to use to store the metadata.
+     * @param collection $collection a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
     public static function get_metadata(collection $collection) : collection {

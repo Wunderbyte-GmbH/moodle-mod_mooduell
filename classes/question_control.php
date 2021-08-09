@@ -178,7 +178,7 @@ class question_control {
 
     /**
      * Return array of answers of a given question.
-     *
+     * @param null $listofanswers
      * @return array
      * @throws dml_exception
      */
@@ -208,10 +208,10 @@ class question_control {
     /**
      * We fetch the result of the question from DB and add it to this instance.
      *
-     * @param $gameid
+     * @param int $gameid
      * @throws dml_exception
      */
-    public function get_results($gameid) {
+    public function get_results(int $gameid) {
         global $DB;
         if ($this->questionid) {
             $question = $DB->get_record('mooduell_questions', ['gameid' => $gameid, 'questionid' => $this->questionid]);
@@ -223,11 +223,11 @@ class question_control {
 
     /**
      * See if answer was correct.
-     * @param $answerids
-     * @param $showcorrectanswer
+     * @param array $answerids
+     * @param int $showcorrectanswer
      * @return int[]
      */
-    public function validate_question($answerids, $showcorrectanswer) {
+    public function validate_question(array $answerids, int $showcorrectanswer) {
 
         // If we don't have answers, something went wrong, we return error code -1.
         if (count($this->answers) == 0) {

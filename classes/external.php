@@ -38,17 +38,17 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Starts new game against another user.
-     * @param $courseid
-     * @param $quizid
-     * @param $playerbid
-     * @return int|stdClass
+     * @param int $courseid
+     * @param int $quizid
+     * @param int $playerbid
+     * @return false|mixed|stdClass
      * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function start_attempt($courseid, $quizid, $playerbid) {
+    public static function start_attempt(int $courseid, int $quizid, int $playerbid) {
         $params = array(
                 'courseid' => $courseid,
                 'quizid' => $quizid,
@@ -106,10 +106,10 @@ class mod_mooduell_external extends external_api {
      * We answer a question with the array of ids of the answers. Depending on the internal setting of the MooDuell Instance...
      * ... we might either retrieve an array of the correct answer-ids ...
      * ... or an array of with one value 0 for incorrect and 1 for correctly answered.
-     * @param $quizid
-     * @param $gameid
-     * @param $questionid
-     * @param $answerids
+     * @param int $quizid
+     * @param int $gameid
+     * @param int $questionid
+     * @param array $answerids
      * @return array
      * @throws coding_exception
      * @throws dml_exception
@@ -117,7 +117,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function answer_question($quizid, $gameid, $questionid, $answerids) {
+    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids) {
         $params = array(
                 'quizid' => $quizid,
                 'gameid' => $gameid,
@@ -178,15 +178,15 @@ class mod_mooduell_external extends external_api {
      * .. to those which were upadted since the last glance we took.
      * An empty courseid will return all the games of all the MooDuell Instances visible to this user.
      *
-     * @param $courseids
-     * @param $timemodified
+     * @param array $courseids
+     * @param int $timemodified
      * @return array
      * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function get_games_by_courses($courseids, $timemodified) {
+    public static function get_games_by_courses(array $courseids, int $timemodified) {
 
         $context = context_system::instance();
         self::validate_context($context);
@@ -290,13 +290,13 @@ class mod_mooduell_external extends external_api {
     /**
      * Get all the quizzes (Mooduell Instances) by courses.
      *
-     * @param $courseids
-     * @param $timemodfied
+     * @param array $courseids
+     * @param int $timemodfied
      * @return array
      * @throws coding_exception
      * @throws invalid_parameter_exception
      */
-    public static function get_quizzes_by_courses($courseids, $timemodfied) {
+    public static function get_quizzes_by_courses(array $courseids, int $timemodfied) {
         $warnings = array();
         $returnedquizzes = array();
 
@@ -404,9 +404,9 @@ class mod_mooduell_external extends external_api {
     /**
      * Returns data of active game.
      *
-     * @param $courseid
-     * @param $quizid
-     * @param $gameid
+     * @param int $courseid
+     * @param int $quizid
+     * @param int $gameid
      * @return stdClass
      * @throws coding_exception
      * @throws dml_exception
@@ -414,7 +414,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_game_data($courseid, $quizid, $gameid) {
+    public static function get_game_data(int $courseid, int $quizid, int $gameid) {
         $params = array(
                 'courseid' => $courseid,
                 'quizid' => $quizid,
@@ -494,8 +494,8 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Returns available users for quiz.
-     * @param $courseid
-     * @param $quizid
+     * @param int $courseid
+     * @param int $quizid
      * @return array
      * @throws coding_exception
      * @throws dml_exception
@@ -503,7 +503,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_quiz_users($courseid, $quizid) {
+    public static function get_quiz_users(int $courseid, int $quizid) {
         $params = array(
                 'courseid' => $courseid,
                 'quizid' => $quizid
@@ -562,14 +562,14 @@ class mod_mooduell_external extends external_api {
     /**
      * Set alternate name of user.
      * Actually, this doesn't save to alternatename but to the user profile filed "mooduell_alias".
-     * @param $userid
-     * @param $alternatename
+     * @param int $userid
+     * @param string $alternatename
      * @return bool
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function set_alternatename($userid, $alternatename) {
+    public static function set_alternatename(int $userid, string $alternatename) {
 
         global $CFG;
 
@@ -626,11 +626,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Retrieves some stats about the user.
-     * @param $userid
+     * @param int $userid
      * @return array
      * @throws invalid_parameter_exception
      */
-    public static function get_user_stats($userid) {
+    public static function get_user_stats(int $userid) {
         $params = array(
                 'userid' => $userid
         );
@@ -670,11 +670,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Retrieves the highscore list for a given quiz.
-     * @param $quizid
+     * @param int $quizid
      * @return mixed
      * @throws invalid_parameter_exception
      */
-    public static function get_highscores($quizid) {
+    public static function get_highscores(int $quizid) {
 
         $params = array(
                 'quizid' => $quizid
@@ -714,11 +714,13 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Returns the availalbe pushtokens for a given user.
-     * @param $quizid
-     * @return mixed
+     * @param int $userid
+     * @return array
+     * @throws dml_exception
      * @throws invalid_parameter_exception
+     * @throws moodle_exception
      */
-    public static function get_pushtokens($userid) {
+    public static function get_pushtokens(int $userid) {
 
         global $DB, $USER;
 
@@ -774,16 +776,16 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Sets the pushtokens for a user.
-     * @param $userid
-     * @param $identifier
-     * @param $model
-     * @param $pushtoken
+     * @param int $userid
+     * @param string $identifier
+     * @param string $model
+     * @param string $pushtoken
      * @return int[]
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function set_pushtokens($userid, $identifier, $model, $pushtoken) {
+    public static function set_pushtokens(int $userid, string $identifier, string $model, string $pushtoken) {
 
         global $DB, $USER;
 
@@ -841,11 +843,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Allows a user to give up a game.
-     * @param $gameid
+     * @param int $gameid
      * @return mixed
      * @throws invalid_parameter_exception
      */
-    public static function giveup_game($gameid) {
+    public static function giveup_game(int $gameid) {
 
         global $DB, $USER;
 
@@ -911,14 +913,14 @@ class mod_mooduell_external extends external_api {
     }
     /**
      * Updates the profile picture of a user.
-     * @param $filename
-     * @param $filecontent
+     * @param string $filename
+     * @param string $filecontent
      * @return int[]
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function update_profile_picture($filename, $filecontent) {
+    public static function update_profile_picture(string $filename, string $filecontent) {
 
         global $USER, $CFG, $DB;
 
@@ -989,16 +991,20 @@ class mod_mooduell_external extends external_api {
         );
     }
 
-
     /**
      * Loads highscore data via ajax to display on the website.
-     * @param $quizid
-     * @return array[]
-     * @throws dml_exception
+     * @param int $quizid
+     * @param int|null $pageid
+     * @param string|null $tsort
+     * @param string|null $thide
+     * @param string|null $tshow
+     * @param int|null $tdir
+     * @param int|null $treset
+     * @return array
+     * @throws coding_exception
      * @throws invalid_parameter_exception
-     * @throws moodle_exception
      */
-    public static function load_highscore_data($quizid,
+    public static function load_highscore_data(int $quizid,
             $pageid = null,
             $tsort = null,
             $thide = null,
@@ -1079,7 +1085,8 @@ class mod_mooduell_external extends external_api {
     /**
      * Loads question data to display on the website.
      * @param $quizid
-     * @return array[]
+     * @return array
+     * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
@@ -1135,11 +1142,16 @@ class mod_mooduell_external extends external_api {
     }
     /**
      * Returns the list of open games to display on the website.
-     * @param $quizid
-     * @return array[]
-     * @throws dml_exception
+     * @param int $quizid
+     * @param int|null $pageid
+     * @param string|null $tsort
+     * @param string|null $thide
+     * @param string|null $tshow
+     * @param int|null $tdir
+     * @param int|null $treset
+     * @return array
+     * @throws coding_exception
      * @throws invalid_parameter_exception
-     * @throws moodle_exception
      */
     public static function load_opengames_data(
             $quizid,
@@ -1222,11 +1234,16 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Returns list of finished games to display on the website.
-     * @param $quizid
-     * @return array[]
-     * @throws dml_exception
+     * @param int|$quizid
+     * @param int|null $pageid
+     * @param string|null $tsort
+     * @param string|null $thide
+     * @param string|null $tshow
+     * @param int|null $tdir
+     * @param int|null $treset
+     * @return array
+     * @throws coding_exception
      * @throws invalid_parameter_exception
-     * @throws moodle_exception
      */
     public static function load_finishedgames_data($quizid,
             $pageid = null,

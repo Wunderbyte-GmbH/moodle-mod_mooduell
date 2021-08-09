@@ -22,9 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once("../../config.php");
-
-global $CFG;
+defined('MOODLE_INTERNAL') || die();
+require_login($COURSE);
 
 /**
  * MooDuell Table sql class.
@@ -43,21 +42,21 @@ class mooduell_table extends table_sql {
     public $action;
 
     /**
-     * mooduell_table constructor.
-     * @param $mooduell
-     * @param $action
+     * mooduell_table constructor
+     * @param \mod_mooduell\mooduell $mooduell
+     * @param string $action
      */
-    public function __construct($mooduell, $action) {
+    public function __construct(\mod_mooduell\mooduell $mooduell, $action) {
         parent::__construct($action);
         $this->mooduell = $mooduell;
         $this->action = $action;
     }
 
     /**
-     * Function to return the players name instead of id.
-     * @param $game
+     * Function to return the players name instead of id
+     * @param stdClass $game
      */
-    public function col_playeraid($game) {
+    public function col_playeraid(stdClass $game) {
         if ($game->playeraid) {
 
             $name = $this->mooduell->return_name_by_id($game->playeraid);
@@ -67,10 +66,10 @@ class mooduell_table extends table_sql {
     }
 
     /**
-     * Function to return the players name instead of id.
-     * @param $game
+     * Function to return the players name instead of id
+     * @param stdClass $game
      */
-    public function col_playerbid($game) {
+    public function col_playerbid(stdClass $game) {
         if ($game->playerbid) {
 
             $name = $this->mooduell->return_name_by_id($game->playerbid);
@@ -81,9 +80,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the readable date instead of timestamp.
-     * @param $game
+     * @param stdClass $game
      */
-    public function col_timemodified($game) {
+    public function col_timemodified(stdClass $game) {
         if ($game->timemodified) {
             if (current_language() === 'de') {
                 $monthnamesde = [
@@ -114,9 +113,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the MooDuell id.
-     * @param $game
+     * @param stdClass $game
      */
-    public function col_mooduellid($game) {
+    public function col_mooduellid(stdClass $game) {
         if ($game->mooduellid) {
 
             $name = $game->mooduellid;
@@ -127,9 +126,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return clickable action links.
-     * @param $game
+     * @param stdClass $game
      */
-    public function col_action($game) {
+    public function col_action(stdClass $game) {
         $cmid = $this->mooduell->cm->id;
 
         $link = '<a href="view.php?action=viewquestions&id=' . $cmid .
@@ -151,9 +150,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the ranking of the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_ranking($highscoreentry) {
+    public function col_ranking(stdClass $highscoreentry) {
         if ($highscoreentry->ranking) {
 
             $ranking = $highscoreentry->ranking;
@@ -164,9 +163,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the name of the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_userid($highscoreentry) {
+    public function col_userid(stdClass $highscoreentry) {
         if ($highscoreentry->userid) {
 
             $username = $this->mooduell->return_name_by_id($highscoreentry->userid);
@@ -177,9 +176,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the score of the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_score($highscoreentry) {
+    public function col_score(stdClass $highscoreentry) {
         if ($highscoreentry->score !== null) {
 
             $score = $highscoreentry->score;
@@ -190,9 +189,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the number of games played by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_gamesplayed($highscoreentry) {
+    public function col_gamesplayed(stdClass $highscoreentry) {
         if ($highscoreentry->gamesplayed !== null) {
 
             $gamesplayed = $highscoreentry->gamesplayed;
@@ -203,9 +202,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the number of games won by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_gameswon($highscoreentry) {
+    public function col_gameswon(stdClass $highscoreentry) {
         if ($highscoreentry->gameswon !== null) {
 
             $gameswon = $highscoreentry->gameswon;
@@ -216,9 +215,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the number of games lost by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_gameslost($highscoreentry) {
+    public function col_gameslost(stdClass $highscoreentry) {
         if ($highscoreentry->gameslost !== null) {
 
             $gameslost = $highscoreentry->gameslost;
@@ -229,9 +228,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the number of correctly answered questions by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_qcorrect($highscoreentry) {
+    public function col_qcorrect(stdClass $highscoreentry) {
         if ($highscoreentry->qcorrect !== null) {
 
             $qcorrect = $highscoreentry->qcorrect;
@@ -242,9 +241,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the number of questions answered by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_qplayed($highscoreentry) {
+    public function col_qplayed(stdClass $highscoreentry) {
         if ($highscoreentry->qplayed !== null) {
 
             $qplayed = $highscoreentry->qplayed;
@@ -255,9 +254,9 @@ class mooduell_table extends table_sql {
 
     /**
      * Function to return the percentage of correctly answered questions by the player.
-     * @param $highscoreentry
+     * @param stdClass $highscoreentry
      */
-    public function col_qcpercentage($highscoreentry) {
+    public function col_qcpercentage(stdClass $highscoreentry) {
         if ($highscoreentry->qcpercentage !== null) {
 
             $qcpercentage = number_format($highscoreentry->qcpercentage, 1).' %';

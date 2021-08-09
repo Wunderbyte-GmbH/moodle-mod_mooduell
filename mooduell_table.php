@@ -24,10 +24,12 @@
 
 use mod_mooduell\mooduell;
 
+defined('MOODLE_INTERNAL') || die();
+
 global $CFG, $PAGE, $COURSE;
-require_login($COURSE);
 
 require_once("../../config.php");
+require_login($COURSE);
 
 require("$CFG->libdir/tablelib.php");
 require_once("$CFG->dirroot/mod/mooduell/classes/mooduell_table.php");

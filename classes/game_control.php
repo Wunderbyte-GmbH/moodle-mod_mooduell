@@ -124,13 +124,13 @@ class game_control {
      * This function first get_enrolled_users and filters this list by module visibility of the active module.
      * Users who are not allowed to see the current MooDuell instance will be skipped too.
      * This is needed to give us a valid list of potential partners for a new game.
-     * @param $mooduell
+     * @param mooduell $mooduell
      * @param bool $loadprofile
      * @return array
      * @throws \coding_exception
      * @throws moodle_exception
      */
-    public static function return_users_for_game($mooduell, $loadprofile = true) {
+    public static function return_users_for_game(mooduell $mooduell, $loadprofile = true) {
 
         global $PAGE;
 
@@ -185,13 +185,13 @@ class game_control {
 
     /**
      * Function to assemble stats of a given user.
-     * @param $userid
-     * @param null $mooduellid
+     * @param int $userid
+     * @param int|null $mooduellid
      * @return array
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function get_user_stats($userid, $mooduellid = null) {
+    public static function get_user_stats(int $userid, $mooduellid = null) {
 
         global $DB;
 
@@ -280,12 +280,12 @@ class game_control {
 
     /**
      * Create new game, set random question sequence and write to DB.
-     * @param $playerbid
+     * @param int $playerbid
      * @return false|mixed|stdClass
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function start_new_game($playerbid) {
+    public function start_new_game(int $playerbid) {
         global $DB;
 
         // First we check if the playerbid provided is valid, if not, we throw and exception.
@@ -475,12 +475,12 @@ class game_control {
 
     /**
      * This is necessary to display questions in certain contexts.
-     * @param $context
+     * @param \context $context
      * @return stdClass|void
      * @throws \coding_exception
      * @throws dml_exception
      */
-    public static function register_for_question_usage($context) {
+    public static function register_for_question_usage(\context $context) {
         global $DB;
 
         $entries = $DB->get_records('question_usages', array('contextid' => $context->id, 'component' => 'mod_mooduell'));
@@ -500,13 +500,13 @@ class game_control {
      * ... (validation will be up to the App)...
      * ... or we return 0 for false and 1 for correctly answered.
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
-     * @param $questionid
-     * @param $answerids
+     * @param int $questionid
+     * @param array $answerids
      * @return mixed
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function validate_question($questionid, $answerids) {
+    public function validate_question(int $questionid, array $answerids) {
 
         global $USER;
 
@@ -627,12 +627,12 @@ class game_control {
 
     /**
      * Prepare all the information we need to send a push notification.
-     * @param $messagetype
+     * @param string $messagetype
      * @return array|null
      * @throws \coding_exception
      * @throws dml_exception
      */
-    private function gather_notifcation_data($messagetype) {
+    private function gather_notifcation_data(string $messagetype) {
 
         $users = self::return_users_for_game($this->mooduell, false);
 
@@ -708,11 +708,11 @@ class game_control {
     /**
      * Returns array of pushtoken strings from given user.
      * If there are non, we return empty array
-     * @param $userid
+     * @param int $userid
      * @return array
      * @throws dml_exception
      */
-    private function return_push_tokens_of_user($userid) {
+    private function return_push_tokens_of_user(int $userid) {
 
         global $DB;
 
@@ -782,9 +782,9 @@ class game_control {
 
     /**
      * Write result to DB, 1 is false, 2 is correct.
-     * @param $gameid
-     * @param $questionid
-     * @param $result
+     * @param int $gameid
+     * @param int $questionid
+     * @param int $result
      * @return bool
      * @throws dml_exception
      * @throws moodle_exception
@@ -1003,11 +1003,11 @@ class game_control {
     /**
      * Function fetches questions from DB, creating question_control instances to check for status.
      * If status is not ok, question is not returned.
-     * @param $category
+     * @param stdClass $category
      * @return array
      * @throws \coding_exception
      */
-    private function return_playable_questions_for_category($category) {
+    private function return_playable_questions_for_category(stdClass $category) {
 
         $returnarray = [];
 
@@ -1030,12 +1030,12 @@ class game_control {
 
     /**
      * Sends push notifications to google Firebase.
-     * @param $messagetype
+     * @param string $messagetype
      * @return bool|string|void
      * @throws \coding_exception
      * @throws dml_exception
      */
-    private function send_push_notification($messagetype) {
+    private function send_push_notification(string $messagetype) {
         $pushenabled = get_config('mooduell', 'enablepush');
 
         if ($pushenabled) {
