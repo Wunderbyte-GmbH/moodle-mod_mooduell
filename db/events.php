@@ -40,5 +40,15 @@ $observers = array(
         array(
                 'eventname' => 'mod_mooduell\event\game_finished',
                 'callback' => 'mod_mooduell_observer::game_finished'
+        ),
+
+        array(
+                'eventname' => '\core\event\course_module_created',
+                'callback' => 'mod_mooduell_observer::course_module_created'
+        ),
+
+        array(
+                'eventname' => '\core\event\user_enrolment_created',
+                'callback' => 'mod_mooduell_observer::user_enrolment_created'
         )
 );

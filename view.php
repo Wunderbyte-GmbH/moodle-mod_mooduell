@@ -22,6 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;
 
@@ -29,6 +30,8 @@ require_once('../../config.php');
 require_once(__DIR__ . '/lib.php');
 
 defined('MOODLE_INTERNAL') || die();
+
+global $CFG, $PAGE, $USER;
 
 require_once("{$CFG->dirroot}/mod/mooduell/classes/mooduell.php");
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
@@ -46,11 +49,25 @@ $mooduell->view_page();
 $context = $mooduell->context;
 
 // Event debugging - will be triggered by the button in classes/mooduell.php.
+// Or by setting the event param in the URL.
 $triggeredevent = optional_param('triggered_event', null, PARAM_RAW);
-if ($triggeredevent === 'game_finished') {
-    $event = game_finished::create(array('context' => $context, 'objectid' => $mooduell->cm->id));
-    $event->trigger();
+switch ($triggeredevent) {
+    case 'game_finished':
+        $event = game_finished::create(array('context' => $context, 'objectid' => $mooduell->cm->id));
+        $event->trigger();
+        break;
+
+    case 'course_module_created':
+        manage_tokens::generate_tokens_for_all_instance_users($id);
+        break;
+
+    case 'user_enrolment_created':
+        $debuguserid = optional_param('debuguserid', $USER->id, PARAM_INT);
+        manage_tokens::generate_token_for_user($debuguserid);
+        break;
 }
+
+
 // End of event debugging.
 
 // Use the view.php for different actions and views.
