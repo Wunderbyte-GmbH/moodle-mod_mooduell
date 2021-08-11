@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Game control class for mod_mooduell.
+ *
+ * @package mod_mooduell
+ * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace mod_mooduell;
 
 defined('MOODLE_INTERNAL') || die();
@@ -27,20 +35,14 @@ use dml_exception;
 use mod_mooduell\event\game_finished;
 use moodle_exception;
 use stdClass;
-use tool_dataprivacy\context_instance;use user_picture;
-
-/**
- * Game control class for mod_mooduell.
- *
- * @package mod_mooduell
- * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+use tool_dataprivacy\context_instance;
+use user_picture;
 
 define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
 /**
  * Class to store all the relevant game data and execute game relevant function.
+ * @package mod_mooduell
  */
 class game_control {
 

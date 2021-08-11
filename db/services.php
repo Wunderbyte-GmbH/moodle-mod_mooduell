@@ -44,7 +44,7 @@ $services = array(
                         'mod_mooduell_update_profile_picture'
                 ),
                 'restrictedusers' => 0,
-                'shortname' =>  'mod_mooduell_external',
+                'shortname' => 'mod_mooduell_external',
                 'enabled' => 1
         )
 );

@@ -46,8 +46,7 @@ class mod_mooduell_observer {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function game_finished(\mod_mooduell\event\game_finished $event): bool
-    {
+    public static function game_finished(\mod_mooduell\event\game_finished $event): bool {
         game_finished::update_highscores_table($event->objectid);
 
         return true;
@@ -60,8 +59,7 @@ class mod_mooduell_observer {
      * @param \core\event\course_module_created $event The event.
      * @return bool True on success.
      */
-    public static function course_module_created(\core\event\course_module_created $event): bool
-    {
+    public static function course_module_created(\core\event\course_module_created $event): bool {
         // The $event->objectid is the course_module id (cmid).
         manage_tokens::generate_tokens_for_all_instance_users($event->objectid);
 
@@ -75,8 +73,7 @@ class mod_mooduell_observer {
      * @param \core\event\user_enrolment_created $event The event.
      * @return bool True on success.
      */
-    public static function user_enrolment_created(\core\event\user_enrolment_created $event): bool
-    {
+    public static function user_enrolment_created(\core\event\user_enrolment_created $event): bool {
         // The $event->relateduserid stores the user for which to create the token.
         // $event->userid is the user who did the enrolment (which is irrelevant in this case).
         manage_tokens::generate_token_for_user($event->relateduserid);

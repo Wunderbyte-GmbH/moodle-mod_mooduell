@@ -167,6 +167,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     /**
+     * create array for countdown select.
      * @return array
      * @throws coding_exception
      */
@@ -201,13 +202,13 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Possibility to add another category.
-     * @param $counter
-     * @param $selectedcategory
-     * @param $listofcategories
-     * @param $mform
+     * @param int $counter
+     * @param object|null $selectedcategory
+     * @param array $listofcategories
+     * @param object $mform
      * @throws coding_exception
      */
-    private function add_categories_group($counter, $selectedcategory, $listofcategories, $mform) {
+    private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform) {
 
         $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
         $catweightoptions = $this->return_list_of_category_weight_options();
@@ -230,12 +231,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Build the categories list.
-     * @param $list
+     * @param array $list
      * @return array
      * @throws coding_exception
      * @throws dml_exception
      */
-    private function return_list_of_category_options($list) {
+    private function return_list_of_category_options(array $list) {
 
         global $DB;
 
@@ -280,11 +281,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Returns the parent of an item in list.
-     * @param $list
-     * @param $item
+     * @param array $list
+     * @param object $item
      * @return mixed
      */
-    private function return_parent_for_item_in_list($list, $item) {
+    private function return_parent_for_item_in_list(array $list, object $item) {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
                 $parent = $parentitem;
@@ -296,10 +297,10 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Generate a sorted list.
-     * @param $listofcategories
+     * @param array $listofcategories
      * @return array
      */
-    private function generate_sorted_list($listofcategories) {
+    private function generate_sorted_list(array $listofcategories) {
         $sortedcategories = array();
 
         foreach ($listofcategories as $category) {
@@ -318,11 +319,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Returns children in list.
-     * @param $parent
-     * @param $list
+     * @param object $parent
+     * @param array $list
      * @return array
      */
-    private function return_children_in_list($parent, $list) {
+    private function return_children_in_list(object $parent, array $list) {
         $children = array();
 
         foreach ($list as $child) {

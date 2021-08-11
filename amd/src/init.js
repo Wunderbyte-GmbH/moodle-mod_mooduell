@@ -1,9 +1,9 @@
 
 
-define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
+define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
 
     return {
-        init: function () {
+        init: function() {
             var getUrlParameter = function getUrlParameter(sParam) {
                 var sPageURL = window.location.search.substring(1);
                  return getAdressParameter(sParam, sPageURL);
@@ -23,6 +23,9 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 return false;
             };
 
+            /**
+             * Load questions function.
+             */
             function loadQuestions() {
                 var id = getUrlParameter('id');
 
@@ -35,8 +38,8 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     args: {
                         'quizid': id
                     },
-                    done: function (res) {
-                        //$('#continue').attr("href", link);
+                    done: function(res) {
+                        // $('#continue').attr("href", link);
                         var tablebody = '';
 
                         res.forEach(item => {
@@ -67,8 +70,8 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                             answers += '</ul>';
 
                             tablebody += '<tr>' +
-                                '<td><a href="../../question/question.php?returnurl=/question/edit.php?courseid='+
-                                item.courseid + '&courseid='+ item.courseid + '&id='+ item.questionid + '">' +
+                                '<td><a href="../../question/question.php?returnurl=/question/edit.php?courseid=' +
+                                item.courseid + '&courseid=' + item.courseid + '&id=' + item.questionid + '">' +
                                item.questionid + '</a></td>' +
                                 '<td>' + image + '</td>' +
                                 '<td class="text-left">' + item.questiontext + answers + '</td>' +
@@ -83,28 +86,48 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                         $('#spinner div').addClass('hidden');
                         $('#questionstable').removeClass('hidden');
                     },
-                    fail: function () {
+                    fail: function() {
                         $('#spinner div').addClass('hidden');
                         $('#questionstable').removeClass('hidden');
                     }
                 }]);
             }
 
+            /**
+             * Function to load open games.
+             */
             function loadOpengames() {
                 var id = getUrlParameter('id');
                 callLoadOpenGames(id);
             }
 
+            /**
+             * Function to load finished games.
+             */
             function loadFinishedgames() {
                 var id = getUrlParameter('id');
                 callLoadFinishedGames(id);
             }
 
+            /**
+             * Function to load highscores.
+             */
             function loadHighScores() {
                 var id = getUrlParameter('id');
                 callLoadHighScores(id);
             }
 
+            /**
+             * This function is called by the loadOpenGames function.
+             *
+             * @param {number} id
+             * @param {string} pageid
+             * @param {string} tsort
+             * @param {string} thide
+             * @param {string} tshow
+             * @param {number} tdir
+             * @param {number} treset
+             */
             function callLoadOpenGames(id,
                                        pageid = null,
                                        tsort = null,
@@ -120,36 +143,46 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     methodname: "mod_mooduell_load_opengames_data",
                     args: {
                         'quizid': id,
-                        'pageid' : pageid,
-                        'tsort' : tsort,
-                        'thide' : thide,
-                        'tshow' : tshow,
-                        'tdir' : tdir,
-                        'treset' : treset
+                        'pageid': pageid,
+                        'tsort': tsort,
+                        'thide': thide,
+                        'tshow': tshow,
+                        'tdir': tdir,
+                        'treset': treset
                     },
-                    done: function (res) {
+                    done: function(res) {
 
-                        var dom_nodes = $($.parseHTML(res.content));
+                        var domNodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length > 2) {
-                            replaceDownloadLink(id, dom_nodes, 'opengames');
-                            replaceResetTableLink(id, dom_nodes, callLoadOpenGames);
-                            replacePaginationLinks(id, dom_nodes, callLoadOpenGames);
-                            replaceSortColumLinks(id, dom_nodes, callLoadOpenGames);
+                        if (domNodes.length > 2) {
+                            replaceDownloadLink(id, domNodes, 'opengames');
+                            replaceResetTableLink(id, domNodes, callLoadOpenGames);
+                            replacePaginationLinks(id, domNodes, callLoadOpenGames);
+                            replaceSortColumnLinks(id, domNodes, callLoadOpenGames);
                         }
 
                         $('#spinner div').addClass('hidden');
-                        $("#opengamestable").html(dom_nodes);
+                        $("#opengamestable").html(domNodes);
                         $('#opengamestable').removeClass('hidden');
                     },
-                    fail: function () {
-                        alert('fail');
+                    fail: function() {
+                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#opengamestable').removeClass('hidden');
                     }
                 }]);
             }
 
+            /**
+             * This function is called by the loadFinishedGames function.
+             * @param {number} id
+             * @param {string} pageid
+             * @param {string} tsort
+             * @param {string} thide
+             * @param {string} tshow
+             * @param {number} tdir
+             * @param {number} treset
+             */
             function callLoadFinishedGames(id,
                                            pageid = null,
                                            tsort = null,
@@ -165,36 +198,46 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     methodname: "mod_mooduell_load_finishedgames_data",
                     args: {
                         'quizid': id,
-                        'pageid' : pageid,
-                        'tsort' : tsort,
-                        'thide' : thide,
-                        'tshow' : tshow,
-                        'tdir' : tdir,
-                        'treset' : treset
+                        'pageid': pageid,
+                        'tsort': tsort,
+                        'thide': thide,
+                        'tshow': tshow,
+                        'tdir': tdir,
+                        'treset': treset
                     },
-                    done: function (res) {
+                    done: function(res) {
 
-                        var dom_nodes = $($.parseHTML(res.content));
+                        var domNodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length > 2) {
-                            replaceDownloadLink(id, dom_nodes, 'finishedgames');
-                            replaceResetTableLink(id, dom_nodes, callLoadFinishedGames);
-                            replacePaginationLinks(id, dom_nodes, callLoadFinishedGames);
-                            replaceSortColumLinks(id, dom_nodes, callLoadFinishedGames);
+                        if (domNodes.length > 2) {
+                            replaceDownloadLink(id, domNodes, 'finishedgames');
+                            replaceResetTableLink(id, domNodes, callLoadFinishedGames);
+                            replacePaginationLinks(id, domNodes, callLoadFinishedGames);
+                            replaceSortColumnLinks(id, domNodes, callLoadFinishedGames);
                         }
 
                         $('#spinner div').addClass('hidden');
-                        $("#finishedgamestable").html(dom_nodes);
+                        $("#finishedgamestable").html(domNodes);
                         $('#finishedgamestable').removeClass('hidden');
                     },
-                    fail: function () {
-                        alert('fail');
+                    fail: function() {
+                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#finishedgamestable').removeClass('hidden');
                     }
                 }]);
             }
 
+            /**
+             * This function is called by the loadHighScores function.
+             * @param {number} id
+             * @param {string} pageid
+             * @param {string} tsort
+             * @param {string} thide
+             * @param {string} tshow
+             * @param {number} tdir
+             * @param {number} treset
+             */
             function callLoadHighScores(id, pageid = null, tsort = null, thide = null, tshow = null, tdir = null, treset = null) {
                 $('#spinner div').removeClass('hidden');
                 $('#highscorestable').addClass('hidden');
@@ -204,30 +247,30 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     methodname: "mod_mooduell_load_highscore_data",
                     args: {
                         'quizid': id,
-                        'pageid' : pageid,
-                        'tsort' : tsort,
-                        'thide' : thide,
-                        'tshow' : tshow,
-                        'tdir' : tdir,
-                        'treset' : treset
+                        'pageid': pageid,
+                        'tsort': tsort,
+                        'thide': thide,
+                        'tshow': tshow,
+                        'tdir': tdir,
+                        'treset': treset
                     },
-                    done: function (res) {
+                    done: function(res) {
 
-                        var dom_nodes = $($.parseHTML(res.content));
+                        var domNodes = $($.parseHTML(res.content));
 
-                        if (dom_nodes.length > 2) {
-                            replaceDownloadLink(id, dom_nodes, 'highscores');
-                            replaceResetTableLink(id, dom_nodes, callLoadHighScores);
-                            replacePaginationLinks(id, dom_nodes, callLoadHighScores);
-                            replaceSortColumLinks(id, dom_nodes, callLoadHighScores);
+                        if (domNodes.length > 2) {
+                            replaceDownloadLink(id, domNodes, 'highscores');
+                            replaceResetTableLink(id, domNodes, callLoadHighScores);
+                            replacePaginationLinks(id, domNodes, callLoadHighScores);
+                            replaceSortColumnLinks(id, domNodes, callLoadHighScores);
                         }
 
                         $('#spinner div').addClass('hidden');
-                        $("#highscorestable").html(dom_nodes);
+                        $("#highscorestable").html(domNodes);
                         $('#highscorestable').removeClass('hidden');
                     },
-                    fail: function () {
-                        alert('fail');
+                    fail: function() {
+                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
                     }
@@ -235,16 +278,17 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
             }
 
             /**
-             * To provide for all themes, we get the right link from the data attribute
-             * @param id
-             * @param dom_nodes
-             * @param functionToCall
+             * To provide for all themes, we get the right link from the data attribute.
+             *
+             * @param {number} id
+             * @param {Array} domNodes
+             * @param {Object} functionToCall
              */
-            function replacePaginationLinks(id, dom_nodes, functionToCall) {
-                var arrayOfPageItems = dom_nodes.find(".page-item");
+            function replacePaginationLinks(id, domNodes, functionToCall) {
+                var arrayOfPageItems = domNodes.find(".page-item");
                 $.each(arrayOfPageItems, function() {
                     var element = $(this).find('a');
-                    var url =  element.attr("href");
+                    var url = element.attr("href");
                     var pageNumber;
                     if (url != undefined) {
 
@@ -255,15 +299,22 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     }
                     element.attr('href', '#');
                     if (pageNumber) {
-                        $(this).children('a').click(function () {
+                        $(this).children('a').click(function() {
                             functionToCall(id, pageNumber);
                         });
                     }
                 });
             }
 
-            function replaceSortColumLinks(id, dom_nodes, functionToCall) {
-                var arrayOfItems = dom_nodes.find("th.header a");
+            /**
+             * Function to replace the sort column links.
+             *
+             * @param {string} id
+             * @param {Array} domNodes
+             * @param {Object} functionToCall
+             */
+            function replaceSortColumnLinks(id, domNodes, functionToCall) {
+                var arrayOfItems = domNodes.find("th.header a");
                 $.each(arrayOfItems, function() {
                     // First we disable all the links
                     // $(this).removeAttr('href');
@@ -272,45 +323,58 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                     var thide = $(this).data('action') == 'hide' ? $(this).data('column') : null;
                     var tshow = $(this).data('action') == 'show' ? $(this).data('column') : null;
 
-                    // make sure we only return int
+                    // Make sure we only return int.
                     sortorder = parseInt(sortorder);
 
                     $(this).attr('href', '#');
-                    $(this).click(function () {
+                    $(this).click(function() {
                         functionToCall(id, null, sortid, thide, tshow, sortorder);
                     });
                 });
             }
 
-            function replaceResetTableLink(id, dom_nodes, functionToCall) {
-                var arrayOfItems = dom_nodes.find("div.resettable");
+            /**
+             * Function to replace the reset table link.
+             *
+             * @param {string} id
+             * @param {Array} domNodes
+             * @param {Object} functionToCall
+             */
+            function replaceResetTableLink(id, domNodes, functionToCall) {
+                var arrayOfItems = domNodes.find("div.resettable");
 
                 // Strangely it wasn't possible to get the first div by class, we have to run all the nodes
                 // So we create a fallback
                 if (arrayOfItems.length == 0) {
-                    arrayOfItems = dom_nodes;
+                    arrayOfItems = domNodes;
                 }
 
-                $.each(dom_nodes, function() {
+                $.each(domNodes, function() {
                     var classofelement = $(this).attr('class');
                     if (classofelement.indexOf('resettable') >= 0) {
                         $(this).children('a').attr('href', '#');
-                        $(this).children('a').click(function () {
+                        $(this).children('a').click(function() {
                             functionToCall(id, null, null, null, null, null, 1);
                         });
                     }
                 });
             }
 
-            function replaceDownloadLink(id, dom_nodes, action) {
-                var arrayOfItems = dom_nodes.find("form");
+            /**
+             * Function to replace the download link.
+             *
+             * @param {string} id
+             * @param {Array} domNodes
+             * @param {string} action
+             */
+            function replaceDownloadLink(id, domNodes, action) {
+                var arrayOfItems = domNodes.find("form");
 
                 // Strangely it wasn't possible to get the first div by class, we have to run all the nodes
                 // So we create a fallback
                 if (arrayOfItems.length == 0) {
-                    arrayOfItems = dom_nodes;
+                    arrayOfItems = domNodes;
                 }
-
                 $.each(arrayOfItems, function() {
                     if ($(this).prop("tagName") == 'FORM') {
                         var quizid = getUrlParameter('id');
@@ -320,7 +384,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, ajax) {
                 });
             }
 
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
 
                 var tabname = e.target.toString();
                 tabname = tabname.split('#');

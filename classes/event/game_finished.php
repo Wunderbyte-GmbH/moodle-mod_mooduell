@@ -26,6 +26,14 @@ namespace mod_mooduell\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * The mod_mooduell game finished event class.
+ *
+ * @package mod_mooduell
+ * @since Moodle 3.5
+ * @copyright 2020 onwards Wunderbyte GmbH
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class game_finished extends \core\event\base {
 
     /**

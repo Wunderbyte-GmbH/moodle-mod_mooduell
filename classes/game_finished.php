@@ -18,6 +18,7 @@
  * Class for mod_mooduell to react on game finished event.
  *
  * @package mod_mooduell
+ * @since Moodle 3.5
  * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +28,12 @@ namespace mod_mooduell;
 use \mod_mooduell\mooduell;
 
 /**
- * Class game_finished contains functions to execute when the event game_finished is triggered
+ * Class game_finished contains functions to execute when the event game_finished is triggered.
+ *
+ * @package mod_mooduell
+ * @since Moodle 3.5
+ * @copyright 2021 onwards Wunderbyte GmbH
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class game_finished {
     /**

@@ -122,14 +122,14 @@ function mooduell_delete_instance($id) {
 
 /**
  * Serve the files from the mooduell file areas
- * @param $course
- * @param $context
- * @param $component
- * @param $filearea
- * @param $qubaid
- * @param $slot
- * @param $args
- * @param $forcedownload
+ * @param object|null $course
+ * @param object $context
+ * @param string $component
+ * @param string $filearea
+ * @param int $qubaid
+ * @param int $slot
+ * @param object $args
+ * @param int $forcedownload
  * @param array $options
  * @return false|void
  * @throws coding_exception

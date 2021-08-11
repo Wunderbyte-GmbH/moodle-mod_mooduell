@@ -94,13 +94,13 @@ $table->out(40, true);
 
 /**
  * Function to set the SQL and load the data for open games into the mooduell_table
- * @param $mooduellid
- * @param $table
- * @param $view
+ * @param int $mooduellid
+ * @param object $table
+ * @param string $view
  * @return stdClass
  * @throws coding_exception
  */
-function load_open_games_table_data($mooduellid, $table, $view) {
+function load_open_games_table_data(int $mooduellid, object $table, string $view) {
     global $USER;
     // Work out the sql for the table.
     $fields = "*";
@@ -156,13 +156,13 @@ function load_open_games_table_data($mooduellid, $table, $view) {
 
 /**
  * Function to set the SQL and load the data for finished games into the mooduell_table
- * @param $mooduellid
- * @param $table
- * @param $view
+ * @param int $mooduellid
+ * @param object $table
+ * @param string $view
  * @return stdClass
  * @throws coding_exception
  */
-function load_finished_games_table_data($mooduellid, $table, $view) {
+function load_finished_games_table_data(int $mooduellid, object $table, string $view) {
     global $USER;
 
     // Work out the sql for the table.
@@ -220,12 +220,12 @@ function load_finished_games_table_data($mooduellid, $table, $view) {
 
 /**
  * Function to set the SQL and load the data for highscores into the mooduell_table
- * @param $mooduellid
- * @param $table
+ * @param int $mooduellid
+ * @param object $table
  * @return stdClass
  * @throws coding_exception
  */
-function load_highscores_table_data($mooduellid, $table) {
+function load_highscores_table_data(int $mooduellid, object $table) {
     // Generate the SQL for the table.
     $fields = "*";
     $from = "{mooduell_highscores}";

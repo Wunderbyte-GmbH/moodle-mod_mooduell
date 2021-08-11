@@ -55,7 +55,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
     /**
      * process mooduell table
-     * @param $data
+     * @param object $data
      * @throws base_step_exception
      * @throws dml_exception
      */
@@ -77,7 +77,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
     /**
      * Process mooduell categories table
-     * @param $data
+     * @param object $data
      * @throws dml_exception
      */
     protected function process_mooduell_categories($data) {
@@ -94,7 +94,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
     /**
      * process mooduell_games table
-     * @param $data
+     * @param object $data
      * @throws dml_exception
      * @throws restore_step_exception
      */
@@ -119,7 +119,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
 
     /**
      * process mooduell_questions table
-     * @param $data
+     * @param object $data
      * @throws dml_exception
      */
     protected function process_mooduell_questions($data) {

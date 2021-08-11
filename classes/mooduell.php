@@ -109,7 +109,7 @@ class mooduell {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function __construct(int $id = null) {
+    public function __construct($id = null) {
         global $DB, $PAGE;
 
         global $PAGE;
@@ -1150,10 +1150,10 @@ class mooduell {
     /**
      * Function to export Data as CSV
      * It is necessary to add a headline, ie headline & data must have the same amount of columns.
-     * @param $headline
-     * @param $data
+     * @param array $headline
+     * @param array $data
      */
-    public function export_data_as_csv($headline, $data) {
+    public function export_data_as_csv(array $headline, array $data) {
         global $CFG;
 
         require_once($CFG->libdir . '/csvlib.class.php');

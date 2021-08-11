@@ -54,9 +54,9 @@ class viewpage implements renderable, templatable {
 
     /**
      * Constructor.
-     * @param $data
+     * @param array $data
      */
-    public function __construct($data) {
+    public function __construct(array $data) {
         $this->data = $data;
     }
 

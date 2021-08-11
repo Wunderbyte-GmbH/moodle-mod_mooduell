@@ -15,10 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for mod_mooduell to react on the following events:
- * - course_module_created
- * - user_enrolment_created
- * Will be executed by observer.php
+ * Class for mod_mooduell to react on the following events: course_module_created, user_enrolment_created.
  *
  * @package mod_mooduell
  * @copyright 2021 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
@@ -27,12 +24,13 @@
 
 namespace mod_mooduell;
 
+use coding_exception;
 use context_system;
+use dml_exception;
 use stdClass;
 
 /**
- * Class manage_tokens contains functions to execute when the event course_module_created or the event
- * user_enrolment_created is triggered.
+ * Contains functions to execute when the event course_module_created or the event user_enrolment_created is triggered.
  */
 class manage_tokens {
 
@@ -44,10 +42,11 @@ class manage_tokens {
     /**
      * Function to generate tokens for all users of a course in which a new MooDuell instance has been created.
      *
-     * @param $cmid numeric The course module id of the MooDuell instance.
-     * @throws \dml_exception
+     * @param int $cmid The course module id of the MooDuell instance.
+     * @throws coding_exception
+     * @throws dml_exception
      */
-    public static function generate_tokens_for_all_instance_users($cmid) {
+    public static function generate_tokens_for_all_instance_users(int $cmid) {
         global $DB;
 
         // Currently, ALL users enrolled in the course to which a MooDuell instance has been added, will be selected.
@@ -72,11 +71,11 @@ class manage_tokens {
     /**
      * Function to generate a token for a specific MooDuell user.
      *
-     * @param $userid numeric The id of the user for which a token should be created.
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * @param int $userid The id of the user for which a token should be created.
+     * @throws coding_exception
+     * @throws dml_exception
      */
-    public static function generate_token_for_user($userid) {
+    public static function generate_token_for_user(int $userid) {
 
         global $DB, $USER;
 

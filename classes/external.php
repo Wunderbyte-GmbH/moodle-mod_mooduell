@@ -17,11 +17,10 @@
 /**
  * Moolde external API
  *
- * @package mod_quiz
+ * @package mod_mooduell
  * @category external
  * @copyright 2020 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since Moodle 3.1
  */
 
 use mod_mooduell\game_control;
@@ -1084,14 +1083,14 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Loads question data to display on the website.
-     * @param $quizid
+     * @param int $quizid
      * @return array
      * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function load_questions_data($quizid) {
+    public static function load_questions_data(int $quizid) {
 
         $params = array(
                 'quizid' => $quizid,
@@ -1233,8 +1232,8 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
-     * Returns list of finished games to display on the website.
-     * @param int|$quizid
+     * Returns the list of finished games to display on the website.
+     * @param int $quizid
      * @param int|null $pageid
      * @param string|null $tsort
      * @param string|null $thide
@@ -1245,7 +1244,7 @@ class mod_mooduell_external extends external_api {
      * @throws coding_exception
      * @throws invalid_parameter_exception
      */
-    public static function load_finishedgames_data($quizid,
+    public static function load_finishedgames_data(int $quizid,
             $pageid = null,
             $tsort = null,
             $thide = null,

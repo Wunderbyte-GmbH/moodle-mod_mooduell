@@ -1,21 +1,25 @@
-div.card-deck {
-    margin-top: 25px;
+#mooduellTabContent div.card-deck {
+    margin-top: 8px;
     text-align: center;
 }
-div.wbblue {
+
+#mooduellTabContent div.wbblue {
     background-color: #263683;
 }
-div.wborange {
+
+#mooduellTabContent div.wborange {
     background-color: #ed8701;
 }
-h1 {
+
+#mooduellTabContent h1 {
     font-size: 3.5vw;
+    font-weight: bold;
 }
 
-h1.smallheader {
+#mooduellTabContent h1.smallheader {
     font-size: 2.5vw;
 }
 
-.card-body .card-text.subheader {
+#mooduellTabContent .card-body .card-text.subheader {
     font-size: 1.7vw;
 }

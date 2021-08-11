@@ -99,8 +99,6 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
 
             $question->set_source_table('mooduell_questions', array('mooduellid' => backup::VAR_PARENTID));
 
-            $pushtoken->set_source_table('mooduell_pushtokens', array('mooduellid' => backup::VAR_PARENTID));
-
             // Define id annotations.
             $game->annotate_ids('user', 'playeraid');
             $game->annotate_ids('user', 'playerbid');
