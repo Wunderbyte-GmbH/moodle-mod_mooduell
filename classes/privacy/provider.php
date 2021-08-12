@@ -194,6 +194,8 @@ class provider implements
      * Delete all data for all users in the specified context.
      *
      * @param \context $context the context to delete in.
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         // NOTE: Untested.
@@ -208,7 +210,25 @@ class provider implements
             // The mooduell_questions table is linked to games, we delete it therefore.
             $DB->delete_records('mooduell_questions', ['mooduellid' => $cm->instance]);
             $DB->delete_records('mooduell_highscores', ['mooduellid' => $cm->instance]);
-            $DB->delete_records('mooduell_pushtokens', ['mooduellid' => $cm->instance]);
+
+            // To delete the pushtokens, we must first find out all users (game players).
+            $getallplayerssql = 'SELECT DISTINCT userid
+            FROM (
+                SELECT playeraid AS userid
+                FROM {mooduell_games}
+                WHERE mooduellid = :cminstance
+                UNION
+                SELECT playerbid AS userid
+                FROM {mooduell_games}
+                WHERE mooduellid = :cminstance
+            ) s
+            ORDER BY userid ASC
+            ';
+
+            $records = $DB->get_records_sql($getallplayerssql, ['cminstance' => $cm->instance]);
+            foreach ($records as $record) {
+                $DB->delete_records('mooduell_pushtokens', ['userid' => $record->userid]);
+            }
         }
     }
 
@@ -216,9 +236,9 @@ class provider implements
      * Delete all user data for the specified user, in the specified contexts.
      *
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
+     * @throws \dml_exception
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        // NOTE: Untested.
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -238,7 +258,7 @@ class provider implements
             $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playeraid' => $userid]);
             $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playerbid' => $userid]);
             $DB->delete_records('mooduell_highscores', ['mooduellid' => $instanceid, 'userid' => $userid]);
-            $DB->delete_records('mooduell_pushtokens', ['mooduellid' => $instanceid, 'userid' => $userid]);
+            $DB->delete_records('mooduell_pushtokens', ['userid' => $userid]);
         }
     }
 
@@ -289,7 +309,9 @@ class provider implements
     /**
      * Delete multiple users within a single context.
      *
-     * @param   approved_userlist       $userlist The approved context and user information to delete information for.
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
         // NOTE: Untested.
@@ -323,6 +345,8 @@ class provider implements
      * Export all duells that the user participated in.
      *
      * @param approved_contextlist $contextlist List of contexts approved for export.
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     protected static function export_all_mooduells(approved_contextlist $contextlist) {
         global $DB;
@@ -380,6 +404,8 @@ class provider implements
      * Export the highscores this user is mentioned in.
      *
      * @param approved_contextlist $contextlist List of contexts approved for export.
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     protected static function export_all_highscores(approved_contextlist $contextlist) {
         global $DB;
@@ -427,6 +453,8 @@ class provider implements
      * Export all pushtokens this user requested.
      *
      * @param approved_contextlist $contextlist List of contexts approved for export.
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     protected static function export_all_pushtokens(approved_contextlist $contextlist) {
         global $DB;
@@ -464,7 +492,7 @@ class provider implements
             WHERE userid = :userid";
 
         $params = [
-            'userid'        => $user->id,
+            'userid' => $user->id,
         ];
 
         $rs = $DB->get_recordset_sql($sql, $params);
