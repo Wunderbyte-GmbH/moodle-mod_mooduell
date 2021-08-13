@@ -61,8 +61,11 @@ class mod_mooduell_observer {
      */
     public static function course_module_created(\core\event\course_module_created $event): bool {
         // The $event->objectid is the course_module id (cmid).
-        manage_tokens::generate_tokens_for_all_instance_users($event->objectid);
 
+        $data = $event->get_data();
+        if ($data['other']->modulename === 'mooduell') {
+            manage_tokens::generate_tokens_for_all_instance_users($event->objectid);
+        }
         return true;
     }
 
