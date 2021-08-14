@@ -37,6 +37,7 @@ $string['mooduellname_help'] = 'Wähle einen Namen für Dein Spiel';
 $string['mooduellsettings'] = 'MooDuell Einstellungen';
 $string['mooduellfieldset'] = 'MooDuell Einstellungen';
 $string['usefullnames'] = 'Verwende ganze Namen';
+$string['usefullnames_help'] = 'Die richtigen Namen der UserInnen werden verwendet. Wenn nicht, müssen die UserInnen in ihrem Profil ein MooDuell Alias definieren.';
 $string['modulename_help'] = 'Das MooDuell Modul hilft dir eine Multiplayer Quiz Aktivität zu erstellen, die dann das Spielen mit der MooDuell App erlaubt.';
 $string['modulename'] = 'MooDuell';
 $string['addInstance'] = 'Ein neues Spiel hinzufügen';
@@ -45,6 +46,7 @@ $string['mooduell:addinstance'] = 'Ein neues Spiel hinzufügen';
 $string['enablepush'] = 'Push Nachrichten aktivieren';
 $string['pushtoken'] = 'Push API Access Key';
 $string['countdown'] = 'Countdown';
+$string['countdown_help'] = 'Wie lange sollen die SpielerInnen Zeit haben, um die Fragen zu beantworten?';
 $string['nocountdown'] = 'Kein Countdown';
 $string['xseconds'] = '{$a} Sekunden';
 
@@ -52,8 +54,11 @@ $string['viewgame'] = 'Zeige Spiel';
 $string['deletegame'] = 'Lösche Spiel';
 
 $string['showcontinuebutton'] = 'Zeige "Weiter"-Button';
+$string['showcontinuebutton_help'] = 'Auch wenn es nur eine richtige Antwort gibt, muss diese mit einem Klick auf einen "Weiter"-Button bestätigt werden.';
 $string['showcorrectanswer'] = 'Zeige die korrekten Antworten';
+$string['showcorrectanswer_help'] = 'Nach einer falschen Antwort werden die richtigen Antworten angezeigt.';
 $string['waitfornextquestion'] = 'Zeit um die korrekten Antworten zu sehen.';
+$string['waitfornextquestion_help'] = 'Wie lange sollen die richtigen Antworten nach der Beantwortung der Frage sichtbar bleiben.';
 $string['clicktomoveon'] = 'Warte bis zum nächsten Klick';
 
 $string['pluginadministration'] = 'Plugin Administration';
