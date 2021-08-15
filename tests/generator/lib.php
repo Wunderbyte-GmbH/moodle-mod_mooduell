@@ -51,6 +51,7 @@ class mod_mooduell_generator extends testing_module_generator {
     }
 
     /**
+     * To create a new instance.
      * @param null $record
      * @param array|null $options
      * @return stdClass

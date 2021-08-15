@@ -62,11 +62,11 @@ if (!$table->is_downloading()) {
 switch($action){
     case 'opengames':
         // Generate the tabledata for open games.
-        $tabledata = load_open_games_table_data($mooduellid, $table, $view);
+        $tabledata = load_games_table_data($mooduellid, $table, $view, false);
         break;
     case 'finishedgames':
         // Generate the tabledata for finished games.
-        $tabledata = load_finished_games_table_data($mooduellid, $table, $view);
+        $tabledata = load_games_table_data($mooduellid, $table, $view, true);
         break;
     case 'highscores':
         // Generate the tabledata for highscores.
@@ -93,76 +93,15 @@ $table->define_baseurl("$CFG->wwwroot/mod/mooduell/mooduell_table.php");
 $table->out(40, true);
 
 /**
- * Function to set the SQL and load the data for open games into the mooduell_table
+ * Function to set the SQL and load the data for open or finished games into the mooduell_table
  * @param int $mooduellid
  * @param object $table
  * @param string $view
+ * @param bool $finished
  * @return stdClass
  * @throws coding_exception
  */
-function load_open_games_table_data(int $mooduellid, object $table, string $view) {
-    global $USER;
-    // Work out the sql for the table.
-    $fields = "*";
-    $from = "{mooduell_games}";
-    switch ($view){
-        case 'teacher':
-            $where = "mooduellid = :mooduellid1 AND status <> 3";
-            $params = array('mooduellid1' => $mooduellid);
-            break;
-        // Student view is the default view.
-        default:
-            // We need to pass 2 userids because each one can only be used once for some strange reason.
-            $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
-            $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
-            break;
-    }
-
-    $table->set_sql($fields, $from, $where, $params);
-
-    $columns[] = 'timemodified';
-    $headers[] = get_string('lastplayed', 'mooduell');
-    $help[] = null;
-
-    $columns[] = 'playeraid';
-    $headers[] = get_string('playera', 'mooduell');
-    $help[] = null;
-
-    $columns[] = 'playeraresults';
-    $headers[] = get_string('playeraresults', 'mooduell');
-    $help[] = null;
-
-    $columns[] = 'playerbid';
-    $headers[] = get_string('playerb', 'mooduell');
-    $help[] = null;
-
-    $columns[] = 'playerbresults';
-    $headers[] = get_string('playeraresults', 'mooduell');
-    $help[] = null;
-
-    if ($view == 'teacher') {
-        $columns[] = 'action';
-        $headers[] = get_string('action', 'mooduell');
-        $help[] = null;
-    }
-
-    $tabledata = new stdClass();
-    $tabledata->columns = $columns;
-    $tabledata->headers = $headers;
-    $tabledata->help = $help;
-
-    return $tabledata;
-}
-
-/**
- * Function to set the SQL and load the data for finished games into the mooduell_table
- * @param int $mooduellid
- * @param object $table
- * @param string $view
- * @return stdClass
- * @throws coding_exception
- */
-function load_finished_games_table_data(int $mooduellid, object $table, string $view) {
+function load_games_table_data(int $mooduellid, object $table, string $view, bool $finished) {
     global $USER;
 
     // Work out the sql for the table.
@@ -176,8 +115,14 @@ function load_finished_games_table_data(int $mooduellid, object $table, string $
             break;
         // Student view is the default view.
         default:
+
+            if ($finished) {
+                $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+            } else {
+                $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+            }
             // We need to pass 2 userids because each one can only be used once for some strange reason.
-            $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+
             $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
             break;
     }

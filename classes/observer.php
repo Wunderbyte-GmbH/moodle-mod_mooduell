@@ -63,7 +63,7 @@ class mod_mooduell_observer {
         // The $event->objectid is the course_module id (cmid).
 
         $data = $event->get_data();
-        if ($data['other']->modulename === 'mooduell') {
+        if ($data['other']['modulename'] === 'mooduell') {
             manage_tokens::generate_tokens_for_all_instance_users($event->objectid);
         }
         return true;

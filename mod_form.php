@@ -99,9 +99,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
-        // $mform->addElement('static', 'label1', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
-        $mform->addElement('header', 'mooduellfieldset', get_string('mooduellfieldset', 'mod_mooduell'));
-
         $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
         $mform->setDefault('usefullnames', $config->usefullnames);
         $mform->addHelpButton('usefullnames', 'usefullnames', 'mod_mooduell');
