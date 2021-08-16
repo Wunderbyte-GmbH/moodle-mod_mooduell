@@ -189,6 +189,9 @@ class provider implements
 
         // Export all pushtokens.
         static::export_all_pushtokens($contextlist);
+
+        // Export all associated entries in mooduell_questions.
+        static::export_all_questiondata($contextlist);
     }
 
     /**
@@ -252,10 +255,19 @@ class provider implements
             if (!$context instanceof \context_module) {
                 continue;
             }
+
             $instanceid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid]);
             if (!$instanceid) {
                 continue;
             }
+
+            // Before deleting mooduell_games we have to delete the associated mooduell_questions data.
+            $where = 'gameid in (SELECT id FROM {mooduell_games} WHERE mooduellid = :mooduellid AND ' .
+                '(playeraid = :playeraid OR playerbid = :playerbid))';
+            $DB->delete_records_select('mooduell_questions', $where, ['mooduellid' => $instanceid,
+                'playeraid' => $userid, 'playerbid' => $userid]);
+
+            // Now we can delete the rest.
             $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playeraid' => $userid]);
             $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playerbid' => $userid]);
             $DB->delete_records('mooduell_highscores', ['mooduellid' => $instanceid, 'userid' => $userid]);
@@ -490,6 +502,61 @@ class provider implements
                 'model' => $record->model,
                 'pushtoken' => $record->pushtoken,
                 'numberofnotifications' => $record->numberofnotifications
+            ];
+
+            $writer->export_data($subcontext, $data);
+
+        }
+
+        $rs->close();
+    }
+
+    /**
+     * Export all entries in mooduell_questions the user is associated with.
+     *
+     * @param approved_contextlist $contextlist List of contexts approved for export.
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    protected static function export_all_questiondata(approved_contextlist $contextlist) {
+        global $DB;
+        $user = $contextlist->get_user();
+
+        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+
+        $sql = "SELECT *, cm.id AS cmid
+            FROM {course_modules} cm
+            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+            JOIN {mooduell} md ON cm.instance = md.id
+            JOIN (SELECT mq.*, mg.playeraid, mg.playerbid
+                    FROM {mooduell_questions} mq
+                    JOIN {mooduell_games} mg
+                    ON mq.mooduellid = mg.mooduellid AND mq.gameid = mg.id) mdq 
+                ON mdq.mooduellid = md.id AND (mdq.playeraid = :playeraid OR mdq.playerbid = :playerbid)
+            WHERE c.id {$contextsql}";
+
+        $params = [
+            'modname' => 'mooduell',
+            'contextlevel' => CONTEXT_MODULE,
+            'playeraid' => $user->id,
+            'playerbid' => $user->id
+        ];
+        $params += $contextparams;
+
+        $rs = $DB->get_recordset_sql($sql, $params);
+        foreach ($rs as $record) {
+            \context_helper::preload_from_record($record);
+            $context = \context_module::instance($record->cmid);
+            $writer = \core_privacy\local\request\writer::with_context($context);
+            $subcontext = ['Question entry found: '.$record->id];
+
+            $data = (object) [
+                'mooduellid' => $record->mooduellid,
+                'gameid' => $record->gameid,
+                'questionid' => $record->questionid,
+                'playeraanswered' => $record->playeraanswered,
+                'playerbanswered' => $record->playerbanswered
             ];
 
             $writer->export_data($subcontext, $data);
