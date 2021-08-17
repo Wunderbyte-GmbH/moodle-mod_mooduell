@@ -45,6 +45,8 @@ $services = array(
                 ),
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
+                'downloadfiles' => 1,    // Allow file downloads.
+                'uploadfiles'  => 1,      // Allow file uploads.
                 'enabled' => 1
         )
 );
