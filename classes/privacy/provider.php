@@ -532,7 +532,7 @@ class provider implements
             JOIN (SELECT mq.*, mg.playeraid, mg.playerbid
                     FROM {mooduell_questions} mq
                     JOIN {mooduell_games} mg
-                    ON mq.mooduellid = mg.mooduellid AND mq.gameid = mg.id) mdq 
+                    ON mq.mooduellid = mg.mooduellid AND mq.gameid = mg.id) mdq
                 ON mdq.mooduellid = md.id AND (mdq.playeraid = :playeraid OR mdq.playerbid = :playerbid)
             WHERE c.id {$contextsql}";
 
