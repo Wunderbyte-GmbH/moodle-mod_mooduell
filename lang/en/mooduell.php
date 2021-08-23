@@ -175,6 +175,8 @@ $string['yourturn'] = 'It\'s your turn against {$a}';
 $string['challenged'] = '{$a} has challenged you';
 $string['userhasnonickname'] = 'User has no nickname';
 
+$string['mooduell:play'] = 'Play Mooduell';
+
 // Privacy API.
 $string['privacy:metadata:mooduell_games'] = 'Stores the mooduell game progress.';
 $string['privacy:metadata:mooduell_games:mooduellid'] = 'Id of the mooduell instance.';
