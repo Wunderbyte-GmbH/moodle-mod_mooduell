@@ -23,3 +23,15 @@
 #mooduellTabContent .card-body .card-text.subheader {
     font-size: 1.7vw;
 }
+
+#mooduellTabContent .text-black h1 {
+    color: black !important;
+}
+
+#mooduellTabContent .text-white h1 {
+    color: white !important;
+}
+
+#mooduellTabContent .three-columns .card {
+    flex-basis: calc(33.33% - .5rem) !important;
+}
