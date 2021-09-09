@@ -25,13 +25,13 @@
 }
 
 #mooduellTabContent .text-black h1 {
-    color: black !important;
+    color: black;
 }
 
 #mooduellTabContent .text-white h1 {
-    color: white !important;
+    color: white;
 }
 
 #mooduellTabContent .three-columns .card {
-    flex-basis: calc(33.33% - .5rem) !important;
+    flex-basis: calc(33.33% - .5rem);
 }
