@@ -202,7 +202,7 @@ class provider implements
      * @throws \dml_exception
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
-        // NOTE: Untested.
+
         global $DB;
 
         if (!$context instanceof \context_module) {
@@ -281,7 +281,7 @@ class provider implements
      * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
-        // NOTE: Untested.
+
         $context = $userlist->get_context();
 
         if (!$context instanceof \context_module) {
@@ -327,7 +327,7 @@ class provider implements
      * @throws \dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
-        // NOTE: Untested.
+
         global $DB;
 
         $context = $userlist->get_context();
@@ -453,9 +453,7 @@ class provider implements
                 'gameswon' => $record->gameswon,
                 'gameslost' => $record->gameslost,
             ];
-
             $writer->export_data($subcontext, $data);
-
         }
 
         $rs->close();
@@ -503,11 +501,8 @@ class provider implements
                 'pushtoken' => $record->pushtoken,
                 'numberofnotifications' => $record->numberofnotifications
             ];
-
             $writer->export_data($subcontext, $data);
-
         }
-
         $rs->close();
     }
 
@@ -558,9 +553,7 @@ class provider implements
                 'playeraanswered' => $record->playeraanswered,
                 'playerbanswered' => $record->playerbanswered
             ];
-
             $writer->export_data($subcontext, $data);
-
         }
 
         $rs->close();
