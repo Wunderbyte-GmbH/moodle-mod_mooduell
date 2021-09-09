@@ -388,9 +388,8 @@ class provider implements
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
-            $subcontext = ['Game entry found: '.$record->id];
+            $subcontext = ['MooDuell games played', $record->id];
 
-            // TODO: Some explanations would be nice, also remove unused elements.
             $data = (object) [
                 'playeraid' => $record->playeraid,
                 'playerbid' => $record->playerbid,
@@ -445,7 +444,7 @@ class provider implements
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
-            $subcontext = ['Highscore entry found: '.$record->id];
+            $subcontext = ['MooDuell highscore entries', $record->id];
 
             $data = (object) [
                 'ranking' => $record->ranking,
@@ -492,7 +491,7 @@ class provider implements
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
-            $subcontext = ['Pushtoken entry found: '.$record->id];
+            $subcontext = ['MooDuell pushtokens', $record->id];
 
             $data = (object) [
                 'userid' => $record->userid,
@@ -544,7 +543,7 @@ class provider implements
             \context_helper::preload_from_record($record);
             $context = \context_module::instance($record->cmid);
             $writer = \core_privacy\local\request\writer::with_context($context);
-            $subcontext = ['Question entry found: '.$record->id];
+            $subcontext = ['MooDuell question entries', $record->id];
 
             $data = (object) [
                 'mooduellid' => $record->mooduellid,
