@@ -31,6 +31,7 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\deletion_criteria;
 use core_privacy\local\request\helper;
+use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
@@ -367,12 +368,13 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        $sql = "SELECT *, cm.id AS cmid
+        $sql = "SELECT mdg.*, cm.id AS cmid, md.name AS mooduellname, u.firstname, u.lastname
             FROM {course_modules} cm
             JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
             JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id AND mdg.playeraid = :userida OR  mdg.playerbid = :useridb
+            LEFT JOIN {user} u ON u.id = :userid
             WHERE c.id {$contextsql}";
 
         $params = [
@@ -380,6 +382,7 @@ class provider implements
             'contextlevel'  => CONTEXT_MODULE,
             'userida'       => $user->id,
             'useridb'       => $user->id,
+            'userid'        => $user->id
         ];
         $params += $contextparams;
 
@@ -390,19 +393,56 @@ class provider implements
             $writer = \core_privacy\local\request\writer::with_context($context);
             $subcontext = ['MooDuell games played', $record->id];
 
+            // Anonymize name of second player and add name of player who did the privacy request.
+            if ($record->playeraid == $user->id) {
+                $record->playeraid .= ' (' . $record->firstname . ' ' . $record->lastname . ')';
+                $record->playerbid = 'anonymized';
+            } else {
+                $record->playeraid = 'anonymized';
+                $record->playerbid .= ' (' . $record->firstname . ' ' . $record->lastname . ')';
+            }
+
+            // Anonymize name of winner if it was the other user, else show the name.
+            if ($record->winnerid == $user->id) {
+                $record->winnerid .= ' (' . $record->firstname . ' ' . $record->lastname . ')';
+            } else {
+                $record->winnerid = 'anonymized';
+            }
+
+            // Add explanation texts to status.
+            switch ($record->status) {
+                case 1:
+                    $record->status .= ' (First players turn)';
+                    break;
+                case 2:
+                    $record->status .= ' (Second players turn)';
+                    break;
+                case 3:
+                    $record->status .= ' (Game finished)';
+                    break;
+                default:
+                    $record->status .= ' (Game not started yet)';
+                    break;
+            }
+
             $data = (object) [
+                'id' => $record->id,
+                'mooduellid' => $record->mooduellid . ' (' . $record->mooduellname . ')',
                 'playeraid' => $record->playeraid,
                 'playerbid' => $record->playerbid,
-                'timecreated' => \core_privacy\local\request\transform::datetime($record->timecreated),
-                'timemodified' => \core_privacy\local\request\transform::datetime($record->timemodified),
-                'playeracorrect' => $record->playeracorrect,
-                'playerbcorrect' => $record->playerbcorrect,
-                'playeraqplayed' => $record->playeraqplayed,
-                'playerbqplayed' => $record->playerbqplayed,
+                'playeratime' => $record->playeratime . ' (Time used by player A to answer question)',
+                'playerbtime' => $record->playerbtime . ' (Time used by player B to answer question)',
+                'playeracorrect' => $record->playeracorrect . ' (Questions correctly answered by player A)',
+                'playerbcorrect' => $record->playerbcorrect . ' (Questions correctly answered by player B)',
+                'playeraqplayed' => $record->playeraqplayed . ' (Questions played by player A)',
+                'playerbqplayed' => $record->playerbqplayed . ' (Questions played by player B)',
                 'playeraresults' => $record->playeraresults,
                 'playerbresults' => $record->playerbresults,
                 'winnerid' => $record->winnerid,
                 'status' => $record->status,
+                'victorycoefficient' => $record->victorycoefficient . ' (Victories correlated to the strength of adversary)',
+                'timemodified'=> transform::datetime($record->timemodified),
+                'timecreated'=> transform::datetime($record->timecreated)
             ];
 
             $writer->export_data($subcontext, $data);
@@ -424,18 +464,20 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        $sql = "SELECT *, cm.id AS cmid
+        $sql = "SELECT mdh.*, cm.id AS cmid, u.firstname, u.lastname, md.name AS mooduellname
             FROM {course_modules} cm
             JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
             JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid
+            LEFT JOIN {user} u ON u.id = :userid2
             WHERE c.id {$contextsql}";
 
         $params = [
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
+            'userid2'       => $user->id
         ];
         $params += $contextparams;
 
@@ -447,10 +489,21 @@ class provider implements
             $subcontext = ['MooDuell highscore entries', $record->id];
 
             $data = (object) [
-                'ranking' => $record->ranking,
-                'gamesplayed' => $record->gamesplayed,
-                'gameswon' => $record->gameswon,
-                'gameslost' => $record->gameslost,
+                'id' => $record->id,
+                'mooduellid' => $record->mooduellid . ' (' . $record->mooduellname . ')',
+                'userid' => $record->userid . ' (' . $record->firstname . ' ' . $record->lastname . ')',
+                'ranking' => $record->ranking . ' (Rank in the highscores table)',
+                'gamesplayed' => $record->gamesplayed . ' (Number of games played)',
+                'gameswon' => $record->gameswon . ' (Number of games won)',
+                'gameslost' => $record->gameslost . ' (Number of games lost)',
+                'gamesstarted'=> $record->gamesstarted . ' (Number of games started)',
+                'gamesfinished'=> $record->gamesfinished . ' (Number of games finished)',
+                'score'=> $record->score . ' (The user\'s score)',
+                'qcorrect'=> $record->qcorrect . ' (Number of correctly answered questions)',
+                'qplayed'=> $record->qplayed . ' (Number of played questions)',
+                'qcpercentage'=> $record->qcpercentage . ' (Percentage of correctly answered questions)',
+                'timecreated'=> transform::datetime($record->timecreated),
+                'timemodified'=> transform::datetime($record->timemodified)
             ];
             $writer->export_data($subcontext, $data);
         }
@@ -471,18 +524,20 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        $sql = "SELECT *, cm.id AS cmid
+        $sql = "SELECT mdp.*, cm.id AS cmid, u.firstname, u.lastname
             FROM {course_modules} cm
             JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
             JOIN {mooduell} md ON cm.instance = md.id
             JOIN {mooduell_pushtokens} mdp ON mdp.userid = :userid
+            LEFT JOIN {user} u ON u.id = :userid2
             WHERE c.id {$contextsql}";
 
         $params = [
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
+            'userid2'       => $user->id
         ];
         $params += $contextparams;
 
@@ -494,11 +549,12 @@ class provider implements
             $subcontext = ['MooDuell pushtokens', $record->id];
 
             $data = (object) [
-                'userid' => $record->userid,
-                'identifier' => $record->identifier,
-                'model' => $record->model,
+                'id' => $record->id,
+                'userid' => $record->userid . ' (' . $record->firstname . ' ' . $record->lastname . ')',
+                'identifier' => $record->identifier . ' (Device identifier)',
+                'model' => $record->model . ' (Device model)',
                 'pushtoken' => $record->pushtoken,
-                'numberofnotifications' => $record->numberofnotifications
+                'numberofnotifications' => $record->numberofnotifications . ' (Number of notifications)'
             ];
             $writer->export_data($subcontext, $data);
         }
@@ -518,7 +574,7 @@ class provider implements
 
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
-        $sql = "SELECT *, cm.id AS cmid
+        $sql = "SELECT mdq.*, cm.id AS cmid, q.questiontext, md.name as mooduellname
             FROM {course_modules} cm
             JOIN {modules} m ON cm.module = m.id AND m.name = :modname
             JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
@@ -528,6 +584,7 @@ class provider implements
                     JOIN {mooduell_games} mg
                     ON mq.mooduellid = mg.mooduellid AND mq.gameid = mg.id) mdq
                 ON mdq.mooduellid = md.id AND (mdq.playeraid = :playeraid OR mdq.playerbid = :playerbid)
+            LEFT JOIN {question} q ON q.id = mdq.questionid
             WHERE c.id {$contextsql}";
 
         $params = [
@@ -545,10 +602,37 @@ class provider implements
             $writer = \core_privacy\local\request\writer::with_context($context);
             $subcontext = ['MooDuell question entries', $record->id];
 
+            // Add explanation texts to playeraanswered.
+            switch ($record->playeraanswered) {
+                case 1:
+                    $record->playeraanswered .= ' (Player A gave a wrong answer)';
+                    break;
+                case 2:
+                    $record->playeraanswered .= ' (Player A gave the correct answer)';
+                    break;
+                default:
+                    $record->playeraanswered .= ' (Player A did not answer yet)';
+                    break;
+            }
+
+            // Add explanation texts to playerbanswered.
+            switch ($record->playerbanswered) {
+                case 1:
+                    $record->playerbanswered .= ' (Player B gave a wrong answer)';
+                    break;
+                case 2:
+                    $record->playerbanswered .= ' (Player B gave the correct answer)';
+                    break;
+                default:
+                    $record->playerbanswered .= ' (Player B did not answer yet)';
+                    break;
+            }
+
             $data = (object) [
-                'mooduellid' => $record->mooduellid,
+                'id' => $record->id,
+                'mooduellid' => $record->mooduellid . ' (' . $record->mooduellname . ')',
                 'gameid' => $record->gameid,
-                'questionid' => $record->questionid,
+                'questionid' => $record->questionid . ' (Question: "' . strip_tags($record->questiontext) . '")',
                 'playeraanswered' => $record->playeraanswered,
                 'playerbanswered' => $record->playerbanswered
             ];
