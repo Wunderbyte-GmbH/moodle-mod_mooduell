@@ -915,7 +915,6 @@ class mooduell {
 
         $returnarray = [];
 
-        // TODO: Check each question individually.
         $questions = $this->return_list_of_all_questions_in_quiz();
 
         // Are there enough questions in the categories added?

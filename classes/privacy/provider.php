@@ -441,8 +441,8 @@ class provider implements
                 'winnerid' => $record->winnerid,
                 'status' => $record->status,
                 'victorycoefficient' => $record->victorycoefficient . ' (Victories correlated to the strength of adversary)',
-                'timemodified'=> transform::datetime($record->timemodified),
-                'timecreated'=> transform::datetime($record->timecreated)
+                'timemodified' => transform::datetime($record->timemodified),
+                'timecreated' => transform::datetime($record->timecreated)
             ];
 
             $writer->export_data($subcontext, $data);
@@ -496,14 +496,14 @@ class provider implements
                 'gamesplayed' => $record->gamesplayed . ' (Number of games played)',
                 'gameswon' => $record->gameswon . ' (Number of games won)',
                 'gameslost' => $record->gameslost . ' (Number of games lost)',
-                'gamesstarted'=> $record->gamesstarted . ' (Number of games started)',
-                'gamesfinished'=> $record->gamesfinished . ' (Number of games finished)',
-                'score'=> $record->score . ' (The user\'s score)',
-                'qcorrect'=> $record->qcorrect . ' (Number of correctly answered questions)',
-                'qplayed'=> $record->qplayed . ' (Number of played questions)',
-                'qcpercentage'=> $record->qcpercentage . ' (Percentage of correctly answered questions)',
-                'timecreated'=> transform::datetime($record->timecreated),
-                'timemodified'=> transform::datetime($record->timemodified)
+                'gamesstarted' => $record->gamesstarted . ' (Number of games started)',
+                'gamesfinished' => $record->gamesfinished . ' (Number of games finished)',
+                'score' => $record->score . ' (The user\'s score)',
+                'qcorrect' => $record->qcorrect . ' (Number of correctly answered questions)',
+                'qplayed' => $record->qplayed . ' (Number of played questions)',
+                'qcpercentage' => $record->qcpercentage . ' (Percentage of correctly answered questions)',
+                'timecreated' => transform::datetime($record->timecreated),
+                'timemodified' => transform::datetime($record->timemodified)
             ];
             $writer->export_data($subcontext, $data);
         }

@@ -121,8 +121,6 @@ function load_games_table_data(int $mooduellid, object $table, string $view, boo
             } else {
                 $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
             }
-            // We need to pass 2 userids because each one can only be used once for some strange reason.
-
             $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
             break;
     }

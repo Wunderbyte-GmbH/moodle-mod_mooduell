@@ -74,8 +74,6 @@ class mod_mooduell_external extends external_api {
         // We create a new game: Save parameters to DB & trigger notification event.
         $startgameresult = $gamecontroller->start_new_game($params['playerbid']);
 
-        // TODO: Trigger Notification for other User.
-
         $result = array();
         $result['status'] = $startgameresult;
         return $startgameresult;
