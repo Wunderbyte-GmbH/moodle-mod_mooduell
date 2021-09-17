@@ -43,7 +43,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                         var tablebody = '';
 
                         res.forEach(item => {
-                            var image = 'no image';
+                            var image = ' ';
                             if (item.imageurl && item.imageurl.length > 0) {
                                 image = '<a href="' + item.imageurl +
                                     '"><img src="' + item.imageurl + '" alt="' +
