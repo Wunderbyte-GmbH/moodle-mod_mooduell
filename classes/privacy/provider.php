@@ -61,10 +61,14 @@ class provider implements
                 'mooduellid' => 'privacy:metadata:mooduell_games:mooduellid',
                 'playeraid' => 'privacy:metadata:mooduell_games:playeraid',
                 'playerbid' => 'privacy:metadata:mooduell_games:playerbid',
+                'playeratime' => 'privacy:metadata:mooduell_games:playeratime',
+                'playerbtime' => 'privacy:metadata:mooduell_games:playerbtime',
                 'playeracorrect' => 'privacy:metadata:mooduell_games:playeracorrect',
                 'playerbcorrect' => 'privacy:metadata:mooduell_games:playerbcorrect',
                 'playeraqplayed' => 'privacy:metadata:mooduell_games:playeraqplayed',
                 'playerbqplayed' => 'privacy:metadata:mooduell_games:playerbqplayed',
+                'playeraresults' => 'privacy:metadata:mooduell_games:playeraresults',
+                'playerbresults' => 'privacy:metadata:mooduell_games:playerbresults',
                 'winnerid' => 'privacy:metadata:mooduell_games:winnerid',
                 'status' => 'privacy:metadata:mooduell_games:status',
                 'victorycoefficient' => 'privacy:metadata:mooduell_games:victorycoefficient',
@@ -89,13 +93,13 @@ class provider implements
                 'qcorrect' => 'privacy:metadata:mooduell_highscores:qcorrect',
                 'qplayed' => 'privacy:metadata:mooduell_highscores:qplayed',
                 'qcpercentage' => 'privacy:metadata:mooduell_highscores:qcpercentage',
-                'timemodified' => 'privacy:metadata:mooduell_highscores:timemodified',
                 'timecreated' => 'privacy:metadata:mooduell_highscores:timecreated',
+                'timemodified' => 'privacy:metadata:mooduell_highscores:timemodified',
             ],
             'privacy:metadata:mooduell_highscores'
         );
 
-        // Stores the mooduell pushtokens.
+        // Stores the MooDuell pushtokens.
         $collection->add_database_table(
             'mooduell_pushtokens',
             [
@@ -106,6 +110,19 @@ class provider implements
                 'numberofnotifications' => 'privacy:metadata:mooduell_pushtokens:numberofnotifications',
             ],
             'privacy:metadata:mooduell_pushtokens'
+        );
+
+        // Stores MooDuell question data.
+        $collection->add_database_table(
+            'mooduell_questions',
+            [
+                'mooduellid' => 'privacy:metadata:mooduell_questions:mooduellid',
+                'gameid' => 'privacy:metadata:mooduell_questions:gameid',
+                'questionid' => 'privacy:metadata:mooduell_questions:questionid',
+                'playeraanswered' => 'privacy:metadata:mooduell_questions:playeraanswered',
+                'playerbanswered' => 'privacy:metadata:mooduell_questions:playerbanswered',
+            ],
+            'privacy:metadata:mooduell_questions'
         );
 
         return $collection;
