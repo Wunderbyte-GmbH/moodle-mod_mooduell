@@ -24,9 +24,10 @@
 
 use mod_mooduell\mooduell;
 
+require_once("../../config.php");
+
 global $CFG, $PAGE, $COURSE;
 
-require_once("../../config.php");
 require_login($COURSE);
 
 require("$CFG->libdir/tablelib.php");
