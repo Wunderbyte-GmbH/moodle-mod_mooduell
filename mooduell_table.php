@@ -24,8 +24,6 @@
 
 use mod_mooduell\mooduell;
 
-defined('MOODLE_INTERNAL') || die();
-
 global $CFG, $PAGE, $COURSE;
 
 require_once("../../config.php");
@@ -50,6 +48,14 @@ $table = new mooduell_table($mooduellinstance, $action);
 $table->is_downloading($download, $action, $action);
 
 $mooduellid = $table->mooduell->cm->instance;
+
+if (empty($view)) {
+    if (has_capability('mod/mooduell:editgames', $context)) {
+        $view = 'teacher';
+    } else {
+        $view = 'student';
+    }
+}
 
 if (!$table->is_downloading()) {
     // Only print headers if not asked to download data.
