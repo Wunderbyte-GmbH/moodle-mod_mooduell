@@ -24,16 +24,9 @@
 
 namespace mod_mooduell;
 
-
-use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Label\Label;
-use Endroid\QrCode\Logo\Logo;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
-use Endroid\QrCode\Writer\PngWriter;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -69,35 +62,29 @@ class qr_code {
 
         $pinCode = rand(1000,9999);
 
-        $writer = new PngWriter();
-
         $qrstring = $url . ';' . $token . ';' . $pinCode;
 
         //base64 encode the qr code
         $basestring = base64_encode($qrstring);
-        
-        // Create QR code
-        $qrCode = QrCode::create($basestring)
-        ->setEncoding(new Encoding('UTF-8'))
-        ->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh())
-        ->setSize(300)
-        ->setMargin(10)
-        ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
-        ->setForegroundColor(new Color(0, 0, 0))
-        ->setBackgroundColor(new Color(255, 255, 255));
-
-        // Create Logo
-        $logo = Logo::create($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
-        ->setResizeToWidth(230);
-
-        // Create generic label
         $text = get_string('pincode','mod_mooduell');
-        $label = Label::create($text . $pinCode)
-        ->setTextColor(new Color(0, 0, 0));
+        // Create QR code
+        // Create a basic QR code
+        $qrCode = new QrCode($basestring);
+        $qrCode
+        ->setSize(300)
+        ->setWriterByName('png')
+        ->setMargin(10)
+        ->setEncoding('UTF-8')
+        ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+        ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
+        ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
+        ->setLabel($text . $pinCode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf', LabelAlignment::CENTER)
+        ->setLogoPath($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
+        ->setLogoWidth(230)
+        ->setValidateResult(false);
 
-        //Combine elements to QR Code and return Imagestring
-        $result = $writer->write($qrCode, $logo, $label);
-        $dataUri = $result->getDataUri();
+        $dataUri = $qrCode->writeDataUri();
+   
         return $dataUri;
         
     }
