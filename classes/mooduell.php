@@ -39,7 +39,11 @@ use mod_mooduell_mod_form;
 use moodle_exception;
 use stdClass;
 
+
+
 global $CFG;
+
+require_once("{$CFG->dirroot}/mod/mooduell/classes/qr_code.php");
 
 // Question Health constants.
 /**
@@ -308,7 +312,12 @@ class mooduell {
                 $out .= $output->render_viewquestions($viewquestions);
                 break;
             case 'studentsview':
+                
+                $qrcode = new qr_code();
+
+                $qrcode_image = $qrcode->generate_qr_code();    
                 // Create the list of open games we can pass on to the renderer.
+                $data['qrimage'] = $qrcode_image;
                 $data['statistics'] = $this->return_list_of_statistics_student();
                 $data['opengames'] = [];
                 $data['finishedgames'] = [];
@@ -341,6 +350,9 @@ class mooduell {
         if (!$inline) {
             $out .= $output->footer();
         }
+
+
+
         return $out;
     }
 
