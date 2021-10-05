@@ -214,3 +214,6 @@ $string['privacy:metadata:mooduell_pushtokens:pushtoken'] = 'The pushtoken.';
 $string['privacy:metadata:mooduell_pushtokens:numberofnotifications'] = 'The number of notifications.';
 
 $string['pincode'] = "Your PinCode: ";
+$string['qr_title'] = "QR Login - How to:";
+$string['qr_desc'] ="To login on your Smartphone, scan this personal QR-Code with the MooDuell App and verify the process with your unique 4-digit pincode.";
+
