@@ -138,7 +138,7 @@ $string['noquestions'] = 'Es gibt noch keine Fragen in diesem Quiz.';
 $string['univiemooduell'] = 'Univie Mooduell';
 $string['downloaduniviemoduell'] = 'Lade Deine App auf dein Handy und beginne sofort mit deinem Spiel!';
 $string['univiemooduellappstore'] = 'Hier geht es zum Apple App Store:';
-$string['univiemooduellplaystore'] = 'Hier geht es zum Google Play Store.';
+$string['univiemooduellplaystore'] = 'Hier geht es zum Google Play Store:';
 
 $string['username'] = 'Name';
 $string['gamesplayed'] = 'Gespielte Spiele';
@@ -176,3 +176,5 @@ $string['userhasnonickname'] = 'SpielerIn ohne Alias';
 $string['anonymous'] = 'Anonym';
 
 $string['mooduell:play'] = 'MooDuell spielen';
+
+$string['pincode'] = "Dein PinCode: ";
