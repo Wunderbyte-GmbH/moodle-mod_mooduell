@@ -177,5 +177,5 @@ $string['userhasnonickname'] = 'SpielerIn ohne Alias';
 $string['mooduell:play'] = 'MooDuell spielen';
 
 $string['pincode'] = "Dein PinCode: ";
-$string['qr_title'] = "Anleitung QR-Login:";
-$string['qr_desc'] ="Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode in der App und bestätige den Login mit dem einmaligen Pincode.";
+$string['qrtitle'] = "Anleitung QR-Login:";
+$string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode in der App und bestätige den Login mit dem einmaligen Pincode.";
