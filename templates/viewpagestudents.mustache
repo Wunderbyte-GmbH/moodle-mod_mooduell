@@ -71,8 +71,14 @@
         </tr>
     </table></div>
     <div class="col-sm">
+        <h4>{{#str}} qr_title, mod_mooduell {{/str}}</h4>
+        <p>{{#str}} qr_desc, mod_mooduell {{/str}}</p>
+    </div>
+    {{#qrimage}}
+    <div class="col-sm">
         <img style="width:200px" src="{{qrimage}}"/>
     </div>
+    {{/qrimage}}
   </div>
   </div>
 </div>

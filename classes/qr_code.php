@@ -27,7 +27,7 @@ namespace mod_mooduell;
 
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
@@ -41,25 +41,23 @@ require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/mod/mooduell/thirdparty/vendor/autoload.php');
 
-
+/**
+ * This class handles the QR Code creation
+ */
 class qr_code {
 
     /**
      * Creates QR Code with pin for current User and returns QRImage that can be displayed.
      */
     function generate_qr_code() {
-        global $CFG;
+        global $CFG, $DB;
         
 
-        //create service object
-        $service = new stdClass();
-        $service->shortname = 'mod_mooduell_external';
-        $service->restrictedusers = 0;
-        $service->downloadfiles = 1;   // Allow file downloads.
-        $service->uploadfiles  = 1;      // Allow file uploads.
-        $service->enabled = 1;
-        $service->id = 2;
-        $service->requiredcapability = "";
+        $service = $DB->get_record('external_services', array('shortname' => 'mod_mooduell_external', 'enabled' => 1));
+        if (empty($service)) {
+            // will throw exception if no token found
+            return;
+        }
 
         
         //setup qrcode parameters
@@ -81,7 +79,7 @@ class qr_code {
         // Create QR code
         $qrCode = QrCode::create($basestring)
         ->setEncoding(new Encoding('UTF-8'))
-        ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+        ->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh())
         ->setSize(300)
         ->setMargin(10)
         ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
@@ -90,7 +88,7 @@ class qr_code {
 
         // Create Logo
         $logo = Logo::create($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
-        ->setResizeToWidth(300);
+        ->setResizeToWidth(230);
 
         // Create generic label
         $text = get_string('pincode','mod_mooduell');
