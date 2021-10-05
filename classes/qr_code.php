@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * QR Code is generated here
+ * Plugin event observers are registered here.
  *
- * @package     mod_mooduell
- * @copyright   2020 Wunderbyte GmbH <info@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_mooduell
+ * @copyright 2020 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_mooduell;
@@ -37,57 +37,50 @@ require_once($CFG->dirroot . '/mod/mooduell/thirdparty/vendor/autoload.php');
 /**
  * This class handles the QR Code creation
  */
-class qr_code {
-
+class qr_code
+{
     /**
      * Creates QR Code with pin for current User and returns QRImage that can be displayed.
      */
-    function generate_qr_code() {
+    public function generate_qr_code()
+    {
         global $CFG, $DB;
-        
 
         $service = $DB->get_record('external_services', array('shortname' => 'mod_mooduell_external', 'enabled' => 1));
         if (empty($service)) {
-            // will throw exception if no token found
+            // Will throw exception if no token found.
             return;
         }
+        // setup qrcode parameters.
+        $tokenobject = external_generate_token_for_current_user($service);
 
-        
-        //setup qrcode parameters
-        $tokenObject = external_generate_token_for_current_user($service);
-     
         $url = $CFG->wwwroot;
-     
-        $token = $tokenObject->token;
 
-        $pinCode = rand(1000,9999);
+        $token = $tokenobject->token;
 
-        $qrstring = $url . ';' . $token . ';' . $pinCode;
+        $pincode = rand(1000, 9999);
 
-        //base64 encode the qr code
+        $qrstring = $url . ';' . $token . ';' . $pincode;
+        // base64 encode the qr code.
         $basestring = base64_encode($qrstring);
-        $text = get_string('pincode','mod_mooduell');
-        // Create QR code
-        // Create a basic QR code
-        $qrCode = new QrCode($basestring);
-        $qrCode
-        ->setSize(300)
-        ->setWriterByName('png')
-        ->setMargin(10)
-        ->setEncoding('UTF-8')
-        ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
-        ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
-        ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
-        ->setLabel($text . $pinCode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf', LabelAlignment::CENTER)
-        ->setLogoPath($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
-        ->setLogoWidth(230)
-        ->setValidateResult(false);
+        $text = get_string('pincode', 'mod_mooduell');
+        // Create QR code.
+        // Create a basic QR code.
+        $qrcode = new QrCode($basestring);
+        $qrcode
+            ->setSize(300)
+            ->setWriterByName('png')
+            ->setMargin(10)
+            ->setEncoding('UTF-8')
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+            ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
+            ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
+            ->setLabel($text . $pincode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf', LabelAlignment::CENTER)
+            ->setLogoPath($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
+            ->setLogoWidth(230)
+            ->setValidateResult(false);
 
-        $dataUri = $qrCode->writeDataUri();
-   
+        $dataUri = $qrcode->writeDataUri();
         return $dataUri;
-        
     }
-
-
 }
