@@ -126,7 +126,7 @@ function mooduell_delete_instance($id) {
  * @param string $filearea
  * @param int $qubaid
  * @param int $slot
- * @param object $args
+ * @param array $args
  * @param int $forcedownload
  * @param array $options
  * @return false|void
@@ -135,15 +135,15 @@ function mooduell_delete_instance($id) {
  * @throws require_login_exception
  */
 function mooduell_question_pluginfile(
-        $course,
-        $context,
-        $component,
-        $filearea,
-        $qubaid,
-        $slot,
-        $args,
-        $forcedownload,
-        array $options=array()) {
+    object $course = null,
+    object $context,
+    string $component,
+    string $filearea,
+    int $qubaid,
+    int $slot,
+    array $args,
+    int $forcedownload,
+    array $options=array()) {
 
     // Make sure the filearea is one of those used by the plugin.
     if ($filearea !== 'questiontext') {
