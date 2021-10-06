@@ -1022,13 +1022,13 @@ class mooduell {
         }
 
         // Easiest question = question which has been answered correctly most often.
-        $sql = "select s.questionid, q.name questionname, count(*) correct_count from
+        $sql = "select s.questionid, q.questiontext questionname, count(*) correct_count from
                 (select * from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
                 union all
                 select * from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s
                 inner join {question} q
                 on q.id = s.questionid
-                group by s.questionid
+                group by s.questionid, q.name, q.questiontext
                 order by correct_count desc
                 limit 1";
 
@@ -1044,13 +1044,13 @@ class mooduell {
         }
 
         // Hardest question = question which has been answered incorrectly most often.
-        $sql = "select s.questionid, q.name questionname, count(*) incorrect_count from
+        $sql = "select s.questionid, q.questiontext questionname, count(*) incorrect_count from
                 (select * from {mooduell_questions} where playeraanswered = 1 and mooduellid = $mooduellid
                 union all
                 select * from {mooduell_questions} where playerbanswered = 1 and mooduellid = $mooduellid) s
                 inner join {question} q
                 on q.id = s.questionid
-                group by s.questionid
+                group by s.questionid, q.name, q.questiontext
                 order by incorrect_count desc
                 limit 1";
 
