@@ -30,7 +30,7 @@ use Endroid\QrCode\QrCode;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/../../../config.php');
+
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/mod/mooduell/thirdparty/vendor/autoload.php');
 
@@ -42,8 +42,7 @@ class qr_code
     /**
      * Creates QR Code with pin for current User and returns QRImage that can be displayed.
      */
-    public function generate_qr_code()
-    {
+    public function generate_qr_code() {
         global $CFG, $DB;
 
         $service = $DB->get_record('external_services', array('shortname' => 'mod_mooduell_external', 'enabled' => 1));
@@ -51,7 +50,7 @@ class qr_code
             // Will throw exception if no token found.
             return;
         }
-        // setup qrcode parameters.
+        // Setup qrcode parameters.
         $tokenobject = external_generate_token_for_current_user($service);
 
         $url = $CFG->wwwroot;
@@ -61,7 +60,7 @@ class qr_code
         $pincode = rand(1000, 9999);
 
         $qrstring = $url . ';' . $token . ';' . $pincode;
-        // base64 encode the qr code.
+        // Base64 encode the qr code.
         $basestring = base64_encode($qrstring);
         $text = get_string('pincode', 'mod_mooduell');
         // Create QR code.
@@ -75,12 +74,13 @@ class qr_code
             ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
             ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
             ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
-            ->setLabel($text . $pincode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf', LabelAlignment::CENTER)
+            ->setLabel($text . $pincode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf'
+            , LabelAlignment::CENTER)
             ->setLogoPath($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
             ->setLogoWidth(230)
             ->setValidateResult(false);
 
-        $dataUri = $qrcode->writeDataUri();
-        return $dataUri;
+        $datauri = $qrcode->writeDataUri();
+        return $datauri;
     }
 }
