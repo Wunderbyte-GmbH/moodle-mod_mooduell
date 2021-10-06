@@ -348,9 +348,6 @@ class mooduell {
         if (!$inline) {
             $out .= $output->footer();
         }
-
-
-
         return $out;
     }
 
