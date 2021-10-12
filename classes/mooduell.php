@@ -64,7 +64,8 @@ const NEEDIMAGE = false;
 const ACCEPTEDTYPES = [
         'truefalse',
         'multichoice',
-        'singlechoice'
+        'singlechoice',
+        'numerical'
 ];
 
 /**
