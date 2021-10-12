@@ -106,7 +106,8 @@ class mod_mooduell_external extends external_api {
      * @param int $quizid
      * @param int $gameid
      * @param int $questionid
-     * @param array $answerids
+     * @param array $answerids IDs of answers given to single or multiple choice questions.
+     * @param float $numericanswer Answer given to a numeric question (stored as float).
      * @return array
      * @throws coding_exception
      * @throws dml_exception
@@ -114,12 +115,13 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids) {
+    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids = [], float $numericanswer = null) {
         $params = array(
                 'quizid' => $quizid,
                 'gameid' => $gameid,
                 'questionid' => $questionid,
-                'answerids' => $answerids
+                'answerids' => $answerids,
+                'numericanswer' => $numericanswer,
         );
 
         $params = self::validate_parameters(self::answer_question_parameters(), $params);
@@ -133,13 +135,17 @@ class mod_mooduell_external extends external_api {
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        // We create Mooduell Instance.
+        // We create the MooDuell nstance.
         $mooduell = new mooduell($params['quizid']);
 
-        // We create the game_controller Instance.
+        // We create the game_controller instance.
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         $result['response'] = $gamecontroller->validate_question($params['questionid'], $params['answerids']);
+
+        // TODO: $result['response'] = ... for numerical questions
+        // TODO: $result['iscorrect'] = ... for numerical questions
+        // TODO: $result['generalfeedback'] = ... for numerical questions
 
         return $result;
     }
@@ -153,8 +159,9 @@ class mod_mooduell_external extends external_api {
                 'quizid' => new external_value(PARAM_INT, 'quizid id'),
                 'gameid' => new external_value(PARAM_INT, 'gameid id'),
                 'questionid' => new external_value(PARAM_INT, 'question id'),
-                'answerids' => new external_multiple_structure(new external_value(PARAM_INT, 'answer ids'),
+                'answerids' => new external_multiple_structure(new external_value(PARAM_INT, 'answer id'),
                         'Array of answer ids'),
+                'numericanswer' => new external_value(PARAM_RAW), 'answer to numerical question',
         ));
     }
 
@@ -165,8 +172,12 @@ class mod_mooduell_external extends external_api {
     public static function answer_question_returns() {
         return new external_single_structure(array(
                 'response' => new external_multiple_structure(
-                        new external_value(PARAM_INT, 'ids of correct answers OR 0 if false, 1 if true')
-                )
+                        // For numerical questions, it will contain the correct answer.
+                        new external_value(PARAM_RAW, 'ids of correct answers, correct answer OR 0 if false, 1 if true')
+                ),
+                'iscorrect' => new external_value(PARAM_INT, '0 if false, 1 if true'),
+                'generalfeedback' => new external_value(PARAM_TEXT, 'general feedback'),
+                // TODO: Also add ann array of question specific feedbacks.
         ));
     }
 
