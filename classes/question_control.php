@@ -170,7 +170,16 @@ class question_control {
 
             $this->extract_image();
 
-            $this->answers = $this->return_answers($listofanswers);
+            switch($this->questiontype) {
+                // For numerical questions, we do not want to return any answers.
+                case 'numerical':
+                    $this->answers = array();
+                    break;
+                // For all other questions, we return the list of answers.
+                default:
+                    $this->answers = $this->return_answers($listofanswers);
+                    break;
+            }
 
             $this->check_question();
         }
@@ -347,20 +356,30 @@ class question_control {
      * @throws \coding_exception
      */
     private function check_for_right_number_of_answers() {
-        $countcorrectanswers = 0;
-        foreach ($this->answers as $answer) {
-            if ($answer->fraction > 0) {
-                ++$countcorrectanswers;
-            }
+
+        // For numerical questions we do not need to check the number of answers.
+        switch ($this->questiontype) {
+            case 'numerical':
+                return;
+            case 'singlechoice':
+            case 'multichoice':
+                $countcorrectanswers = 0;
+                foreach ($this->answers as $answer) {
+                    if ($answer->fraction > 0) {
+                        ++$countcorrectanswers;
+                    }
+                }
+                if ($countcorrectanswers < 1) {
+                    $this->warnings[] = [
+                            'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
+                    ];
+                    $this->status = get_string('notok', 'mod_mooduell');
+                } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
+                    // If there only is one correct answer, convert to singlechoice.
+                    $this->questiontype = 'singlechoice';
+                } // Else do nothing.  
+                return;         
         }
-        if ($countcorrectanswers < 1) {
-            $this->warnings[] = [
-                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
-            ];
-            $this->status = get_string('notok', 'mod_mooduell');
-        } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
-            $this->questiontype = 'singlechoice';
-        } // Else do nothing.
     }
 
     /**
