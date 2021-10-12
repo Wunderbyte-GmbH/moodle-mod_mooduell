@@ -261,7 +261,7 @@ class game_control {
             $returnarray['lostgames'] = $lostgames;
             $returnarray['correctlyanswered'] = $correctlyanswered;
             $returnarray['playedquestions'] = $playedquestions;
-        } catch (exception $e) {
+        } catch (\exception $e) {
             throw new moodle_exception('nomooduellinstance', 'mooduell', null, null,
                     "No MooDuell instance seems to exist on your plattform");
         }
@@ -313,7 +313,7 @@ class game_control {
         // We get exactly nine questions from the right categories.
         // We run this before we save our game...
         // ... because it will throw an error if we don't receive the right number of questions.
-        $questions = self::set_random_questions();
+        $questions = $this->set_random_questions();
 
         // We collect all the data to save to mooduell_games table.
         $this->gamedata->gameid = $DB->insert_record('mooduell_games', $data);
@@ -523,11 +523,10 @@ class game_control {
                     "It's not your turn to answer a question");
         }
 
+        $activequestion = null;
+
         // If there are questions, if we have the right number and if we find the specific question with the right id.
         if ($questions && count($questions) == 9) {
-
-            $activequestion = null;
-
             foreach ($questions as $question) {
                 if ($question->questionid == $questionid) {
                     $activequestion = $question;
@@ -575,10 +574,12 @@ class game_control {
         $this->save_result_to_db($this->gamedata->gameid, $questionid, $result);
         // After every answered questions, turn status is updated as well.
 
-        if ($USER->id == $this->gamedata->playeraid) {
-            $activequestion->playeraanswered = $result;
-        } else {
-            $activequestion->playerbanswered = $result;
+        if ($activequestion !== null) {
+            if ($USER->id == $this->gamedata->playeraid) {
+                $activequestion->playeraanswered = $result;
+            } else {
+                $activequestion->playerbanswered = $result;
+            }
         }
 
         $this->save_my_turn_status();
