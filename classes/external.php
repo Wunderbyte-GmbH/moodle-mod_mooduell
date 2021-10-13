@@ -120,8 +120,7 @@ class mod_mooduell_external extends external_api {
                 'quizid' => $quizid,
                 'gameid' => $gameid,
                 'questionid' => $questionid,
-                'answerids' => $answerids,
-                'numericanswer' => $numericanswer,
+                'answerids' => $answerids
         );
 
         $params = self::validate_parameters(self::answer_question_parameters(), $params);
@@ -160,8 +159,7 @@ class mod_mooduell_external extends external_api {
                 'gameid' => new external_value(PARAM_INT, 'gameid id'),
                 'questionid' => new external_value(PARAM_INT, 'question id'),
                 'answerids' => new external_multiple_structure(new external_value(PARAM_RAW, 'answer id'),
-                        'Array of answer ids'),
-                'numericanswer' => new external_value(PARAM_FLOAT), 'answer to numerical question',
+                        'Array of answer ids')
         ));
     }
 
