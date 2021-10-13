@@ -161,7 +161,7 @@ class mod_mooduell_external extends external_api {
                 'questionid' => new external_value(PARAM_INT, 'question id'),
                 'answerids' => new external_multiple_structure(new external_value(PARAM_INT, 'answer id'),
                         'Array of answer ids'),
-                'numericanswer' => new external_value(PARAM_RAW), 'answer to numerical question',
+                'numericanswer' => new external_value(PARAM_FLOAT), 'answer to numerical question',
         ));
     }
 
