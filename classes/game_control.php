@@ -510,7 +510,13 @@ class game_control {
      */
     public function validate_question(int $questionid, array $answerids) {
 
-        global $USER;
+        global $DB, $USER;
+
+        // Get the question type.
+        if (!$questiontype = $DB->get_field('question', 'qtype', ['id' => $questionid])) {
+            throw new moodle_exception('missingquestiontype', 'mooduell', null, null,
+                "Question without a question type.");
+        }
 
         // Check if it's the right question sequence.
         // First we get our game data.
@@ -536,16 +542,16 @@ class game_control {
                 if (($USER->id == $this->gamedata->playeraid && $question->playeraanswered == null) ||
                         ($USER->id == $this->gamedata->playerbid && $question->playerbanswered == null)) {
                     throw new moodle_exception('outofsequence', 'mooduell', null, null,
-                            "You tried to answere a question out of sequence");
+                            "You tried to answer a question out of sequence");
                 }
             }
 
             // If we want the correct answers, we just return an array of these correct answers to the app...
-            // ... which will deal with the rest.
-            $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1 ? true : false;
+            // ... which will deal with the rest. This will be ignored by numerical questions.
+            $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1;
 
             if ($activequestion) {
-                $resultarray = $activequestion->validate_question($answerids, $showcorrectanswer);
+                list($resultarray, $iscorrect) = $activequestion->validate_question($answerids, $showcorrectanswer);
             } else {
                 throw new moodle_exception('noactivquestion', 'mooduell', null, null,
                         "Couldn't find the question you wanted to answer");
@@ -553,21 +559,34 @@ class game_control {
 
         } else {
             $resultarray[] = -1;
+            $iscorrect = -1;
         }
 
-        // After having calculated the resultarray, we have to translate the result for the db.
-        // There, we don't need the correct answerids, but just if the player has answered correctly (1 is false, 2 is correct).
-        if (!$showcorrectanswer) {
-            $result = $resultarray[0] == 1 ? 2 : 1;
-        } else {
-            foreach ($resultarray as $resultitem) {
-                if (count($resultarray) != count($answerids) || !in_array($resultitem, $answerids)) {
-                    $result = 1;
-                    break;
+        switch ($questiontype) {
+            case 'singlechoice':
+            case 'multichoice':
+                // After having calculated the resultarray, we have to translate the result for the db.
+                // There, we don't need the correct answerids, but just if the player has answered correctly (1 is false, 2 is correct).
+                if (!$showcorrectanswer) {
+                    $result = $resultarray[0] == 1 ? 2 : 1;
+                } else {
+                    foreach ($resultarray as $resultitem) {
+                        if (count($resultarray) != count($answerids) || !in_array($resultitem, $answerids)) {
+                            $result = 1;
+                            break;
+                        }
+                    }
+                    // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
+                    $result != 1 ? $result = 2 : null;
                 }
-            }
-            // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
-            $result != 1 ? $result = 2 : null;
+                break;
+            case 'numerical':
+                // If correct, we set result to 2, if false, we set result to 1.
+                $iscorrect ? $result = 2 : $result = 1;
+                break;
+            default:
+                throw new moodle_exception('wrongquestiontype', 'mooduell', null, null,
+                    'Question type ' . $questiontype . ' is not supported right now.');
         }
 
         // We write the result of our question check.
