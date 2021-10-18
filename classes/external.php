@@ -173,6 +173,8 @@ class mod_mooduell_external extends external_api {
             $result['showgeneralfeedback'] = 0;
         }
 
+        $result['showgeneralfeedback'] = $mooduell->settings->showgeneralfeedback;
+
         return $result;
     }
 
