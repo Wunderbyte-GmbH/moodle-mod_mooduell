@@ -239,13 +239,85 @@ class question_control {
      * See if answer was correct.
      * @param array $answerids
      * @param int $showcorrectanswer
-     * @return int[]
+     * @return array An array of results.
      */
-    public function validate_question(array $answerids, int $showcorrectanswer) {
+    public function validate_question(array $answerids, int $showcorrectanswer): array {
+
+        switch ($this->questiontype) {
+            case 'numerical':
+                list($resultarray, $iscorrect) = $this->validate_numerical_question($answerids);
+                break;
+            case 'singlechoice':
+            case 'multichoice':
+                list($resultarray, $iscorrect) = $this->validate_single_and_multichoice_question($answerids, $showcorrectanswer);
+                break;
+            default:
+                $resultarray = [];
+                $iscorrect = -1; // Invalid question type.
+        }
+
+        return [$resultarray, $iscorrect];
+    }
+
+    /**
+     * Private function to validate numerical questions.
+     * @param array $answerids
+     * @param int $showcorrectanswer
+     * @return array An array of results.
+     */
+    private function validate_numerical_question(array $answerids): array {
+        global $DB;
+
+        $resultarray = [];
+        $iscorrect = 0; // Incorrect on initialization.
+        $answergiven = $answerids[0]; // Given answer will always be first value of answerids array.
 
         // If we don't have answers, something went wrong, we return error code -1.
         if (count($this->answers) == 0) {
             return [-1];
+        }
+
+        // Add all correct answers to the array of correct answers.
+        // With numerical questions we have only one correct answer in most (but not all) cases.
+        foreach ($this->answers as $answer) {
+            if ($answer->fraction > 0) {
+                $resultarray[] = $answer->answer;
+            }
+        }
+
+        // Now loop again through all correct answers and check...
+        // ... if the given answer is within the tolerance of one of them.
+        foreach ($this->answers as $answer) {
+            if ($answer->fraction > 0) {
+                $tolerance = $DB->get_field('question_numerical', 'tolerance',
+                    ['question' => $this->questionid, 'answer' => $answer->id]);
+
+                $min = $answer->answer - $tolerance;
+                $max = $answer->answer + $tolerance;
+                if ($min <= $answergiven && $answergiven <= $max) {
+                    $iscorrect = 1;
+                    break;
+                }
+            }
+        }
+
+        return [$resultarray, $iscorrect];
+    }
+
+    /**
+     * Private function to validate single and multiple choice questions.
+     * @param array $answerids
+     * @param int $showcorrectanswer
+     * @return array An array of results.
+     */
+    private function validate_single_and_multichoice_question(array $answerids, int $showcorrectanswer): array {
+        $resultarray = [];
+        $iscorrect = 1;
+
+        // If we don't have answers, something went wrong, we return error code -1.
+        if (count($this->answers) == 0) {
+            // First value is $resultarray, second $iscorrect parameter.
+            return [[-1], -1];
         }
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
@@ -257,16 +329,18 @@ class question_control {
                     // If we can't find the correct answer in our answerarray, we return wrong answer.
                     if (!in_array($answer->id, $answerids)) {
                         $resultarray[] = 0;
+                        $iscorrect = 0;
                         break;
                     }
                 }
             } else {
-                // If we have on wrong answer in our answer array ...
+                // If we have one wrong answer in our answer array ...
                 // ... and only if we don't want to show the correct answers.
                 if (!$showcorrectanswer) {
                     // We check if we have registered a wrong answer.
                     if (in_array($answer->id, $answerids)) {
                         $resultarray[] = 0;
+                        $iscorrect = 0;
                         break;
                     }
                 }
@@ -276,7 +350,7 @@ class question_control {
         if (!$showcorrectanswer && count($resultarray) == 0) {
             $resultarray[] = 1;
         }
-        return $resultarray;
+        return [$resultarray, $iscorrect];
     }
 
     /**
