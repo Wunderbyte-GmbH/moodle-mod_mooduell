@@ -47,7 +47,7 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         // Define each element separated.
         $mooduell = new backup_nested_element('mooduell', array('id'), array(
             'name', 'intro', 'introformat', 'quizid', 'usefullnames',
-            'showcontinuebutton', 'showcorrectanswer', 'countdown', 'waitfornextquestion',
+            'showcontinuebutton', 'showcorrectanswer', 'showgeneralfeedback', 'countdown', 'waitfornextquestion',
             'timecreated', 'timemodified', 'completiongamesplay', 'completiongameswon', 'completionrightanswers'));
 
         $categories = new backup_nested_element('categories');

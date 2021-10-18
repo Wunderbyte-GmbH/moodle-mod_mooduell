@@ -85,7 +85,21 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021051200, 'mooduell');
     }
 
-    // Add fields for completion rules.
+    if ($oldversion < 2021101800) {
+
+        // Define field showgeneralfeedback to be added to table mooduell.
+        $table = new xmldb_table('mooduell');
+        $field = new xmldb_field('showgeneralfeedback', XMLDB_TYPE_INTEGER, 1, null, true, null, '0', 'showcorrectanswer');
+
+        // Conditionally launch add field showgeneralfeedback.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021101800, 'mooduell');
+    }
+
+	// Add fields for completion rules.
     if ($oldversion < 2021102205) {
         $table = new xmldb_table('mooduell');
         $field = new xmldb_field('completiongamesplayed', XMLDB_TYPE_INTEGER, '4', null,

@@ -108,17 +108,25 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
         $mform->setDefault('usefullnames', $config->usefullnames);
         $mform->addHelpButton('usefullnames', 'usefullnames', 'mod_mooduell');
+
         $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
         $mform->setDefault('showcontinuebutton', $config->showcontinuebutton);
         $mform->addHelpButton('showcontinuebutton', 'showcontinuebutton', 'mod_mooduell');
+
         $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
         $mform->setDefault('showcorrectanswer', $config->showcorrectanswer);
         $mform->addHelpButton('showcorrectanswer', 'showcorrectanswer', 'mod_mooduell');
+
+        $mform->addElement('checkbox', 'showgeneralfeedback', get_string('showgeneralfeedback', 'mod_mooduell'));
+        $mform->setDefault('showgeneralfeedback', $config->showgeneralfeedback);
+        $mform->addHelpButton('showgeneralfeedback', 'showgeneralfeedback', 'mod_mooduell');
+
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
         if (isset($config->countdown)) {
             $mform->setDefault('countdown', $config->countdown);
         }
         $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
+
         $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
                 $this->return_move_on_options());
         if (isset($config->waitfornextquestion)) {
