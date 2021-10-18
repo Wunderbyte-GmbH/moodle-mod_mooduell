@@ -151,7 +151,9 @@ class mod_mooduell_external extends external_api {
             // TODO: $result['iscorrect'] = ... for numerical questions
             // TODO: $result['generalfeedback'] = ... for numerical questions
 
-            return $result;
+		$result['showgeneralfeedback'] = $mooduell->settings->showgeneralfeedback;
+
+        return $result;
     }
 
     /**
@@ -180,7 +182,8 @@ class mod_mooduell_external extends external_api {
                 ),
                 'iscorrect' => new external_value(PARAM_INT, '0 if false, 1 if true'),
                 'generalfeedback' => new external_value(PARAM_TEXT, 'general feedback'),
-                // TODO: Also add ann array of question specific feedbacks.
+                'showgeneralfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true'),
+                // TODO: Also add an array of question specific feedbacks.
         ));
     }
 
@@ -280,6 +283,7 @@ class mod_mooduell_external extends external_api {
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
+                        'showgeneralfeedback' => new external_value(PARAM_INT, 'showgeneralfeedback'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
@@ -349,6 +353,7 @@ class mod_mooduell_external extends external_api {
                 $quizdetails['usefullnames'] = $quiz->usefullnames;
                 $quizdetails['showcontinuebutton'] = $quiz->showcontinuebutton;
                 $quizdetails['showcorrectanswer'] = $quiz->showcorrectanswer;
+                $quizdetails['showgeneralfeedback'] = $quiz->showgeneralfeedback;
                 $quizdetails['countdown'] = $quiz->countdown;
                 $quizdetails['waitfornextquestion'] = $quiz->waitfornextquestion;
                 $quizdetails['courseid'] = $quiz->course;
@@ -405,6 +410,7 @@ class mod_mooduell_external extends external_api {
                         'usefullnames' => new external_value(PARAM_INT, 'usefullnames'),
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
+                        'showgeneralfeedback' => new external_value(PARAM_INT, 'showgeneralfeedback'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),

@@ -172,6 +172,7 @@ class mooduell
         $data->usefullnames = isset($formdata->usefullnames) ? $formdata->usefullnames : 0;
         $data->showcontinuebutton = isset($formdata->showcontinuebutton) ? $formdata->showcontinuebutton : 0;
         $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;
+        $data->showgeneralfeedback = isset($formdata->showgeneralfeedback) ? $formdata->showgeneralfeedback : 0;
         $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0) ? $formdata->quizid : null;
 
         $mooduellid = $DB->insert_record('mooduell', $data);
