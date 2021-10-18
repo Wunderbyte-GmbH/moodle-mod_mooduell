@@ -26,16 +26,24 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $ADMIN;
+
 if ($ADMIN->fulltree) {
 
     $setting = new admin_setting_configcheckbox('mooduell/usefullnames',
             get_string('usefullnames', 'mod_mooduell'), "", 0);
     $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
+
     $settings->add(new admin_setting_configcheckbox('mooduell/showcontinuebutton',
             get_string('showcontinuebutton', 'mod_mooduell'), "", 0));
+
     $settings->add(new admin_setting_configcheckbox('mooduell/showcorrectanswer',
             get_string('showcorrectanswer', 'mod_mooduell'), "", 0));
+
+    $settings->add(new admin_setting_configcheckbox('mooduell/showgeneralfeedback',
+        get_string('showgeneralfeedback', 'mod_mooduell'), "", 0));
+
     $name = new lang_string('countdown', 'mod_mooduell');
     $options = array(
             "0" => get_string('nocountdown', 'mod_mooduell'),
@@ -46,7 +54,6 @@ if ($ADMIN->fulltree) {
             "90" => get_string('xseconds', 'mod_mooduell', 90),
             "120" => get_string('xseconds', 'mod_mooduell', 120),
     );
-
     $settings->add(new admin_setting_configselect('mooduell/countdown',
             $name,
             "",
@@ -62,7 +69,6 @@ if ($ADMIN->fulltree) {
             "20" => get_string('xseconds', 'mod_mooduell', 20),
             "30" => get_string('xseconds', 'mod_mooduell', 30),
     );
-
     $settings->add(new admin_setting_configselect('mooduell/waitfornextquestion',
             $name,
             "",

@@ -22,7 +22,9 @@
                 <FIELD NAME="showcontinuebutton" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Treat every question as a multi answer question, where we have to press 'continue' to register the answer (1) Register answer of single answer questions directy by pressing the answer button"/>
                 <FIELD NAME="showcorrectanswer" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
-                       COMMENT="After wrongly answering a querstion, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
+                       COMMENT="After wrongly answering a question, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
+                <FIELD NAME="showgeneralfeedback" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Show text from 'General feedback' after answering a question (1). Don't show general feedback (0)."/>
                 <FIELD NAME="countdown" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Set time your students have to answer a question. 0 means no limit."/>
                 <FIELD NAME="waitfornextquestion" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"

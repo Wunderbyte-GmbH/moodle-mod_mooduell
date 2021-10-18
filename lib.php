@@ -92,6 +92,9 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
     if (!isset($moduleinstance->showcorrectanswer)) {
         $moduleinstance->showcorrectanswer = 0;
     }
+    if (!isset($moduleinstance->showgeneralfeedback)) {
+        $moduleinstance->showgeneralfeedback = 0;
+    }
     if (!isset($moduleinstance->usefullnames)) {
         $moduleinstance->usefullnames = 0;
     }
