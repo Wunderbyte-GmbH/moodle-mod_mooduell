@@ -183,8 +183,7 @@ class mod_mooduell_external extends external_api {
                 ),
                 'iscorrect' => new external_value(PARAM_INT, '0 if false, 1 if true'),
                 'generalfeedback' => new external_value(PARAM_TEXT, 'general feedback'),
-                'showgeneralfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true'),
-                // TODO: Also add an array of question specific feedbacks.
+                'showgeneralfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true')
         ));
     }
 

@@ -198,7 +198,6 @@ class question_control {
      */
     public function return_answers($listofanswers = null) {
         global $DB;
-        $answers = array();
 
         if (!$listofanswers || count($listofanswers) === 0) {
             $listofanswers = $DB->get_records('question_answers', [
@@ -206,16 +205,29 @@ class question_control {
             ]);
         }
 
-        if ($listofanswers && count($listofanswers) > 0) {
-
-            foreach ($listofanswers as $k => $val) {
-                if ($val->question == $this->questionid) {
-                    $answer = new answer_control($val);
-                    $answers[] = $answer;
-                    unset($listofanswers[$k]);
+        switch ($this->questiontype) {
+            case 'singlechoice':
+            case 'multichoice':
+                $answers = array();
+                if ($listofanswers && count($listofanswers) > 0) {
+                    foreach ($listofanswers as $k => $val) {
+                        if ($val->question == $this->questionid) {
+                            $answer = new answer_control($val);
+                            $answers[] = $answer;
+                            unset($listofanswers[$k]);
+                        }
+                    }
                 }
-            }
+                break;
+            case 'numerical':
+                // For numerical question we only need the values from DB.
+                $answers = $listofanswers;
+                break;
+            default:
+                $answers = array();
+                break;
         }
+
         return $answers;
     }
 
@@ -270,7 +282,10 @@ class question_control {
 
         $resultarray = [];
         $iscorrect = 0; // Incorrect on initialization.
-        $answergiven = $answerids[0]; // Given answer will always be first value of answerids array.
+        $answergiven = (float) $answerids[0]; // Given answer will always be first value of answerids array.
+
+        // Get the numerical answer(s).
+        $this->answers = $this->return_answers();
 
         // If we don't have answers, something went wrong, we return error code -1.
         if (count($this->answers) == 0) {
@@ -281,7 +296,7 @@ class question_control {
         // With numerical questions we have only one correct answer in most (but not all) cases.
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
-                $resultarray[] = $answer->answer;
+                $resultarray[] = (float) $answer->answer;
             }
         }
 
