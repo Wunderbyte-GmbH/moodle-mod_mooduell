@@ -579,7 +579,8 @@ class game_control {
             case 'singlechoice':
             case 'multichoice':
                 // After having calculated the resultarray, we have to translate the result for the db.
-                // There, we don't need the correct answerids, but just if the player has answered correctly (1 is false, 2 is correct).
+                // There, we don't need the correct answerids, but just if the player has answered correctly.
+                // 1 = false, 2 = correct.
                 if (!$showcorrectanswer) {
                     $result = $resultarray[0] == 1 ? 2 : 1;
                 } else {

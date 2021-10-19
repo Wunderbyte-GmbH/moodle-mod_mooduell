@@ -252,6 +252,7 @@ class question_control {
      * @param array $answerids
      * @param int $showcorrectanswer
      * @return array An array of results.
+     * @throws dml_exception
      */
     public function validate_question(array $answerids, int $showcorrectanswer): array {
 
@@ -274,8 +275,8 @@ class question_control {
     /**
      * Private function to validate numerical questions.
      * @param array $answerids
-     * @param int $showcorrectanswer
      * @return array An array of results.
+     * @throws dml_exception
      */
     private function validate_numerical_question(array $answerids): array {
         global $DB;
@@ -472,7 +473,8 @@ class question_control {
                 } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
                     // If there only is one correct answer, convert to singlechoice.
                     $this->questiontype = 'singlechoice';
-                } // Else do nothing.
+                }
+                // Else do nothing.
                 return;
         }
     }
