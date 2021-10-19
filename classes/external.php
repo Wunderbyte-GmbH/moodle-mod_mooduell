@@ -154,8 +154,7 @@ class mod_mooduell_external extends external_api {
             $result['showgeneralfeedback'] = 0;
         }
 
-        $result['response'] = [];
-        $result['response'][] = 12345.0;
+        $result['iscorrect'] = 1;
 
         return $result;
     }
