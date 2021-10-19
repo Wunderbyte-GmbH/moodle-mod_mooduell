@@ -142,8 +142,11 @@ class mod_mooduell_external extends external_api {
         // We create the game_controller instance.
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
-        list ($result['response'], $result['iscorrect']) =
+        list ($response, $iscorrect) =
             $gamecontroller->validate_question($params['questionid'], $params['answerids']);
+
+        $result['response'] = $response;
+        $result['iscorrect'] = $iscorrect;
 
         if ($generalfeedback = $DB->get_field('question', 'generalfeedback', ['id' => $questionid])) {
             $result['generalfeedback'] = strip_tags($generalfeedback);
