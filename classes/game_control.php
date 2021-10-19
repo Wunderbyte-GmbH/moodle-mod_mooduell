@@ -619,7 +619,7 @@ class game_control {
         // Do we need to send a push notification? If so, we'll do it here.
         $this->send_notifcation_if_necessary();
 
-        return $resultarray;
+        return [$resultarray, $iscorrect];
     }
 
     /**
