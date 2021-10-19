@@ -107,7 +107,6 @@ class mod_mooduell_external extends external_api {
      * @param int $gameid
      * @param int $questionid
      * @param array $answerids IDs of answers given to single or multiple choice questions.
-     * @param float $numericanswer Answer given to a numeric question (stored as float).
      * @return array
      * @throws coding_exception
      * @throws dml_exception
@@ -115,7 +114,7 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids = [], float $numericanswer = null) {
+    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids = []) {
         global $DB;
 
         $params = array(
