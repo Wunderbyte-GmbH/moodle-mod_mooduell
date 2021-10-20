@@ -163,7 +163,7 @@ class question_control {
             }
 
             // We need the context id, but it might be there already.
-            $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories',
+            $this->contextid = $data->contextid ?? $DB->get_field('question_categories',
                     'contextid', array('id' => $this->category));
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
@@ -266,9 +266,6 @@ class question_control {
         $resultarray = [];
         $iscorrect = 0; // Incorrect on initialization.
         $answergiven = (float) $answerids[0]; // Given answer will always be first value of answerids array.
-
-        // Get the numerical answer(s).
-        $this->answers = $this->return_answers();
 
         // Add all correct answers to the array of correct answers.
         // With numerical questions we have only one correct answer in most (but not all) cases.
