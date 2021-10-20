@@ -262,11 +262,13 @@ class question_control {
                 break;
             case 'singlechoice':
             case 'multichoice':
-                list($resultarray, $iscorrect) = $this->validate_single_and_multichoice_question($answerids, $showcorrectanswer);
+            case 'truefalse':
+                list($resultarray, $iscorrect) =
+                    $this->validate_single_multichoice_truefalse_question($answerids, $showcorrectanswer);
                 break;
             default:
                 $resultarray = [];
-                $iscorrect = -1; // Invalid question type.
+                $iscorrect = 0;
         }
 
         return [$resultarray, $iscorrect];
@@ -321,65 +323,36 @@ class question_control {
     }
 
     /**
-     * Private function to validate single and multiple choice questions.
+     * Private function to validate single choice, multiple choice and true/false questions.
      * @param array $answerids
      * @param int $showcorrectanswer
      * @return array An array of results.
      */
-    private function validate_single_and_multichoice_question(array $answerids, int $showcorrectanswer): array {
-
-        $correctanswers = [];
-        $wronganswers = [];
+    private function validate_single_multichoice_truefalse_question(array $answerids, int $showcorrectanswer): array {
 
         $resultarray = [];
         $iscorrect = 1; // True on initialization.
-
-        // If we don't have answers, something went wrong, we return error code -1.
-        if (count($this->answers) == 0) {
-            $iscorrect = -1;
-            return [$resultarray, $iscorrect];
-        }
 
         // Loop through all answers.
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
                 // Build array of correct answers.
-                $correctanswers[] = (int) $answer->id;
+                $resultarray[] = $answer->id;
+
+                // It's a correct answer, so if it's not among the given answers, we have to mark iscorrect with 0.
+                if (!in_array($answer->id, $answerids)) {
+                    $iscorrect = 0;
+                }
             } else {
-                // Build array of wrong answers.
-                $wronganswers[] = (int) $answer->id;
+                // It's a wrong answer, so if it's among the given answers, we have to mark iscorrect with 0.
+                if (in_array($answer->id, $answerids)) {
+                    $iscorrect = 0;
+                }
             }
         }
 
-        // If at least one given answer is among the wrong answers...
-        foreach ($answerids as $answergiven) {
-            if (in_array((int) $answergiven, $wronganswers)) {
-                // ...then the question will be marked false.
-                $iscorrect = 0;
-                break;
-            }
-        }
-
-        // If there is at least one correct answer which was not given...
-        foreach ($correctanswers as $correctanswer) {
-            if (!in_array($answerids, (int) $correctanswer)) {
-                // ...then the question will be marked false.
-                $iscorrect = 0;
-                break;
-            }
-        }
-
-        switch ($showcorrectanswer) {
-            // Setting to show correct answers is turned off.
-            case 1:
-                // Show correct answers in the result array.
-                $resultarray = $correctanswers;
-                break;
-            // Setting to show correct answers is turned off.
-            case 0:
-            default:
-                break;
-        }
+        // If setting to show correct answers is turned off, clear the result array.
+        if (!$showcorrectanswer) $resultarray = array();
 
         return [$resultarray, $iscorrect];
     }
