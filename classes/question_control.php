@@ -24,6 +24,7 @@
 
 namespace mod_mooduell;
 
+use coding_exception;
 use dml_exception;
 
 defined('MOODLE_INTERNAL') || die();
@@ -175,16 +176,7 @@ class question_control {
 
             $this->extract_image();
 
-            switch($this->questiontype) {
-                // For numerical questions, we do not want to return any answers.
-                case 'numerical':
-                    $this->answers = array();
-                    break;
-                // For all other questions, we return the list of answers.
-                default:
-                    $this->answers = $this->return_answers($listofanswers);
-                    break;
-            }
+            $this->answers = $this->return_answers($listofanswers);
 
             $this->check_question();
         }
@@ -196,7 +188,7 @@ class question_control {
      * @return array
      * @throws dml_exception
      */
-    public function return_answers($listofanswers = null) {
+    public function return_answers($listofanswers = null): array {
         global $DB;
 
         if (!$listofanswers || count($listofanswers) === 0) {
@@ -205,27 +197,15 @@ class question_control {
             ]);
         }
 
-        switch ($this->questiontype) {
-            case 'singlechoice':
-            case 'multichoice':
-                $answers = array();
-                if ($listofanswers && count($listofanswers) > 0) {
-                    foreach ($listofanswers as $k => $val) {
-                        if ($val->question == $this->questionid) {
-                            $answer = new answer_control($val);
-                            $answers[] = $answer;
-                            unset($listofanswers[$k]);
-                        }
-                    }
+        $answers = array();
+        if ($listofanswers && count($listofanswers) > 0) {
+            foreach ($listofanswers as $k => $val) {
+                if ($val->question == $this->questionid) {
+                    $answer = new answer_control($val);
+                    $answers[] = $answer;
+                    unset($listofanswers[$k]);
                 }
-                break;
-            case 'numerical':
-                // For numerical question we only need the values from DB.
-                $answers = $listofanswers;
-                break;
-            default:
-                $answers = array();
-                break;
+            }
         }
 
         return $answers;
@@ -290,28 +270,23 @@ class question_control {
         // Get the numerical answer(s).
         $this->answers = $this->return_answers();
 
-        // If we don't have answers, something went wrong, we return error code -1.
-        if (count($this->answers) == 0) {
-            return [-1];
-        }
-
         // Add all correct answers to the array of correct answers.
         // With numerical questions we have only one correct answer in most (but not all) cases.
         foreach ($this->answers as $answer) {
-            if ($answer->fraction > 0) {
-                $resultarray[] = (float) $answer->answer;
+            if ($answer->correct) {
+                $resultarray[] = (float) $answer->answertext;
             }
         }
 
         // Now loop again through all correct answers and check...
         // ... if the given answer is within the tolerance of one of them.
         foreach ($this->answers as $answer) {
-            if ($answer->fraction > 0) {
+            if ($answer->correct) {
                 $tolerance = $DB->get_field('question_numerical', 'tolerance',
                     ['question' => $this->questionid, 'answer' => $answer->id]);
 
-                $min = $answer->answer - $tolerance;
-                $max = $answer->answer + $tolerance;
+                $min = $answer->answertext - $tolerance;
+                $max = $answer->answertext + $tolerance;
                 if ($min <= $answergiven && $answergiven <= $max) {
                     $iscorrect = 1;
                     break;
@@ -359,7 +334,7 @@ class question_control {
 
     /**
      * Add warnings for every problem and set status accordingly.
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     private function check_question() {
         // Check for correct number of answers and set status and qtype accordingly.
@@ -378,7 +353,7 @@ class question_control {
 
     /**
      * Stores the image parameters in the question_class.
-     * @throws \coding_exception
+     * @throws coding_exception
      * @throws dml_exception
      */
     private function extract_image() {
@@ -437,39 +412,30 @@ class question_control {
 
     /**
      * Make sure we have the right number of answers.
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     private function check_for_right_number_of_answers() {
 
-        // For numerical questions we do not need to check the number of answers.
-        switch ($this->questiontype) {
-            case 'numerical':
-                return;
-            case 'singlechoice':
-            case 'multichoice':
-                $countcorrectanswers = 0;
-                foreach ($this->answers as $answer) {
-                    if ($answer->fraction > 0) {
-                        ++$countcorrectanswers;
-                    }
-                }
-                if ($countcorrectanswers < 1) {
-                    $this->warnings[] = [
-                            'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
-                    ];
-                    $this->status = get_string('notok', 'mod_mooduell');
-                } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
-                    // If there only is one correct answer, convert to singlechoice.
-                    $this->questiontype = 'singlechoice';
-                }
-                // Else do nothing.
-                return;
+        $countcorrectanswers = 0;
+        foreach ($this->answers as $answer) {
+            if ($answer->correct) {
+                ++$countcorrectanswers;
+            }
+        }
+        if ($countcorrectanswers < 1) {
+            $this->warnings[] = [
+                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
+            ];
+            $this->status = get_string('notok', 'mod_mooduell');
+        } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
+            // If there only is one correct answer, convert to singlechoice.
+            $this->questiontype = 'singlechoice';
         }
     }
 
     /**
      * Make sure questiontext is not too long.
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     private function check_for_right_length_of_questiontext() {
         if (strlen($this->questiontext) < MINLENGTH) {
@@ -487,7 +453,7 @@ class question_control {
 
     /**
      * Verify question type.
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     private function check_for_right_type_of_question() {
         if (!in_array($this->questiontype, ACCEPTEDTYPES)) {
