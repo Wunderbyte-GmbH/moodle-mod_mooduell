@@ -38,7 +38,6 @@ class answer_control {
     public $id;
 
     /**
-     *
      * @var string
      */
     public $answertext;
@@ -69,16 +68,31 @@ class answer_control {
         // If we have $data, we automatically create all the relevant values for this answer...
         if ($data) {
             $this->id = $data->id;
-            // No HTML Tags anymore!
-            $this->answertext = strip_tags($data->answer);
-            // If there is still markdown in answers, we want to render it properly.
-            $this->answertext = format_text($this->answertext, 4);
+
+            // The original answer.
+            $this->answertext = $data->answer;
+
+            // Only strip HTML-Tags and remove markdown, if it's a text format.
+            if ($data->answerformat == 1) {
+                // No HTML Tags anymore!
+                $this->answertext = strip_tags($this->answertext);
+                // If there is still markdown in answers, we want to render it properly.
+                $this->answertext = format_text($this->answertext, 4);
+            }
+
+            // The answer fraction (percentage).
             $this->fraction = $data->fraction;
+
+            // The answer feedback.
             if ($data->feedback) {
                 $this->feedback = $data->feedback;
             }
+
+            // Is it a right or a wrong answer?
             if ($this->fraction > 0) {
                 $this->correct = true;
+            } else {
+                $this->correct = false;
             }
         }
     }
