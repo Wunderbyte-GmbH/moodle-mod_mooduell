@@ -327,45 +327,60 @@ class question_control {
      * @return array An array of results.
      */
     private function validate_single_and_multichoice_question(array $answerids, int $showcorrectanswer): array {
+
+        $correctanswers = [];
+        $wronganswers = [];
+
         $resultarray = [];
-        $iscorrect = 1;
+        $iscorrect = 1; // True on initialization.
 
         // If we don't have answers, something went wrong, we return error code -1.
         if (count($this->answers) == 0) {
-            // First value is $resultarray, second $iscorrect parameter.
-            return [[-1], -1];
+            $iscorrect = -1;
+            return [$resultarray, $iscorrect];
         }
+
+        // Loop through all answers.
         foreach ($this->answers as $answer) {
             if ($answer->fraction > 0) {
-                // If this is a correct answer...
-                // ... we want it in our array of correct answers OR we need to find it in our array of given answers.
-                if ($showcorrectanswer) {
-                    $resultarray[] = $answer->id;
-                } else {
-                    // If we can't find the correct answer in our answerarray, we return wrong answer.
-                    if (!in_array($answer->id, $answerids)) {
-                        $resultarray[] = 0;
-                        $iscorrect = 0;
-                        break;
-                    }
-                }
+                // Build array of correct answers.
+                $correctanswers[] = (int) $answer->id;
             } else {
-                // If we have one wrong answer in our answer array ...
-                // ... and only if we don't want to show the correct answers.
-                if (!$showcorrectanswer) {
-                    // We check if we have registered a wrong answer.
-                    if (in_array($answer->id, $answerids)) {
-                        $resultarray[] = 0;
-                        $iscorrect = 0;
-                        break;
-                    }
-                }
+                // Build array of wrong answers.
+                $wronganswers[] = (int) $answer->id;
             }
         }
-        // If we had no reason to add 0 to our result array, we can return 1.
-        if (!$showcorrectanswer && count($resultarray) == 0) {
-            $resultarray[] = 1;
+
+        // If at least one given answer is among the wrong answers...
+        foreach ($answerids as $answergiven) {
+            if (in_array((int) $answergiven, $wronganswers)) {
+                // ...then the question will be marked false.
+                $iscorrect = 0;
+                break;
+            }
         }
+
+        // If there is at least one correct answer which was not given...
+        foreach ($correctanswers as $correctanswer) {
+            if (!in_array($answerids, (int) $correctanswer)) {
+                // ...then the question will be marked false.
+                $iscorrect = 0;
+                break;
+            }
+        }
+
+        switch ($showcorrectanswer) {
+            // Setting to show correct answers is turned off.
+            case 1:
+                // Show correct answers in the result array.
+                $resultarray = $correctanswers;
+                break;
+            // Setting to show correct answers is turned off.
+            case 0:
+            default:
+                break;
+        }
+
         return [$resultarray, $iscorrect];
     }
 
