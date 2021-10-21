@@ -121,6 +121,10 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->setDefault('showgeneralfeedback', $config->showgeneralfeedback);
         $mform->addHelpButton('showgeneralfeedback', 'showgeneralfeedback', 'mod_mooduell');
 
+        $mform->addElement('checkbox', 'showanswersfeedback', get_string('showanswersfeedback', 'mod_mooduell'));
+        $mform->setDefault('showanswersfeedback', $config->showanswersfeedback);
+        $mform->addHelpButton('showanswersfeedback', 'showanswersfeedback', 'mod_mooduell');
+
         $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
         if (isset($config->countdown)) {
             $mform->setDefault('countdown', $config->countdown);

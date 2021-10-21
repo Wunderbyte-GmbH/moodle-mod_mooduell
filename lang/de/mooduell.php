@@ -59,6 +59,9 @@ $string['showcorrectanswer'] = 'Zeige die korrekten Antworten';
 $string['showcorrectanswer_help'] = 'Nach einer falschen Antwort werden die richtigen Antworten angezeigt.';
 $string['showgeneralfeedback'] = 'Allgemeines Feedback anzeigen';
 $string['showgeneralfeedback_help'] = 'Aktivieren, um nach jeder beantworteten Frage den Text anzuzeigen, der bei der jeweiligen Frage unter "Allgemeines Feedback" angegeben wurde.';
+$string['showanswersfeedback'] = 'Antwort-spezifische Feedbacks anzeigen';
+$string['showanswersfeedback_help'] = 'Aktivieren, um nach jeder beantworteten Frage die Feedback-Texte der jeweiligen Antworten anzuzeigen.';
+
 $string['waitfornextquestion'] = 'Zeit um die korrekten Antworten zu sehen.';
 $string['waitfornextquestion_help'] = 'Wie lange sollen die richtigen Antworten nach der Beantwortung der Frage sichtbar bleiben.';
 $string['clicktomoveon'] = 'Warte bis zum nächsten Klick';

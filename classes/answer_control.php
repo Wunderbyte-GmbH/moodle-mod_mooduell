@@ -49,7 +49,7 @@ class answer_control {
     public $fraction;
 
     /**
-     *
+     * The answer-specific feedback.
      * @var string
      */
     public $feedback;

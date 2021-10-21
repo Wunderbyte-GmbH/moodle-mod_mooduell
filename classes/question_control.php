@@ -26,6 +26,7 @@ namespace mod_mooduell;
 
 use coding_exception;
 use dml_exception;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -212,6 +213,37 @@ class question_control {
     }
 
     /**
+     * Returns an array of objects containing answer id, answertext (value) and feedback.
+     * 
+     * @return array The feedback array.
+     */
+    public function return_answers_feedback(): array {
+        $answers = $this->answers;
+
+        $answersfeedbackarray = [];
+
+        foreach ($answers as $answer) {
+            $answerobj = new stdClass();
+            if (!empty($answer->feedback)) {
+                $answerobj->answerid = (int) $answer->id;
+                
+                if ($this->questiontype == 'numerical') {
+                    // Use float number for numerical questions.
+                    $answerobj->answertext = (float) $answer->answertext;
+                } else {
+                    // Remove HTML tags for all other questions.
+                    $answerobj->answertext = trim(strip_tags($answer->answertext));
+                }
+                
+                $answerobj->feedback = trim(strip_tags($answer->feedback));
+                $answersfeedbackarray[] = $answerobj;
+            }
+        }
+
+        return $answersfeedbackarray;
+    }
+
+    /**
      * We fetch the result of the question from DB and add it to this instance.
      *
      * @param int $gameid
@@ -248,6 +280,7 @@ class question_control {
                 break;
             default:
                 $resultarray = [];
+                $resultarray[] = -1; // Error code.
                 $iscorrect = 0;
         }
 

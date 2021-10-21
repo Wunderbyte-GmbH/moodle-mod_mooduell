@@ -565,14 +565,17 @@ class game_control {
 
             if ($activequestion) {
                 list($resultarray, $iscorrect) = $activequestion->validate_question($answerids, $showcorrectanswer);
+
+                // Get the answer-specific feedbacks.
+                $answersfeedback = $activequestion->return_answers_feedback();
             } else {
                 throw new moodle_exception('noactivquestion', 'mooduell', null, null,
                         "Couldn't find the question you wanted to answer");
             }
 
         } else {
-            $resultarray[] = -1;
-            $iscorrect = -1;
+            $resultarray[] = -1; // Error code.
+            $iscorrect = 0;
         }
 
         switch ($questiontype) {
@@ -621,7 +624,7 @@ class game_control {
         // Do we need to send a push notification? If so, we'll do it here.
         $this->send_notifcation_if_necessary();
 
-        return [$resultarray, $iscorrect];
+        return [$resultarray, $iscorrect, $answersfeedback];
     }
 
     /**
