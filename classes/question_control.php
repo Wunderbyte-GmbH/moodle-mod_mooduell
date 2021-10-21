@@ -324,7 +324,9 @@ class question_control {
         }
 
         // If setting to show correct answers is turned off, clear the result array.
-        if (!$showcorrectanswer) $resultarray = array();
+        if (!$showcorrectanswer) {
+            $resultarray = [];
+        }
 
         return [$resultarray, $iscorrect];
     }
