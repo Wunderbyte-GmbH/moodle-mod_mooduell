@@ -99,6 +99,20 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021101800, 'mooduell');
     }
 
+    if ($oldversion < 2021102100) {
+
+        // Define field showanswersfeedback to be added to table mooduell.
+        $table = new xmldb_table('mooduell');
+        $field = new xmldb_field('showanswersfeedback', XMLDB_TYPE_INTEGER, 1, null, true, null, '0', 'showgeneralfeedback');
+
+        // Conditionally launch add field showanswersfeedback.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021102100, 'mooduell');
+    }
+
 	// Add fields for completion rules.
     if ($oldversion < 2021102205) {
         $table = new xmldb_table('mooduell');

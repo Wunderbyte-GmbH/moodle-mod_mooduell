@@ -44,6 +44,9 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('mooduell/showgeneralfeedback',
         get_string('showgeneralfeedback', 'mod_mooduell'), "", 0));
 
+    $settings->add(new admin_setting_configcheckbox('mooduell/showanswersfeedback',
+        get_string('showanswersfeedback', 'mod_mooduell'), "", 0));
+
     $name = new lang_string('countdown', 'mod_mooduell');
     $options = array(
             "0" => get_string('nocountdown', 'mod_mooduell'),

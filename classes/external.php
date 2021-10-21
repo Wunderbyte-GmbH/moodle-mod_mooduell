@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moolde external API
+ * Moodle external API
  *
  * @package mod_mooduell
  * @category external
@@ -142,10 +142,26 @@ class mod_mooduell_external extends external_api {
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         // Validate the question.
-        list ($response, $iscorrect) =
+        list ($response, $iscorrect, $answersfeedback) =
             $gamecontroller->validate_question($params['questionid'], $params['answerids']);
         $result['response'] = $response;
         $result['iscorrect'] = $iscorrect;
+
+        // Answer-specific feedback and param to show or not show it.
+        if (!empty($answersfeedback)) {
+            $result['showanswersfeedback'] = $mooduell->settings->showanswersfeedback;
+            
+            if ($mooduell->settings->showanswersfeedback == 1) {
+                // We only transfer the feedback JSON if the setting is turned on.
+                $result['answersfeedback'] = $answersfeedback;
+            } else {
+                $result['answersfeedback'] = [];
+            }
+        } else {
+            $result['answersfeedback'] = [];
+            // If there is no answer-specific feedback we always set the param to zero.
+            $result['showanswersfeedback'] = 0;
+        }
 
         // Get the general feedback and set the param to show or not show it.
         if ($generalfeedback = $DB->get_field('question', 'generalfeedback', ['id' => $questionid])) {
@@ -179,15 +195,27 @@ class mod_mooduell_external extends external_api {
      * @return external_single_structure
      */
     public static function answer_question_returns() {
-        return new external_single_structure(array(
+        return new external_single_structure(
+            array(
                 'response' => new external_multiple_structure(
                         // For numerical questions, it will contain the correct answer.
                         new external_value(PARAM_RAW, 'ids of correct answers, correct answer OR 0 if false, 1 if true')
                 ),
                 'iscorrect' => new external_value(PARAM_INT, '0 if false, 1 if true'),
                 'generalfeedback' => new external_value(PARAM_TEXT, 'general feedback'),
-                'showgeneralfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true')
-        ));
+                'showgeneralfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true'),
+                'answersfeedback' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            "answerid" => new external_value(PARAM_RAW, 'answer id'),
+                            "answertext" => new external_value(PARAM_RAW, 'answer text'),
+                            "feedback" => new external_value(PARAM_RAW, 'answer-specific feedback')
+                        )
+                    )
+                ),
+                'showanswersfeedback' => new external_value(PARAM_INT, '0 if false, 1 if true'),
+            )
+        );
     }
 
     /**
@@ -287,6 +315,7 @@ class mod_mooduell_external extends external_api {
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
                         'showgeneralfeedback' => new external_value(PARAM_INT, 'showgeneralfeedback'),
+                        'showanswersfeedback' => new external_value(PARAM_INT, 'showanswersfeedback'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
@@ -357,6 +386,7 @@ class mod_mooduell_external extends external_api {
                 $quizdetails['showcontinuebutton'] = $quiz->showcontinuebutton;
                 $quizdetails['showcorrectanswer'] = $quiz->showcorrectanswer;
                 $quizdetails['showgeneralfeedback'] = $quiz->showgeneralfeedback;
+                $quizdetails['showanswersfeedback'] = $quiz->showanswersfeedback;
                 $quizdetails['countdown'] = $quiz->countdown;
                 $quizdetails['waitfornextquestion'] = $quiz->waitfornextquestion;
                 $quizdetails['courseid'] = $quiz->course;
@@ -414,6 +444,7 @@ class mod_mooduell_external extends external_api {
                         'showcorrectanswer' => new external_value(PARAM_INT, 'showcorrectanswer'),
                         'showcontinuebutton' => new external_value(PARAM_INT, 'showcontinuebutton'),
                         'showgeneralfeedback' => new external_value(PARAM_INT, 'showgeneralfeedback'),
+                        'showanswersfeedback' => new external_value(PARAM_INT, 'showanswersfeedback'),
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),

@@ -25,6 +25,8 @@
                        COMMENT="After wrongly answering a question, should the right answer by highmarked? (1) Correct answer will not be shown (0)"/>
                 <FIELD NAME="showgeneralfeedback" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Show text from 'General feedback' after answering a question (1). Don't show general feedback (0)."/>
+                <FIELD NAME="showanswersfeedback" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Show answer-specific feedbacks after answering a question (1). Don't show answer-specific feedbacks (0)."/>
                 <FIELD NAME="countdown" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Set time your students have to answer a question. 0 means no limit."/>
                 <FIELD NAME="waitfornextquestion" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
