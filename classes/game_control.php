@@ -565,6 +565,7 @@ class game_control {
         switch ($questiontype) {
             case 'singlechoice':
             case 'multichoice':
+            case 'truefalse':
                 // After having calculated the resultarray, we have to translate the result for the db.
                 // There, we don't need the correct answerids, but just if the player has answered correctly.
                 // 1 = false, 2 = correct.
