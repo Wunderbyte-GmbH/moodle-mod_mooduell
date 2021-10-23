@@ -136,6 +136,7 @@ $string['questionimage'] = 'Image';
 $string['questiontextlength'] = 'Text length';
 $string['questionstatus'] = 'Status';
 $string['noquestions'] = 'There are no questions in this quiz.';
+$string['noimage'] = 'No image';
 
 $string['univiemooduell'] = 'Univie Mooduell';
 $string['downloaduniviemoduell'] = 'Dowload your app and start playing now!';
