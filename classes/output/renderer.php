@@ -120,6 +120,61 @@ class renderer extends plugin_renderer_base {
      * @param templatable $viewpage
      * @return string|boolean
      */
+    public function render_overview_teachers(templatable $overview) {
+        $data = $overview->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/overview_teachers', $data);
+    }
+
+    /**
+     * render image of question in list.
+     *
+     * @param templatable $question
+     * @return void
+     */
+    public function render_list_image(templatable $question) {
+        $data = $question->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/list_image', $data);
+    }
+
+    /**
+     * render image of question in list.
+     *
+     * @param templatable $question
+     * @return void
+     */
+    public function render_list_id(templatable $question) {
+        $data = $question->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/list_id', $data);
+    }
+
+    /**
+     * render image of question in list.
+     *
+     * @param templatable $question
+     * @return void
+     */
+    public function render_list_warnings(templatable $question) {
+        $data = $question->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/list_warnings', $data);
+    }
+
+    /**
+     * render text & answers of question in list.
+     *
+     * @param templatable $question
+     * @return void
+     */
+    public function render_list_text(templatable $question) {
+        $data = $question->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/list_text', $data);
+    }
+
+    /**
+     * Render a mooduell view page.
+     *
+     * @param templatable $viewpage
+     * @return string|boolean
+     */
     public function render_viewpage(templatable $viewpage) {
         $data = $viewpage->export_for_template($this);
         return $this->render_from_template('mod_mooduell/viewpage', $data);
