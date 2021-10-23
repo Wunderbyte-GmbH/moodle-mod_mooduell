@@ -156,6 +156,11 @@ class question_control {
             $this->categoryname = isset($data->categoryname) ? $data->categoryname : null;
             $this->courseid = $COURSE->id;
 
+            // TODO: Delete, only for debugging.
+            if ($this->questiontype == 'ddwtos') {
+                echo 'found it';
+            }
+
             // We need the context id, but it might be there already.
             $this->contextid = isset($data->contextid) ? $data->contextid : $DB->get_field('question_categories',
                     'contextid', array('id' => $this->category));
@@ -378,8 +383,8 @@ class question_control {
                 } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
                     // If there only is one correct answer, convert to singlechoice.
                     $this->questiontype = 'singlechoice';
-                } // Else do nothing.  
-                return;         
+                } // Else do nothing.
+                return;
         }
     }
 
