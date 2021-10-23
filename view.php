@@ -22,9 +22,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\event\course_module_viewed;
 use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;
+use mod_mooduell\output\overview_teacher;
 
 require_once('../../config.php');
 require_once(__DIR__ . '/lib.php');
@@ -39,14 +41,19 @@ require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 $id = required_param('id', PARAM_INT);
 $action = optional_param('action', '', PARAM_RAW);
 $gameid = optional_param('gameid', '', PARAM_INT);
+$out = '';
+// We don't need it now, but we might in the future.
+$inline = false;
 
 $mooduell = new mooduell($id);
 require_login($mooduell->course, true, $mooduell->cm);
 
-$pagename = null;
-$mooduell->view_page();
-
 $context = $mooduell->context;
+
+$pagename = null;
+global $PAGE;
+
+$mooduell->view_page();
 
 // Event debugging - will be triggered by the button in classes/mooduell.php.
 // Or by setting the event param in the URL.
@@ -67,8 +74,12 @@ switch ($triggeredevent) {
         break;
 }
 
-
 // End of event debugging.
+$output = $PAGE->get_renderer('mod_mooduell');
+
+if (!$inline) {
+    $out .= $output->header();
+}
 
 // Use the view.php for different actions and views.
 switch ($action) {
@@ -90,6 +101,15 @@ switch ($action) {
 
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {
     $pagename = 'studentsview';
+} else {
+    $overview = new overview_teacher($mooduell);
 }
 
-echo $mooduell->display_page(false, $pagename, $gameid);
+$out .= $output->render_overview_teachers($overview);
+
+if (!$inline) {
+    $out .= $output->footer();
+}
+
+echo $out;
+
