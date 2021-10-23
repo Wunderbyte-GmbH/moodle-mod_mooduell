@@ -22,18 +22,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_mooduell\tables;
+
+use local_wunderbyte_table\wunderbyte_table;
+use mod_mooduell\mooduell;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 require_login($COURSE);
 
 /**
  * MooDuell Table sql class.
  */
-class mooduell_table extends table_sql {
-
-    /**
-     * @var stdClass
-     */
-    public $mooduell;
+class table_highscores extends wunderbyte_table {
 
     /**
      * Parameter to store the action (what to show in the mooduell_table)
@@ -42,108 +43,21 @@ class mooduell_table extends table_sql {
     public $action;
 
     /**
+     * @var mooduell
+     */
+    public $mooduell;
+
+    /**
      * mooduell_table constructor
-     * @param \mod_mooduell\mooduell $mooduell
-     * @param string $action
+     * @param mooduell $mooduell
      */
-    public function __construct(\mod_mooduell\mooduell $mooduell, $action) {
+    public function __construct($action, mooduell $mooduell = null) {
         parent::__construct($action);
-        $this->mooduell = $mooduell;
+
+        if ($mooduell) {
+            $this->mooduell = $mooduell;
+        }
         $this->action = $action;
-    }
-
-    /**
-     * Function to return the players name instead of id
-     * @param stdClass $game
-     */
-    public function col_playeraid(stdClass $game) {
-        if ($game->playeraid) {
-
-            $name = $this->mooduell->return_name_by_id($game->playeraid);
-
-            return $name;
-        }
-    }
-
-    /**
-     * Function to return the players name instead of id
-     * @param stdClass $game
-     */
-    public function col_playerbid(stdClass $game) {
-        if ($game->playerbid) {
-
-            $name = $this->mooduell->return_name_by_id($game->playerbid);
-
-            return $name;
-        }
-    }
-
-    /**
-     * Function to return the readable date instead of timestamp.
-     * @param stdClass $game
-     */
-    public function col_timemodified(stdClass $game) {
-        if ($game->timemodified) {
-            if (current_language() === 'de') {
-                $monthnamesde = [
-                    1 => "Januar",
-                    2 => "Februar",
-                    3 => "März",
-                    4 => "April",
-                    5 => "Mai",
-                    6 => "Juni",
-                    7 => "Juli",
-                    8 => "August",
-                    9 => "September",
-                    10 => "Oktober",
-                    11 => "November",
-                    12 => "Dezember"
-                ];
-                // Now build the German date string.
-                $name = date("d. ", $game->timemodified);
-                $name .= $monthnamesde[date("n", $game->timemodified)];
-                $name .= date(" Y, H:i:s", $game->timemodified);
-            } else {
-                $name = date("F j, Y, g:i:s a", $game->timemodified);
-            }
-
-            return $name;
-        }
-    }
-
-    /**
-     * Function to return the MooDuell id.
-     * @param stdClass $game
-     */
-    public function col_mooduellid(stdClass $game) {
-        if ($game->mooduellid) {
-
-            $name = $game->mooduellid;
-
-            return $name;
-        }
-    }
-
-    /**
-     * Function to return clickable action links.
-     * @param stdClass $game
-     */
-    public function col_action(stdClass $game) {
-        $cmid = $this->mooduell->cm->id;
-
-        $link = '<a href="view.php?action=viewquestions&id=' . $cmid .
-                '&gameid=' . $game->id .'" alt="' .
-                get_string('viewgame', 'mod_mooduell') .'">' .
-                '<i class="fa fa-info"></i>'
-                . '</a>';
-        $link .= " ";
-        $link .= '<a href="view.php?action=delete&id=' . $cmid .
-                '&gameid=' . $game->id .'" alt="' .
-                get_string('deletegame', 'mod_mooduell') . '"' .
-                '<i class="fa fa-trash"></i>'
-                . '</a>';
-
-        return $link;
     }
 
     /* COLUMNS for HIGHSCORES */
@@ -262,6 +176,39 @@ class mooduell_table extends table_sql {
             $qcpercentage = number_format($highscoreentry->qcpercentage, 1).' %';
 
             return $qcpercentage;
+        }
+    }
+
+    /**
+     * Function to return the readable date instead of timestamp.
+     * @param stdClass $game
+     */
+    public function col_timemodified(stdClass $game) {
+        if ($game->timemodified) {
+            if (current_language() === 'de') {
+                $monthnamesde = [
+                    1 => "Januar",
+                    2 => "Februar",
+                    3 => "März",
+                    4 => "April",
+                    5 => "Mai",
+                    6 => "Juni",
+                    7 => "Juli",
+                    8 => "August",
+                    9 => "September",
+                    10 => "Oktober",
+                    11 => "November",
+                    12 => "Dezember"
+                ];
+                // Now build the German date string.
+                $name = date("d. ", $game->timemodified);
+                $name .= $monthnamesde[date("n", $game->timemodified)];
+                $name .= date(" Y, H:i:s", $game->timemodified);
+            } else {
+                $name = date("F j, Y, g:i:s a", $game->timemodified);
+            }
+
+            return $name;
         }
     }
 }

@@ -35,3 +35,7 @@
 #mooduellTabContent .three-columns .card {
     flex-basis: calc(33.33% - .5rem);
 }
+
+span.correct {
+    color: green;
+}

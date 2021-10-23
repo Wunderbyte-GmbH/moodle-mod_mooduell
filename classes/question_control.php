@@ -301,6 +301,7 @@ class question_control {
     private function extract_image() {
 
         if (strpos($this->questiontext, '<img src') === false) {
+            $this->length = strlen($this->questiontext);
             return;
         }
 

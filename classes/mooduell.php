@@ -62,10 +62,10 @@ const NEEDIMAGE = false;
  * @var array ACCEPTEDTYPES accepted question types
  */
 const ACCEPTEDTYPES = [
-        'truefalse',
-        'multichoice',
-        'singlechoice',
-        'numerical'
+    'truefalse',
+    'multichoice',
+    'singlechoice',
+    'numerical'
 ];
 
 /**
@@ -73,7 +73,8 @@ const ACCEPTEDTYPES = [
  *
  * @package mod_mooduell
  */
-class mooduell {
+class mooduell
+{
 
     /**
      * @var stdClass|null fieldset record of mooduell instance
@@ -126,7 +127,7 @@ class mooduell {
         $this->course = get_course($this->cm->course);
 
         if (!$this->settings = $DB->get_record('mooduell', array(
-                'id' => $this->cm->instance
+            'id' => $this->cm->instance
         ))) {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
@@ -333,16 +334,16 @@ class mooduell {
             case 'downloadhighscores':
                 $listofhighscores = $this->return_list_of_highscores();
                 $headline = [
-                        get_string('rank', 'mod_mooduell'),
-                        get_string('username', 'mod_mooduell'),
-                        get_string('gamesplayed', 'mod_mooduell'),
-                        get_string('gameswon', 'mod_mooduell'),
-                        get_string('gameslost', 'mod_mooduell'),
-                        get_string('score', 'mod_mooduell'),
-                        get_string('correctlyanswered', 'mod_mooduell'),
-                        get_string('correctlyansweredpercentage', 'mod_mooduell'),
-                        get_string('questions_played', 'mod_mooduell')
-                        ];
+                    get_string('rank', 'mod_mooduell'),
+                    get_string('username', 'mod_mooduell'),
+                    get_string('gamesplayed', 'mod_mooduell'),
+                    get_string('gameswon', 'mod_mooduell'),
+                    get_string('gameslost', 'mod_mooduell'),
+                    get_string('score', 'mod_mooduell'),
+                    get_string('correctlyanswered', 'mod_mooduell'),
+                    get_string('correctlyansweredpercentage', 'mod_mooduell'),
+                    get_string('questions_played', 'mod_mooduell')
+                ];
                 $this->export_data_as_csv($headline, $listofhighscores);
         }
 
@@ -377,12 +378,12 @@ class mooduell {
         foreach ($games as $game) {
 
             $returngames[] = [
-                    'mooduellid' => $game->mooduellid,
-                    'gameid' => $game->id,
-                    "playera" => $this->return_name_by_id($game->playeraid),
-                    'playerb' => $this->return_name_by_id($game->playerbid),
-                    'playeraresults' => $game->playeraresults,
-                    'playerbresults' => $game->playerbresults
+                'mooduellid' => $game->mooduellid,
+                'gameid' => $game->id,
+                "playera" => $this->return_name_by_id($game->playeraid),
+                'playerb' => $this->return_name_by_id($game->playerbid),
+                'playeraresults' => $game->playeraresults,
+                'playerbresults' => $game->playerbresults
             ];
         }
         return $returngames;
@@ -402,7 +403,6 @@ class mooduell {
 
         if ($this->questions && count($this->questions) > 0) {
             return $this->questions;
-            return $this->questions;
         }
 
         global $DB;
@@ -420,7 +420,6 @@ class mooduell {
         $this->questions = $questions;
 
         return $questions;
-
     }
 
     /**
@@ -436,15 +435,15 @@ class mooduell {
         foreach ($list as $entry) {
             $entry = (object) $entry;
             $returnarray[] = [
-                    'rank' => $entry->rank,
-                    'username' => $this->return_name_by_id($entry->userid),
-                    'gamesplayed' => $entry->played,
-                    'gameswon' => $entry->won,
-                    'gameslost' => $entry->lost,
-                    'score' => $entry->score,
-                    'correct' => $entry->correct,
-                    'correctpercentage' => $entry->correctpercentage,
-                    'qplayed' => $entry->qplayed
+                'rank' => $entry->rank,
+                'username' => $this->return_name_by_id($entry->userid),
+                'gamesplayed' => $entry->played,
+                'gameswon' => $entry->won,
+                'gameslost' => $entry->lost,
+                'score' => $entry->score,
+                'correct' => $entry->correct,
+                'correctpercentage' => $entry->correctpercentage,
+                'qplayed' => $entry->qplayed
             ];
         }
 
@@ -533,7 +532,7 @@ class mooduell {
         $sql = "SELECT * FROM {mooduell_games} WHERE mooduellid = $instanceid";
 
         if ($studentview) {
-                $sql .= " AND (playeraid = $USER->id OR playerbid = $USER->id)";
+            $sql .= " AND (playeraid = $USER->id OR playerbid = $USER->id)";
         }
 
         if ($timemodified > 0) {
@@ -574,17 +573,17 @@ class mooduell {
             foreach ($data as $entry) {
 
                 $returndata[] = [
-                        'identifier' => $entry->identifier,
-                        'model' => $entry->model,
-                        'pushtoken' => $entry->pushtoken
+                    'identifier' => $entry->identifier,
+                    'model' => $entry->model,
+                    'pushtoken' => $entry->pushtoken
                 ];
             }
         }
 
         return [
-                'userid' => $userid,
-                'pushtokens' => $returndata,
-                ];
+            'userid' => $userid,
+            'pushtokens' => $returndata,
+        ];
     }
 
     /**
@@ -607,11 +606,11 @@ class mooduell {
         $data = $DB->get_record('mooduell_pushtokens', array('userid' => $userid, 'identifier' => $identifier));
 
         $updatedata = [
-                'userid' => $userid,
-                'model' => $model,
-                'identifier' => $identifier,
-                'pushtoken' => $pushtoken,
-                'numberofnotifications' => 0
+            'userid' => $userid,
+            'model' => $model,
+            'identifier' => $identifier,
+            'pushtoken' => $pushtoken,
+            'numberofnotifications' => 0
         ];
 
         if ($data) {
@@ -639,8 +638,13 @@ class mooduell {
         // If there was no mooduellid, we have to retrieve it here.
         if (!$mooduellid) {
             if (!$mooduellid = $DB->get_field('course_modules', 'instance', array('id' => $cmid))) {
-                throw new moodle_exception('mooduellinstancedoesnotexist', 'mooduell', null, null,
-                        "This MooDuell Instance does not exist.");
+                throw new moodle_exception(
+                    'mooduellinstancedoesnotexist',
+                    'mooduell',
+                    null,
+                    null,
+                    "This MooDuell Instance does not exist."
+                );
             }
         }
 
@@ -761,7 +765,7 @@ class mooduell {
 
             if (!empty($value->qplayed) and $value->qplayed > 0) {
                 // Determine percentage of correctly answered questions by division through played questions.
-                $entry['correctpercentage'] = number_format((( $value->correct / $value->qplayed ) * 100), 1);
+                $entry['correctpercentage'] = number_format((($value->correct / $value->qplayed) * 100), 1);
                 $entry['qplayed'] = $value->qplayed;
             } else {
                 $entry['correctpercentage'] = 0;
@@ -844,7 +848,6 @@ class mooduell {
             } else {
                 $returnstring = get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;
             }
-
         } else {
             $returnstring = "$user->firstname $user->lastname";
         }
@@ -862,15 +865,15 @@ class mooduell {
     public function view_page() {
         global $PAGE;
         $event = event\course_module_viewed::create(array(
-                'objectid' => $this->cm->instance,
-                'context' => $this->context
+            'objectid' => $this->cm->instance,
+            'context' => $this->context
         ));
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot('mooduell', $this->settings);
         $event->trigger();
 
         $PAGE->set_url('/mod/mooduell/view.php', array(
-                'id' => $this->cm->id
+            'id' => $this->cm->id
         ));
         $PAGE->set_title(format_string($this->settings->name));
         $PAGE->set_heading(format_string($this->course->fullname));
@@ -928,8 +931,9 @@ class mooduell {
         // Are there enough questions in the categories added?
         if (count($questions) < 9) {
             $returnarray[] = [
-                    'id' => 1,
-                    'message' => get_string('notenoughquestions', 'mod_mooduell')];
+                'id' => 1,
+                'message' => get_string('notenoughquestions', 'mod_mooduell')
+            ];
         }
 
         return $returnarray;
@@ -940,7 +944,7 @@ class mooduell {
      * @return array
      * @throws dml_exception
      */
-    private function return_list_of_categories() {
+    public function return_list_of_categories() {
 
         global $DB;
 
@@ -972,7 +976,7 @@ class mooduell {
      * @return array
      * @throws dml_exception
      */
-    private function return_list_of_statistics_teacher() {
+    public function return_list_of_statistics_teacher() {
         global $DB;
 
         $mooduellid = $this->cm->instance;
@@ -1024,7 +1028,7 @@ class mooduell {
 
         if (!empty($numberofcorrectanswers)) {
             // Step 2: calculate the percentage.
-            $correctanswerspercentage = number_format((( $numberofcorrectanswers / $numberofanswers ) * 100), 1);
+            $correctanswerspercentage = number_format((($numberofcorrectanswers / $numberofanswers) * 100), 1);
             $listofstatistics['percentage_of_correct_answers'] = $correctanswerspercentage;
         } else {
             $listofstatistics['percentage_of_correct_answers'] = false;
@@ -1094,7 +1098,7 @@ class mooduell {
         $listofstatistics['courseid'] = $this->course->id;
 
         // Get user statistics.
-        $userstats = game_control::get_user_stats( $USER->id, $mooduellid);
+        $userstats = game_control::get_user_stats($USER->id, $mooduellid);
 
         // Number of distinct opponents who have played a MooDuell game...
         // ...against the current user.
@@ -1145,7 +1149,7 @@ class mooduell {
         $numberofcorrectanswers = $userstats['correctlyanswered'];
         $numberofplayedquestions = $userstats['playedquestions'];
         if ($numberofcorrectanswers != 0) {
-            $correctanswerspercentage = number_format((( $numberofcorrectanswers / $numberofplayedquestions ) * 100), 1);
+            $correctanswerspercentage = number_format((($numberofcorrectanswers / $numberofplayedquestions) * 100), 1);
         } else {
             $correctanswerspercentage = 0;
         }
@@ -1168,11 +1172,11 @@ class mooduell {
 
         // Make sure data is valid.
 
-        $headlinecount = count ($headline);
+        $headlinecount = count($headline);
 
-        $csvexport = new \csv_export_writer( 'semicolon' );
+        $csvexport = new \csv_export_writer('semicolon');
         $filename = $this->cm->name . '_highscores';
-        $csvexport->set_filename ($filename, '.csv');
+        $csvexport->set_filename($filename, '.csv');
 
         $csvexport->add_data($headline);
 
@@ -1186,4 +1190,227 @@ class mooduell {
 
         $csvexport->download_file();
     }
+
+    /**
+     * Function to return the sql as array for table_games class.
+     * @param int $mooduellid
+     * @param object $table
+     * @param string $view
+     * @param bool $finished
+     * @return array
+     * @throws coding_exception
+     */
+    public function return_sql_for_games(string $view, bool $finished = false) {
+        global $USER;
+
+        $mooduellid = $this->cm->instance;
+
+        // Work out the sql for the table.
+        $fields = "*";
+        $from = "{mooduell_games}";
+
+        switch ($view) {
+            case 'teacher':
+                $where = "mooduellid = :mooduellid1 AND status = 3";
+                $params = array('mooduellid1' => $mooduellid);
+                break;
+                // Student view is the default view.
+            default:
+                if ($finished) {
+                    $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+                } else {
+                    $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
+                }
+                $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
+                break;
+        }
+
+        return [$fields, $from, $where, $params];
+    }
+
+    /**
+     * Function to return the sql as array for table_highscores class.
+     *
+     * @param mooduell $mooduell
+     * @return array
+     */
+    public function return_sql_for_highscores(string $view) {
+        $fields = "*";
+        $from = "{mooduell_highscores}";
+        $where = "mooduellid = :mooduellid1";
+        $params = array('mooduellid1' => $this->cm->instance);
+
+        return [$fields, $from, $where, $params];
+    }
+
+    /**
+     * Function to return the sql as array for table_questions class.
+     *
+     * @return void
+     */
+    public function return_sql_for_questions() {
+
+        $mooduellid = $this->cm->instance;
+
+        $fields = "q.id, q.questiontext text, q.qtype type, qc.name category";
+        $from = "{mooduell_categories} mc
+                JOIN {question_categories} qc
+                ON qc.id=mc.category
+                JOIN {question} q
+                ON mc.category=q.category";
+        $where = "mc.mooduellid = :mooduellid1";
+        $params = array('mooduellid1' => $this->cm->instance);
+
+        return [$fields, $from, $where, $params];
+
+    }
+
+    /**
+     * Return object for setting columns for table_games class.
+     *
+     * @param string $view
+     * @return stdClass
+     */
+    public function return_cols_for_games_table($view) {
+
+        $columns[] = 'timemodified';
+        $headers[] = get_string('lastplayed', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'playeraid';
+        $headers[] = get_string('playera', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'playeraresults';
+        $headers[] = get_string('playeraresults', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'playerbid';
+        $headers[] = get_string('playerb', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'playerbresults';
+        $headers[] = get_string('playeraresults', 'mooduell');
+        $help[] = null;
+
+        if ($view == 'teacher') {
+            $columns[] = 'action';
+            $headers[] = get_string('action', 'mooduell');
+            $help[] = null;
+        }
+
+        $tabledata = new stdClass();
+        $tabledata->columns = $columns;
+        $tabledata->headers = $headers;
+        $tabledata->help = $help;
+
+        return $tabledata;
+    }
+
+    /**
+     * Function to set the SQL and load the data for highscores into the mooduell_table
+     * @param int $mooduellid
+     * @param object $table
+     * @return stdClass
+     * @throws coding_exception
+     */
+    public function return_cols_for_highscores_table() {
+
+        $columns[] = 'ranking';
+        $headers[] = get_string('rank', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'userid';
+        $headers[] = get_string('username', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'score';
+        $headers[] = get_string('score', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'gamesplayed';
+        $headers[] = get_string('gamesplayed', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'gameswon';
+        $headers[] = get_string('gameswon', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'gameslost';
+        $headers[] = get_string('gameslost', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'qcorrect';
+        $headers[] = get_string('correctlyanswered', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'qplayed';
+        $headers[] = get_string('questions_played', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'qcpercentage';
+        $headers[] = get_string('correctlyansweredpercentage', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'timemodified';
+        $headers[] = get_string('timemodified', 'mooduell');
+        $help[] = null;
+
+        $tabledata = new stdClass();
+        $tabledata->columns = $columns;
+        $tabledata->headers = $headers;
+        $tabledata->help = $help;
+
+        return $tabledata;
+    }
+
+    /**
+     * Function to set the SQL and load the data for highscores into the mooduell_table
+     * @param int $mooduellid
+     * @param object $table
+     * @return stdClass
+     * @throws coding_exception
+     */
+    public function return_cols_for_questions_table() {
+
+        $columns[] = 'id';
+        $headers[] = get_string('questionid', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'image';
+        $headers[] = get_string('questionimage', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'text';
+        $headers[] = get_string('questiontext', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'type';
+        $headers[] = get_string('questiontype', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'length';
+        $headers[] = get_string('questiontextlength', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'category';
+        $headers[] = get_string('category', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'warnings';
+        $headers[] = get_string('warnings', 'mooduell');
+        $help[] = null;
+
+        $columns[] = 'status';
+        $headers[] = get_string('questionstatus', 'mooduell');
+        $help[] = null;
+
+        $tabledata = new stdClass();
+        $tabledata->columns = $columns;
+        $tabledata->headers = $headers;
+        $tabledata->help = $help;
+
+        return $tabledata;
+    }
+
 }

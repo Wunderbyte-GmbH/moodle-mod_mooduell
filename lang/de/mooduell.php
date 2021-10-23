@@ -134,6 +134,7 @@ $string['questionimage'] = 'Bild';
 $string['questiontextlength'] = 'Textlänge';
 $string['questionstatus'] = 'Status';
 $string['noquestions'] = 'Es gibt noch keine Fragen in diesem Quiz.';
+$string['noimage'] = 'Kein Bild';
 
 $string['univiemooduell'] = 'Univie Mooduell';
 $string['downloaduniviemoduell'] = 'Lade Deine App auf dein Handy und beginne sofort mit deinem Spiel!';
