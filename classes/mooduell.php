@@ -65,7 +65,8 @@ const ACCEPTEDTYPES = [
     'truefalse',
     'multichoice',
     'singlechoice',
-    'numerical'
+    'numerical',
+    'ddwtos'
 ];
 
 /**
@@ -414,7 +415,7 @@ class mooduell
 
         foreach ($listofquestions as $entry) {
             $newquestion = new question_control($entry, $listofanswers);
-            $questions[] = $newquestion;
+            $questions[$entry->id] = $newquestion;
         }
 
         $this->questions = $questions;
@@ -463,18 +464,39 @@ class mooduell
 
         $mooduellid = $this->cm->instance;
 
-        $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname
-                FROM {mooduell_categories} mc
-                JOIN {question_categories} qc
-                ON mc.category=qc.id
-                JOIN {question} q
-                ON q.category=qc.id
-                WHERE mc.mooduellid=$mooduellid";
+        $sqldata = $this->return_sql_for_all_questions_of_quiz();
 
-        if (!$listofquestions = $DB->get_records_sql($sql)) {
+        $sql = "SELECT " . $sqldata['select'] .
+               " FROM " . $sqldata['from'] .
+               " WHERE " . $sqldata['where'];
+
+        if (!$listofquestions = $DB->get_records_sql($sql, $sqldata['params'])) {
             return [];
         }
         return $listofquestions;
+    }
+
+
+    /**
+     * Priveleged function to build sql for all instances where all the questions have to be fetched.
+     * Never use other function, as this would lead to inconsistencies and errors.
+     *
+     * @return array
+     */
+    public function return_sql_for_all_questions_of_quiz():array {
+
+        $mooduellid = $this->cm->instance;
+
+        $sqldata = [];
+        $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
+        $sqldata['from'] = "{mooduell_categories} mc
+                            JOIN {question_categories} qc
+                            ON qc.id=mc.category
+                            RIGHT JOIN {question} q
+                            ON qc.id=q.category";
+        $sqldata['where'] = "mc.mooduellid=:mooduellid";
+        $sqldata['params'] = array('mooduellid' => $mooduellid);
+        return $sqldata;
     }
 
     /**
@@ -1249,18 +1271,14 @@ class mooduell
      */
     public function return_sql_for_questions() {
 
+        $sqldata = $this->return_sql_for_all_questions_of_quiz();
+
         $mooduellid = $this->cm->instance;
 
-        $fields = "q.id, q.questiontext text, q.qtype type, qc.name category";
-        $from = "{mooduell_categories} mc
-                JOIN {question_categories} qc
-                ON qc.id=mc.category
-                JOIN {question} q
-                ON mc.category=q.category";
-        $where = "mc.mooduellid = :mooduellid1";
-        $params = array('mooduellid1' => $this->cm->instance);
+        // We override the select in this case, as we need slightly different fields.
+        $select = "q.id id, q.questiontext text, q.qtype type, qc.name category";
 
-        return [$fields, $from, $where, $params];
+        return [$select, $sqldata['from'], $sqldata['where'], $sqldata['params']];
 
     }
 

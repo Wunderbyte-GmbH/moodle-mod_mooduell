@@ -29,7 +29,6 @@ use mod_mooduell\mooduell;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
-require_login($COURSE);
 
 /**
  * MooDuell Table sql class.

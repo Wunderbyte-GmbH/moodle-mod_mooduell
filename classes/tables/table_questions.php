@@ -31,6 +31,7 @@ use mod_mooduell\output\list_image;
 use mod_mooduell\output\list_text;
 use mod_mooduell\output\list_warnings;
 use mod_mooduell\output\renderer;
+use mod_mooduell\question_control;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -52,6 +53,16 @@ class table_questions extends wunderbyte_table {
     public $mooduell;
 
     /**
+     * @var renderer
+     */
+    private $renderer;
+
+    /**
+     * @var array
+     */
+    private $questions;
+
+    /**
      * mooduell_table constructor
      * @param mooduell $mooduell
      */
@@ -65,95 +76,86 @@ class table_questions extends wunderbyte_table {
             $this->mooduell = $mooduell;
         }
         $this->action = $action;
+
+        $this->renderer = $PAGE->get_renderer('mod_mooduell');
     }
 
 
     public function col_id(stdClass $question) {
 
-        global $PAGE;
+        if (!$this->questions) {
+            $this->questions = $this->mooduell->return_list_of_all_questions_in_quiz();
+            return count($this->questions);
+        }
 
-        // We can call this fucntion because it caches all the questions and is very fast after the first call.
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        $renderer = $PAGE->get_renderer('mod_mooduell');
-
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return $question->id;
+        }
         $id = new list_id($question, $this->mooduell->cm->id);
 
-        $out = $renderer->render_list_id($id);
-
+        $out = $this->renderer->render_list_id($id);
         return $out;
     }
 
-
-
     public function col_image(stdClass $question) {
 
-        global $PAGE;
-
-        // We can call this fucntion because it caches all the questions and is very fast after the first call.
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        $renderer = $PAGE->get_renderer('mod_mooduell');
-
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return json_encode($question);
+        }
         $image = new list_image($question);
 
-        return $renderer->render_list_image($image);
+        $out = $this->renderer->render_list_image($image);
+        return $out;
     }
 
     public function col_text(stdClass $question) {
 
-        global $PAGE;
-
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        $renderer = $PAGE->get_renderer('mod_mooduell');
-
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return json_encode($question);
+        }
         $image = new list_text($question);
-
-        return $renderer->render_list_text($image);
+        $out = $this->renderer->render_list_text($image);
+        return $out;
     }
 
     public function col_length(stdClass $question) {
 
-        global $PAGE;
-
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        return $question->length;
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return json_encode($question);
+        }
+        $out = $question->length;
+        return $out;
     }
 
     public function col_warnings(stdClass $question) {
 
-        global $PAGE;
-
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        $renderer = $PAGE->get_renderer('mod_mooduell');
-
-        $image = new list_warnings($question);
-
-        return $renderer->render_list_warnings($image);
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return json_encode($question);
+        }
+        $warnings = new list_warnings($question);
+        $out = $this->renderer->render_list_warnings($warnings);
+        return $out;
     }
 
     public function col_status(stdClass $question) {
 
-        global $PAGE;
-
-        $questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-
-        $question = $questions[$question->id];
-
-        return $question->status;;
+        if (isset($this->questions[$question->id])) {
+            $question = $this->questions[$question->id];
+        } else {
+            return json_encode($question);
+        }
+        $out = $question->status;
+        return $out;
     }
 
 }
