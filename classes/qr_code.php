@@ -76,7 +76,6 @@ class qr_code
             ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
             ->setLabel($text . $pincode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf'
             , LabelAlignment::CENTER)
-            ->setLogoPath($CFG->dirroot . '/mod/mooduell/pix/wb_logo.png')
             ->setLogoWidth(230)
             ->setValidateResult(false);
 
