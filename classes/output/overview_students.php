@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
  * @package mod_mooduell
  *
  */
-class overview_teacher implements renderable, templatable {
+class overview_students implements renderable, templatable {
 
     /**
      * An array of headings

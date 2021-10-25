@@ -51,7 +51,8 @@ class list_id implements renderable, templatable {
 
     /**
      * Constructor.
-     * @param mooduell $mooduell
+     * @param question_control $question
+     * @param int $cmid
      */
     public function __construct(question_control $question, int $cmid) {
 

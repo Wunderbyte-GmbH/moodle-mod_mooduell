@@ -48,6 +48,7 @@ class table_highscores extends wunderbyte_table {
 
     /**
      * mooduell_table constructor
+     * @param string $action
      * @param mooduell $mooduell
      */
     public function __construct($action, mooduell $mooduell = null) {

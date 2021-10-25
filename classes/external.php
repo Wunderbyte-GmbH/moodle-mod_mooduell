@@ -150,7 +150,7 @@ class mod_mooduell_external extends external_api {
         // Answer-specific feedback and param to show or not show it.
         if (!empty($answersfeedback)) {
             $result['showanswersfeedback'] = $mooduell->settings->showanswersfeedback;
-            
+
             if ($mooduell->settings->showanswersfeedback == 1) {
                 // We only transfer the feedback JSON if the setting is turned on.
                 $result['answersfeedback'] = $answersfeedback;
@@ -220,7 +220,7 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Get all the open or closed MooDuell Games. By providing a date, we can limit the treated entries...
-     * .. to those which were upadted since the last glance we took.
+     * ... to those which were upadted since the last glance we took.
      * An empty courseid will return all the games of all the MooDuell Instances visible to this user.
      *
      * @param array $courseids

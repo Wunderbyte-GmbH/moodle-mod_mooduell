@@ -174,7 +174,7 @@ class mooduell
         $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;
         $data->showgeneralfeedback = isset($formdata->showgeneralfeedback) ? $formdata->showgeneralfeedback : 0;
         $data->showanswersfeedback = isset($formdata->showanswersfeedback) ? $formdata->showanswersfeedback : 0;
-        
+
         $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0) ? $formdata->quizid : null;
 
         $mooduellid = $DB->insert_record('mooduell', $data);
@@ -1202,14 +1202,12 @@ class mooduell
 
     /**
      * Function to return the sql as array for table_games class.
-     * @param int $mooduellid
-     * @param object $table
      * @param string $view
      * @param bool $finished
      * @return array
      * @throws coding_exception
      */
-    public function return_sql_for_games(string $view, bool $finished = false) {
+    public function return_sql_for_games(string $view, bool $finished = false): array {
         global $USER;
 
         $mooduellid = $this->cm->instance;
@@ -1241,10 +1239,10 @@ class mooduell
     /**
      * Function to return the sql as array for table_highscores class.
      *
-     * @param mooduell $mooduell
+     * @param string $view
      * @return array
      */
-    public function return_sql_for_highscores(string $view) {
+    public function return_sql_for_highscores(string $view): array {
         $fields = "*";
         $from = "{mooduell_highscores}";
         $where = "mooduellid = :mooduellid1";
@@ -1315,12 +1313,10 @@ class mooduell
 
     /**
      * Function to set the SQL and load the data for highscores into the mooduell_table
-     * @param int $mooduellid
-     * @param object $table
      * @return stdClass
      * @throws coding_exception
      */
-    public function return_cols_for_highscores_table() {
+    public function return_cols_for_highscores_table(): stdClass {
 
         $columns[] = 'ranking';
         $headers[] = get_string('rank', 'mooduell');
@@ -1372,12 +1368,10 @@ class mooduell
 
     /**
      * Function to set the SQL and load the data for highscores into the mooduell_table
-     * @param int $mooduellid
-     * @param object $table
      * @return stdClass
      * @throws coding_exception
      */
-    public function return_cols_for_questions_table() {
+    public function return_cols_for_questions_table(): stdClass {
 
         $columns[] = 'id';
         $headers[] = get_string('questionid', 'mooduell');
