@@ -110,6 +110,7 @@ class overview_teacher implements renderable, templatable {
      * Render the open games table. This function automatically returns the table for teachers or students.
      *
      * @param mooduell $mooduell
+     * @param string $action
      * @return string
      */
     private function render_games_table(mooduell $mooduell, $action):string {
