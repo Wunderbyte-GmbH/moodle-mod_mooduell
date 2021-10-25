@@ -214,7 +214,7 @@ class question_control {
 
     /**
      * Returns an array of objects containing answer id, answertext (value) and feedback.
-     * 
+     *
      * @return array The feedback array.
      */
     public function return_answers_feedback(): array {
@@ -226,7 +226,7 @@ class question_control {
             $answerobj = new stdClass();
             if (!empty($answer->feedback)) {
                 $answerobj->answerid = (int) $answer->id;
-                
+
                 if ($this->questiontype == 'numerical') {
                     // Use float number for numerical questions.
                     $answerobj->answertext = (float) $answer->answertext;
@@ -234,7 +234,7 @@ class question_control {
                     // Remove HTML tags for all other questions.
                     $answerobj->answertext = trim(strip_tags($answer->answertext));
                 }
-                
+
                 $answerobj->feedback = trim(strip_tags($answer->feedback));
                 $answersfeedbackarray[] = $answerobj;
             }

@@ -51,7 +51,7 @@ class list_warnings implements renderable, templatable {
 
     /**
      * Constructor.
-     * @param mooduell $mooduell
+     * @param question_control $question
      */
     public function __construct(question_control $question) {
 

@@ -116,8 +116,7 @@ class renderer extends plugin_renderer_base {
 
     /**
      * Render a mooduell view page.
-     *
-     * @param templatable $viewpage
+     * @param templatable $overview
      * @return string|boolean
      */
     public function render_overview_teachers(templatable $overview) {

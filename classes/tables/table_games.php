@@ -57,8 +57,8 @@ class table_games extends wunderbyte_table {
 
     /**
      * mooduell_table constructor
-     * @param int $mooduell
      * @param string $action
+     * @param mooduell $mooduell
      */
     public function __construct($action, mooduell $mooduell = null) {
         global $PAGE;

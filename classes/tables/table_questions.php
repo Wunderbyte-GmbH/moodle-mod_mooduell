@@ -64,6 +64,7 @@ class table_questions extends wunderbyte_table {
 
     /**
      * mooduell_table constructor
+     * @param string $action
      * @param mooduell $mooduell
      */
     public function __construct($action, mooduell $mooduell = null) {
@@ -80,7 +81,11 @@ class table_questions extends wunderbyte_table {
         $this->renderer = $PAGE->get_renderer('mod_mooduell');
     }
 
-
+    /**
+     * ID column.
+     * @param stdClass $question
+     * @return int|string|void
+     */
     public function col_id(stdClass $question) {
 
         if (!$this->questions) {
@@ -98,6 +103,11 @@ class table_questions extends wunderbyte_table {
         return $out;
     }
 
+    /**
+     * Image column.
+     * @param stdClass $question
+     * @return string|false|void
+     */
     public function col_image(stdClass $question) {
 
         if (isset($this->questions[$question->id])) {
@@ -111,6 +121,11 @@ class table_questions extends wunderbyte_table {
         return $out;
     }
 
+    /**
+     * Text column.
+     * @param stdClass $question
+     * @return string|false|void
+     */
     public function col_text(stdClass $question) {
 
         if (isset($this->questions[$question->id])) {
@@ -123,6 +138,11 @@ class table_questions extends wunderbyte_table {
         return $out;
     }
 
+    /**
+     * Length column.
+     * @param stdClass $question
+     * @return int|string|false
+     */
     public function col_length(stdClass $question) {
 
         if (isset($this->questions[$question->id])) {
@@ -134,6 +154,11 @@ class table_questions extends wunderbyte_table {
         return $out;
     }
 
+    /**
+     * Warnings column.
+     * @param stdClass $question
+     * @return string|false|void
+     */
     public function col_warnings(stdClass $question) {
 
         if (isset($this->questions[$question->id])) {
@@ -146,6 +171,11 @@ class table_questions extends wunderbyte_table {
         return $out;
     }
 
+    /**
+     * Status column.
+     * @param stdClass $question
+     * @return string|false|void
+     */
     public function col_status(stdClass $question) {
 
         if (isset($this->questions[$question->id])) {
@@ -156,5 +186,4 @@ class table_questions extends wunderbyte_table {
         $out = $question->status;
         return $out;
     }
-
 }
