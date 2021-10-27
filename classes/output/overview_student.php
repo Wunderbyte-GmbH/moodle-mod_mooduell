@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Contains class mod_questionnaire\output\indexpage
+ * Contains class mod_mooduell\output\overview_student
  *
  * @package    mod_mooduell
  * @copyright  2020 Wunderbyte Gmbh <info@wunderbyte.at>
@@ -26,6 +26,7 @@
 namespace mod_mooduell\output;
 
 use mod_mooduell\mooduell;
+use mod_mooduell\qr_code;
 use mod_mooduell\tables\table_games;
 use mod_mooduell\tables\table_highscores;
 use mod_mooduell\tables\table_questions;
@@ -41,7 +42,7 @@ defined('MOODLE_INTERNAL') || die();
  * @package mod_mooduell
  *
  */
-class overview_teacher implements renderable, templatable {
+class overview_student implements renderable, templatable {
 
     /**
      * An object with all the data.
@@ -57,19 +58,21 @@ class overview_teacher implements renderable, templatable {
     public function __construct(mooduell $mooduell = null) {
 
         $data = [];
+        $qrcode = new qr_code();
+        $qrcodeimage = $qrcode->generate_qr_code();
+        // Create the list of open games we can pass on to the renderer.
+        $data['qrimage'] = $qrcodeimage;
 
         $data['opengames'] = $this->render_open_games_table($mooduell);
         $data['finishedgames'] = $this->render_finished_games_table($mooduell);
-        $data['warnings'] = $mooduell->check_quiz();
 
         // Add the Name of the instance.
         $data['quizname'] = $mooduell->cm->name;
         $data['mooduellid'] = $mooduell->cm->id;
         // Add the list of questions.
-        $data['questions'] = $this->render_questions_table($mooduell);
         $data['highscores'] = $this->render_highscores_table($mooduell);
         $data['categories'] = $mooduell->return_list_of_categories();
-        $data['statistics'] = $mooduell->return_list_of_statistics_teacher();
+        $data['statistics'] = $mooduell->return_list_of_statistics_student();
 
         $this->data = $data;
     }
@@ -113,26 +116,21 @@ class overview_teacher implements renderable, templatable {
      * @return string
      */
     private function render_games_table(mooduell $mooduell, $action):string {
-
-        $tablename = bin2hex(random_bytes(12));
-
-        $gamestable = new table_games($tablename, $mooduell);
+        $gamestable = new table_games($action, $mooduell);
 
         $finishedgames = $action == 'finishedgames' ? true : false;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_games('teacher', $finishedgames);
+        list($fields, $from, $where, $params) = $mooduell->return_sql_for_games('student', $finishedgames);
 
         $gamestable->set_sql($fields, $from, $where, $params);
 
-        $tabledata = $mooduell->return_cols_for_games_table('teacher');
+        $tabledata = $mooduell->return_cols_for_games_table('student');
         $gamestable->define_columns($tabledata->columns);
         $gamestable->define_headers($tabledata->headers);
         $gamestable->define_help_for_headers($tabledata->help);
 
-        $gamestable->is_downloading('', 'mooduell_games');
-
         ob_start();
-        $gamestable->out(10, true);
+        $gamestable->out(40, true);
         return ob_get_clean();
     }
 
@@ -145,13 +143,12 @@ class overview_teacher implements renderable, templatable {
      */
     private function render_highscores_table(mooduell $mooduell):string {
 
-        $tablename = bin2hex(random_bytes(12));
-        $highscorestable = new table_highscores($tablename, $mooduell);
+        $highscorestable = new table_highscores('highscores', $mooduell);
         // Sort the table by descending score by default.
         $highscorestable->sort_default_column = 'score';
         $highscorestable->sort_default_order = SORT_DESC;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_highscores('teacher');
+        list($fields, $from, $where, $params) = $mooduell->return_sql_for_highscores('student');
 
         $highscorestable->set_sql($fields, $from, $where, $params);
 
@@ -161,42 +158,8 @@ class overview_teacher implements renderable, templatable {
         $highscorestable->define_headers($tabledata->headers);
         $highscorestable->define_help_for_headers($tabledata->help);
 
-        $highscorestable->is_downloading('', 'mooduell_highscores');
-
         ob_start();
         $highscorestable->out(40, true);
-        return ob_get_clean();
-    }
-
-    /**
-     * Render the questions table.
-     *
-     * @param mooduell $mooduell
-     * @return string
-     */
-    private function render_questions_table(mooduell $mooduell):string {
-
-        $tablename = bin2hex(random_bytes(12));
-
-        $questionstable = new table_questions($tablename, $mooduell);
-        // Sort the table by descending score by default.
-        $questionstable->sort_default_column = 'id';
-        $questionstable->sort_default_order = SORT_ASC;
-
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_questions();
-
-        $questionstable->set_sql($fields, $from, $where, $params);
-
-        $tabledata = $mooduell->return_cols_for_questions_table();
-
-        $questionstable->define_columns($tabledata->columns);
-        $questionstable->define_headers($tabledata->headers);
-        $questionstable->define_help_for_headers($tabledata->help);
-
-        $questionstable->is_downloading('', 'mooduell_questions');
-
-        ob_start();
-        $questionstable->out(40, true);
         return ob_get_clean();
     }
 }

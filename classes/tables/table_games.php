@@ -26,6 +26,8 @@ namespace mod_mooduell\tables;
 
 use local_wunderbyte_table\wunderbyte_table;
 use mod_mooduell\mooduell;
+use mod_mooduell\output\list_action;
+use mod_mooduell\output\renderer;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -49,17 +51,26 @@ class table_games extends wunderbyte_table {
     public $mooduell;
 
     /**
+     * @var renderer
+     */
+    private $renderer;
+
+    /**
      * mooduell_table constructor
      * @param int $mooduell
      * @param string $action
      */
     public function __construct($action, mooduell $mooduell = null) {
+        global $PAGE;
+
         parent::__construct($action);
 
         if ($mooduell) {
             $this->mooduell = $mooduell;
         }
         $this->action = $action;
+
+        $this->renderer = $PAGE->get_renderer('mod_mooduell');
     }
 
     /**
@@ -137,20 +148,8 @@ class table_games extends wunderbyte_table {
      * @param stdClass $game
      */
     public function col_action(stdClass $game) {
-        $cmid = $this->mooduell->cm->id;
 
-        $link = '<a href="view.php?action=viewquestions&id=' . $cmid .
-                '&gameid=' . $game->id .'" alt="' .
-                get_string('viewgame', 'mod_mooduell') .'">' .
-                '<i class="fa fa-info"></i>'
-                . '</a>';
-        $link .= " ";
-        $link .= '<a href="view.php?action=delete&id=' . $cmid .
-                '&gameid=' . $game->id .'" alt="' .
-                get_string('deletegame', 'mod_mooduell') . '"' .
-                '<i class="fa fa-trash"></i>'
-                . '</a>';
-
-        return $link;
+        $action = new list_action($game->id, $game, $this->mooduell);
+        return $this->renderer->render_list_action($action);
     }
 }
