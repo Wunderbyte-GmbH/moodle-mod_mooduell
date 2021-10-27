@@ -27,6 +27,12 @@
                        COMMENT="Set time your students have to answer a question. 0 means no limit."/>
                 <FIELD NAME="waitfornextquestion" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Set time your students can contemplate the correct result. 0 means no limit."/>
+                <FIELD NAME="completiongamesplayed" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="How many games the user has to play to complete the activity"/>
+                <FIELD NAME="completiongameswon" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="How many games the user has to win to complete the activity."/>
+                <FIELD NAME="completionrightanswers" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
+                       COMMENT="Number of questions the user has to answer correctly"/>                   
                 <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
                        COMMENT="Timestamp of when the instance was added to the course."/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"
