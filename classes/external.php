@@ -115,38 +115,43 @@ class mod_mooduell_external extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function answer_question(int $quizid, int $gameid, int $questionid, array $answerids = [], float $numericanswer = null) {
-        $params = array(
+    public static function answer_question(
+        int $quizid,
+        int $gameid,
+        int $questionid,
+        array $answerids = [],
+        float $numericanswer = null) {
+            $params = array(
                 'quizid' => $quizid,
                 'gameid' => $gameid,
                 'questionid' => $questionid,
                 'answerids' => $answerids
-        );
+            );
 
-        $params = self::validate_parameters(self::answer_question_parameters(), $params);
+            $params = self::validate_parameters(self::answer_question_parameters(), $params);
 
-        // Now security checks.
+            // Now security checks.
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
-        }
-        $context = context_module::instance($cm->id);
-        self::validate_context($context);
+            if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
+                throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
+                        "Course module id:" . $params['quizid']);
+            }
+            $context = context_module::instance($cm->id);
+            self::validate_context($context);
 
-        // We create the MooDuell nstance.
-        $mooduell = new mooduell($params['quizid']);
+            // We create the MooDuell nstance.
+            $mooduell = new mooduell($params['quizid']);
 
-        // We create the game_controller instance.
-        $gamecontroller = new game_control($mooduell, $params['gameid']);
+            // We create the game_controller instance.
+            $gamecontroller = new game_control($mooduell, $params['gameid']);
 
-        $result['response'] = $gamecontroller->validate_question($params['questionid'], $params['answerids']);
+            $result['response'] = $gamecontroller->validate_question($params['questionid'], $params['answerids']);
 
-        // TODO: $result['response'] = ... for numerical questions
-        // TODO: $result['iscorrect'] = ... for numerical questions
-        // TODO: $result['generalfeedback'] = ... for numerical questions
+            // TODO: $result['response'] = ... for numerical questions
+            // TODO: $result['iscorrect'] = ... for numerical questions
+            // TODO: $result['generalfeedback'] = ... for numerical questions
 
-        return $result;
+            return $result;
     }
 
     /**

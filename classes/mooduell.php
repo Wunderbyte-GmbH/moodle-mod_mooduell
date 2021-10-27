@@ -332,20 +332,6 @@ class mooduell
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;
-            case 'downloadhighscores':
-                $listofhighscores = $this->return_list_of_highscores();
-                $headline = [
-                    get_string('rank', 'mod_mooduell'),
-                    get_string('username', 'mod_mooduell'),
-                    get_string('gamesplayed', 'mod_mooduell'),
-                    get_string('gameswon', 'mod_mooduell'),
-                    get_string('gameslost', 'mod_mooduell'),
-                    get_string('score', 'mod_mooduell'),
-                    get_string('correctlyanswered', 'mod_mooduell'),
-                    get_string('correctlyansweredpercentage', 'mod_mooduell'),
-                    get_string('questions_played', 'mod_mooduell')
-                ];
-                $this->export_data_as_csv($headline, $listofhighscores);
         }
 
         if (!$inline) {
@@ -476,7 +462,6 @@ class mooduell
         return $listofquestions;
     }
 
-
     /**
      * Priveleged function to build sql for all instances where all the questions have to be fetched.
      * Never use other function, as this would lead to inconsistencies and errors.
@@ -496,6 +481,27 @@ class mooduell
                             ON qc.id=q.category";
         $sqldata['where'] = "mc.mooduellid=:mooduellid";
         $sqldata['params'] = array('mooduellid' => $mooduellid);
+        return $sqldata;
+    }
+
+    /**
+     * Priveleged function to build sql for all instances where all the questions have to be fetched.
+     * Never use other function, as this would lead to inconsistencies and errors.
+     *
+     * @return array
+     */
+    public function return_sql_for_questions_in_game(stdClass $game):array {
+
+        $sqldata = [];
+        $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
+        $sqldata['from'] = "{mooduell_questions} mq
+                            LEFT JOIN {question} q
+                            ON mq.questionid=q.id
+                            LEFT JOIN {question_categories} qc
+                            ON q.category=qc.id";
+        $sqldata['where'] = "mq.gameid=:gameid
+                            ORDER BY mq.id ASC";
+        $sqldata['params'] = array('gameid' => $game->id);
         return $sqldata;
     }
 
@@ -1120,7 +1126,7 @@ class mooduell
      * @throws dml_exception
      * @throws moodle_exception
      */
-    private function return_list_of_statistics_student() {
+    public function return_list_of_statistics_student() {
         global $DB;
         global $USER;
 
@@ -1192,38 +1198,6 @@ class mooduell
     }
 
     /**
-     * Function to export Data as CSV
-     * It is necessary to add a headline, ie headline & data must have the same amount of columns.
-     * @param array $headline
-     * @param array $data
-     */
-    public function export_data_as_csv(array $headline, array $data) {
-        global $CFG;
-
-        require_once($CFG->libdir . '/csvlib.class.php');
-
-        // Make sure data is valid.
-
-        $headlinecount = count($headline);
-
-        $csvexport = new \csv_export_writer('semicolon');
-        $filename = $this->cm->name . '_highscores';
-        $csvexport->set_filename($filename, '.csv');
-
-        $csvexport->add_data($headline);
-
-        foreach ($data as $item) {
-            if ($headlinecount != count($item)) {
-                printf('data of this line is wrong', json_encode($item));
-                continue;
-            }
-            $csvexport->add_data($item);
-        }
-
-        $csvexport->download_file();
-    }
-
-    /**
      * Function to return the sql as array for table_games class.
      * @param int $mooduellid
      * @param object $table
@@ -1240,23 +1214,24 @@ class mooduell
         // Work out the sql for the table.
         $fields = "*";
         $from = "{mooduell_games}";
+        $where = "mooduellid = :mooduellid1";
+        if ($finished) {
+            $where .= " AND status = 3";
+        } else {
+            $where .= " AND status <> 3";
+        }
 
         switch ($view) {
             case 'teacher':
-                $where = "mooduellid = :mooduellid1 AND status = 3";
-                $params = array('mooduellid1' => $mooduellid);
                 break;
                 // Student view is the default view.
             default:
-                if ($finished) {
-                    $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
-                } else {
-                    $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
-                }
-                $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
+                $where .= " AND (playeraid = :userid1 OR playerbid = :userid2)";
+                $params = array('userid1' => $USER->id, 'userid2' => $USER->id);
                 break;
         }
 
+        $params['mooduellid1'] = $mooduellid;
         return [$fields, $from, $where, $params];
     }
 

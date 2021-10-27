@@ -26,6 +26,7 @@ namespace mod_mooduell\output;
 
 use plugin_renderer_base;
 use templatable;
+use template;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,7 +38,7 @@ class renderer extends plugin_renderer_base {
 
 
     /**
-     * Render a mooduell view page.
+     * Render a mooduell overview page for teachers.
      *
      * @param templatable $viewpage
      * @return string|boolean
@@ -45,6 +46,17 @@ class renderer extends plugin_renderer_base {
     public function render_overview_teachers(templatable $overview) {
         $data = $overview->export_for_template($this);
         return $this->render_from_template('mod_mooduell/overview_teachers', $data);
+    }
+
+    /**
+     * Render a mooduell overview page for students.
+     *
+     * @param templatable $viewpage
+     * @return string|boolean
+     */
+    public function render_overview_students(templatable $overview) {
+        $data = $overview->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/overview_students', $data);
     }
 
     /**
@@ -89,6 +101,17 @@ class renderer extends plugin_renderer_base {
     public function render_list_text(templatable $question) {
         $data = $question->export_for_template($this);
         return $this->render_from_template('mod_mooduell/list_text', $data);
+    }
+
+    /**
+     * render action column in games list
+     *
+     * @param templatable $game
+     * @return void
+     */
+    public function render_list_action(templatable $game) {
+        $data = $game->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/list_action', $data);
     }
 
     /**
