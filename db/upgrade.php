@@ -85,7 +85,7 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021051200, 'mooduell');
     }
 
-    // Add fields for completion rules
+    // Add fields for completion rules.
     if ($oldversion < 2021102205) {
         $table = new xmldb_table('mooduell');
         $field = new xmldb_field('completiongamesplayed', XMLDB_TYPE_INTEGER, '4', null,
