@@ -387,6 +387,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $DB->get_records_sql($sql);
     }
 
+    /**
+     * Set defaults and prepare data for form.
+     *
+     * @param array $defaultvalues
+     */
     public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
         foreach ($this->completionmodes as $mode) {
@@ -431,6 +436,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return false;
     }
 
+    /**
+     * Get the data of the form
+     *
+     * @return array Contains the data of the form
+     */
     public function get_data() {
         $data = parent::get_data();
         if (!$data) {

@@ -136,7 +136,7 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
 
     // If completion option is enabled, evaluate it and return true/false.
     $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
-    
+
     $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
     $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
     $completion = true;
@@ -163,9 +163,9 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
             $completion = $completion && true;
         } else {
             $completion = false;
-        } 
+        }
     }
-    return $completion;  
+    return $completion;
 }
 
 
