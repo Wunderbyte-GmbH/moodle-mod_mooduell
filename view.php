@@ -26,9 +26,10 @@ use core\event\course_module_viewed;
 use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;
+use mod_mooduell\output\overview_student;
 use mod_mooduell\output\overview_teacher;
 
-require_once('../../config.php');
+require_once(__DIR__ .'/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
 defined('MOODLE_INTERNAL') || die();
@@ -101,11 +102,12 @@ switch ($action) {
 
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {
     $pagename = 'studentsview';
+    $overview = new overview_student($mooduell);
+    $out .= $output->render_overview_students($overview);
 } else {
     $overview = new overview_teacher($mooduell);
+    $out .= $output->render_overview_teachers($overview);
 }
-
-$out .= $output->render_overview_teachers($overview);
 
 if (!$inline) {
     $out .= $output->footer();

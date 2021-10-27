@@ -85,7 +85,6 @@ class table_questions extends wunderbyte_table {
 
         if (!$this->questions) {
             $this->questions = $this->mooduell->return_list_of_all_questions_in_quiz();
-            return count($this->questions);
         }
 
         if (isset($this->questions[$question->id])) {
