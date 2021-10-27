@@ -22,6 +22,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_completion\api;
 use mod_mooduell\mooduell;
 
 defined('MOODLE_INTERNAL') || die();
@@ -40,6 +41,8 @@ function mooduell_supports($feature) {
             return true;
         case FEATURE_USES_QUESTIONS:
             return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+                return true;
         default:
             return null;
     }
@@ -117,6 +120,56 @@ function mooduell_delete_instance($id) {
 
     return true;
 }
+
+/**
+  * Obtains the automatic completion state for this mooduell instance based on any conditions
+  * in mooduell settings.
+  *
+  * @param object $course Course
+  * @param object $cm Course-module
+  * @param int $userid User ID
+  * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+  * @return bool True if completed, false if not, $type if conditions not set.
+ */
+function mooduell_get_completion_state($course, $cm, $userid, $type) {
+    global $DB;  
+    
+    // If completion option is enabled, evaluate it and return true/false.
+    $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
+    
+    
+    $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
+    $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
+    $completion = true;
+
+    if (!empty($mooduell->completiongamesplayed)) {
+        // Check the number of games finished required against the number of games the user has finished.
+        if ($studentstatistics["number_of_games_finished"] >= $mooduell->completiongamesplayed) {
+            $completion = $completion && true;
+        } else {
+            $completion = false;
+        }
+    }
+    if (!empty($mooduell->completiongameswon)) {
+        // Check the number of games won required against the number of games the user has won.
+        if ($studentstatistics["number_of_games_won"] >= $mooduell->completiongameswon) {
+            $completion = $completion && true;
+        } else {
+            $completion = false;
+        }
+    }
+    if (!empty($mooduell->completionrightanswers)) {
+        // Check the number of right answers required against the number of right answers the user has made.
+        if ($studentstatistics["number_of_correct_answers"] >= $mooduell->completionrightanswers) {
+            $completion = $completion && true;
+        } else {
+            $completion = false;
+        } 
+    }
+    return $completion;  
+
+}
+
 
 /**
  * Serve the files from the mooduell file areas

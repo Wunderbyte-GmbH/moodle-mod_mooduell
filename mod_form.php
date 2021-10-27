@@ -35,7 +35,10 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_mod_form extends moodleform_mod {
-
+    
+    /** @var array $completionmodes - defined completionmodes for this form */
+    private $completionmodes = ['completiongamesplayed', 'completiongameswon', 'completionrightanswers'];
+    
     /**
      * Defines forms elements
      */
@@ -382,5 +385,70 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $sql .= ';';
 
         return $DB->get_records_sql($sql);
+    }
+
+    function data_preprocessing(&$default_values) {
+        parent::data_preprocessing($default_values);
+        foreach ($this->completionmodes as $mode) {
+            $default_values[$mode . 'enabled'] = !empty($default_values[$mode]) ? 1 : 0;
+            if (empty($default_values[$mode])) {
+                $default_values[$mode] = 1;
+            }
+        }
+    }
+    /**
+     * Add any custom completion rules to the form.
+     *
+     * @return array Contains the names of the added form elements
+     */
+    function add_completion_rules() {
+        $mform = $this->_form;
+        $result = [];
+        foreach ($this->completionmodes as $mode) {
+            $group = array();
+            $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
+            $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
+            $mform->setType($mode, PARAM_INT);
+            $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
+            $mform->disabledIf($mode, $mode . 'enabled', 'notchecked');
+            $result[] = $mode . 'group';
+        }
+        return $result;
+    }
+    
+    /**
+     * Determines if completion is enabled for this module.
+     *
+     * @param array $data
+     * @return bool
+     */
+    function completion_rule_enabled($data) {
+        foreach ($this->completionmodes as $mode) {
+            if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return false;
+        }
+        // Turn off completion settings if the checkboxes aren't ticked
+        if (!empty($data->completionunlocked)) {
+            $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
+            if (empty($data->completiongamesplayedenabled) || !$autocompletion) {
+                $data->completiongamesplayed = 0;
+            }
+            if (empty($data->completiongameswonenabled) || !$autocompletion) {
+                $data->completiongameswon = 0;
+            }
+            if (empty($data->completionrightanswerenabled) || !$autocompletion) {
+                $data->completionrightanswers = 0;
+            }
+        }
+        return $data;
     }
 }

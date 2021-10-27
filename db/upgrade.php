@@ -38,6 +38,26 @@ function xmldb_mooduell_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
+    if ($oldversion = 2021102203) {
+        $table = new xmldb_table('mooduell');
+        $field = new xmldb_field('completiongamesplayed', XMLDB_TYPE_INTEGER, '4', null,
+        null, null, '0');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('completiongameswon', XMLDB_TYPE_INTEGER, '4', null,
+        null, null, '0');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('completionrightanswers', XMLDB_TYPE_INTEGER, '4', null,
+        null, null, '0');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2021102205, 'mooduell');
+    }
+
 
     if ($oldversion < 2021051000) {
         // Define table mooduell_highscores to be created.
