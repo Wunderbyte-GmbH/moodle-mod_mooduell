@@ -35,10 +35,10 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_mod_form extends moodleform_mod {
-    
+
     /** @var array $completionmodes - defined completionmodes for this form */
     private $completionmodes = ['completiongamesplayed', 'completiongameswon', 'completionrightanswers'];
-    
+
     /**
      * Defines forms elements
      */
@@ -387,12 +387,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return $DB->get_records_sql($sql);
     }
 
-    function data_preprocessing(&$default_values) {
-        parent::data_preprocessing($default_values);
+    public function data_preprocessing(&$defaultvalues) {
+        parent::data_preprocessing($defaultvalues);
         foreach ($this->completionmodes as $mode) {
-            $default_values[$mode . 'enabled'] = !empty($default_values[$mode]) ? 1 : 0;
-            if (empty($default_values[$mode])) {
-                $default_values[$mode] = 1;
+            $defaultvalues[$mode . 'enabled'] = !empty($defaultvalues[$mode]) ? 1 : 0;
+            if (empty($defaultvalues[$mode])) {
+                $defaultvalues[$mode] = 1;
             }
         }
     }
@@ -401,7 +401,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      *
      * @return array Contains the names of the added form elements
      */
-    function add_completion_rules() {
+    public function add_completion_rules() {
         $mform = $this->_form;
         $result = [];
         foreach ($this->completionmodes as $mode) {
@@ -415,14 +415,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
         }
         return $result;
     }
-    
+
     /**
      * Determines if completion is enabled for this module.
      *
      * @param array $data
      * @return bool
      */
-    function completion_rule_enabled($data) {
+    public function completion_rule_enabled($data) {
         foreach ($this->completionmodes as $mode) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
                 return true;
@@ -431,12 +431,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         return false;
     }
 
-    function get_data() {
+    public function get_data() {
         $data = parent::get_data();
         if (!$data) {
             return false;
         }
-        // Turn off completion settings if the checkboxes aren't ticked
+        // Turn off completion settings if the checkboxes aren't ticked.
         if (!empty($data->completionunlocked)) {
             $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
             if (empty($data->completiongamesplayedenabled) || !$autocompletion) {
