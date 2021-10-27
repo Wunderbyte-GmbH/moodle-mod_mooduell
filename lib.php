@@ -122,21 +122,20 @@ function mooduell_delete_instance($id) {
 }
 
 /**
-  * Obtains the automatic completion state for this mooduell instance based on any conditions
-  * in mooduell settings.
-  *
-  * @param object $course Course
-  * @param object $cm Course-module
-  * @param int $userid User ID
-  * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
-  * @return bool True if completed, false if not, $type if conditions not set.
+ * Obtains the automatic completion state for this mooduell instance based on any conditions
+ * in mooduell settings.
+ *
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not, $type if conditions not set.
  */
 function mooduell_get_completion_state($course, $cm, $userid, $type) {
-    global $DB;  
-    
+    global $DB;
+
     // If completion option is enabled, evaluate it and return true/false.
     $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
-    
     
     $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
     $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
@@ -167,7 +166,6 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
         } 
     }
     return $completion;  
-
 }
 
 
