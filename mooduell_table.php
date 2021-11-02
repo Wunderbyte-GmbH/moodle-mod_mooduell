@@ -114,23 +114,24 @@ function load_games_table_data(int $mooduellid, object $table, string $view, boo
     // Work out the sql for the table.
     $fields = "*";
     $from = "{mooduell_games}";
+    $where = "mooduellid = :mooduellid1";
+    if ($finished) {
+        $where .= " AND status = 3";
+    } else {
+        $where .= " AND status <> 3";
+    }
 
-    switch($view){
+    switch ($view) {
         case 'teacher':
-            $where = "mooduellid = :mooduellid1 AND status = 3";
-            $params = array('mooduellid1' => $mooduellid);
             break;
-        // Student view is the default view.
+            // Student view is the default view.
         default:
-
-            if ($finished) {
-                $where = "mooduellid = :mooduellid1 AND status = 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
-            } else {
-                $where = "mooduellid = :mooduellid1 AND status <> 3 AND (playeraid = :userid1 OR playerbid = :userid2)";
-            }
-            $params = array('mooduellid1' => $mooduellid, 'userid1' => $USER->id, 'userid2' => $USER->id);
+            $where .= " AND (playeraid = :userid1 OR playerbid = :userid2)";
+            $params = array('userid1' => $USER->id, 'userid2' => $USER->id);
             break;
     }
+
+    $params['mooduellid1'] = $mooduellid;
 
     $table->set_sql($fields, $from, $where, $params);
 
