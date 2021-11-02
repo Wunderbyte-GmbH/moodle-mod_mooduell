@@ -422,7 +422,7 @@ class game_control {
         // We have to make sure we have all the questions added to the normal game data.
         // Also, we use the mquestions here because we find the results attached to every question.
         // Therefore, we update the question class instances we already have.
-        $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid));
+        $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid), 'id');
 
         // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
         if (count($mquestions) != 9) {
