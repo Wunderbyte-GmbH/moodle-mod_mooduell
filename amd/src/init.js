@@ -70,8 +70,11 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                             answers += '</ul>';
 
                             tablebody += '<tr>' +
-                                '<td><a href="../../question/question.php?returnurl=/question/edit.php?courseid=' +
-                                item.courseid + '&courseid=' + item.courseid + '&id=' + item.questionid + '">' +
+                                '<td><a href="../../question/question.php?id='
+                                    + item.questionid
+                                    + '&courseid=' + item.courseid
+                                    + 'returnto=url&returnurl=%2Fmod%2Fmooduell%2Fview.php'
+                                    + '%3Fid%3D' + id + '%23questions">' +
                                item.questionid + '</a></td>' +
                                 '<td>' + image + '</td>' +
                                 '<td class="text-left">' + item.questiontext + answers + '</td>' +
