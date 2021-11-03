@@ -970,6 +970,7 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         $listofstatistics = [];
+        $listofstatistics['cmid'] = $this->cm->id;
         $listofstatistics['courseid'] = $this->course->id;
 
         // Number of distinct users who have played a MooDuell game.
