@@ -209,19 +209,32 @@ class game_control {
             $playedgames = 0;
             $correctlyanswered = 0;
             $playedquestions = 0;
+
+            // We need moduleid below.
+            $moduleid = $DB->get_field('modules', 'id', array('name' => 'mooduell'));
+
+            // To avoid checking visibility for every game, we only do it for every mooduell instance.
+            // Therefore, we use this array.
+            $visibletouser = [];
+
             foreach ($data as $entry) {
                 // Check if user has the right to access.
                 if ($mooduellid != null && $mooduellid !== $entry->mooduellid) {
                     continue;
                 }
 
-                $moduleid = $DB->get_field('modules', 'id', array('name' => 'mooduell'));
-                $cm = $DB->get_record('course_modules', array('instance' => $entry->mooduellid, 'module' => $moduleid));
+                // We run the database lookup only if we don't have an entry in our array yet.
+                if (!isset($visibletouser[$entry->mooduellid])) {
+                    $cm = $DB->get_record('course_modules', array('instance' => $entry->mooduellid, 'module' => $moduleid));
 
-                $modinfo = get_fast_modinfo($cm->course);
-                $cm = $modinfo->get_cm($cm->id);
+                    $modinfo = get_fast_modinfo($cm->course);
+                    $cm = $modinfo->get_cm($cm->id);
 
-                if (!$cm->uservisible) {
+                    // We store the visibility for this instance.
+                    $visibletouser = [
+                        $entry->mooduellid => $cm->uservisible
+                    ];
+                } else if (!$visibletouser[$entry->mooduellid]) {
                     continue;
                 }
 
