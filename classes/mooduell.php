@@ -1039,7 +1039,7 @@ class mooduell {
         $entry = $DB->get_record_sql($sql);
         if (!empty($entry)) {
             $listofstatistics['eq_id'] = $entry->questionid;
-            $listofstatistics['eq_name'] = $entry->questionname;
+            $listofstatistics['eq_name'] = strip_tags($entry->questionname);
             $listofstatistics['eq_correct_count'] = $entry->correct_count;
         }
 
@@ -1061,7 +1061,7 @@ class mooduell {
         $entry = $DB->get_record_sql($sql);
         if (!empty($entry)) {
             $listofstatistics['hq_id'] = $entry->questionid;
-            $listofstatistics['hq_name'] = $entry->questionname;
+            $listofstatistics['hq_name'] = strip_tags($entry->questionname);
             $listofstatistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
 
