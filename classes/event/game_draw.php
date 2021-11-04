@@ -47,6 +47,7 @@ class game_draw extends \core\event\base {
 
     /**
      * Returns the description for event logs.
+     * @return string
      */
     public function get_description() {
         return "Draw: The user with the id '{$this->userid}' has played a draw against the user with the id '{$this->relateduserid}‚'.";
