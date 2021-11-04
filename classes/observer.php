@@ -27,6 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_mooduell\game_finished;
 use mod_mooduell\manage_tokens;
+use mod_mooduell\event\game_won;
+use mod_mooduell\event\game_lost;
+use mod_mooduell\event\game_draw;
+use mod_mooduell\event\question_correctly_answered;
+use mod_mooduell\event\question_wrongly_answered;
 
 /**
  * Event observer class.
@@ -38,7 +43,7 @@ use mod_mooduell\manage_tokens;
 class mod_mooduell_observer {
 
     /**
-     * Triggered via $event when a game has been finished.
+     * Will be triggered when a game has been finished.
      *
      * @param \mod_mooduell\event\game_finished $event The event.
      * @return bool True on success.
@@ -47,13 +52,149 @@ class mod_mooduell_observer {
      * @throws moodle_exception
      */
     public static function game_finished(\mod_mooduell\event\game_finished $event): bool {
+        
+        $playeraid = $event->other['playeraid'];
+        $playerbid = $event->other['playerbid'];
+        $winnerid = $event->other['winnerid'];
+        $loserid = 0;
+        
+        if ($winnerid == 0) {
+            // It was a draw, so trigger the game_draw event.
+            $drawevent = game_draw::create([
+                'context' => $event->context,
+                'objectid' => $event->objectid,
+                'userid' => $playeraid,
+                'relateduserid' => $playerbid
+            ]);
+            $drawevent->trigger();
+        } else if ($playeraid == $winnerid) {
+            $loserid = $playerbid;
+        } else if ($playerbid == $winnerid) {
+            $loserid = $playeraid;
+        }
+
+        if ($loserid != 0) {
+            // Trigger the game_won event for the winner ...
+            $wonevent = game_won::create([
+                'context' => $event->context,
+                'objectid' => $event->objectid,
+                'userid' => $winnerid,
+                'relateduserid' => $loserid
+            ]);
+            $wonevent->trigger();
+
+            // ... and the game_lost event for the loser.
+            $lostevent = game_lost::create([
+                'context' => $event->context,
+                'objectid' => $event->objectid,
+                'userid' => $loserid,
+                'relateduserid' => $winnerid
+            ]);
+            $lostevent->trigger();
+        }
+
+        // Now, update highscores and statistics.
         game_finished::update_highscores_table($event->objectid);
 
         return true;
     }
 
     /**
-     * Triggered when a new MooDuell instance is added.
+     * Will be triggered when a game has been won.
+     *
+     * @param \mod_mooduell\event\game_won $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function game_won(\mod_mooduell\event\game_won $event): bool {
+        // Currently we do nothing.
+        return true;
+    }
+
+    /**
+     * Will be triggered when a game has been lost.
+     *
+     * @param \mod_mooduell\event\game_lost $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function game_lost(\mod_mooduell\event\game_lost $event): bool {
+        // Currently we do nothing.
+        return true;
+    }
+
+    /**
+     * Will be triggered when a game has been a draw.
+     *
+     * @param \mod_mooduell\event\game_draw $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function game_draw(\mod_mooduell\event\game_draw $event): bool {
+        // Currently we do nothing.
+        return true;
+    }
+
+    /**
+     * Will be triggered after a question has been answered.
+     *
+     * @param \mod_mooduell\event\question_answered $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function question_answered(\mod_mooduell\event\question_answered $event): bool {
+        
+        if ($event->other['iscorrect'] == true) {
+            // Question was answered correctly.
+            $qcorrectevent = question_correctly_answered::create(array('context' => $event->context, 'objectid' => $event->objectid));
+            $qcorrectevent->trigger();
+        } else {
+            // Question was answered wrongly.
+            $qwrongevent = question_wrongly_answered::create(array('context' => $event->context, 'objectid' => $event->objectid));
+            $qwrongevent->trigger();
+        }
+
+        return true;
+    }
+
+    /**
+     * Will be triggered when a question has been answered correctly.
+     *
+     * @param \mod_mooduell\event\question_correctly_answered $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function question_correctly_answered(\mod_mooduell\event\question_correctly_answered $event): bool {
+        // Currently we do nothing.
+        return true;
+    }
+
+    /**
+     * Will be triggered when a question has been answered wrongly.
+     *
+     * @param \mod_mooduell\event\question_wrongly_answered $event The event.
+     * @return bool True on success.
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function question_wrongly_answered(\mod_mooduell\event\question_wrongly_answered $event): bool {
+        // Currently we do nothing.
+        return true;
+    }
+
+    /**
+     * Will be triggered when a new MooDuell instance is added.
      * This will create tokens for all users of the instance.
      *
      * @param \core\event\course_module_created $event The event.
@@ -70,7 +211,7 @@ class mod_mooduell_observer {
     }
 
     /**
-     * Triggered when a new user enrolment has been created.
+     * Will be triggered when a new user enrolment has been created.
      * This will create a token for the new user.
      *
      * @param \core\event\user_enrolment_created $event The event.
