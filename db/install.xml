@@ -119,7 +119,7 @@
                        COMMENT="Device identifier"/>
                 <FIELD NAME="model" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
                        COMMENT="Device model"/>
-                <FIELD NAME="pushtoken" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"
+                <FIELD NAME="pushtoken" TYPE="text" NOTNULL="true" SEQUENCE="false"
                        COMMENT="pushtoken"/>
                 <FIELD NAME="numberofnotifications" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0"
                        COMMENT="numberofnotifications"/>
