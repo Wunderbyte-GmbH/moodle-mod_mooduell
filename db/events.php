@@ -43,6 +43,31 @@ $observers = array(
         ),
 
         array(
+                'eventname' => 'mod_mooduell\event\game_won',
+                'callback' => 'mod_mooduell_observer::game_won'
+        ),
+
+        array(
+                'eventname' => 'mod_mooduell\event\game_lost',
+                'callback' => 'mod_mooduell_observer::game_lost'
+        ),
+
+        array(
+                'eventname' => 'mod_mooduell\event\game_draw',
+                'callback' => 'mod_mooduell_observer::game_draw'
+        ),
+
+        array(
+                'eventname' => 'mod_mooduell\event\question_correctly_answered',
+                'callback' => 'mod_mooduell_observer::question_correctly_answered'
+        ),
+
+        array(
+                'eventname' => 'mod_mooduell\event\question_wrongly_answered',
+                'callback' => 'mod_mooduell_observer::question_wrongly_answered'
+        ),
+
+        array(
                 'eventname' => '\core\event\course_module_created',
                 'callback' => 'mod_mooduell_observer::course_module_created'
         ),

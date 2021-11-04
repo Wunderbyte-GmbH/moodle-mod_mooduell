@@ -33,6 +33,7 @@ require_once("$CFG->dirroot/user/profile/lib.php");
 use DateTime;
 use dml_exception;
 use mod_mooduell\event\game_finished;
+use mod_mooduell\event\question_answered;
 use moodle_exception;
 use stdClass;
 use tool_dataprivacy\context_instance;
@@ -607,6 +608,12 @@ class game_control {
                     'Question type ' . $questiontype . ' is not supported right now.');
         }
 
+        // Trigger question answered event.
+        $event = question_answered::create(array('context' => $this->mooduell->context, 'objectid' => $questionid, 'other' => [
+            'iscorrect' => $result == 2 ? true : false
+        ]));
+        $event->trigger();
+
         // We write the result of our question check.
         $this->save_result_to_db($this->gamedata->gameid, $questionid, $result);
         // After every answered questions, turn status is updated as well.
@@ -929,10 +936,13 @@ class game_control {
 
         $updatestatus = $DB->update_record('mooduell_games', $update);
 
-        // Now the mooduell_games table has been updated.
+        // Now the mooduell_games table has been updated...
         // ... so we can trigger the game_finished event.
         if ($updatestatus && $this->is_game_finished()) {
-            $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id));
+            $event = game_finished::create(array('context' => $this->mooduell->context, 'objectid' => $this->mooduell->cm->id,
+                'other' => ['playeraid' => $this->gamedata->playeraid,
+                            'playerbid' => $this->gamedata->playerbid,
+                            'winnerid' => $this->gamedata->winnerid]));
             $event->trigger();
         }
     }
