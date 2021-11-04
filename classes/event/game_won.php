@@ -47,6 +47,7 @@ class game_won extends \core\event\base {
 
     /**
      * Returns the description for event logs.
+     * @return string
      */
     public function get_description() {
         return "The user with the id '{$this->userid}' has won a MooDuell game against the user with the id '{$this->relateduserid}'.";

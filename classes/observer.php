@@ -52,46 +52,11 @@ class mod_mooduell_observer {
      * @throws moodle_exception
      */
     public static function game_finished(\mod_mooduell\event\game_finished $event): bool {
-        
+
         $playeraid = $event->other['playeraid'];
         $playerbid = $event->other['playerbid'];
         $winnerid = $event->other['winnerid'];
         $loserid = 0;
-        
-        if ($winnerid == 0) {
-            // It was a draw, so trigger the game_draw event.
-            $drawevent = game_draw::create([
-                'context' => $event->context,
-                'objectid' => $event->objectid,
-                'userid' => $playeraid,
-                'relateduserid' => $playerbid
-            ]);
-            $drawevent->trigger();
-        } else if ($playeraid == $winnerid) {
-            $loserid = $playerbid;
-        } else if ($playerbid == $winnerid) {
-            $loserid = $playeraid;
-        }
-
-        if ($loserid != 0) {
-            // Trigger the game_won event for the winner ...
-            $wonevent = game_won::create([
-                'context' => $event->context,
-                'objectid' => $event->objectid,
-                'userid' => $winnerid,
-                'relateduserid' => $loserid
-            ]);
-            $wonevent->trigger();
-
-            // ... and the game_lost event for the loser.
-            $lostevent = game_lost::create([
-                'context' => $event->context,
-                'objectid' => $event->objectid,
-                'userid' => $loserid,
-                'relateduserid' => $winnerid
-            ]);
-            $lostevent->trigger();
-        }
 
         // Now, update highscores and statistics.
         game_finished::update_highscores_table($event->objectid);
@@ -151,14 +116,30 @@ class mod_mooduell_observer {
      * @throws moodle_exception
      */
     public static function question_answered(\mod_mooduell\event\question_answered $event): bool {
-        
+
+        // Get the right context for cmid.
+        $data = $event->get_data();
+        $context = $event->get_context();
+        $objectid = $data["objectid"];
+        $questionid = $data['other']['questionid'];
+
         if ($event->other['iscorrect'] == true) {
             // Question was answered correctly.
-            $qcorrectevent = question_correctly_answered::create(array('context' => $event->context, 'objectid' => $event->objectid));
+            $qcorrectevent = question_correctly_answered::create(array(
+                'context' => $context,
+                'objectid' => $objectid,
+                'other' => [
+                    'questionid' => $questionid
+                ]));
             $qcorrectevent->trigger();
         } else {
             // Question was answered wrongly.
-            $qwrongevent = question_wrongly_answered::create(array('context' => $event->context, 'objectid' => $event->objectid));
+            $qwrongevent = question_wrongly_answered::create(array(
+                'context' => $context,
+                'objectid' => $objectid,
+                'other' => [
+                    'questionid' => $questionid
+                ]));
             $qwrongevent->trigger();
         }
 

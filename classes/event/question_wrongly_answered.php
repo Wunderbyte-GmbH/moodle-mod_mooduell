@@ -44,4 +44,18 @@ class question_wrongly_answered extends \core\event\base {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
+
+    /**
+     * Returns the description for event logs.
+     * @return string
+     */
+    public function get_description() {
+
+        $userid = $this->data['userid'];
+        $questionid = $this->data['other']['questionid'];
+
+        $message = "The user with the id $userid has answered question $questionid incorrectly.";
+
+        return $message;
+    }
 }

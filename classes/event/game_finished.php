@@ -44,4 +44,24 @@ class game_finished extends \core\event\base {
         $this->data['crud'] = 'u'; // The event will update and insert new highscores data.
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
+
+    /**
+     * Returns the description for event logs.
+     * @return string
+     */
+    public function get_description() {
+
+        $userid = $this->data['userid'];
+        $relateduserid = $this->data['relateduserid'];
+
+        if ($this->data['other']['winnerid'] == 0) {
+            $message = "The user with the id $userid has played draw against user $relateduserid.";
+        } else if ($this->data['other']['winnerid'] == $userid) {
+            $message = "The user with the id $userid has won against user $relateduserid.";
+        } else {
+            $message = "The user with the id $relateduserid has won against user $userid.";
+        }
+
+        return $message;
+    }
 }
