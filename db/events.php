@@ -58,6 +58,11 @@ $observers = array(
         ),
 
         array(
+                'eventname' => 'mod_mooduell\event\question_answered',
+                'callback' => 'mod_mooduell_observer::question_answered'
+        ),
+
+        array(
                 'eventname' => 'mod_mooduell\event\question_correctly_answered',
                 'callback' => 'mod_mooduell_observer::question_correctly_answered'
         ),
