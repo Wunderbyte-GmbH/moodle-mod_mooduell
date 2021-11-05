@@ -829,7 +829,7 @@ class game_control {
             $update->playeraanswered = $result;
             // We update result in live memory as well.
             foreach ($this->gamedata->questions as $question) {
-                if ($questionid == $question->id) {
+                if ($questionid == $question->questionid) {
                     $question->playeraanswered = $result;
                     break;
                 }
@@ -845,7 +845,7 @@ class game_control {
             $update->playerbanswered = $result;
             // We update in live memory as well.
             foreach ($this->gamedata->questions as $question) {
-                if ($questionid == $question->id) {
+                if ($questionid == $question->questionid) {
                     $question->playerbanswered = $result;
                     break;
                 }
