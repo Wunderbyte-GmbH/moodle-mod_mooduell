@@ -973,6 +973,7 @@ class game_control {
 
             $event = game_finished::create(array(
                 'context' => $this->mooduell->context,
+                'objectid' => $this->mooduell->cm->id,
                 'relateduserid' => $relateduserid,
                 'other' => ['playeraid' => $this->gamedata->playeraid,
                             'playerbid' => $this->gamedata->playerbid,
