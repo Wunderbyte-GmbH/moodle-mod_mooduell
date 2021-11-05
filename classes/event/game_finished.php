@@ -55,11 +55,11 @@ class game_finished extends \core\event\base {
         $relateduserid = $this->data['relateduserid'];
 
         if ($this->data['other']['winnerid'] == 0) {
-            $message = "The user with the id $userid has played draw against user $relateduserid.";
+            $message = "The user with the id {$userid} has played a draw against the user with the id {$relateduserid}.";
         } else if ($this->data['other']['winnerid'] == $userid) {
-            $message = "The user with the id $userid has won against user $relateduserid.";
+            $message = "The user with the id {$userid} has won against the user with the id {$relateduserid}.";
         } else {
-            $message = "The user with the id $relateduserid has won against user $userid.";
+            $message = "The user with the id {$relateduserid} has won against the user with the id {$userid}.";
         }
 
         return $message;

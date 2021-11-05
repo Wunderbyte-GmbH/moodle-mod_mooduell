@@ -40,7 +40,6 @@ class game_draw extends \core\event\base {
      * Set basic properties for the event.
      */
     protected function init() {
-        $this->data['objecttable'] = 'mooduell_highscores';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -50,6 +49,6 @@ class game_draw extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "Draw: The user with the id '{$this->userid}' has played a draw against the user with the id '{$this->relateduserid}‚'.";
+        return "Draw: The user with the id {$this->userid} has played a draw against the user with the id {$this->relateduserid}.";
     }
 }
