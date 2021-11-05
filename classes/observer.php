@@ -95,7 +95,7 @@ class mod_mooduell_observer {
         }
 
         // Now, update highscores and statistics.
-        game_finished::update_highscores_table($event->objectid);
+        game_finished::update_highscores_table($data['objectid']);
 
         return true;
     }
