@@ -32,10 +32,7 @@ require_once("$CFG->dirroot/user/profile/lib.php");
 
 use DateTime;
 use dml_exception;
-use mod_mooduell\event\game_draw;
 use mod_mooduell\event\game_finished;
-use mod_mooduell\event\game_lost;
-use mod_mooduell\event\game_won;
 use mod_mooduell\event\question_answered;
 use moodle_exception;
 use stdClass;
@@ -614,10 +611,9 @@ class game_control {
         // Trigger question answered event.
         $event = question_answered::create(array(
             'context' => $this->mooduell->context,
-            'objectid' => $questionid,
             'other' => [
-            'iscorrect' => $result == 2 ? true : false,
-            'questionid' => $questionid
+                'iscorrect' => $result == 2 ? true : false,
+                'questionid' => $questionid
             ]));
         $event->trigger();
 
@@ -977,50 +973,12 @@ class game_control {
 
             $event = game_finished::create(array(
                 'context' => $this->mooduell->context,
-                'objectid' => $this->mooduell->cm->id,
                 'relateduserid' => $relateduserid,
                 'other' => ['playeraid' => $this->gamedata->playeraid,
                             'playerbid' => $this->gamedata->playerbid,
                             'winnerid' => $this->gamedata->winnerid]));
             $event->trigger();
-
-            if ($this->gamedata->winnerid == 0) {
-                $drawevent = game_draw::create([
-                    'context' => $this->mooduell->context,
-                    'objectid' => $this->mooduell->cm->id,
-                    'userid' => $this->gamedata->playeraid,
-                    'relateduserid' => $this->gamedata->playerbid
-                ]);
-                $drawevent->trigger();
-            } else {
-                // Trigger the game_won event for the winner ...
-                if ($this->gamedata->winnerid == $this->gamedata->playeraid) {
-                    $winnerid = $this->gamedata->playeraid;
-                    $loserid = $this->gamedata->playerbid;
-                } else {
-                    $winnerid = $this->gamedata->playerbid;
-                    $loserid = $this->gamedata->playeraid;
-                }
-
-                $wonevent = game_won::create([
-                    'context' => $this->mooduell->context,
-                    'objectid' => $this->mooduell->cm->id,
-                    'userid' => $winnerid,
-                    'relateduserid' => $loserid
-                ]);
-                $wonevent->trigger();
-
-                // ... and the game_lost event for the loser.
-                $lostevent = game_lost::create([
-                    'context' => $this->mooduell->context,
-                    'objectid' => $this->mooduell->cm->id,
-                    'userid' => $loserid,
-                    'relateduserid' => $winnerid
-                ]);
-                $lostevent->trigger();
-            }
         }
-
     }
 
     /**

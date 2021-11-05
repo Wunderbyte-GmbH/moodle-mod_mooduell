@@ -27,9 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_mooduell\game_finished;
 use mod_mooduell\manage_tokens;
-use mod_mooduell\event\game_won;
-use mod_mooduell\event\game_lost;
 use mod_mooduell\event\game_draw;
+use mod_mooduell\event\game_lost;
+use mod_mooduell\event\game_won;
 use mod_mooduell\event\question_correctly_answered;
 use mod_mooduell\event\question_wrongly_answered;
 
@@ -53,10 +53,46 @@ class mod_mooduell_observer {
      */
     public static function game_finished(\mod_mooduell\event\game_finished $event): bool {
 
-        $playeraid = $event->other['playeraid'];
-        $playerbid = $event->other['playerbid'];
-        $winnerid = $event->other['winnerid'];
+        // Get the right context for cmid.
+        $data = $event->get_data();
+        $context = $event->get_context();
+        
+        $playeraid = $data['other']['playeraid'];
+        $playerbid = $data['other']['playerbid'];
+        $winnerid = $data['other']['winnerid'];
         $loserid = 0;
+
+        if ($winnerid == 0) {
+            $drawevent = game_draw::create([
+                'context' => $context,
+                'userid' => $playeraid,
+                'relateduserid' => $playerbid
+            ]);
+            $drawevent->trigger();
+        } else {
+            // Trigger the game_won event for the winner ...
+            if ($winnerid == $playeraid) {
+                $loserid = $playerbid;
+            } else {
+                $winnerid = $playerbid;
+                $loserid = $playeraid;
+            }
+
+            $wonevent = game_won::create([
+                'context' => $context,
+                'userid' => $winnerid,
+                'relateduserid' => $loserid
+            ]);
+            $wonevent->trigger();
+
+            // ... and the game_lost event for the loser.
+            $lostevent = game_lost::create([
+                'context' => $context,
+                'userid' => $loserid,
+                'relateduserid' => $winnerid
+            ]);
+            $lostevent->trigger();
+        }
 
         // Now, update highscores and statistics.
         game_finished::update_highscores_table($event->objectid);
@@ -120,14 +156,12 @@ class mod_mooduell_observer {
         // Get the right context for cmid.
         $data = $event->get_data();
         $context = $event->get_context();
-        $objectid = $data["objectid"];
         $questionid = $data['other']['questionid'];
 
         if ($event->other['iscorrect'] == true) {
             // Question was answered correctly.
             $qcorrectevent = question_correctly_answered::create(array(
                 'context' => $context,
-                'objectid' => $objectid,
                 'other' => [
                     'questionid' => $questionid
                 ]));
@@ -136,7 +170,6 @@ class mod_mooduell_observer {
             // Question was answered wrongly.
             $qwrongevent = question_wrongly_answered::create(array(
                 'context' => $context,
-                'objectid' => $objectid,
                 'other' => [
                     'questionid' => $questionid
                 ]));
@@ -183,7 +216,6 @@ class mod_mooduell_observer {
      */
     public static function course_module_created(\core\event\course_module_created $event): bool {
         // The $event->objectid is the course_module id (cmid).
-
         $data = $event->get_data();
         if ($data['other']['modulename'] === 'mooduell') {
             manage_tokens::generate_tokens_for_all_instance_users($event->objectid);

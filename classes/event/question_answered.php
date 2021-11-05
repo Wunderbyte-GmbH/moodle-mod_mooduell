@@ -40,7 +40,6 @@ class question_answered extends \core\event\base {
      * Set basic properties for the event.
      */
     protected function init() {
-        $this->data['objecttable'] = 'mooduell_highscores';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -55,9 +54,9 @@ class question_answered extends \core\event\base {
         $questionid = $this->data['other']['questionid'];
 
         if ($this->data['other']['iscorrect']) {
-            $message = "The user with the id $userid has answered question $questionid correctly.";
+            $message = "The user with the id {$userid} has answered question {$questionid} correctly.";
         } else {
-            $message = "The user with the id $userid has answered question $questionid incorrectly.";
+            $message = "The user with the id {$userid} has answered question {$questionid} incorrectly.";
         }
         return $message;
     }
