@@ -467,7 +467,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             if (empty($data->completiongameswonenabled) || !$autocompletion) {
                 $data->completiongameswon = 0;
             }
-            if (empty($data->completionrightanswerenabled) || !$autocompletion) {
+            if (empty($data->completionrightanswersenabled) || !$autocompletion) {
                 $data->completionrightanswers = 0;
             }
         }
