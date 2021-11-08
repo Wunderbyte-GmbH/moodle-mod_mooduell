@@ -1402,5 +1402,4 @@ class mooduell
 
         return $tabledata;
     }
-
 }
