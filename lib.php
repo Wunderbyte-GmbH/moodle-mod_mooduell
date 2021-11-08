@@ -128,6 +128,22 @@ function mooduell_delete_instance($id) {
 }
 
 /**
+ * Helper function to retrieve a list of all completion modes ...
+ * ... and their associated field names in student statistics.
+ * @return array $completionmodes
+ */
+function mooduell_get_completion_modes() {
+    // List of completion modes and the according fields in table $studentstatistics.
+    $completionmodes = [
+        'completiongamesplayed' => 'number_of_games_finished',
+        'completiongameswon' => 'number_of_games_won',
+        'completionrightanswers' => 'number_of_correct_answers'
+    ];
+
+    return $completionmodes;
+}
+
+/**
  * Obtains the automatic completion state for this mooduell instance based on any conditions
  * in mooduell settings.
  *
@@ -148,11 +164,7 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
     $completion = true;
     
     // List of completion modes and the according fields in table $studentstatistics.
-    $completionmodes = [
-        'completiongamesplayed' => 'number_of_games_finished',
-        'completiongameswon' => 'number_of_games_won',
-        'completionrightanswers' => 'number_of_correct_answers'
-    ];
+    $completionmodes = mooduell_get_completion_modes();
 
     foreach ($completionmodes as $completionmode => $statsfield) {
         if (!empty($mooduell->{$completionmode})) {
@@ -164,8 +176,36 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
             }
         }
     }
-    
+
     return $completion;
+}
+
+/**
+     * Helper function to create the challenges JSON needed for activity completion.
+     * @param mooduell $mooduellinstance A MooDuell instance.
+     * @return string An encoded JSON string containing all challenges.
+     */
+function get_completion_challenges_json_string($mooduellinstance) {
+    $completionmodes = mooduell_get_completion_modes();
+    $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
+
+    $challengesarray = [];
+
+    foreach ($completionmodes as $completionmode => $statsfield) {
+        if (!empty($mooduellinstance->{$completionmode})) {
+            $challenge = new stdClass();
+            $challenge->challengetype = $completionmode;
+            // TODO: challenge->challengename
+            $challenge->actualnumber = $studentstatistics[$statsfield];
+            $challenge->targetnumber = $mooduellinstance->{$completionmode};
+            // TODO: challenge->targetdate
+            // TODO: challenge->challengerank
+
+            $challengesarray[] = $challenge;
+        }
+    }
+
+    return json_encode($challengesarray);
 }
 
 

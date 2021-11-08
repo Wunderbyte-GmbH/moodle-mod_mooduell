@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once(__DIR__ . '/lib.php');
 
 /**
  * Module instance settings form.
@@ -35,9 +36,6 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_mod_form extends moodleform_mod {
-
-    /** @var array $completionmodes - defined completionmodes for this form */
-    private $completionmodes = ['completiongamesplayed', 'completiongameswon', 'completionrightanswers'];
 
     /**
      * Defines forms elements
@@ -406,7 +404,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
-        foreach ($this->completionmodes as $mode) {
+        $completionmodes = mooduell_get_completion_modes();
+        foreach ($completionmodes as $mode => $field) {
             $defaultvalues[$mode . 'enabled'] = !empty($defaultvalues[$mode]) ? 1 : 0;
             if (empty($defaultvalues[$mode])) {
                 $defaultvalues[$mode] = 1;
@@ -421,7 +420,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
     public function add_completion_rules() {
         $mform = $this->_form;
         $result = [];
-        foreach ($this->completionmodes as $mode) {
+        $completionmodes = mooduell_get_completion_modes();
+        foreach ($completionmodes as $mode => $field) {
             $group = array();
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
             $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
@@ -440,7 +440,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return bool
      */
     public function completion_rule_enabled($data) {
-        foreach ($this->completionmodes as $mode) {
+        $completionmodes = mooduell_get_completion_modes();
+        foreach ($completionmodes as $mode => $field) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
                 return true;
             }
@@ -458,19 +459,19 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if (!$data) {
             return false;
         }
+        
         // Turn off completion settings if the checkboxes aren't ticked.
         if (!empty($data->completionunlocked)) {
             $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
-            if (empty($data->completiongamesplayedenabled) || !$autocompletion) {
-                $data->completiongamesplayed = 0;
-            }
-            if (empty($data->completiongameswonenabled) || !$autocompletion) {
-                $data->completiongameswon = 0;
-            }
-            if (empty($data->completionrightanswersenabled) || !$autocompletion) {
-                $data->completionrightanswers = 0;
+
+            $completionmodes = mooduell_get_completion_modes();
+            foreach ($completionmodes as $completionmode => $field) {
+                if (empty($data->{$completionmode . 'enabled'}) || !$autocompletion) {
+                    $data->{$completionmode} = 0;
+                }
             }
         }
+
         return $data;
     }
 }

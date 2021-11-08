@@ -22,7 +22,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use core\event\course_module_viewed;
 use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use \mod_mooduell\event\game_finished;

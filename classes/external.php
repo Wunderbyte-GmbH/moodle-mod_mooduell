@@ -540,7 +540,8 @@ class mod_mooduell_external extends external_api {
                                                 )
                                         )
                                 )
-                        )
+                        ),
+                        'challenges' => new external_value(PARAM_RAW, 'challenges')
                 )
         );
     }
