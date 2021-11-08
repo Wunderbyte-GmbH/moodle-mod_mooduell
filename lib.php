@@ -146,31 +146,25 @@ function mooduell_get_completion_state($course, $cm, $userid, $type) {
     $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
     $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
     $completion = true;
+    
+    // List of completion modes and the according fields in table $studentstatistics.
+    $completionmodes = [
+        'completiongamesplayed' => 'number_of_games_finished',
+        'completiongameswon' => 'number_of_games_won',
+        'completionrightanswers' => 'number_of_correct_answers'
+    ];
 
-    if (!empty($mooduell->completiongamesplayed)) {
-        // Check the number of games finished required against the number of games the user has finished.
-        if ($studentstatistics["number_of_games_finished"] >= $mooduell->completiongamesplayed) {
-            $completion = $completion && true;
-        } else {
-            $completion = false;
+    foreach ($completionmodes as $completionmode => $statsfield) {
+        if (!empty($mooduell->{$completionmode})) {
+            // Check the number of games finished required against the number of games the user has finished.
+            if ($studentstatistics[$statsfield] >= $mooduell->{$completionmode}) {
+                $completion = $completion && true;
+            } else {
+                $completion = false;
+            }
         }
     }
-    if (!empty($mooduell->completiongameswon)) {
-        // Check the number of games won required against the number of games the user has won.
-        if ($studentstatistics["number_of_games_won"] >= $mooduell->completiongameswon) {
-            $completion = $completion && true;
-        } else {
-            $completion = false;
-        }
-    }
-    if (!empty($mooduell->completionrightanswers)) {
-        // Check the number of right answers required against the number of right answers the user has made.
-        if ($studentstatistics["number_of_correct_answers"] >= $mooduell->completionrightanswers) {
-            $completion = $completion && true;
-        } else {
-            $completion = false;
-        }
-    }
+    
     return $completion;
 }
 

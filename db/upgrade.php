@@ -131,7 +131,25 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
+
+        // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021102205, 'mooduell');
+    }
+
+    // Add field challenges to mooduell_highscores table.
+    if ($oldversion < 2021110800) {
+
+        // Define field challenges to be added to mooduell_highscores.
+        $table = new xmldb_table('mooduell_highscores');
+        $field = new xmldb_field('challenges', XMLDB_TYPE_TEXT, null, null, null, null, null, 'qcpercentage');
+
+        // Conditionally launch add field challenges.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021110800, 'mooduell');
     }
 
     return true;
