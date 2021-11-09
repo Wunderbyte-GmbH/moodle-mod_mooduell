@@ -223,10 +223,14 @@ $string['pincode'] = "Your PinCode: ";
 $string['qrtitle'] = "QR Login - How to:";
 $string['qrdesc'] = "To login on your Smartphone, scan this personal QR-Code with the MooDuell App and verify the process with your unique 4-digit pincode.";
 
-/*completion strings */
+// Activity completion.
 $string['completiongamesplayed'] = 'User has to play number of games';
 $string['completiongamesplayedlabel'] = 'Played games';
 $string['completionrightanswers'] = 'User has to answer number of question correctly';
 $string['completionrightanswerslabel'] = 'Number of Questions';
 $string['completiongameswon'] = 'User has to win number of games';
 $string['completiongameswonlabel'] = 'Won games';
+$string['completiondetail:gamesplayed'] = 'Number of games played';
+$string['completiondetail:gameswon'] = 'Number of games won';
+$string['completiondetail:rightanswers'] = 'Number of questions correctly answered';
+$string['completionexpected'] = 'Abschlusstermin';

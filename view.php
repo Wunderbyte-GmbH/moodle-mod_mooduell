@@ -24,7 +24,7 @@
 
 use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
-use \mod_mooduell\event\game_finished;
+use mod_mooduell\event\game_finished;
 use mod_mooduell\output\overview_student;
 use mod_mooduell\output\overview_teacher;
 

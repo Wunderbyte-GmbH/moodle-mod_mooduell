@@ -188,10 +188,14 @@ $string['qrtitle'] = "Anleitung QR-Login:";
 $string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode in der App und bestätige den Login mit dem einmaligen Pincode.";
 
 
-/*completion strings */
+// Activity completion.
 $string['completiongamesplayed'] = 'Teilnehmer:in muss Anzahl Spiele spielen';
 $string['completiongamesplayedlabel'] = 'Gespielte Runden';
 $string['completionrightanswers'] = 'Teilnehmer:in muss n Fragen richtig beantworten';
 $string['completionrightanswerslabel'] = 'Richtige Antworten';
 $string['completiongameswon'] = 'Teilnehmer:in muss eine bestimmte Anzahl Spiele gewinnen';
 $string['completiongameswonlabel'] = 'Gewonnene Spiele';
+$string['completiondetail:gamesplayed'] = 'Anzahl gespielter Spiele';
+$string['completiondetail:gameswon'] = 'Anzahl gewonnener Spiele';
+$string['completiondetail:rightanswers'] = 'Anzahl richtig beantworteter Fragen';
+$string['completionexpected'] = 'Expect completed on';

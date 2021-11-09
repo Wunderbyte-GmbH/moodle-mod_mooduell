@@ -25,6 +25,7 @@
 
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
+use mod_mooduell\completion\custom_completion;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -76,6 +77,10 @@ class mod_mooduell_external extends external_api {
 
         $result = array();
         $result['status'] = $startgameresult;
+
+        // Add challenges JSON string with completion data to $startgameresult.
+        $startgameresult->challenges = custom_completion::get_completion_challenges_json_string($mooduell);
+
         return $startgameresult;
     }
 
@@ -485,14 +490,19 @@ class mod_mooduell_external extends external_api {
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        // We create Mooduell Instance.
+        // We create the Mooduell instance.
         $mooduell = new mooduell($params['quizid']);
 
         // We create the game_controller Instance.
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         // We can now retrieve the questions and add them to our gamedata.
-        return $gamecontroller->get_questions();
+        $gamedata = $gamecontroller->get_questions();
+
+        // Add challenges JSON string with completion data to $gamedata.
+        $gamedata->challenges = custom_completion::get_completion_challenges_json_string($mooduell);
+
+        return $gamedata;
     }
 
     /**
