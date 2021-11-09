@@ -82,7 +82,7 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    mod_mooduell\mooduell::update_categories($moduleinstance->id, $mform->get_data());
+    mod_mooduell\mooduell::update_categories($moduleinstance->id, (object) $mform->get_data());
 
     // As empty checkboxes are not included in data, we have to make sure they are transmitted to DB.
     // Check for keys and add 0 if they are not present.
@@ -126,88 +126,6 @@ function mooduell_delete_instance($id) {
 
     return true;
 }
-
-/**
- * Helper function to retrieve a list of all completion modes ...
- * ... and their associated field names in student statistics.
- * @return array $completionmodes
- */
-function mooduell_get_completion_modes() {
-    // List of completion modes and the according fields in table $studentstatistics.
-    $completionmodes = [
-        'completiongamesplayed' => 'number_of_games_finished',
-        'completiongameswon' => 'number_of_games_won',
-        'completionrightanswers' => 'number_of_correct_answers'
-    ];
-
-    return $completionmodes;
-}
-
-/**
- * Obtains the automatic completion state for this mooduell instance based on any conditions
- * in mooduell settings.
- *
- * @param object $course Course
- * @param object $cm Course-module
- * @param int $userid User ID
- * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
- * @return bool True if completed, false if not, $type if conditions not set.
- */
-function mooduell_get_completion_state($course, $cm, $userid, $type) {
-    global $DB;
-
-    // If completion option is enabled, evaluate it and return true/false.
-    $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
-
-    $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
-    $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
-    $completion = true;
-    
-    // List of completion modes and the according fields in table $studentstatistics.
-    $completionmodes = mooduell_get_completion_modes();
-
-    foreach ($completionmodes as $completionmode => $statsfield) {
-        if (!empty($mooduell->{$completionmode})) {
-            // Check the number of games finished required against the number of games the user has finished.
-            if ($studentstatistics[$statsfield] >= $mooduell->{$completionmode}) {
-                $completion = $completion && true;
-            } else {
-                $completion = false;
-            }
-        }
-    }
-
-    return $completion;
-}
-
-/**
-     * Helper function to create the challenges JSON needed for activity completion.
-     * @param mooduell $mooduellinstance A MooDuell instance.
-     * @return string An encoded JSON string containing all challenges.
-     */
-function get_completion_challenges_json_string($mooduellinstance) {
-    $completionmodes = mooduell_get_completion_modes();
-    $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
-
-    $challengesarray = [];
-
-    foreach ($completionmodes as $completionmode => $statsfield) {
-        if (!empty($mooduellinstance->{$completionmode})) {
-            $challenge = new stdClass();
-            $challenge->challengetype = $completionmode;
-            // TODO: challenge->challengename
-            $challenge->actualnumber = $studentstatistics[$statsfield];
-            $challenge->targetnumber = $mooduellinstance->{$completionmode};
-            // TODO: challenge->targetdate
-            // TODO: challenge->challengerank
-
-            $challengesarray[] = $challenge;
-        }
-    }
-
-    return json_encode($challengesarray);
-}
-
 
 /**
  * Serve the files from the mooduell file areas
@@ -268,4 +186,17 @@ function mooduell_question_pluginfile(
 
     // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
     send_stored_file($file, 86400, 0, $forcedownload, $options);
+}
+
+/**
+ * This will show the completion info on the coursepage.
+ *
+ * @param cm_info $cm
+ * @return void
+ */
+function mod_mooduell_cm_info_view(cm_info $cm) {
+    global $OUTPUT, $USER;
+    $completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
+    $activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id); // Fetch activity dates.
+    $cm->set_content($OUTPUT->activity_information($cm, $completiondetails, $activitydates));
 }

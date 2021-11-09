@@ -21,6 +21,8 @@
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+use mod_mooduell\completion\custom_completion;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -404,7 +406,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
-        $completionmodes = mooduell_get_completion_modes();
+        $completionmodes = custom_completion::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $defaultvalues[$mode . 'enabled'] = !empty($defaultvalues[$mode]) ? 1 : 0;
             if (empty($defaultvalues[$mode])) {
@@ -420,7 +422,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     public function add_completion_rules() {
         $mform = $this->_form;
         $result = [];
-        $completionmodes = mooduell_get_completion_modes();
+        $completionmodes = custom_completion::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $group = array();
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
@@ -440,7 +442,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return bool
      */
     public function completion_rule_enabled($data) {
-        $completionmodes = mooduell_get_completion_modes();
+        $completionmodes = custom_completion::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
                 return true;
@@ -464,7 +466,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if (!empty($data->completionunlocked)) {
             $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
 
-            $completionmodes = mooduell_get_completion_modes();
+            $completionmodes = custom_completion::mooduell_get_completion_modes();
             foreach ($completionmodes as $completionmode => $field) {
                 if (empty($data->{$completionmode . 'enabled'}) || !$autocompletion) {
                     $data->{$completionmode} = 0;
@@ -473,5 +475,29 @@ class mod_mooduell_mod_form extends moodleform_mod {
         }
 
         return $data;
+    }
+
+    /**
+     * Allows module to modify the data returned by form get_data().
+     * This method is also called in the bulk activity completion form.
+     *
+     * Only available on moodleform_mod.
+     *
+     * @param stdClass $data The form data to be modified.
+     */
+    public function data_postprocessing($data) {
+        parent::data_postprocessing($data);
+
+        $completionmodes = custom_completion::mooduell_get_completion_modes();
+        
+        if (!empty($data->completionunlocked)) {
+            // Turn off completion settings if the checkboxes aren't ticked.
+            $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
+            foreach ($completionmodes as $completionmode) {
+                if (empty($data->{$completionmode}) || !$autocompletion) {
+                    $data->{$completionmode} = 0;
+                }
+            }
+        }
     }
 }

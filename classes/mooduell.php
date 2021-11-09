@@ -30,6 +30,7 @@ use \moodle_url;
 use coding_exception;
 use context_module;
 use core_customfield\category;
+use \cm_info;
 use dml_exception;
 use mod_mooduell\game_control;
 use mod_mooduell\output\viewpage;
@@ -276,7 +277,7 @@ class mooduell
      * @throws moodle_exception
      */
     public function display_page(bool $inline = null, string $pagename = null, $gameid = '') {
-        global $PAGE;
+        global $PAGE, $OUTPUT, $USER;
 
         $output = $PAGE->get_renderer('mod_mooduell');
         $data = [];
@@ -285,7 +286,7 @@ class mooduell
         if (!$inline) {
             $out .= $output->header();
         }
-
+        
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
