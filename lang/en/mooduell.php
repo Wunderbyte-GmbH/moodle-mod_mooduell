@@ -232,4 +232,4 @@ $string['completiongameswonlabel'] = 'Won games';
 $string['completiondetail:gamesplayed'] = 'Play {$a} games';
 $string['completiondetail:gameswon'] = 'Win {$a} games';
 $string['completiondetail:rightanswers'] = 'Answer {$a} questions correctly';
-$string['completionexpected'] = 'Abschlusstermin';
+$string['completionexpected'] = 'Expect completed on';
