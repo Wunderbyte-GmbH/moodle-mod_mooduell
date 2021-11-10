@@ -476,28 +476,4 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         return $data;
     }
-
-    /**
-     * Allows module to modify the data returned by form get_data().
-     * This method is also called in the bulk activity completion form.
-     *
-     * Only available on moodleform_mod.
-     *
-     * @param stdClass $data The form data to be modified.
-     */
-    public function data_postprocessing($data) {
-        parent::data_postprocessing($data);
-
-        $completionmodes = custom_completion::mooduell_get_completion_modes();
-        
-        if (!empty($data->completionunlocked)) {
-            // Turn off completion settings if the checkboxes aren't ticked.
-            $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
-            foreach ($completionmodes as $completionmode) {
-                if (empty($data->{$completionmode}) || !$autocompletion) {
-                    $data->{$completionmode} = 0;
-                }
-            }
-        }
-    }
 }
