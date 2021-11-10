@@ -24,6 +24,7 @@
 
 use core_completion\api;
 use mod_mooduell\mooduell;
+use mod_mooduell\completion\custom_completion;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -189,14 +190,41 @@ function mooduell_question_pluginfile(
 }
 
 /**
- * This will show the completion info on the coursepage.
+ * Add a get_coursemodule_info function in case any MooDuell course module wants to add 'extra' information
+ * for the course (see resource).
  *
- * @param cm_info $cm
- * @return void
+ * Given a course_module object, this function returns any "extra" information that may be needed
+ * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
+ *
+ * @param stdClass $coursemodule The coursemodule object (record).
+ * @return cached_cm_info An object on information that the courses
+ *                        will know about (most noticeably, an icon).
  */
-function mod_mooduell_cm_info_view(cm_info $cm) {
-    global $OUTPUT, $USER;
-    $completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
-    $activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id); // Fetch activity dates.
-    $cm->set_content($OUTPUT->activity_information($cm, $completiondetails, $activitydates));
+function mooduell_get_coursemodule_info($coursemodule) {
+    global $DB;
+
+    $dbparams = ['id' => $coursemodule->instance];
+    $fields = 'id, name, intro, introformat, completiongamesplayed, completiongameswon, completionrightanswers';
+    
+    if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
+        return false;
+    }
+
+    $result = new cached_cm_info();
+    $result->name = $mooduellobj->name;
+
+    if ($coursemodule->showdescription) {
+        // Convert intro to html. Do not filter cached version, filters run at display time.
+        $result->content = format_module_intro('mooduell', $mooduellobj, $coursemodule->id, false);
+    }
+
+    // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+        $completionmodes = custom_completion::get_defined_custom_rules();
+        foreach ($completionmodes as $completionmode) {
+            $result->customdata['customcompletionrules'][$completionmode] = $mooduellobj->{$completionmode};
+        }
+    }
+
+    return $result;
 }
