@@ -198,4 +198,4 @@ $string['completiongameswonlabel'] = 'Gewonnene Spiele';
 $string['completiondetail:gamesplayed'] = 'Starte {$a} Spiele';
 $string['completiondetail:gameswon'] = 'Gewinne {$a} Spiele';
 $string['completiondetail:rightanswers'] = 'Beantworte {$a} Fragen richtig';
-$string['completionexpected'] = 'Expect completed on';
+$string['completionexpected'] = 'Abschlusstermin';

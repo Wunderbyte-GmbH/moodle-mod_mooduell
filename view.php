@@ -51,7 +51,6 @@ require_login($mooduell->course, true, $mooduell->cm);
 $context = $mooduell->context;
 
 $pagename = null;
-global $PAGE;
 
 $mooduell->view_page();
 
@@ -99,6 +98,14 @@ switch ($action) {
         $pagename = 'downloadhighscores';
 }
 
+if (!$inline) {
+    $cminfo = cm_info::create($mooduell->cm, $USER->id);
+    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id); // Fetch completion information. 
+    $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id); // Fetch activity dates.
+    $out .= $OUTPUT->heading(format_string($mooduell->cm->name), 2, null);
+    $out .= $OUTPUT->activity_information($cminfo, $completiondetails, $activitydates);
+}
+
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {
     $pagename = 'studentsview';
     $overview = new overview_student($mooduell);
@@ -109,10 +116,6 @@ if (!has_capability('mod/mooduell:viewstatistics', $context)) {
 }
 
 if (!$inline) {
-    $cminfo = cm_info::create($mooduell->cm, $USER->id);
-    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id); // Fetch completion information. 
-    $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id); // Fetch activity dates.
-    $out .= $OUTPUT->activity_information($cminfo, $completiondetails, $activitydates);
     $out .= $output->footer();
 }
 
