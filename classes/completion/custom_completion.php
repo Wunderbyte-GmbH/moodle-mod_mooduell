@@ -53,10 +53,16 @@ class custom_completion extends activity_custom_completion {
      * @return array
      */
     public function get_custom_rule_descriptions(): array {
+        global $DB;
+
+        $gamesplayed = $this->cm->customdata['customcompletionrules']['completiongamesplayed'] ?? 0;
+        $gameswon = $this->cm->customdata['customcompletionrules']['completiongameswon'] ?? 0;
+        $rightanswers = $this->cm->customdata['customcompletionrules']['completionrightanswers'] ?? 0;
+
         return [
-            'completiongamesplayed' => get_string('completiondetail:gamesplayed', 'mooduell'),
-            'completiongameswon' => get_string('completiondetail:gameswon', 'mooduell'),
-            'completionrightanswers' => get_string('completiondetail:rightanswers', 'mooduell')
+            'completiongamesplayed' => get_string('completiondetail:gamesplayed', 'mod_mooduell', $gamesplayed),
+            'completiongameswon' => get_string('completiondetail:gameswon', 'mod_mooduell', $gameswon),
+            'completionrightanswers' => get_string('completiondetail:rightanswers', 'mod_mooduell', $rightanswers)
         ];
     }
 
@@ -74,7 +80,7 @@ class custom_completion extends activity_custom_completion {
         // If completion option is enabled, evaluate it and return true/false.
         $mooduell = $DB->get_record('mooduell', ['id' => $this->cm->instance], '*', MUST_EXIST);
 
-        $mooduellinstance = mooduell::get_mooduell_by_instance($this->cm->instance);
+        $mooduellinstance = mooduell::get_mooduell_by_instance((int) $this->cm->instance);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
         // List of completion modes and the according fields in table $studentstatistics.
