@@ -265,6 +265,8 @@ class mod_mooduell_external extends external_api {
 
             if ($games && count($games) > 0) {
 
+                $quiz['challenges'] = custom_completion::get_completion_challenges_array($mooduell);
+
                 foreach ($games as $game) {
 
                     $quiz['games'][] = [
@@ -326,6 +328,17 @@ class mod_mooduell_external extends external_api {
                         'countdown' => new external_value(PARAM_INT, 'countdown'),
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
+                        'challenges' => new external_multiple_structure(new external_single_structure(array(
+                                                'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
+                                                'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
+                                                'actualnumber' => new external_value(PARAM_INT, 'actual number'),
+                                                'targetnumber' => new external_value(PARAM_INT, 'target number'),
+                                                'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
+                                                'targetdate' => new external_value(PARAM_INT, 'unix timestamp of expected completion date'),
+                                                'challengerank' => new external_value(PARAM_INT, 'a user\'s ranking within a challenge')
+                                        )
+                                )
+                        ),
                         'games' => new external_multiple_structure(new external_single_structure(array(
                                 'gameid' => new external_value(PARAM_INT, 'id of game'),
                                 'playeraid' => new external_value(PARAM_INT, 'id of player A'),
