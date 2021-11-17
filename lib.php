@@ -189,42 +189,83 @@ function mooduell_question_pluginfile(
     send_stored_file($file, 86400, 0, $forcedownload, $options);
 }
 
-/**
- * Add a get_coursemodule_info function in case any MooDuell course module wants to add 'extra' information
- * for the course (see resource).
- *
- * Given a course_module object, this function returns any "extra" information that may be needed
- * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
- *
- * @param stdClass $coursemodule The coursemodule object (record).
- * @return cached_cm_info An object on information that the courses
- *                        will know about (most noticeably, an icon).
- */
-function mooduell_get_coursemodule_info($coursemodule) {
-    global $DB;
+// The following function only applies to Moodle 3.11 and later.
+if ($CFG->version >= 2021051700) {
+    /**
+     * Add a get_coursemodule_info function in case any MooDuell course module wants to add 'extra' information
+     * for the course (see resource).
+     *
+     * Given a course_module object, this function returns any "extra" information that may be needed
+     * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
+     *
+     * @param stdClass $coursemodule The coursemodule object (record).
+     * @return cached_cm_info An object on information that the courses
+     *                        will know about (most noticeably, an icon).
+     */
+    function mooduell_get_coursemodule_info($coursemodule) {
+        global $DB;
 
-    $dbparams = ['id' => $coursemodule->instance];
-    $fields = 'id, name, intro, introformat, completiongamesplayed, completiongameswon, completionrightanswers';
-    
-    if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
-        return false;
-    }
-
-    $result = new cached_cm_info();
-    $result->name = $mooduellobj->name;
-
-    if ($coursemodule->showdescription) {
-        // Convert intro to html. Do not filter cached version, filters run at display time.
-        $result->content = format_module_intro('mooduell', $mooduellobj, $coursemodule->id, false);
-    }
-
-    // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
-    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $completionmodes = custom_completion::get_defined_custom_rules();
-        foreach ($completionmodes as $completionmode) {
-            $result->customdata['customcompletionrules'][$completionmode] = $mooduellobj->{$completionmode};
+        $dbparams = ['id' => $coursemodule->instance];
+        $fields = 'id, name, intro, introformat, completiongamesplayed, completiongameswon, completionrightanswers';
+        
+        if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
+            return false;
         }
-    }
 
-    return $result;
+        $result = new cached_cm_info();
+        $result->name = $mooduellobj->name;
+
+        if ($coursemodule->showdescription) {
+            // Convert intro to html. Do not filter cached version, filters run at display time.
+            $result->content = format_module_intro('mooduell', $mooduellobj, $coursemodule->id, false);
+        }
+
+        // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+        if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+            $completionmodes = custom_completion::get_defined_custom_rules();
+            foreach ($completionmodes as $completionmode) {
+                $result->customdata['customcompletionrules'][$completionmode] = $mooduellobj->{$completionmode};
+            }
+        }
+
+        return $result;
+    }
+} else {
+    // Deprecated in Moodle 3.11 and later.
+    /**
+     * Obtains the automatic completion state for this mooduell instance based on any conditions
+     * in mooduell settings.
+     *
+     * @param object $course Course
+     * @param object $cm Course-module
+     * @param int $userid User ID
+     * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+     * @return bool True if completed, false if not, $type if conditions not set.
+     */
+    function mooduell_get_completion_state($course, $cm, $userid, $type) {
+        global $DB;
+
+        // If completion option is enabled, evaluate it and return true/false.
+        $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
+
+        $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
+        $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
+        $completion = true;
+        
+        // List of completion modes and the according fields in table $studentstatistics.
+        $completionmodes = custom_completion::mooduell_get_completion_modes();
+
+        foreach ($completionmodes as $completionmode => $statsfield) {
+            if (!empty($mooduell->{$completionmode})) {
+                // Check the number of games finished required against the number of games the user has finished.
+                if ($studentstatistics[$statsfield] >= $mooduell->{$completionmode}) {
+                    $completion = $completion && true;
+                } else {
+                    $completion = false;
+                }
+            }
+        }
+
+        return $completion;
+    }
 }
