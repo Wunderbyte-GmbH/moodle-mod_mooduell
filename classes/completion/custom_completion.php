@@ -131,30 +131,49 @@ class custom_completion extends activity_custom_completion {
     }
 
     /**
-     * Helper function to create the challenges JSON needed for activity completion.
+     * Helper function to create the challenges array needed for the get_game_data webservice.
      * @param mooduell $mooduellinstance A MooDuell instance.
-     * @return string An encoded JSON string containing all challenges.
+     * @return array An array of objects. Each object contains a challenge.
      */
-    public static function get_completion_challenges_json_string($mooduellinstance) {
+    public static function get_completion_challenges_array($mooduellinstance): array {
         $completionmodes = self::mooduell_get_completion_modes();
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
         $challengesarray = [];
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-            if (!empty($mooduellinstance->{$completionmode})) {
+            if (!empty($mooduellinstance->settings->{$completionmode})) {
                 $challenge = new stdClass();
+                $challenge->challengename = null; //TODO
                 $challenge->challengetype = $completionmode;
-                // TODO: challenge->challengename
-                $challenge->actualnumber = $studentstatistics[$statsfield];
-                $challenge->targetnumber = $mooduellinstance->{$completionmode};
-                // TODO: challenge->targetdate
-                // TODO: challenge->challengerank
+                $challenge->actualnumber = (int) $studentstatistics[$statsfield];
+                $challenge->targetnumber = (int) $mooduellinstance->settings->{$completionmode};
+
+                // Calculate challenge percentage.
+                $percentage = null;
+                if(isset($challenge->actualnumber) && !empty($challenge->targetnumber)) {
+                    if ($challenge->actualnumber == 0) {
+                        $percentage = 0;
+                    } else if ($challenge->actualnumber > 0
+                        && $challenge->actualnumber < $challenge->targetnumber) {
+                        $percentage = ($challenge->actualnumber / $challenge->targetnumber) * 100;
+                    } else if ($challenge->actualnumber >= $challenge->targetnumber) {
+                        $percentage = 100;
+                    } else {
+                        $percentage = null;
+                    }
+                } else {
+                    $percentage = null;
+                }
+
+                $challenge->challengepercentage = (int) floor($percentage);
+                $challenge->targetdate = null; //TODO
+                $challenge->challengerank = null; //TODO
 
                 $challengesarray[] = $challenge;
             }
         }
 
-        return json_encode($challengesarray);
+        return $challengesarray;
     }
 }
