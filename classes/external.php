@@ -78,8 +78,8 @@ class mod_mooduell_external extends external_api {
         $result = array();
         $result['status'] = $startgameresult;
 
-        // Add challenges JSON string with completion data to $startgameresult.
-        $startgameresult->challenges = custom_completion::get_completion_challenges_json_string($mooduell);
+        // Add challenges array with completion data to $startgameresult.
+        $startgameresult->challenges = custom_completion::get_completion_challenges_array($mooduell);
 
         return $startgameresult;
     }
@@ -500,7 +500,7 @@ class mod_mooduell_external extends external_api {
         $gamedata = $gamecontroller->get_questions();
 
         // Add challenges JSON string with completion data to $gamedata.
-        $gamedata->challenges = custom_completion::get_completion_challenges_json_string($mooduell);
+        $gamedata->challenges = custom_completion::get_completion_challenges_array($mooduell);
 
         return $gamedata;
     }
@@ -532,6 +532,17 @@ class mod_mooduell_external extends external_api {
                         'winnerid' => new external_value(PARAM_INT, 'winner id'),
                         'timemodified' => new external_value(PARAM_INT, 'time modified'),
                         'status' => new external_value(PARAM_INT, 'status'),
+                        'challenges' => new external_multiple_structure(new external_single_structure(array(
+                                                'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
+                                                'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
+                                                'actualnumber' => new external_value(PARAM_INT, 'actual number'),
+                                                'targetnumber' => new external_value(PARAM_INT, 'target number'),
+                                                'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
+                                                'targetdate' => new external_value(PARAM_INT, 'unix timestamp of expected completion date'),
+                                                'challengerank' => new external_value(PARAM_INT, 'a user\'s ranking within a challenge')
+                                        )
+                                )
+                        ),
                         'questions' => new external_multiple_structure(new external_single_structure(array(
                                                 'questionid' => new external_value(PARAM_INT, 'questionid'),
                                                 'questiontext' => new external_value(PARAM_RAW, 'question text'),
@@ -544,14 +555,13 @@ class mod_mooduell_external extends external_api {
                                                 'answers' => new external_multiple_structure(new external_single_structure(array(
                                                                         'id' => new external_value(PARAM_INT, 'answerid'),
                                                                         'answertext' => new external_value(PARAM_RAW,
-                                                                                'answer text'),
+                                                                                'answer text')
                                                                 )
                                                         )
                                                 )
                                         )
                                 )
-                        ),
-                        'challenges' => new external_value(PARAM_RAW, 'challenges')
+                        )
                 )
         );
     }
