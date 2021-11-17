@@ -98,7 +98,8 @@ switch ($action) {
         $pagename = 'downloadhighscores';
 }
 
-if (!$inline) {
+// The following part only applies to Moodle 3.11 and later.
+if (!$inline && $CFG->version >= 2021051700) {
     $cminfo = cm_info::create($mooduell->cm, $USER->id);
     $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id); // Fetch completion information. 
     $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id); // Fetch activity dates.
