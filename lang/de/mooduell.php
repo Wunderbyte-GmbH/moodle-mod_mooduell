@@ -188,13 +188,14 @@ $string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach di
 
 
 // Activity completion.
-$string['completiongamesplayed'] = 'Teilnehmer:in muss Anzahl Spiele spielen';
+$string['completiongamesplayed'] = 'Teilnehmer*in muss Anzahl Spiele spielen';
 $string['completiongamesplayedlabel'] = 'Gespielte Runden';
-$string['completionrightanswers'] = 'Teilnehmer:in muss n Fragen richtig beantworten';
+$string['completionrightanswers'] = 'Teilnehmer*in muss n Fragen richtig beantworten';
 $string['completionrightanswerslabel'] = 'Richtige Antworten';
-$string['completiongameswon'] = 'Teilnehmer:in muss eine bestimmte Anzahl Spiele gewinnen';
+$string['completiongameswon'] = 'Teilnehmer*in muss eine bestimmte Anzahl Spiele gewinnen';
 $string['completiongameswonlabel'] = 'Gewonnene Spiele';
 $string['completiondetail:gamesplayed'] = 'Starte {$a} Spiele';
 $string['completiondetail:gameswon'] = 'Gewinne {$a} Spiele';
 $string['completiondetail:rightanswers'] = 'Beantworte {$a} Fragen richtig';
 $string['completionexpected'] = 'Abschlusstermin';
+$string['completionchallengename'] = 'Challenge benennen...';

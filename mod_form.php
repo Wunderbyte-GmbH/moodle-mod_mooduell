@@ -428,9 +428,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $group = array();
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
             $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
+            $group[] = $mform->createElement('checkbox', $mode . 'nameenabled', '', get_string('completionchallengename', 'mooduell'));
+            $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 40));
             $mform->setType($mode, PARAM_INT);
+            $mform->setType($mode . 'name', PARAM_TEXT);
             $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
-            $mform->disabledIf($mode, $mode . 'enabled', 'notchecked');
+            $mform->hideIf($mode, $mode . 'enabled', 'notchecked');
+            $mform->hideIf($mode . 'nameenabled', $mode . 'enabled', 'notchecked');
+            $mform->hideIf($mode . 'name', $mode . 'nameenabled', 'notchecked');
             $result[] = $mode . 'group';
         }
         return $result;
