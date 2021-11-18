@@ -22,6 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 use mod_mooduell\completion\custom_completion;
+use mod_mooduell\completion\completion_utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -406,7 +407,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
-        $completionmodes = custom_completion::mooduell_get_completion_modes();
+        $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $defaultvalues[$mode . 'enabled'] = !empty($defaultvalues[$mode]) ? 1 : 0;
             if (empty($defaultvalues[$mode])) {
@@ -422,7 +423,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     public function add_completion_rules() {
         $mform = $this->_form;
         $result = [];
-        $completionmodes = custom_completion::mooduell_get_completion_modes();
+        $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $group = array();
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
@@ -442,7 +443,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return bool
      */
     public function completion_rule_enabled($data) {
-        $completionmodes = custom_completion::mooduell_get_completion_modes();
+        $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
                 return true;
@@ -466,7 +467,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if (!empty($data->completionunlocked)) {
             $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
 
-            $completionmodes = custom_completion::mooduell_get_completion_modes();
+            $completionmodes = completion_utils::mooduell_get_completion_modes();
             foreach ($completionmodes as $completionmode => $field) {
                 if (empty($data->{$completionmode . 'enabled'}) || !$autocompletion) {
                     $data->{$completionmode} = 0;
