@@ -51,21 +51,44 @@ function mooduell_supports($feature) {
 }
 
 /**
- * Saves a new instance of the mod_mooduell into the database.
+ * Saves a new instance of mod_mooduell into the database.
  *
  * Given an object containing all the necessary data, (defined by the form
  * in mod_form.php) this function will create a new instance and return the id
  * number of the instance.
  *
- * @param stdClass $data
+ * @param stdClass $formdata
  * @param mod_mooduell_mod_form|null $mform
  * @return bool|int
  * @throws dml_exception
  */
-function mooduell_add_instance(stdClass $data, mod_mooduell_mod_form $mform = null) {
-    global $CFG;
-    require_once($CFG->dirroot . '/mod/mooduell/classes/mooduell.php');
-    return mooduell::add_instance($data);
+function mooduell_add_instance(stdClass $formdata, mod_mooduell_mod_form $mform = null) {
+    global $DB;
+    // Add the database record.
+    $data = new stdClass();
+    $data->name = $formdata->name;
+    $data->timemodified = time();
+    $data->timecreated = time();
+    $data->course = $formdata->course;
+    $data->courseid = $formdata->course;
+    $data->intro = $formdata->intro;
+    $data->introformat = $formdata->introformat;
+    $data->countdown = isset($formdata->countdown) ? $formdata->countdown : 0;
+    $data->waitfornextquestion = isset($formdata->waitfornextquestion) ? $formdata->waitfornextquestion : 0;
+    $data->usefullnames = isset($formdata->usefullnames) ? $formdata->usefullnames : 0;
+    $data->showcontinuebutton = isset($formdata->showcontinuebutton) ? $formdata->showcontinuebutton : 0;
+    $data->showcorrectanswer = isset($formdata->showcorrectanswer) ? $formdata->showcorrectanswer : 0;
+    $data->showgeneralfeedback = isset($formdata->showgeneralfeedback) ? $formdata->showgeneralfeedback : 0;
+    $data->showanswersfeedback = isset($formdata->showanswersfeedback) ? $formdata->showanswersfeedback : 0;
+
+    $data->quizid = (!empty($formdata->quizid) && $formdata->quizid > 0) ? $formdata->quizid : null;
+
+    $mooduellid = $DB->insert_record('mooduell', $data);
+
+    // Add postprocess function.
+    mooduell_update_categories($mooduellid, $formdata);
+
+    return $mooduellid;
 }
 
 /**
@@ -84,7 +107,7 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    mod_mooduell\mooduell::update_categories($moduleinstance->id, (object) $mform->get_data());
+    mooduell_update_categories($moduleinstance->id, (object) $mform->get_data());
 
     // As empty checkboxes are not included in data, we have to make sure they are transmitted to DB.
     // Check for keys and add 0 if they are not present.
@@ -127,6 +150,85 @@ function mooduell_delete_instance($id) {
     $DB->delete_records('mooduell_questions', array('mooduellid' => $id));
 
     return true;
+}
+
+/**
+ * Function is called on creating or updating MooDuell Quiz Settings.
+ * One Quiz can have one or more categories-entries.
+ * This function has to make sure creating and updating results in the correct DB entries.
+ * @param int $mooduellid
+ * @param object $formdata
+ * @return void|null
+ * @throws dml_exception
+ */
+function mooduell_update_categories(int $mooduellid, object $formdata) {
+    global $DB;
+
+    $categoriesarray = [];
+
+    $counter = 0;
+    $groupname = 'categoriesgroup' . $counter;
+
+    while (isset($formdata->$groupname)) {
+
+        $entry = new stdClass();
+        $newrecord = (object) $formdata->$groupname;
+        $entry->category = $newrecord->category;
+        $entry->weight = $newrecord->weight;
+        $categoriesarray[] = $entry;
+
+        $counter++;
+        $checkboxname = "addanothercategory" . $counter;
+        $groupname = 'categoriesgroup' . $counter;
+        if (!isset($formdata->$checkboxname)) {
+            break;
+        }
+    }
+
+    // Write categories to categories table.
+    if (count($categoriesarray) > 0) {
+
+        // First we have to check if we have any category entry for our Mooduell Id.
+        $foundrecords = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
+        $newrecords = $categoriesarray;
+
+        // If there is no categoriesgroup in Formdata at all, we abort.
+        if (!$newrecords || count($newrecords) == 0) {
+            return;
+        }
+
+        // Else we determine if we have more new or old records and set $i accordingly.
+        $max = count($foundrecords) >= count($newrecords) ? count($foundrecords) : count($newrecords);
+        $i = 0;
+
+        while ($i < $max) {
+
+            $foundrecord = count($foundrecords) > 0 ? array_pop($foundrecords) : null;
+            $newrecord = count($newrecords) > 0 ? array_pop($newrecords) : null;
+
+            // If we have still a foundrecord left, we update it.
+            if ($foundrecord && $newrecord) {
+                $data = new stdClass();
+                $data->id = $foundrecord->id;
+                $data->mooduellid = $mooduellid;
+                $data->category = $newrecord->category;
+                $data->weight = $newrecord->weight;
+                $DB->update_record('mooduell_categories', $data);
+            } else if ($foundrecord) {
+                // Else we have more foundrecords than new recors, we delete the found ones.
+                $DB->delete_records('mooduell_categories', array('id' => $foundrecord->id));
+            } else {
+                $data = new stdClass();
+                $data->mooduellid = $mooduellid;
+                $data->category = $newrecord->category;
+                $data->weight = $newrecord->weight;
+                $DB->insert_record('mooduell_categories', $data);
+            }
+            $i++;
+        }
+    }
+
+    return null;
 }
 
 /**
