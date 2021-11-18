@@ -25,6 +25,7 @@
 use core_completion\api;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
+use mod_mooduell\completion\completion_utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -253,7 +254,7 @@ if ($CFG->version >= 2021051700) {
         $completion = true;
         
         // List of completion modes and the according fields in table $studentstatistics.
-        $completionmodes = mooduell_get_completion_modes();
+        $completionmodes = completion_utils::mooduell_get_completion_modes();
 
         foreach ($completionmodes as $completionmode => $statsfield) {
             if (!empty($mooduell->{$completionmode})) {
@@ -267,21 +268,5 @@ if ($CFG->version >= 2021051700) {
         }
 
         return $completion;
-    }
-
-    /**
-     * Helper function to retrieve a list of all completion modes ...
-     * ... and their associated field names in student statistics.
-     * @return array $completionmodes
-     */
-    function mooduell_get_completion_modes() {
-        // List of completion modes and the according fields in table $studentstatistics.
-        $completionmodes = [
-            'completiongamesplayed' => 'number_of_games_finished',
-            'completiongameswon' => 'number_of_games_won',
-            'completionrightanswers' => 'number_of_correct_answers'
-        ];
-
-        return $completionmodes;
     }
 }

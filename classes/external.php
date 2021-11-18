@@ -26,6 +26,7 @@
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
+use mod_mooduell\completion\completion_utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -79,7 +80,7 @@ class mod_mooduell_external extends external_api {
         $result['status'] = $startgameresult;
 
         // Add challenges array with completion data to $startgameresult.
-        $startgameresult->challenges = custom_completion::get_completion_challenges_array($mooduell);
+        $startgameresult->challenges = completion_utils::get_completion_challenges_array($mooduell);
 
         return $startgameresult;
     }
@@ -265,7 +266,7 @@ class mod_mooduell_external extends external_api {
 
             if ($games && count($games) > 0) {
 
-                $quiz['challenges'] = custom_completion::get_completion_challenges_array($mooduell);
+                $quiz['challenges'] = completion_utils::get_completion_challenges_array($mooduell);
 
                 foreach ($games as $game) {
 
@@ -513,7 +514,7 @@ class mod_mooduell_external extends external_api {
         $gamedata = $gamecontroller->get_questions();
 
         // Add challenges JSON string with completion data to $gamedata.
-        $gamedata->challenges = custom_completion::get_completion_challenges_array($mooduell);
+        $gamedata->challenges = completion_utils::get_completion_challenges_array($mooduell);
 
         return $gamedata;
     }

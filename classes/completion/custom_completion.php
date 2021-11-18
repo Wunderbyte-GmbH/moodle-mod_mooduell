@@ -20,16 +20,13 @@ namespace mod_mooduell\completion;
 
 use core_completion\activity_custom_completion;
 use mod_mooduell\mooduell;
-use stdClass;
+use mod_mooduell\completion\completion_utils;
 
 /**
  * Activity custom completion subclass for the MooDuell activity.
  *
- * Class for defining mod_quiz's custom completion rules and fetching the completion statuses
- * of the custom completion rules for a given quiz instance and a user.
- *
- * @package   mod_quiz
- * @copyright 2021 Shamim Rezaie <shamim@moodle.com>
+ * @package   mod_mooduell
+ * @copyright 2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class custom_completion extends activity_custom_completion {
@@ -84,7 +81,7 @@ class custom_completion extends activity_custom_completion {
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
         // List of completion modes and the according fields in table $studentstatistics.
-        $completionmodes = self::mooduell_get_completion_modes();
+        $completionmodes = completion_utils::mooduell_get_completion_modes();
 
         $status = COMPLETION_INCOMPLETE;
 
@@ -112,68 +109,5 @@ class custom_completion extends activity_custom_completion {
             'completiongameswon',
             'completionrightanswers'
         ];
-    }
-
-    /**
-     * Helper function to retrieve a list of all completion modes ...
-     * ... and their associated field names in student statistics.
-     * @return array $completionmodes
-     */
-    public static function mooduell_get_completion_modes() {
-        // List of completion modes and the according fields in table $studentstatistics.
-        $completionmodes = [
-            'completiongamesplayed' => 'number_of_games_finished',
-            'completiongameswon' => 'number_of_games_won',
-            'completionrightanswers' => 'number_of_correct_answers'
-        ];
-
-        return $completionmodes;
-    }
-
-    /**
-     * Helper function to create the challenges array needed for the get_game_data webservice.
-     * @param mooduell $mooduellinstance A MooDuell instance.
-     * @return array An array of objects. Each object contains a challenge.
-     */
-    public static function get_completion_challenges_array($mooduellinstance): array {
-        $completionmodes = self::mooduell_get_completion_modes();
-        $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
-
-        $challengesarray = [];
-
-        foreach ($completionmodes as $completionmode => $statsfield) {
-            if (!empty($mooduellinstance->settings->{$completionmode})) {
-                $challenge = new stdClass();
-                $challenge->challengename = null; //TODO
-                $challenge->challengetype = $completionmode;
-                $challenge->actualnumber = (int) $studentstatistics[$statsfield];
-                $challenge->targetnumber = (int) $mooduellinstance->settings->{$completionmode};
-
-                // Calculate challenge percentage.
-                $percentage = null;
-                if(isset($challenge->actualnumber) && !empty($challenge->targetnumber)) {
-                    if ($challenge->actualnumber == 0) {
-                        $percentage = 0;
-                    } else if ($challenge->actualnumber > 0
-                        && $challenge->actualnumber < $challenge->targetnumber) {
-                        $percentage = ($challenge->actualnumber / $challenge->targetnumber) * 100;
-                    } else if ($challenge->actualnumber >= $challenge->targetnumber) {
-                        $percentage = 100;
-                    } else {
-                        $percentage = null;
-                    }
-                } else {
-                    $percentage = null;
-                }
-
-                $challenge->challengepercentage = (int) floor($percentage);
-                $challenge->targetdate = null; //TODO
-                $challenge->challengerank = null; //TODO
-
-                $challengesarray[] = $challenge;
-            }
-        }
-
-        return $challengesarray;
     }
 }
