@@ -234,3 +234,6 @@ $string['completiondetail:gameswon'] = 'Win {$a} games';
 $string['completiondetail:rightanswers'] = 'Answer {$a} questions correctly';
 $string['completionexpected'] = 'Expect completed on';
 $string['completionchallengename'] = 'Add challenge name...';
+$string['challengename:completiongamesplayed'] = 'Number of games challenge';
+$string['challengename:completiongameswon'] = 'Number of games won challenge';
+$string['challengename:completionrightanswers'] = 'Number of right answers challenge';

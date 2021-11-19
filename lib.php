@@ -85,8 +85,11 @@ function mooduell_add_instance(stdClass $formdata, mod_mooduell_mod_form $mform 
 
     $mooduellid = $DB->insert_record('mooduell', $data);
 
-    // Add postprocess function.
+    // Update MooDuell categories.
     mooduell_update_categories($mooduellid, $formdata);
+
+    // Update MooDuell challenges.
+    mooduell_update_challenges($mooduellid, $formdata);
 
     return $mooduellid;
 }
@@ -107,7 +110,11 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
+    // Update MooDuell categories.
     mooduell_update_categories($moduleinstance->id, (object) $mform->get_data());
+
+    // Update MooDuell challenges.
+    mooduell_update_challenges($moduleinstance->id, (object) $mform->get_data());
 
     // As empty checkboxes are not included in data, we have to make sure they are transmitted to DB.
     // Check for keys and add 0 if they are not present.
@@ -225,6 +232,71 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
                 $DB->insert_record('mooduell_categories', $data);
             }
             $i++;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Function is called on creating or updating MooDuell settings.
+ * Challenges are stored in a separate table: mooduell_challenges
+ * @param int $mooduellid
+ * @param object $formdata
+ * @return void|null
+ * @throws dml_exception
+ */
+function mooduell_update_challenges(int $mooduellid, object $formdata) {
+    global $DB;
+
+    // List of completion modes and the according fields in table $studentstatistics.
+    $completionmodes = completion_utils::mooduell_get_completion_modes();
+
+    foreach ($completionmodes as $mode => $value) {
+
+        $challengeobj = new stdClass;
+        $challengeobj->mooduellid = $mooduellid;
+        $challengeobj->challengetype = $mode;
+
+        // If checkbox for completion mode is set...
+        if (!empty($formdata->{$mode . 'enabled'}) && !empty($formdata->{$mode})) {
+            $challengeobj->targetnumber = $formdata->{$mode};
+        } else {
+            $where = "mooduellid = :mooduellid AND challengetype = :challengetype";
+            $params = [
+                'mooduellid' => $mooduellid,
+                'challengetype' => $mode
+            ];
+
+            // Else we want to make sure there is no entry in DB anymore.
+            $DB->delete_records_select('mooduell_challenges', $where, $params);
+            // We do not need to do anything else in this case, so continue with next mode.
+            continue;
+        }
+
+        // If checkbox for challenge name is set...
+        if (!empty($formdata->{$mode . 'nameenabled'}) && !empty($formdata->{$mode . 'name'})) {
+            $challengeobj->challengename = $formdata->{$mode . 'name'};
+        } else {
+            // Use default name, if no name has been set.
+            $challengeobj->challengename = get_string('challengename:' . $mode, 'mooduell');
+        }
+
+        $sql = "SELECT * FROM {mooduell_challenges} WHERE mooduellid = :mooduellid AND challengetype = :challengetype";
+        $params = [
+            'mooduellid' => $mooduellid,
+            'challengetype' => $mode
+        ];
+
+        // If a record for this quiz and mode already exists...
+        if ($existingrecords = $DB->get_records_sql($sql, $params)) {
+            $existingrecord = array_pop($existingrecords);
+            // ... update existing record in mooduell_challenges.
+            $challengeobj->id = $existingrecord->id;
+            $DB->update_record('mooduell_challenges', $challengeobj);
+        } else {
+            // If no record exists yet, then insert new record into mooduell_challenges.
+            $DB->insert_record('mooduell_challenges', $challengeobj);
         }
     }
 
