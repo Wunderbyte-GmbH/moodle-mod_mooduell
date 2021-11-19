@@ -200,3 +200,6 @@ $string['completiondetail:gameswon'] = 'Gewinne {$a} Spiele';
 $string['completiondetail:rightanswers'] = 'Beantworte {$a} Fragen richtig';
 $string['completionexpected'] = 'Abschlusstermin';
 $string['completionchallengename'] = 'Challenge benennen...';
+$string['challengename:completiongamesplayed'] = 'Spielanzahl-Challenge';
+$string['challengename:completiongameswon'] = '"Gewonnene Spiele"-Challenge';
+$string['challengename:completionrightanswers'] = '"Richtige Antworten"-Challenge';

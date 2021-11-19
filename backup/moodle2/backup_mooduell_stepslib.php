@@ -56,6 +56,11 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $category = new backup_nested_element('category', array('id'), array(
                 'mooduellid', 'category', 'weight'));
 
+        $challenges = new backup_nested_element('challenges');
+
+        $challenge = new backup_nested_element('challenge', array('id'), array(
+                'mooduellid', 'challengetype', 'targetnumber', 'challengename'));
+
         $games = new backup_nested_element('games');
 
         $game = new backup_nested_element('game', array('id'), array(
@@ -80,6 +85,9 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $mooduell->add_child($categories);
         $categories->add_child($category);
 
+        $mooduell->add_child($challenges);
+        $challenges->add_child($challenge);
+
         $mooduell->add_child($games);
         $games->add_child($game);
 
@@ -93,6 +101,7 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $mooduell->set_source_table('mooduell', array('id' => backup::VAR_ACTIVITYID));
 
         $category->set_source_table('mooduell_categories', array('mooduellid' => backup::VAR_PARENTID));
+        $category->set_source_table('mooduell_challenges', array('mooduellid' => backup::VAR_PARENTID));
 
         // Only if we include userinfo, we also include games, questions & pushtokens.
         if ($userinfo) {

@@ -102,6 +102,24 @@
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
             </KEYS>
         </TABLE>
+        <TABLE NAME="mooduell_challenges"
+               COMMENT="Stores MooDuell completion challenges.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                     COMMENT="ID of the MooDuell instance"/>
+                <FIELD NAME="challengetype" TYPE="text" NOTNULL="true" SEQUENCE="false"
+                     COMMENT="Challenge type (completion mode)"/>
+                <FIELD NAME="targetnumber" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                     COMMENT="Number to be reached to complete the challenge"/>
+                <FIELD NAME="challengename" TYPE="text" NOTNULL="false" SEQUENCE="false"
+                     COMMENT="Optional custom challenge name"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
         <TABLE NAME="mooduell_questions" COMMENT="Stores all the questions linked to this quiz">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
