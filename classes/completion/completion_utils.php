@@ -52,18 +52,23 @@ class completion_utils {
      * @return array An array of objects. Each object contains a challenge.
      */
     public static function get_completion_challenges_array($mooduellinstance): array {
+        global $DB;
+
         $completionmodes = self::mooduell_get_completion_modes();
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
         $challengesarray = [];
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-            if (!empty($mooduellinstance->settings->{$completionmode})) {
-                $challenge = new stdClass();
-                $challenge->challengename = null; //TODO
-                $challenge->challengetype = $completionmode;
+
+            if ($challenge = $DB->get_record('mooduell_challenges',
+                ['mooduellid' => $mooduellinstance->id, 'challengetype' => $completionmode])) {
+
+                // Remove fields not supported by webservice.
+                unset($challenge->id);
+                unset($challenge->mooduellid);
+
                 $challenge->actualnumber = (int) $studentstatistics[$statsfield];
-                $challenge->targetnumber = (int) $mooduellinstance->settings->{$completionmode};
 
                 // Calculate challenge percentage.
                 $percentage = null;
@@ -81,10 +86,13 @@ class completion_utils {
                 } else {
                     $percentage = null;
                 }
+                $challenge->challengepercentage = $percentage ? (int) floor($percentage) : null;
 
-                $challenge->challengepercentage = (int) floor($percentage);
-                $challenge->targetdate = null; //TODO
-                $challenge->challengerank = null; //TODO
+                //TODO: Date until the challenge needs to be done. Still open.
+                $challenge->targetdate = null;
+
+                //TODO: Calculate a user's rank within a challenge. (Will be done later.)
+                $challenge->challengerank = null;
 
                 $challengesarray[] = $challenge;
             }

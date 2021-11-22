@@ -160,9 +160,9 @@ function xmldb_mooduell_upgrade($oldversion) {
         // Adding fields to table mooduell_challenges.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('mooduellid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('challengetype', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null, null);
+        $table->add_field('challengetype', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null);
         $table->add_field('targetnumber', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, null);
-        $table->add_field('challengename', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
+        $table->add_field('challengename', XMLDB_TYPE_CHAR, '255', null, null, null, null, null);
 
         // Adding keys to table mooduell_challenges.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
@@ -174,6 +174,33 @@ function xmldb_mooduell_upgrade($oldversion) {
         }
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021111900, 'mooduell');
+    }
+
+    if ($oldversion < 2021112200) {
+
+        // Define field completiongamesplayed to be dropped from mooduell.
+        $table = new xmldb_table('mooduell');
+        
+        $completiongamesplayed = new xmldb_field('completiongamesplayed');
+        // Conditionally launch drop field completiongamesplayed.
+        if ($dbman->field_exists($table, $completiongamesplayed)) {
+            $dbman->drop_field($table, $completiongamesplayed);
+        }
+
+        $completiongameswon = new xmldb_field('completiongameswon');
+        // Conditionally launch drop field completiongameswon.
+        if ($dbman->field_exists($table, $completiongameswon)) {
+            $dbman->drop_field($table, $completiongameswon);
+        }
+
+        $completionrightanswers = new xmldb_field('completionrightanswers');
+        // Conditionally launch drop field completiongamesplayed.
+        if ($dbman->field_exists($table, $completionrightanswers)) {
+            $dbman->drop_field($table, $completionrightanswers);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021112200, 'mooduell');
     }
 
     return true;

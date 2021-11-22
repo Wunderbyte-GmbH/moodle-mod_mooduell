@@ -75,9 +75,10 @@ class custom_completion extends activity_custom_completion {
         $this->validate_rule($rule);
 
         // If completion option is enabled, evaluate it and return true/false.
-        $mooduell = $DB->get_record('mooduell', ['id' => $this->cm->instance], '*', MUST_EXIST);
+        $mooduellid = $this->cm->instance;
+        $mooduell = $DB->get_record('mooduell', ['id' => $mooduellid], '*', MUST_EXIST);
 
-        $mooduellinstance = mooduell::get_mooduell_by_instance((int) $this->cm->instance);
+        $mooduellinstance = mooduell::get_mooduell_by_instance((int) $mooduellid);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
         // List of completion modes and the according fields in table $studentstatistics.
@@ -86,9 +87,11 @@ class custom_completion extends activity_custom_completion {
         $status = COMPLETION_INCOMPLETE;
 
         // Now, get the completion status of the custom completion rule.
-        if (!empty($mooduell->{$rule})) {
+        if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $rule])) {
+            
             // Check the actual number against the target number.
-            if ($studentstatistics[$completionmodes[$rule]] >= $mooduell->{$rule}) {
+            if ($studentstatistics[$completionmodes[$rule]] >= $targetnumber) {
                 $status = COMPLETION_COMPLETE;
             } else {
                 $status = COMPLETION_INCOMPLETE;
