@@ -54,6 +54,8 @@ class completion_utils {
     public static function get_completion_challenges_array($mooduellinstance): array {
         global $DB;
 
+        $mooduellid = $mooduellinstance->cm->instance;
+
         $completionmodes = self::mooduell_get_completion_modes();
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
 
@@ -62,7 +64,7 @@ class completion_utils {
         foreach ($completionmodes as $completionmode => $statsfield) {
 
             if ($challenge = $DB->get_record('mooduell_challenges',
-                ['mooduellid' => $mooduellinstance->id, 'challengetype' => $completionmode])) {
+                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
 
                 // Remove fields not supported by webservice.
                 unset($challenge->id);

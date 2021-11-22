@@ -371,7 +371,7 @@ if ($CFG->version >= 2021051700) {
         $mooduellid = $coursemodule->instance;
 
         $dbparams = ['id' => $mooduellid];
-        $fields = 'id, name, intro, introformat, completiongamesplayed, completiongameswon, completionrightanswers';
+        $fields = 'id, name, intro, introformat';
         
         if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
             return false;
