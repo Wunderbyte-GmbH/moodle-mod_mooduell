@@ -264,9 +264,9 @@ class mod_mooduell_external extends external_api {
             // This means we only provide games where the active player is involved.
             $games = $mooduell->return_games_for_this_instance(true, null, $timemodified);
 
-            if ($games && count($games) > 0) {
+            $quiz['challenges'] = completion_utils::get_completion_challenges_array($mooduell);
 
-                $quiz['challenges'] = completion_utils::get_completion_challenges_array($mooduell);
+            if ($games && count($games) > 0) {
 
                 foreach ($games as $game) {
 
