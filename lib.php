@@ -153,6 +153,7 @@ function mooduell_delete_instance($id) {
 
     $DB->delete_records('mooduell', array('id' => $id));
     $DB->delete_records('mooduell_categories', array('mooduellid' => $id));
+    $DB->delete_records('mooduell_challenges', array('mooduellid' => $id));
     $DB->delete_records('mooduell_games', array('mooduellid' => $id));
     $DB->delete_records('mooduell_questions', array('mooduellid' => $id));
 
@@ -240,7 +241,7 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
 
 /**
  * Function is called on creating or updating MooDuell settings.
- * Challenges are stored in a separate table: mooduell_challenges
+ * Challenges are stored in a separate table: mooduell_challenges.
  * @param int $mooduellid
  * @param object $formdata
  * @return void|null
@@ -262,14 +263,8 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
         if (!empty($formdata->{$mode . 'enabled'}) && !empty($formdata->{$mode})) {
             $challengeobj->targetnumber = $formdata->{$mode};
         } else {
-            $where = "mooduellid = :mooduellid AND challengetype = :challengetype";
-            $params = [
-                'mooduellid' => $mooduellid,
-                'challengetype' => $mode
-            ];
-
             // Else we want to make sure there is no entry in DB anymore.
-            $DB->delete_records_select('mooduell_challenges', $where, $params);
+            $DB->delete_records('mooduell_challenges', ['mooduellid' => $mooduellid, 'challengetype' => $mode]);
             // We do not need to do anything else in this case, so continue with next mode.
             continue;
         }
@@ -282,15 +277,8 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
             $challengeobj->challengename = get_string('challengename:' . $mode, 'mooduell');
         }
 
-        $sql = "SELECT * FROM {mooduell_challenges} WHERE mooduellid = :mooduellid AND challengetype = :challengetype";
-        $params = [
-            'mooduellid' => $mooduellid,
-            'challengetype' => $mode
-        ];
-
         // If a record for this quiz and mode already exists...
-        if ($existingrecords = $DB->get_records_sql($sql, $params)) {
-            $existingrecord = array_pop($existingrecords);
+        if ($existingrecord = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
             // ... update existing record in mooduell_challenges.
             $challengeobj->id = $existingrecord->id;
             $DB->update_record('mooduell_challenges', $challengeobj);
@@ -380,7 +368,9 @@ if ($CFG->version >= 2021051700) {
     function mooduell_get_coursemodule_info($coursemodule) {
         global $DB;
 
-        $dbparams = ['id' => $coursemodule->instance];
+        $mooduellid = $coursemodule->instance;
+
+        $dbparams = ['id' => $mooduellid];
         $fields = 'id, name, intro, introformat, completiongamesplayed, completiongameswon, completionrightanswers';
         
         if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
@@ -399,7 +389,11 @@ if ($CFG->version >= 2021051700) {
         if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
             $completionmodes = custom_completion::get_defined_custom_rules();
             foreach ($completionmodes as $completionmode) {
-                $result->customdata['customcompletionrules'][$completionmode] = $mooduellobj->{$completionmode};
+                // Get the target number of each completion mode.
+                if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
+                        $result->customdata['customcompletionrules'][$completionmode] = $targetnumber;                
+                }
             }
         }
 
@@ -421,9 +415,10 @@ if ($CFG->version >= 2021051700) {
         global $DB;
 
         // If completion option is enabled, evaluate it and return true/false.
-        $mooduell = $DB->get_record('mooduell', array('id' => $cm->instance), '*', MUST_EXIST);
+        $mooduellid = $cm->instance;
+        $mooduell = $DB->get_record('mooduell', array('id' => $mooduellid), '*', MUST_EXIST);
 
-        $mooduellinstance = mooduell::get_mooduell_by_instance($cm->instance);
+        $mooduellinstance = mooduell::get_mooduell_by_instance($mooduellid);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
         $completion = true;
         
@@ -431,9 +426,12 @@ if ($CFG->version >= 2021051700) {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-            if (!empty($mooduell->{$completionmode})) {
-                // Check the number of games finished required against the number of games the user has finished.
-                if ($studentstatistics[$statsfield] >= $mooduell->{$completionmode}) {
+
+            if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
+                
+                // Check the required number (targetnumber) against the actual number.
+                if ($studentstatistics[$statsfield] >= $targetnumber) {
                     $completion = $completion && true;
                 } else {
                     $completion = false;
