@@ -406,11 +406,39 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
+
+        global $DB;
+
+        // Get MooDuell ID.
+        $cm = $this->get_coursemodule();
+        if ($cm && property_exists($cm, 'instance')) {
+            $mooduellid = $cm->instance;
+        } else {
+            $mooduellid = 0;
+        }
+
+        // Preprocessing to prefill challenge data.
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
-            $defaultvalues[$mode . 'enabled'] = !empty($defaultvalues[$mode]) ? 1 : 0;
-            if (empty($defaultvalues[$mode])) {
-                $defaultvalues[$mode] = 1;
+
+            // Prefill target number if it already exists.
+            if ($existingtargetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
+                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
+                $defaultvalues[$mode . 'enabled'] = 1;
+                $defaultvalues[$mode] = $existingtargetnumber;
+            } else {
+                $defaultvalues[$mode . 'enabled'] = 0;
+                $defaultvalues[$mode] = 0;
+            }
+
+            // Prefill challenge name if it already exists.
+            if ($existingchallengename = $DB->get_field('mooduell_challenges', 'challengename',
+                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
+                $defaultvalues[$mode . 'nameenabled'] = 1;
+                $defaultvalues[$mode . 'name'] = $existingchallengename;
+            } else {
+                $defaultvalues[$mode . 'nameenabled'] = 0;
+                $defaultvalues[$mode . 'name'] = get_string('challengename:' . $mode, 'mooduell');
             }
         }
     }
@@ -435,26 +463,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $group = array();
-            $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
+            $group[] = $mform->createElement('advcheckbox', $mode . 'enabled', '', get_string($mode, 'mooduell'),
+                array('group' => 1), array(0, 1));
             $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
-            $group[] = $mform->createElement('checkbox', $mode . 'nameenabled', '', get_string('completionchallengename', 'mooduell'));
-            $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 40));
+            $group[] = $mform->createElement('advcheckbox', $mode . 'nameenabled', '', get_string('completionchallengename', 'mooduell'),
+                array('group' => 1), array(0, 1));
+            $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 30));
             $mform->setType($mode, PARAM_INT);
             $mform->setType($mode . 'name', PARAM_TEXT);
-
-            // Prefill target number if it already exists.
-            if ($existingtargetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
-                $mform->setDefault($mode . 'enabled', true);
-                $mform->setDefault($mode, $existingtargetnumber);
-            }
-
-            // Prefill challenge name if it already exists.
-            if ($existingchallengename = $DB->get_field('mooduell_challenges', 'challengename',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
-                $mform->setDefault($mode . 'nameenabled', true);
-                $mform->setDefault($mode . 'name', $existingchallengename);
-            }
 
             $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
 
@@ -462,10 +478,9 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $mform->hideIf($mode . 'nameenabled', $mode . 'enabled', 'notchecked');
             $mform->hideIf($mode . 'name', $mode . 'nameenabled', 'notchecked');
 
-            
-
             $result[] = $mode . 'group';
         }
+
         return $result;
     }
 
