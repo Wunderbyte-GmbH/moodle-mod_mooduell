@@ -40,7 +40,8 @@ class completion_utils {
         $completionmodes = [
             'completiongamesplayed' => 'number_of_games_finished',
             'completiongameswon' => 'number_of_games_won',
-            'completionrightanswers' => 'number_of_correct_answers'
+            'completionrightanswers' => 'number_of_correct_answers',
+            'completionrightanswersperc' => 'percentage_of_correct_answers'
         ];
 
         return $completionmodes;
@@ -67,7 +68,6 @@ class completion_utils {
                 ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
 
                 // Remove fields not supported by webservice.
-                unset($challenge->id);
                 unset($challenge->mooduellid);
 
                 $challenge->actualnumber = (int) $studentstatistics[$statsfield];
