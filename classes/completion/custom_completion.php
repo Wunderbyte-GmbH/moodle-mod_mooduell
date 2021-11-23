@@ -40,7 +40,8 @@ class custom_completion extends activity_custom_completion {
         return [
             'completiongamesplayed',
             'completiongameswon',
-            'completionrightanswers'
+            'completionrightanswers',
+            'completionrightanswersperc'
         ];
     }
 
@@ -55,11 +56,13 @@ class custom_completion extends activity_custom_completion {
         $gamesplayed = $this->cm->customdata['customcompletionrules']['completiongamesplayed'] ?? 0;
         $gameswon = $this->cm->customdata['customcompletionrules']['completiongameswon'] ?? 0;
         $rightanswers = $this->cm->customdata['customcompletionrules']['completionrightanswers'] ?? 0;
+        $rightanswersperc = $this->cm->customdata['customcompletionrules']['completionrightanswersperc'] ?? 0;
 
         return [
             'completiongamesplayed' => get_string('completiondetail:gamesplayed', 'mod_mooduell', $gamesplayed),
             'completiongameswon' => get_string('completiondetail:gameswon', 'mod_mooduell', $gameswon),
-            'completionrightanswers' => get_string('completiondetail:rightanswers', 'mod_mooduell', $rightanswers)
+            'completionrightanswers' => get_string('completiondetail:rightanswers', 'mod_mooduell', $rightanswers),
+            'completionrightanswersperc' => get_string('completiondetail:rightanswersperc', 'mod_mooduell', $rightanswersperc)
         ];
     }
 
@@ -110,7 +113,8 @@ class custom_completion extends activity_custom_completion {
         return [
             'completiongamesplayed',
             'completiongameswon',
-            'completionrightanswers'
+            'completionrightanswers',
+            'completionrightanswersperc'
         ];
     }
 }

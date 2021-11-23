@@ -330,6 +330,7 @@ class mod_mooduell_external extends external_api {
                         'waitfornextquestion' => new external_value(PARAM_INT, 'waitfornextquestion'),
                         'isteacher' => new external_value(PARAM_INT, 'isteacher'),
                         'challenges' => new external_multiple_structure(new external_single_structure(array(
+                                                'id' => new external_value(PARAM_INT, 'challenge id'),
                                                 'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
                                                 'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
                                                 'actualnumber' => new external_value(PARAM_INT, 'actual number'),
@@ -547,6 +548,7 @@ class mod_mooduell_external extends external_api {
                         'timemodified' => new external_value(PARAM_INT, 'time modified'),
                         'status' => new external_value(PARAM_INT, 'status'),
                         'challenges' => new external_multiple_structure(new external_single_structure(array(
+                                                'id' => new external_value(PARAM_INT, 'challenge id'),
                                                 'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
                                                 'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
                                                 'actualnumber' => new external_value(PARAM_INT, 'actual number'),
