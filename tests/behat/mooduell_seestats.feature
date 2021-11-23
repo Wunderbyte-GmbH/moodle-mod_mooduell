@@ -56,4 +56,3 @@ Feature: See user stats
     And I follow "Open games"
     And I follow "Statistics"
     Then I should see "Download table data as"
-    
