@@ -29,14 +29,16 @@ use mod_mooduell\completion\completion_utils;
  * @copyright 2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class custom_completion extends activity_custom_completion {
+class custom_completion extends activity_custom_completion
+{
 
     /**
      * Fetch the list of custom completion rules that this module defines.
      *
      * @return array
      */
-    public static function get_defined_custom_rules(): array {
+    public static function get_defined_custom_rules(): array
+    {
         return [
             'completiongamesplayed',
             'completiongameswon',
@@ -50,7 +52,8 @@ class custom_completion extends activity_custom_completion {
      *
      * @return array
      */
-    public function get_custom_rule_descriptions(): array {
+    public function get_custom_rule_descriptions(): array
+    {
         global $DB;
 
         $gamesplayed = $this->cm->customdata['customcompletionrules']['completiongamesplayed'] ?? 0;
@@ -72,7 +75,8 @@ class custom_completion extends activity_custom_completion {
      * @param string $rule The completion rule.
      * @return int The completion state.
      */
-    public function get_state(string $rule): int {
+    public function get_state(string $rule): int
+    {
         global $DB;
         // Make sure to validate the custom completion rule first.
         $this->validate_rule($rule);
@@ -90,9 +94,12 @@ class custom_completion extends activity_custom_completion {
         $status = COMPLETION_INCOMPLETE;
 
         // Now, get the completion status of the custom completion rule.
-        if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
-                    ['mooduellid' => $mooduellid, 'challengetype' => $rule])) {
-            
+        if ($targetnumber = $DB->get_field(
+            'mooduell_challenges',
+            'targetnumber',
+            ['mooduellid' => $mooduellid, 'challengetype' => $rule]
+        )) {
+
             // Check the actual number against the target number.
             if ($studentstatistics[$completionmodes[$rule]] >= $targetnumber) {
                 $status = COMPLETION_COMPLETE;
@@ -109,7 +116,8 @@ class custom_completion extends activity_custom_completion {
      *
      * @return array
      */
-    public function get_sort_order(): array {
+    public function get_sort_order(): array
+    {
         return [
             'completiongamesplayed',
             'completiongameswon',

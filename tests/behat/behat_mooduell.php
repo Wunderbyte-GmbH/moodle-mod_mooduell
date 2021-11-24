@@ -37,15 +37,18 @@ use mod_mooduell\question_control;
  * @copyright  2021 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class behat_mooduell extends behat_base {
+class behat_mooduell extends behat_base
+{
 
     /**
      * Creates new mooduell games in the database
      * @Given /^I start games in "(?P<mooduellinstancename_string>(?:[^"]|\\")*)" against "(?P<playerbname_string>(?:[^"]|\\")*)"$/
+     * 
+     * @param string $mooduellinstancename
      * @param string $playerbname
      * @return void
      */
-    public function i_start_games_against($mooduellinstancename, $playerbname) {
+    public function i_start_games_against($mooduellinstancename, string $playerbname) {
 
         global $DB;
 
@@ -72,7 +75,6 @@ class behat_mooduell extends behat_base {
 
             ++$counter;
         }
-
     }
 
     /**
@@ -97,6 +99,12 @@ class behat_mooduell extends behat_base {
         return get_coursemodule_from_instance('mooduell', $mooduell->id, $mooduell->course);
     }
 
+    /**
+     * Get a MooDuell user by name.
+     *
+     * @param string $name
+     * @return stdClass
+     */
     protected function get_user_by_name(string $name): stdClass {
         global $DB;
 

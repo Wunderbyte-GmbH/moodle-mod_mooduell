@@ -167,7 +167,7 @@ class mooduell
         if (!$inline) {
             $out .= $output->header();
         }
-        
+
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
@@ -338,8 +338,8 @@ class mooduell
         $sqldata = $this->return_sql_for_all_questions_of_quiz();
 
         $sql = "SELECT " . $sqldata['select'] .
-               " FROM " . $sqldata['from'] .
-               " WHERE " . $sqldata['where'];
+            " FROM " . $sqldata['from'] .
+            " WHERE " . $sqldata['where'];
 
         if (!$listofquestions = $DB->get_records_sql($sql, $sqldata['params'])) {
             return [];
@@ -353,7 +353,7 @@ class mooduell
      *
      * @return array
      */
-    public function return_sql_for_all_questions_of_quiz():array {
+    public function return_sql_for_all_questions_of_quiz(): array {
 
         $mooduellid = $this->cm->instance;
 
@@ -373,9 +373,10 @@ class mooduell
      * Priveleged function to build sql for all instances where all the questions have to be fetched.
      * Never use other function, as this would lead to inconsistencies and errors.
      *
+     * @param stdClass $game
      * @return array
      */
-    public function return_sql_for_questions_in_game(stdClass $game):array {
+    public function return_sql_for_questions_in_game(stdClass $game): array {
 
         $sqldata = [];
         $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
@@ -1138,7 +1139,6 @@ class mooduell
         $select = "q.id id, q.questiontext text, q.qtype type, qc.name category";
 
         return [$select, $sqldata['from'], $sqldata['where'], $sqldata['params']];
-
     }
 
     /**
