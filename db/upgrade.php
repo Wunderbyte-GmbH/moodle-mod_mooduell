@@ -113,7 +113,7 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021102100, 'mooduell');
     }
 
-	// Add fields for completion rules.
+    // Add fields for completion rules.
     if ($oldversion < 2021102205) {
         $table = new xmldb_table('mooduell');
         $field = new xmldb_field('completiongamesplayed', XMLDB_TYPE_INTEGER, '4', null,
@@ -159,7 +159,7 @@ function xmldb_mooduell_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        
+
         // Mooduell savepoint reached.
         upgrade_mod_savepoint(true, 2021110800, 'mooduell');
     }
@@ -192,7 +192,7 @@ function xmldb_mooduell_upgrade($oldversion) {
 
         // Define field completiongamesplayed to be dropped from mooduell.
         $table = new xmldb_table('mooduell');
-        
+
         $completiongamesplayed = new xmldb_field('completiongamesplayed');
         // Conditionally launch drop field completiongamesplayed.
         if ($dbman->field_exists($table, $completiongamesplayed)) {

@@ -113,9 +113,10 @@ class overview_student implements renderable, templatable {
      * Render the open games table. This function automatically returns the table for teachers or students.
      *
      * @param mooduell $mooduell
+     * @param string $action
      * @return string
      */
-    private function render_games_table(mooduell $mooduell, $action):string {
+    private function render_games_table(mooduell $mooduell, string $action):string {
         $gamestable = new table_games($action, $mooduell);
 
         $finishedgames = $action == 'finishedgames' ? true : false;

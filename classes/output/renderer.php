@@ -40,7 +40,7 @@ class renderer extends plugin_renderer_base {
     /**
      * Render a mooduell overview page for teachers.
      *
-     * @param templatable $viewpage
+     * @param templatable $overview
      * @return string|boolean
      */
     public function render_overview_teachers(templatable $overview) {
@@ -51,7 +51,7 @@ class renderer extends plugin_renderer_base {
     /**
      * Render a mooduell overview page for students.
      *
-     * @param templatable $viewpage
+     * @param templatable $overview
      * @return string|boolean
      */
     public function render_overview_students(templatable $overview) {

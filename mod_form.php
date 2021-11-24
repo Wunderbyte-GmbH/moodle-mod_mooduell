@@ -21,6 +21,7 @@
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
 
@@ -38,12 +39,14 @@ require_once(__DIR__ . '/lib.php');
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_mooduell_mod_form extends moodleform_mod {
+class mod_mooduell_mod_form extends moodleform_mod
+{
 
     /**
      * Defines forms elements
      */
-    public function definition() {
+    public function definition()
+    {
         global $CFG;
 
         $mform = $this->_form;
@@ -53,7 +56,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('mooduellname', 'mod_mooduell'), array(
-                'size' => '64'
+            'size' => '64'
         ));
 
         if (!empty($CFG->formatstringstriptags)) {
@@ -84,7 +87,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * Add Mooduell setting elements.
      * @throws coding_exception
      */
-    private function mooduell_elements() {
+    private function mooduell_elements()
+    {
 
         global $DB;
 
@@ -131,8 +135,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         }
         $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
 
-        $mform->addElement('select', 'waitfornextquestion', get_string('waitfornextquestion', 'mod_mooduell'),
-                $this->return_move_on_options());
+        $mform->addElement(
+            'select',
+            'waitfornextquestion',
+            get_string('waitfornextquestion', 'mod_mooduell'),
+            $this->return_move_on_options()
+        );
         if (isset($config->waitfornextquestion)) {
             $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
         }
@@ -145,8 +153,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
             // First, there is the explanation.
-            $mform->addElement('static', 'categoriesexplanation', get_string('important', 'mod_mooduell'),
-                    get_string('categoriesexplanation', 'mod_mooduell'));
+            $mform->addElement(
+                'static',
+                'categoriesexplanation',
+                get_string('important', 'mod_mooduell'),
+                get_string('categoriesexplanation', 'mod_mooduell')
+            );
 
             // Between one to three categories are supported.
             $i = 0;
@@ -176,11 +188,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
                 }
                 ++$i;
             }
-
         } else {
             // Warning if there are not categories.
-            $mform->addElement('static', 'warning', get_string('important', 'mod_mooduell'),
-                    get_string('nocategories', 'mod_mooduell'));
+            $mform->addElement(
+                'static',
+                'warning',
+                get_string('important', 'mod_mooduell'),
+                get_string('nocategories', 'mod_mooduell')
+            );
         }
     }
 
@@ -189,15 +204,16 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return array
      * @throws coding_exception
      */
-    private function return_countdown_options() {
+    private function return_countdown_options()
+    {
         return [
-                "0" => get_string('nocountdown', 'mod_mooduell'),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30),
-                "60" => get_string('xseconds', 'mod_mooduell', 60),
-                "90" => get_string('xseconds', 'mod_mooduell', 90),
-                "120" => get_string('xseconds', 'mod_mooduell', 120)
+            "0" => get_string('nocountdown', 'mod_mooduell'),
+            "10" => get_string('xseconds', 'mod_mooduell', 10),
+            "20" => get_string('xseconds', 'mod_mooduell', 20),
+            "30" => get_string('xseconds', 'mod_mooduell', 30),
+            "60" => get_string('xseconds', 'mod_mooduell', 60),
+            "90" => get_string('xseconds', 'mod_mooduell', 90),
+            "120" => get_string('xseconds', 'mod_mooduell', 120)
         ];
     }
 
@@ -207,14 +223,15 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return array
      * @throws coding_exception
      */
-    private function return_move_on_options() {
+    private function return_move_on_options()
+    {
         return [
-                "0" => get_string('clicktomoveon', 'mod_mooduell'),
-                "2" => get_string('xseconds', 'mod_mooduell', 2),
-                "5" => get_string('xseconds', 'mod_mooduell', 5),
-                "10" => get_string('xseconds', 'mod_mooduell', 10),
-                "20" => get_string('xseconds', 'mod_mooduell', 20),
-                "30" => get_string('xseconds', 'mod_mooduell', 30)
+            "0" => get_string('clicktomoveon', 'mod_mooduell'),
+            "2" => get_string('xseconds', 'mod_mooduell', 2),
+            "5" => get_string('xseconds', 'mod_mooduell', 5),
+            "10" => get_string('xseconds', 'mod_mooduell', 10),
+            "20" => get_string('xseconds', 'mod_mooduell', 20),
+            "30" => get_string('xseconds', 'mod_mooduell', 30)
         ];
     }
 
@@ -226,19 +243,18 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @param object $mform
      * @throws coding_exception
      */
-    private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform) {
+    private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform)
+    {
 
         $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
         $catweightoptions = $this->return_list_of_category_weight_options();
 
         $formgroup = array();
-        $formgroup[] =&
-                $mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
+        $formgroup[] = &$mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
         if ($selectedcategory) {
             $formgroup[0]->setSelected($selectedcategory->category);
         }
-        $formgroup[] =&
-                $mform->createElement('select', 'weight', get_string('categoryweight', 'mod_mooduell'), $catweightoptions);
+        $formgroup[] = &$mform->createElement('select', 'weight', get_string('categoryweight', 'mod_mooduell'), $catweightoptions);
         if ($selectedcategory) {
             $formgroup[1]->setSelected($selectedcategory->weight);
         } else {
@@ -254,7 +270,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @throws coding_exception
      * @throws dml_exception
      */
-    private function return_list_of_category_options(array $list) {
+    private function return_list_of_category_options(array $list)
+    {
 
         global $DB;
 
@@ -303,7 +320,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @param object $item
      * @return mixed
      */
-    private function return_parent_for_item_in_list(array $list, object $item) {
+    private function return_parent_for_item_in_list(array $list, object $item)
+    {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
                 $parent = $parentitem;
@@ -318,7 +336,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @param array $listofcategories
      * @return array
      */
-    private function generate_sorted_list(array $listofcategories) {
+    private function generate_sorted_list(array $listofcategories)
+    {
         $sortedcategories = array();
 
         foreach ($listofcategories as $category) {
@@ -341,7 +360,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @param array $list
      * @return array
      */
-    private function return_children_in_list(object $parent, array $list) {
+    private function return_children_in_list(object $parent, array $list)
+    {
         $children = array();
 
         foreach ($list as $child) {
@@ -362,14 +382,15 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * Returns list of category weight options.
      * @return string[]
      */
-    private function return_list_of_category_weight_options() {
+    private function return_list_of_category_weight_options()
+    {
         return array(
-                0 => '0',
-                17 => '17',
-                33 => '33',
-                50 => '50',
-                66 => '66',
-                100 => '100'
+            0 => '0',
+            17 => '17',
+            33 => '33',
+            50 => '50',
+            66 => '66',
+            100 => '100'
         );
     }
 
@@ -378,7 +399,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return array
      * @throws dml_exception
      */
-    private function get_categories_of_context_from_db() {
+    private function get_categories_of_context_from_db()
+    {
         global $DB;
 
         $context = $this->context;
@@ -404,7 +426,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      *
      * @param array $defaultvalues
      */
-    public function data_preprocessing(&$defaultvalues) {
+    public function data_preprocessing(&$defaultvalues)
+    {
         parent::data_preprocessing($defaultvalues);
 
         global $DB;
@@ -422,8 +445,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
         foreach ($completionmodes as $mode => $field) {
 
             // Prefill target number if it already exists.
-            if ($existingtargetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
+            if ($existingtargetnumber = $DB->get_field(
+                'mooduell_challenges',
+                'targetnumber',
+                ['mooduellid' => $mooduellid, 'challengetype' => $mode]
+            )) {
                 $defaultvalues[$mode . 'enabled'] = 1;
                 $defaultvalues[$mode] = $existingtargetnumber;
             } else {
@@ -432,8 +458,11 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
 
             // Prefill challenge name if it already exists.
-            if ($existingchallengename = $DB->get_field('mooduell_challenges', 'challengename',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
+            if ($existingchallengename = $DB->get_field(
+                'mooduell_challenges',
+                'challengename',
+                ['mooduellid' => $mooduellid, 'challengetype' => $mode]
+            )) {
                 $defaultvalues[$mode . 'name'] = $existingchallengename;
             } else {
                 $defaultvalues[$mode . 'name'] = get_string('challengename:' . $mode, 'mooduell');
@@ -445,7 +474,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      *
      * @return array Contains the names of the added form elements
      */
-    public function add_completion_rules() {
+    public function add_completion_rules()
+    {
         global $DB;
 
         // Get MooDuell ID.
@@ -485,7 +515,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @param array $data
      * @return bool
      */
-    public function completion_rule_enabled($data) {
+    public function completion_rule_enabled($data)
+    {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
@@ -500,12 +531,13 @@ class mod_mooduell_mod_form extends moodleform_mod {
      *
      * @return array Contains the data of the form
      */
-    public function get_data() {
+    public function get_data()
+    {
         $data = parent::get_data();
         if (!$data) {
             return false;
         }
-        
+
         // Turn off completion settings if the checkboxes aren't ticked.
         if (!empty($data->completionunlocked)) {
             $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;

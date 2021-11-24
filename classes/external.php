@@ -336,13 +336,17 @@ class mod_mooduell_external extends external_api {
                                                 'actualnumber' => new external_value(PARAM_INT, 'actual number'),
                                                 'targetnumber' => new external_value(PARAM_INT, 'target number'),
                                                 'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
-                                                'targetdate' => new external_value(PARAM_INT, 'unix timestamp of expected completion date'),
-                                                'challengerank' => new external_value(PARAM_INT, 'a user\'s ranking within a challenge'),
-                                                'localizedstrings' => new external_multiple_structure(new external_single_structure(array(
-                                                    'lang' => new external_value(PARAM_TEXT, 'language identifier'),
-                                                    'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
-                                                    'stringval' => new external_value(PARAM_TEXT, 'string value')
-                                                )))
+                                                'targetdate' => new external_value(PARAM_INT,
+                                                    'unix timestamp of expected completion'),
+                                                'challengerank' => new external_value(PARAM_INT,
+                                                    'a user\'s ranking within a challenge'),
+                                                'localizedstrings' => new external_multiple_structure(
+                                                    new external_single_structure(array(
+                                                        'lang' => new external_value(PARAM_TEXT, 'language identifier'),
+                                                        'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
+                                                        'stringval' => new external_value(PARAM_TEXT, 'string value')
+                                                    ))
+                                                )
                                         )
                                 )
                         ),
@@ -559,13 +563,17 @@ class mod_mooduell_external extends external_api {
                                                 'actualnumber' => new external_value(PARAM_INT, 'actual number'),
                                                 'targetnumber' => new external_value(PARAM_INT, 'target number'),
                                                 'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
-                                                'targetdate' => new external_value(PARAM_INT, 'unix timestamp of expected completion date'),
-                                                'challengerank' => new external_value(PARAM_INT, 'a user\'s ranking within a challenge'),
-                                                'localizedstrings' => new external_multiple_structure(new external_single_structure(array(
-                                                    'lang' => new external_value(PARAM_TEXT, 'language identifier'),
-                                                    'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
-                                                    'stringval' => new external_value(PARAM_TEXT, 'string value')
-                                                )))
+                                                'targetdate' => new external_value(PARAM_INT,
+                                                    'unix timestamp of expected completion date'),
+                                                'challengerank' => new external_value(PARAM_INT,
+                                                    'a user\'s ranking within a challenge'),
+                                                'localizedstrings' => new external_multiple_structure(
+                                                    new external_single_structure(array(
+                                                        'lang' => new external_value(PARAM_TEXT, 'language identifier'),
+                                                        'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
+                                                        'stringval' => new external_value(PARAM_TEXT, 'string value')
+                                                    ))
+                                                )
                                         )
                                 )
                         ),

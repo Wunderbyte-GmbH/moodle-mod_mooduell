@@ -23,19 +23,20 @@ use stdClass;
 
 /**
  * A library of completion functions used for custom completion.
- * We could not put this into custom_completion.php because of compatibility issues with Moodle 3.9.
  *
  * @package   mod_mooduell
  * @copyright 2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_utils {
+class completion_utils
+{
     /**
      * Helper function to retrieve a list of all completion modes ...
      * ... and their associated field names in student statistics.
      * @return array $completionmodes
      */
-    public static function mooduell_get_completion_modes() {
+    public static function mooduell_get_completion_modes()
+    {
         // List of completion modes and the according fields in table $studentstatistics.
         $completionmodes = [
             'completiongamesplayed' => 'number_of_games_finished',
@@ -52,7 +53,8 @@ class completion_utils {
      * @param mooduell $mooduellinstance A MooDuell instance.
      * @return array An array of objects. Each object contains a challenge.
      */
-    public static function get_completion_challenges_array($mooduellinstance): array {
+    public static function get_completion_challenges_array($mooduellinstance): array
+    {
         global $DB;
 
         $mooduellid = $mooduellinstance->cm->instance;
@@ -64,8 +66,10 @@ class completion_utils {
 
         foreach ($completionmodes as $completionmode => $statsfield) {
 
-            if ($challenge = $DB->get_record('mooduell_challenges',
-                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
+            if ($challenge = $DB->get_record(
+                'mooduell_challenges',
+                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+            )) {
 
                 // Remove fields not supported by webservice.
                 unset($challenge->mooduellid);
@@ -74,11 +78,13 @@ class completion_utils {
 
                 // Calculate challenge percentage.
                 $percentage = null;
-                if(isset($challenge->actualnumber) && !empty($challenge->targetnumber)) {
+                if (isset($challenge->actualnumber) && !empty($challenge->targetnumber)) {
                     if ($challenge->actualnumber == 0) {
                         $percentage = 0;
-                    } else if ($challenge->actualnumber > 0
-                        && $challenge->actualnumber < $challenge->targetnumber) {
+                    } else if (
+                        $challenge->actualnumber > 0
+                        && $challenge->actualnumber < $challenge->targetnumber
+                    ) {
                         $percentage = ($challenge->actualnumber / $challenge->targetnumber) * 100;
                     } else if ($challenge->actualnumber >= $challenge->targetnumber) {
                         $percentage = 100;
@@ -98,7 +104,7 @@ class completion_utils {
                     $challenge->targetdate = null;
                 }
 
-                //TODO: Calculate a user's rank within a challenge. (Will be done in a future release.)
+                // TODO: Calculate a user's rank within a challenge. - Will be done in a future release.
                 $challenge->challengerank = null;
 
                 // Add an array of objects containing localized language strings needed by the app.
@@ -107,13 +113,14 @@ class completion_utils {
                 $languages = $stringman->get_list_of_translations();
 
                 foreach ($languages as $langkey => $langval) {
-                    $stringobj = new stdClass;                    
+                    $stringobj = new stdClass;
                     $stringobj->lang = $langkey;
                     $stringobj->stringkey = $completionmode;
-                    $stringobj->stringval = $stringman->get_string('app:' . $completionmode, 'mooduell', $challenge->targetnumber, $langkey);
+                    $stringobj->stringval = $stringman->get_string('app:' . $completionmode, 'mooduell',
+                        $challenge->targetnumber, $langkey);
                     $localizedstrings[] = $stringobj;
                 }
-                
+
                 $challenge->localizedstrings = $localizedstrings;
 
                 $challengesarray[] = $challenge;

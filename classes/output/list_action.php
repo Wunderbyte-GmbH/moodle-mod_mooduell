@@ -52,6 +52,8 @@ class list_action implements renderable, templatable {
 
     /**
      * Constructor.
+     * @param int $counter
+     * @param stdClass $game
      * @param mooduell $mooduell
      */
     public function __construct(int $counter, stdClass $game, mooduell $mooduell) {
@@ -76,7 +78,9 @@ class list_action implements renderable, templatable {
     /**
      * Render the questions table.
      *
+     * @param stdClass $game
      * @param mooduell $mooduell
+     * @param int $counter
      * @return string
      */
     private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, int $counter = null):string {

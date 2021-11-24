@@ -44,7 +44,7 @@ function mooduell_supports($feature) {
         case FEATURE_USES_QUESTIONS:
             return true;
         case FEATURE_COMPLETION_HAS_RULES:
-                return true;
+            return true;
         default:
             return null;
     }
@@ -315,7 +315,8 @@ function mooduell_question_pluginfile(
     int $slot,
     array $args,
     int $forcedownload,
-    array $options=array()) {
+    array $options = array()
+) {
 
     // Make sure the filearea is one of those used by the plugin.
     if ($filearea !== 'questiontext') {
@@ -337,7 +338,7 @@ function mooduell_question_pluginfile(
     if (!$args) {
         $filepath = '/';
     } else {
-        $filepath = '/'.implode('/', $args).'/';
+        $filepath = '/' . implode('/', $args) . '/';
     }
 
     // Retrieve the file from the Files API.
@@ -371,7 +372,7 @@ if ($CFG->version >= 2021051700) {
 
         $dbparams = ['id' => $mooduellid];
         $fields = 'id, name, intro, introformat';
-        
+
         if (!$mooduellobj = $DB->get_record('mooduell', $dbparams, $fields)) {
             return false;
         }
@@ -389,9 +390,12 @@ if ($CFG->version >= 2021051700) {
             $completionmodes = custom_completion::get_defined_custom_rules();
             foreach ($completionmodes as $completionmode) {
                 // Get the target number of each completion mode.
-                if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
-                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
-                        $result->customdata['customcompletionrules'][$completionmode] = $targetnumber;                
+                if ($targetnumber = $DB->get_field(
+                    'mooduell_challenges',
+                    'targetnumber',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+                )) {
+                    $result->customdata['customcompletionrules'][$completionmode] = $targetnumber;
                 }
             }
         }
@@ -420,15 +424,18 @@ if ($CFG->version >= 2021051700) {
         $mooduellinstance = mooduell::get_mooduell_by_instance($mooduellid);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
         $completion = true;
-        
+
         // List of completion modes and the according fields in table $studentstatistics.
         $completionmodes = completion_utils::mooduell_get_completion_modes();
 
         foreach ($completionmodes as $completionmode => $statsfield) {
 
-            if ($targetnumber = $DB->get_field('mooduell_challenges', 'targetnumber',
-                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode])) {
-                
+            if ($targetnumber = $DB->get_field(
+                'mooduell_challenges',
+                'targetnumber',
+                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+            )) {
+
                 // Check the required number (targetnumber) against the actual number.
                 if ($studentstatistics[$statsfield] >= $targetnumber) {
                     $completion = $completion && true;

@@ -28,7 +28,7 @@ use mod_mooduell\event\game_finished;
 use mod_mooduell\output\overview_student;
 use mod_mooduell\output\overview_teacher;
 
-require_once(__DIR__ .'/../../config.php');
+require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
 defined('MOODLE_INTERNAL') || die();
@@ -101,7 +101,8 @@ switch ($action) {
 // The following part only applies to Moodle 3.11 and later.
 if (!$inline && $CFG->version >= 2021051700) {
     $cminfo = cm_info::create($mooduell->cm, $USER->id);
-    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id); // Fetch completion information. 
+    // Fetch completion information.
+    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
     $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id); // Fetch activity dates.
     $out .= $OUTPUT->heading(format_string($mooduell->cm->name), 2, null);
     $out .= $OUTPUT->activity_information($cminfo, $completiondetails, $activitydates);
