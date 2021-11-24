@@ -262,19 +262,18 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
         // If checkbox for completion mode is set...
         if (!empty($formdata->{$mode . 'enabled'}) && !empty($formdata->{$mode})) {
             $challengeobj->targetnumber = $formdata->{$mode};
+
+            if (!empty($formdata->{$mode . 'name'})) {
+                $challengeobj->challengename = $formdata->{$mode . 'name'};
+            } else {
+                // Use default name, if no name has been set.
+                $challengeobj->challengename = get_string('challengename:' . $mode, 'mooduell');
+            }
         } else {
             // Else we want to make sure there is no entry in DB anymore.
             $DB->delete_records('mooduell_challenges', ['mooduellid' => $mooduellid, 'challengetype' => $mode]);
             // We do not need to do anything else in this case, so continue with next mode.
             continue;
-        }
-
-        // If checkbox for challenge name is set...
-        if (!empty($formdata->{$mode . 'nameenabled'}) && !empty($formdata->{$mode . 'name'})) {
-            $challengeobj->challengename = $formdata->{$mode . 'name'};
-        } else {
-            // Use default name, if no name has been set.
-            $challengeobj->challengename = get_string('challengename:' . $mode, 'mooduell');
         }
 
         // If a record for this quiz and mode already exists...

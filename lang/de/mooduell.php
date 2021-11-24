@@ -206,3 +206,4 @@ $string['challengename:completiongamesplayed'] = 'Spielanzahl-Challenge';
 $string['challengename:completiongameswon'] = '"Gewonnene Spiele"-Challenge';
 $string['challengename:completionrightanswers'] = '"Richtige Antworten"-Challenge';
 $string['challengename:completionrightanswersperc'] = 'Prozentsatz-Challenge';
+$string['completion_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';

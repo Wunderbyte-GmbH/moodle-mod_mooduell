@@ -434,10 +434,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
             // Prefill challenge name if it already exists.
             if ($existingchallengename = $DB->get_field('mooduell_challenges', 'challengename',
                 ['mooduellid' => $mooduellid, 'challengetype' => $mode])) {
-                $defaultvalues[$mode . 'nameenabled'] = 1;
                 $defaultvalues[$mode . 'name'] = $existingchallengename;
             } else {
-                $defaultvalues[$mode . 'nameenabled'] = 0;
                 $defaultvalues[$mode . 'name'] = get_string('challengename:' . $mode, 'mooduell');
             }
         }
@@ -463,20 +461,17 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             $group = array();
-            $group[] = $mform->createElement('advcheckbox', $mode . 'enabled', '', get_string($mode, 'mooduell'),
-                array('group' => 1), array(0, 1));
+            $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
             $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
-            $group[] = $mform->createElement('advcheckbox', $mode . 'nameenabled', '', get_string('completionchallengename', 'mooduell'),
-                array('group' => 1), array(0, 1));
             $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 30));
             $mform->setType($mode, PARAM_INT);
             $mform->setType($mode . 'name', PARAM_TEXT);
 
             $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
+            $mform->addHelpButton($mode . 'group', 'completion', 'mooduell');
 
             $mform->hideIf($mode, $mode . 'enabled', 'notchecked');
-            $mform->hideIf($mode . 'nameenabled', $mode . 'enabled', 'notchecked');
-            $mform->hideIf($mode . 'name', $mode . 'nameenabled', 'notchecked');
+            $mform->hideIf($mode . 'name', $mode . 'enabled', 'notchecked');
 
             $result[] = $mode . 'group';
         }

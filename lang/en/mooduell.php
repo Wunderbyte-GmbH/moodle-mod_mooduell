@@ -241,3 +241,4 @@ $string['challengename:completiongamesplayed'] = 'Number of games challenge';
 $string['challengename:completiongameswon'] = 'Number of games won challenge';
 $string['challengename:completionrightanswers'] = 'Number of right answers challenge';
 $string['challengename:completionrightanswersperc'] = 'Percentage challenge';
+$string['completion_help'] = 'Enter a target number and a challenge name (which will be shown in the app only).';
