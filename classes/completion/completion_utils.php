@@ -90,11 +90,31 @@ class completion_utils {
                 }
                 $challenge->challengepercentage = $percentage ? (int) floor($percentage) : null;
 
-                //TODO: Date until the challenge needs to be done. Still open.
-                $challenge->targetdate = null;
+                // Date until the challenge needs to be done.
+                $cmid = $mooduellinstance->cm->id;
+                if ($completionexpected = $DB->get_field('course_modules', 'completionexpected', ['id' => $cmid])) {
+                    $challenge->targetdate = $completionexpected;
+                } else {
+                    $challenge->targetdate = null;
+                }
 
-                //TODO: Calculate a user's rank within a challenge. (Will be done later.)
+                //TODO: Calculate a user's rank within a challenge. (Will be done in a future release.)
                 $challenge->challengerank = null;
+
+                // Add an array of objects containing localized language strings needed by the app.
+                $localizedstrings = [];
+                $stringman = get_string_manager();
+                $languages = $stringman->get_list_of_translations();
+
+                foreach ($languages as $langkey => $langval) {
+                    $stringobj = new stdClass;                    
+                    $stringobj->lang = $langkey;
+                    $stringobj->stringkey = $completionmode;
+                    $stringobj->stringval = $stringman->get_string('app:' . $completionmode, 'mooduell', $challenge->targetnumber, $langkey);
+                    $localizedstrings[] = $stringobj;
+                }
+                
+                $challenge->localizedstrings = $localizedstrings;
 
                 $challengesarray[] = $challenge;
             }

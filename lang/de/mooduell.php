@@ -189,7 +189,7 @@ $string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach di
 
 
 // Activity completion.
-$string['completiongamesplayed'] = 'Teilnehmer*in muss Anzahl Spiele spielen';
+$string['completiongamesplayed'] = 'Teilnehmer*in muss Anzahl Spiele beenden';
 $string['completiongamesplayedlabel'] = 'Gespielte Runden';
 $string['completionrightanswers'] = 'Teilnehmer*in muss n Fragen richtig beantworten';
 $string['completionrightanswerslabel'] = 'Richtige Antworten';
@@ -197,7 +197,7 @@ $string['completionrightanswersperc'] = 'Teilnehmer*in muss Prozentsatz aller Fr
 $string['completionrightanswersperclabel'] = 'Prozentsatz richtiger Antworten';
 $string['completiongameswon'] = 'Teilnehmer*in muss eine bestimmte Anzahl Spiele gewinnen';
 $string['completiongameswonlabel'] = 'Gewonnene Spiele';
-$string['completiondetail:gamesplayed'] = 'Starte {$a} Spiele';
+$string['completiondetail:gamesplayed'] = 'Beende {$a} Spiele';
 $string['completiondetail:gameswon'] = 'Gewinne {$a} Spiele';
 $string['completiondetail:rightanswers'] = 'Beantworte {$a} Fragen richtig';
 $string['completiondetail:rightanswersperc'] = 'Beantworte {$a}% aller Fragen richtig';
@@ -207,4 +207,11 @@ $string['challengename:completiongamesplayed'] = 'Spielanzahl-Challenge';
 $string['challengename:completiongameswon'] = '"Gewonnene Spiele"-Challenge';
 $string['challengename:completionrightanswers'] = '"Richtige Antworten"-Challenge';
 $string['challengename:completionrightanswersperc'] = 'Prozentsatz-Challenge';
-$string['completion_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';
+$string['completiongamesplayedlabel_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';
+$string['completiongameswonlabel_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';
+$string['completionrightanswerslabel_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';
+$string['completionrightanswersperclabel_help'] = 'Geben Sie einen Ziel-Wert und einen Challenge-Namen ein. (Dieser wird nur in der App angezeigt.)';
+$string['app:completiongamesplayed'] = 'Beende {$a} Spiele, um diese Herausforderung abzuschließen.';
+$string['app:completiongameswon'] = 'Gewinne {$a} Spiele, um diese Herausforderung abzuschließen.';
+$string['app:completionrightanswers'] = 'Beantworte {$a} Fragen korrekt, um diese Herausforderung abzuschließen.';
+$string['app:completionrightanswersperc'] = 'Beantworte {$a}% aller Fragen korrekt, um diese Herausforderung abzuschließen.';
