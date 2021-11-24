@@ -468,7 +468,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $mform->setType($mode . 'name', PARAM_TEXT);
 
             $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
-            $mform->addHelpButton($mode . 'group', 'completion', 'mooduell');
+            $mform->addHelpButton($mode . 'group', $mode . 'label', 'mooduell');
 
             $mform->hideIf($mode, $mode . 'enabled', 'notchecked');
             $mform->hideIf($mode . 'name', $mode . 'enabled', 'notchecked');
