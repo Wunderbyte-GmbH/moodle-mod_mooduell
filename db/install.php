@@ -54,9 +54,9 @@ function xmldb_mooduell_install() {
             'visible' => 0,
             'forceunique' => 0,
             'signup' => 0,
-            'defaultdata' => null,
+            'defaultdata' => '',
             'defaultdataformat' => 0,
-            'param1' => 30,
+            'param1' => 0,
             'param2' => 2048
     ];
 

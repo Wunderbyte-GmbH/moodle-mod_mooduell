@@ -652,20 +652,40 @@ class game_control {
 
         $users = self::return_users_for_game($this->mooduell, false);
 
+        // Will be true if usefullnames setting is set to "1" or 1.
+        $usefullnames = $this->mooduell->settings->usefullnames == 1;
+
         foreach ($users as $user) {
 
             profile_load_custom_fields($user);
 
             if ($user->id === $this->gamedata->playeraid) {
-                $playeraname = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' + $user->lastname : $user->profile['mooduell_alias'];
-                $playera = $user;
+                if ($usefullnames) {
+                    // Full user name.
+                    $playeraname = $user->firstname . ' ' . $user->lastname;
+                } else {
+                    // Nickname.
+                    $playeraname = $user->profile['mooduell_alias'];
+                }
+
             }
             if ($user->id === $this->gamedata->playerbid) {
-                $playerbname = $this->mooduell->usefullnames === 1 ?
-                        $user->firstname + ' ' + $user->lastname : $user->profile['mooduell_alias'];
-                $playerb = $user;
+                if ($usefullnames) {
+                    // Full user name.
+                    $playerbname = $user->firstname . ' ' . $user->lastname;
+                } else {
+                    // Nickname.
+                    $playerbname = $user->profile['mooduell_alias'];
+                }
             }
+        }
+
+        // Use "Anonymous" if no nicknames can be found.
+        if (empty($playeraname)) {
+            $playeraname = get_string('anonymous', 'mod_mooduell');
+        }
+        if (empty($playerbname)) {
+            $playerbname = get_string('anonymous', 'mod_mooduell');
         }
 
         $recepientid = 0;
