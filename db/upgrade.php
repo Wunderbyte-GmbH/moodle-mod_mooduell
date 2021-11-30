@@ -203,5 +203,17 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021112200, 'mooduell');
     }
 
+    if ($oldversion < 2021113000) {
+        // Fix mooduell_alias bugs (string contained a binary bit).
+        if ($record = $DB->get_record('user_info_field', ['shortname' => 'mooduell_alias'])) {
+            $record->defaultdata = '';
+            $record->param1 = 0;
+            $DB->update_record('user_info_field', $record);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021113000, 'mooduell');
+    }
+
     return true;
 }

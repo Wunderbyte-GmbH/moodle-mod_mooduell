@@ -179,6 +179,8 @@ $string['draw'] = 'You played draw against {$a}';
 $string['yourturn'] = 'It\'s your turn against {$a}';
 $string['challenged'] = '{$a} has challenged you';
 $string['userhasnonickname'] = 'User has no nickname';
+$string['userhasnonickname'] = 'User has no nickname';
+$string['anonymous'] = 'Anonymous';
 
 $string['mooduell:play'] = 'Play Mooduell';
 
