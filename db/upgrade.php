@@ -227,5 +227,33 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021113000, 'mooduell');
     }
 
+    // Add new table mooduell_challenge_results.
+    if ($oldversion < 2021113001) {
+        // Define table to be created.
+        $table = new xmldb_table('mooduell_challenge_results');
+
+        // Adding fields to table mooduell_challenge_results.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('mooduellid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('challengeid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, null);
+        $table->add_field('result', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table mooduell_challenge_results.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('fk_mooduellid', XMLDB_KEY_FOREIGN, ['mooduellid'], 'mooduell', ['id']);
+        $table->add_key('fk_challengeid', XMLDB_KEY_FOREIGN, ['challengeid'], 'mooduell_challenges', ['id']);
+        $table->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+
+        // Conditionally launch create table for mooduell_challenge_results.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2021113001, 'mooduell');
+    }
+
     return true;
 }
