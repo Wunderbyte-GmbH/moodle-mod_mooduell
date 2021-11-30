@@ -45,8 +45,7 @@ class mod_mooduell_mod_form extends moodleform_mod
     /**
      * Defines forms elements
      */
-    public function definition()
-    {
+    public function definition() {
         global $CFG;
 
         $mform = $this->_form;
@@ -87,8 +86,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * Add Mooduell setting elements.
      * @throws coding_exception
      */
-    private function mooduell_elements()
-    {
+    private function mooduell_elements() {
 
         global $DB;
 
@@ -204,8 +202,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @return array
      * @throws coding_exception
      */
-    private function return_countdown_options()
-    {
+    private function return_countdown_options() {
         return [
             "0" => get_string('nocountdown', 'mod_mooduell'),
             "10" => get_string('xseconds', 'mod_mooduell', 10),
@@ -223,8 +220,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @return array
      * @throws coding_exception
      */
-    private function return_move_on_options()
-    {
+    private function return_move_on_options() {
         return [
             "0" => get_string('clicktomoveon', 'mod_mooduell'),
             "2" => get_string('xseconds', 'mod_mooduell', 2),
@@ -243,14 +239,14 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param object $mform
      * @throws coding_exception
      */
-    private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform)
-    {
+    private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform) {
 
         $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
         $catweightoptions = $this->return_list_of_category_weight_options();
 
         $formgroup = array();
-        $formgroup[] = &$mform->createElement('select', 'category', get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
+        $formgroup[] = &$mform->createElement('select', 'category',
+            get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
         if ($selectedcategory) {
             $formgroup[0]->setSelected($selectedcategory->category);
         }
@@ -270,8 +266,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @throws coding_exception
      * @throws dml_exception
      */
-    private function return_list_of_category_options(array $list)
-    {
+    private function return_list_of_category_options(array $list) {
 
         global $DB;
 
@@ -320,8 +315,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param object $item
      * @return mixed
      */
-    private function return_parent_for_item_in_list(array $list, object $item)
-    {
+    private function return_parent_for_item_in_list(array $list, object $item) {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
                 $parent = $parentitem;
@@ -336,8 +330,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param array $listofcategories
      * @return array
      */
-    private function generate_sorted_list(array $listofcategories)
-    {
+    private function generate_sorted_list(array $listofcategories) {
         $sortedcategories = array();
 
         foreach ($listofcategories as $category) {
@@ -360,8 +353,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param array $list
      * @return array
      */
-    private function return_children_in_list(object $parent, array $list)
-    {
+    private function return_children_in_list(object $parent, array $list) {
         $children = array();
 
         foreach ($list as $child) {
@@ -382,8 +374,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * Returns list of category weight options.
      * @return string[]
      */
-    private function return_list_of_category_weight_options()
-    {
+    private function return_list_of_category_weight_options() {
         return array(
             0 => '0',
             17 => '17',
@@ -399,8 +390,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @return array
      * @throws dml_exception
      */
-    private function get_categories_of_context_from_db()
-    {
+    private function get_categories_of_context_from_db() {
         global $DB;
 
         $context = $this->context;
@@ -426,8 +416,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      *
      * @param array $defaultvalues
      */
-    public function data_preprocessing(&$defaultvalues)
-    {
+    public function data_preprocessing(&$defaultvalues) {
         parent::data_preprocessing($defaultvalues);
 
         global $DB;
@@ -469,13 +458,13 @@ class mod_mooduell_mod_form extends moodleform_mod
             }
         }
     }
+
     /**
      * Add any custom completion rules to the form.
      *
      * @return array Contains the names of the added form elements
      */
-    public function add_completion_rules()
-    {
+    public function add_completion_rules() {
         global $DB;
 
         // Get MooDuell ID.
@@ -515,8 +504,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param array $data
      * @return bool
      */
-    public function completion_rule_enabled($data)
-    {
+    public function completion_rule_enabled($data) {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
             if (!empty($data[$mode . 'enabled']) && $data[$mode] !== 0) {
@@ -531,8 +519,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      *
      * @return array Contains the data of the form
      */
-    public function get_data()
-    {
+    public function get_data() {
         $data = parent::get_data();
         if (!$data) {
             return false;
