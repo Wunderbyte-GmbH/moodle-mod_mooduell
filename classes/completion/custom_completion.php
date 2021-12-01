@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace mod_mooduell\completion;
 
+use coding_exception;
 use core_completion\activity_custom_completion;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\completion_utils;
@@ -37,8 +38,7 @@ class custom_completion extends activity_custom_completion
      *
      * @return array
      */
-    public static function get_defined_custom_rules(): array
-    {
+    public static function get_defined_custom_rules(): array {
         return [
             'completiongamesplayed',
             'completiongameswon',
@@ -52,8 +52,7 @@ class custom_completion extends activity_custom_completion
      *
      * @return array
      */
-    public function get_custom_rule_descriptions(): array
-    {
+    public function get_custom_rule_descriptions(): array {
         global $DB;
 
         $gamesplayed = $this->cm->customdata['customcompletionrules']['completiongamesplayed'] ?? 0;
@@ -75,15 +74,12 @@ class custom_completion extends activity_custom_completion
      * @param string $rule The completion rule.
      * @return int The completion state.
      */
-    public function get_state(string $rule): int
-    {
-        global $DB;
+    public function get_state(string $rule): int {
+        global $DB, $USER;
         // Make sure to validate the custom completion rule first.
         $this->validate_rule($rule);
 
-        // If completion option is enabled, evaluate it and return true/false.
         $mooduellid = $this->cm->instance;
-        $mooduell = $DB->get_record('mooduell', ['id' => $mooduellid], '*', MUST_EXIST);
 
         $mooduellinstance = mooduell::get_mooduell_by_instance((int) $mooduellid);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
@@ -94,17 +90,36 @@ class custom_completion extends activity_custom_completion
         $status = COMPLETION_INCOMPLETE;
 
         // Now, get the completion status of the custom completion rule.
-        if ($targetnumber = $DB->get_field(
-            'mooduell_challenges',
-            'targetnumber',
-            ['mooduellid' => $mooduellid, 'challengetype' => $rule]
-        )) {
+        if ($challenge = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid, 'challengetype' => $rule])) {
 
-            // Check the actual number against the target number.
-            if ($studentstatistics[$completionmodes[$rule]] >= $targetnumber) {
-                $status = COMPLETION_COMPLETE;
+            $completionexpected = $this->cm->completionexpected;
+
+            // If the challenge is already expired take the result value from the challenge results table.
+            if ($this->cm->completion == 2 && $completionexpected != 0 && time() > $completionexpected) {
+                if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                    'mooduellid' => $mooduellid,
+                    'challengeid' => $challenge->id,
+                    'userid' => $USER->id
+                ])) {
+                    // Error prevention.
+                    $actualnumber = 0;
+                }
+                // Check the actual number against the target number.
+                if ($actualnumber >= $challenge->targetnumber) {
+                    $status = COMPLETION_COMPLETE_PASS; // Challenge expired. User passed.
+                } else {
+                    $status = COMPLETION_COMPLETE_FAIL; // Challenge expired. User failed.
+                }
             } else {
-                $status = COMPLETION_INCOMPLETE;
+                // Else retrieve the actual number from the statistics.
+                $actualnumber = (int) $studentstatistics[$completionmodes[$rule]];
+
+                // Check the actual number against the target number.
+                if ($actualnumber >= $challenge->targetnumber) {
+                    $status = COMPLETION_COMPLETE; // Challenge still open, but already complete.
+                } else {
+                    $status = COMPLETION_INCOMPLETE; // Challenge still open, but not finished yet.
+                }
             }
         }
 
@@ -116,8 +131,7 @@ class custom_completion extends activity_custom_completion
      *
      * @return array
      */
-    public function get_sort_order(): array
-    {
+    public function get_sort_order(): array {
         return [
             'completiongamesplayed',
             'completiongameswon',

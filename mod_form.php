@@ -24,6 +24,7 @@
 
 use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
+use mod_mooduell\task\challenge_results_task;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -91,13 +92,7 @@ class mod_mooduell_mod_form extends moodleform_mod
         global $DB;
 
         // Get MooDuell id.
-        $cm = $this->get_coursemodule();
-
-        if ($cm && property_exists($cm, 'instance')) {
-            $mooduellid = $cm->instance;
-        } else {
-            $mooduellid = 0;
-        }
+        $mooduellid = $this->get_mooduell_id();
 
         $config = get_config('mooduell');
 
@@ -421,13 +416,8 @@ class mod_mooduell_mod_form extends moodleform_mod
 
         global $DB;
 
-        // Get MooDuell ID.
-        $cm = $this->get_coursemodule();
-        if ($cm && property_exists($cm, 'instance')) {
-            $mooduellid = $cm->instance;
-        } else {
-            $mooduellid = 0;
-        }
+        // Get MooDuell id.
+        $mooduellid = $this->get_mooduell_id();
 
         // Preprocessing to prefill challenge data.
         $completionmodes = completion_utils::mooduell_get_completion_modes();
@@ -460,22 +450,50 @@ class mod_mooduell_mod_form extends moodleform_mod
     }
 
     /**
+     * Allows modules to modify the data returned by form get_data().
+     * This method is also called in the bulk activity completion form.
+     *
+     * Only available on moodleform_mod.
+     *
+     * @param stdClass $data the form data to be modified.
+     */
+    public function data_postprocessing($data) {
+        parent::data_postprocessing($data);
+
+        // Get course module id.
+        $cmid = $this->get_cm_id();
+
+        // Get MooDuell id.
+        $mooduellid = $this->get_mooduell_id();
+
+        // Create an adhoc-task to store challenge results after expiration.
+        if ($mooduellid != 0 && $data->completion == 2 && $data->completionexpected > 0) {
+            // Create task instance.
+            $crtask = new challenge_results_task();
+            // Add custom data to task.
+            $crtask->set_custom_data([
+                'cmid' => $cmid,
+                'mooduellid' => $mooduellid,
+                'completionexpected' => $data->completionexpected
+            ]);
+            $crtask->set_next_run_time($data->completionexpected);
+
+            // Second param needs to be true to ignore duplicates.
+            \core\task\manager::queue_adhoc_task($crtask, true);
+        } else {
+            return;
+        }
+    }
+
+    /**
      * Add any custom completion rules to the form.
      *
      * @return array Contains the names of the added form elements
      */
     public function add_completion_rules() {
-        global $DB;
-
-        // Get MooDuell ID.
-        $cm = $this->get_coursemodule();
-        if ($cm && property_exists($cm, 'instance')) {
-            $mooduellid = $cm->instance;
-        } else {
-            $mooduellid = 0;
-        }
 
         $mform = $this->_form;
+
         $result = [];
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
@@ -538,5 +556,37 @@ class mod_mooduell_mod_form extends moodleform_mod
         }
 
         return $data;
+    }
+
+    /**
+     * Helper function to quickly retrieve MooDuell ID.
+     * @return int The ID of the current MooDuell instance, 0 if not found.
+     */
+    private function get_mooduell_id() {
+        $cm = $this->get_coursemodule();
+
+        if ($cm && property_exists($cm, 'instance')) {
+            $mooduellid = $cm->instance;
+        } else {
+            $mooduellid = 0;
+        }
+
+        return $mooduellid;
+    }
+
+    /**
+     * Helper function to quickly retrieve course module id (cmid).
+     * @return int The ID of the current current course module, 0 if not found.
+     */
+    private function get_cm_id() {
+        $cm = $this->get_coursemodule();
+
+        if ($cm && property_exists($cm, 'id')) {
+            $cmid = $cm->id;
+        } else {
+            $cmid = 0;
+        }
+
+        return $cmid;
     }
 }

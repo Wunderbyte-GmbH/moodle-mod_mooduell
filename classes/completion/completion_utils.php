@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace mod_mooduell\completion;
 
+use coding_exception;
 use mod_mooduell\mooduell;
 use stdClass;
 
@@ -35,8 +36,7 @@ class completion_utils
      * ... and their associated field names in student statistics.
      * @return array $completionmodes
      */
-    public static function mooduell_get_completion_modes()
-    {
+    public static function mooduell_get_completion_modes() {
         // List of completion modes and the according fields in table $studentstatistics.
         $completionmodes = [
             'completiongamesplayed' => 'number_of_games_finished',
@@ -53,11 +53,11 @@ class completion_utils
      * @param mooduell $mooduellinstance A MooDuell instance.
      * @return array An array of objects. Each object contains a challenge.
      */
-    public static function get_completion_challenges_array($mooduellinstance): array
-    {
-        global $DB;
+    public static function get_completion_challenges_array($mooduellinstance): array {
+        global $DB, $USER;
 
         $mooduellid = $mooduellinstance->cm->instance;
+        $completionexpected = $mooduellinstance->cm->completionexpected;
 
         $completionmodes = self::mooduell_get_completion_modes();
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
@@ -74,7 +74,34 @@ class completion_utils
                 // Remove fields not supported by webservice.
                 unset($challenge->mooduellid);
 
-                $challenge->actualnumber = (int) $studentstatistics[$statsfield];
+                // If the challenge is already expired take the result value from the challenge results table.
+                if ($mooduellinstance->cm->completion == 2 && $completionexpected != 0 && time() > $completionexpected) {
+                    if (!$challenge->actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                        'mooduellid' => $mooduellid,
+                        'challengeid' => $challenge->id,
+                        'userid' => $USER->id
+                    ])) {
+                        // Error prevention.
+                        $challenge->actualnumber = 0;
+                    }
+
+                    // Check the actual number against the target number.
+                    if ($challenge->actualnumber >= $challenge->targetnumber) {
+                        $challenge->status = 'CHALLENGE_EXPIRED_PASS'; // Challenge expired. User passed.
+                    } else {
+                        $challenge->status = 'CHALLENGE_EXPIRED_FAIL'; // Challenge expired. User failed.
+                    }
+                } else {
+                    // Else retrieve the actual number from the statistics.
+                    $challenge->actualnumber = (int) $studentstatistics[$completionmodes[$statsfield]];
+
+                    // Check the actual number against the target number.
+                    if ($challenge->actualnumber >= $challenge->targetnumber) {
+                        $challenge->status = 'CHALLENGE_ACTIVE_COMPLETE'; // Challenge still open, but already complete.
+                    } else {
+                        $challenge->status = 'CHALLENGE_ACTIVE_INCOMPLETE'; // Challenge still open, but not finished yet.
+                    }
+                }
 
                 // Calculate challenge percentage.
                 $percentage = null;
@@ -97,12 +124,7 @@ class completion_utils
                 $challenge->challengepercentage = $percentage ? (int) floor($percentage) : null;
 
                 // Date until the challenge needs to be done.
-                $cmid = $mooduellinstance->cm->id;
-                if ($completionexpected = $DB->get_field('course_modules', 'completionexpected', ['id' => $cmid])) {
-                    $challenge->targetdate = $completionexpected;
-                } else {
-                    $challenge->targetdate = null;
-                }
+                $challenge->targetdate = $mooduellinstance->cm->completionexpected ?? null;
 
                 // TODO: Calculate a user's rank within a challenge. - Will be done in a future release.
                 $challenge->challengerank = null;
