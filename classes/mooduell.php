@@ -998,13 +998,16 @@ class mooduell
     /**
      * Helper function to generate statistical data
      * for tab "Statistics" (student view)
+     * @param stdClass $otheruser Allows to specify a different user than the one logged in.
      * @return array
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function return_list_of_statistics_student() {
-        global $DB;
-        global $USER;
+    public function return_list_of_statistics_student($otheruser = null) {
+        global $DB, $USER;
+
+        // Set the correct user id.
+        $userid = $otheruser ? $otheruser->id : $USER->id;
 
         $mooduellid = $this->cm->instance;
 
@@ -1012,7 +1015,7 @@ class mooduell
         $listofstatistics['courseid'] = $this->course->id;
 
         // Get user statistics.
-        $userstats = game_control::get_user_stats($USER->id, $mooduellid);
+        $userstats = game_control::get_user_stats($userid, $mooduellid);
 
         // Number of distinct opponents who have played a MooDuell game...
         // ...against the current user.
@@ -1020,11 +1023,11 @@ class mooduell
                 from (
                   select playeraid playerid from {mooduell_games}
                   where mooduellid = $mooduellid
-                  and (playeraid = $USER->id or playerbid = $USER->id)
+                  and (playeraid = $userid or playerbid = $userid)
                   union
                   select playerbid playerid from {mooduell_games}
                   where mooduellid = $mooduellid
-                  and (playeraid = $USER->id or playerbid = $USER->id)
+                  and (playeraid = $userid or playerbid = $userid)
                 ) s"; // Info: union selects only distinct records.
         $numberofopponents = $DB->get_record_sql($sql)->opponents;
         // No game played yet.
@@ -1040,7 +1043,7 @@ class mooduell
         // Number of unfinished (open) MooDuell games having the current user involved.
         $sql = "select count(*) open_games from {mooduell_games}
                 where mooduellid = $mooduellid
-                and (playeraid = $USER->id or playerbid = $USER->id)
+                and (playeraid = $userid or playerbid = $userid)
                 and status <> 3";
 
         if ($data = $DB->get_record_sql($sql)) {
