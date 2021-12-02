@@ -93,7 +93,7 @@ class completion_utils
                     }
                 } else {
                     // Else retrieve the actual number from the statistics.
-                    $challenge->actualnumber = (int) $studentstatistics[$completionmodes[$statsfield]];
+                    $challenge->actualnumber = (int) $studentstatistics[$statsfield];
 
                     // Check the actual number against the target number.
                     if ($challenge->actualnumber >= $challenge->targetnumber) {
