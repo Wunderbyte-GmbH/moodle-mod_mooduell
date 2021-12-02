@@ -24,8 +24,10 @@ use mod_mooduell\mooduell;
 use stdClass;
 
 /**
- * Adhoc task to write challenge results into the table mooduell_challenge_results
- * at the specific expiration time of a challenge.
+ * Adhoc task to write challenge results into the table mooduell_challenge_results.
+ * @package mod_mooduell
+ * @copyright 2021 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class challenge_results_task extends \core\task\adhoc_task {
 

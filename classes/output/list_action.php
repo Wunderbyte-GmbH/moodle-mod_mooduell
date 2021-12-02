@@ -60,7 +60,7 @@ class list_action implements renderable, templatable {
 
         global $CFG, $PAGE, $COURSE;
 
-        $this->data['counter'] = $counter;
+        $this->data['counter'] = (int) $counter;
         $this->data['deletelink'] = $mooduell->cm->id;
         $this->data['thisgametable'] = $this->render_questions_table_for_game($game, $mooduell);
     }

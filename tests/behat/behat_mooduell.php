@@ -43,7 +43,6 @@ class behat_mooduell extends behat_base
     /**
      * Creates new mooduell games in the database
      * @Given /^I start games in "(?P<mooduellinstancename_string>(?:[^"]|\\")*)" against "(?P<playerbname_string>(?:[^"]|\\")*)"$/
-     * 
      * @param string $mooduellinstancename
      * @param string $playerbname
      * @return void

@@ -25,12 +25,9 @@
 
 namespace mod_mooduell\output;
 
-use mod_mooduell\mooduell;
 use mod_mooduell\question_control;
-use moodle_url;
 use renderable;
 use renderer_base;
-use stdClass;
 use templatable;
 
 defined('MOODLE_INTERNAL') || die();
@@ -54,8 +51,6 @@ class list_warnings implements renderable, templatable {
      * @param question_control $question
      */
     public function __construct(question_control $question) {
-
-        global $CFG, $PAGE, $COURSE;
 
         $this->data['warnings'] = $question->warnings;
     }

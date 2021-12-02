@@ -25,12 +25,10 @@
 
 namespace mod_mooduell\output;
 
-use mod_mooduell\mooduell;
 use mod_mooduell\question_control;
 use moodle_url;
 use renderable;
 use renderer_base;
-use stdClass;
 use templatable;
 
 defined('MOODLE_INTERNAL') || die();

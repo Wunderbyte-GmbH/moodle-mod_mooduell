@@ -23,11 +23,8 @@
 
     Example context (json):
     {
-       'questontext':'https:/mymoodle/editquestion.png',
-       'answers': [
-           'questiontext':'my question',
-           'true': 'true'
-       ]
+       "questiontext": "https://mymoodle/editquestion.png",
+       "answers": []
     }
 
 }}
@@ -39,9 +36,9 @@
         {{#answers}}
             <li>
                 {{#correct}}<span class="correct">{{/correct}}
-                {{{answertext}}}
+                    {{{answertext}}}
                 {{#correct}}</span>{{/correct}}
             </li>
         {{/answers}}
     </ul>
-<div>
+</div>
