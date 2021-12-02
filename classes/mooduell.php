@@ -966,7 +966,12 @@ class mooduell
         $entry = $DB->get_record_sql($sql);
         if (!empty($entry)) {
             $listofstatistics['eq_id'] = $entry->questionid;
-            $listofstatistics['eq_name'] = strip_tags($entry->questionname);
+            // Remove HTML tags and shorten to a maximum of 50 characters.
+            if (strlen(strip_tags($entry->questionname)) > 50) {
+                $listofstatistics['eq_name'] = substr(strip_tags($entry->questionname), 0, 50) . '... ?';
+            } else {
+                $listofstatistics['eq_name'] = strip_tags($entry->questionname);
+            }
             $listofstatistics['eq_correct_count'] = $entry->correct_count;
         }
 
@@ -988,7 +993,12 @@ class mooduell
         $entry = $DB->get_record_sql($sql);
         if (!empty($entry)) {
             $listofstatistics['hq_id'] = $entry->questionid;
-            $listofstatistics['hq_name'] = strip_tags($entry->questionname);
+            // Remove HTML tags and shorten to a maximum of 50 characters.
+            if (strlen(strip_tags($entry->questionname)) > 50) {
+                $listofstatistics['hq_name'] = substr(strip_tags($entry->questionname), 0, 50) . '... ?';
+            } else {
+                $listofstatistics['hq_name'] = strip_tags($entry->questionname);
+            }
             $listofstatistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
 
