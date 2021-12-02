@@ -12,30 +12,26 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_mooduell/list_id
-    Template which defines the id column in a list.
+    @template mod_mooduell/list_warnings
+    Template which defines the warnings in a list.
     Classes required for JS:
     * none
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * none
+    * warnings - array
 
     Example context (json):
     {
-       'warnings': [
-           'message' : 'warning text'
-       ]
-       'id':'id'
+        "warnings": []
     }
-
 }}
 <div class='warnings'>
     <ul>
         {{#warnings}}
             <li>
-                {{message}}
+                {{{message}}}
             </li>
         {{/warnings}}
     </ul>
-<div>
+</div>

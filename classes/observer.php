@@ -52,8 +52,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function game_finished(\mod_mooduell\event\game_finished $event): bool
-    {
+    public static function game_finished(\mod_mooduell\event\game_finished $event): bool {
 
         // Get the right context for cmid.
         $data = $event->get_data();
@@ -111,8 +110,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function game_won(\mod_mooduell\event\game_won $event): bool
-    {
+    public static function game_won(\mod_mooduell\event\game_won $event): bool {
         // Currently we do nothing.
         return true;
     }
@@ -126,8 +124,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function game_lost(\mod_mooduell\event\game_lost $event): bool
-    {
+    public static function game_lost(\mod_mooduell\event\game_lost $event): bool {
         // Currently we do nothing.
         return true;
     }
@@ -141,8 +138,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function game_draw(\mod_mooduell\event\game_draw $event): bool
-    {
+    public static function game_draw(\mod_mooduell\event\game_draw $event): bool {
         // Currently we do nothing.
         return true;
     }
@@ -156,8 +152,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function question_answered(\mod_mooduell\event\question_answered $event): bool
-    {
+    public static function question_answered(\mod_mooduell\event\question_answered $event): bool {
 
         // Get the right context for cmid.
         $data = $event->get_data();
@@ -196,8 +191,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function question_correctly_answered(\mod_mooduell\event\question_correctly_answered $event): bool
-    {
+    public static function question_correctly_answered(\mod_mooduell\event\question_correctly_answered $event): bool {
         // Currently we do nothing.
         return true;
     }
@@ -211,8 +205,7 @@ class mod_mooduell_observer
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public static function question_wrongly_answered(\mod_mooduell\event\question_wrongly_answered $event): bool
-    {
+    public static function question_wrongly_answered(\mod_mooduell\event\question_wrongly_answered $event): bool {
         // Currently we do nothing.
         return true;
     }
@@ -224,8 +217,7 @@ class mod_mooduell_observer
      * @param \core\event\course_module_created $event The event.
      * @return bool True on success.
      */
-    public static function course_module_created(\core\event\course_module_created $event): bool
-    {
+    public static function course_module_created(\core\event\course_module_created $event): bool {
         // The $event->objectid is the course_module id (cmid).
         $data = $event->get_data();
         if ($data['other']['modulename'] === 'mooduell') {
@@ -241,8 +233,7 @@ class mod_mooduell_observer
      * @param \core\event\user_enrolment_created $event The event.
      * @return bool True on success.
      */
-    public static function user_enrolment_created(\core\event\user_enrolment_created $event): bool
-    {
+    public static function user_enrolment_created(\core\event\user_enrolment_created $event): bool {
         // The $event->relateduserid stores the user for which to create the token.
         // $event->userid is the user who did the enrolment (which is irrelevant in this case).
         manage_tokens::generate_token_for_user($event->relateduserid);

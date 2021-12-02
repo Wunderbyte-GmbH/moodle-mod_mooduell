@@ -19,24 +19,24 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * none
+    * counter - int
+    * deleteLink - string
+    * thisgametable - string of HTML
 
     Example context (json):
     {
-        'counter':1,
-        'deletelink':'https://mod/mooduell/deletethis.php',
-        'gameid':23,
-        'thisgametable': '<html>'
+        "counter": 1,
+        "deletelink": "https://mod/mooduell/deletethis.php",
+        "thisgametable": "<table><tr><td>emptytable</td></tr></table>"
     }
-
 }}
 
 
 <a href="#" data-toggle="modal" data-target="#mooduell-modal{{counter}}">
-        <i class="fa fa-info"></i>
+    <i class="fa fa-info"></i>
 </a>
-<a href="{{{deletelink}}}" alt="{{#str}} deletegame, mod_mooduell {{/str}}"
-                <i class="fa fa-trash"></i>
+<a href="{{{deletelink}}}">
+    <i class="fa fa-trash"></i>
 </a>
 
 <div id="mooduell-modal{{counter}}" class="modal in" tabindex="-1" role="dialog"

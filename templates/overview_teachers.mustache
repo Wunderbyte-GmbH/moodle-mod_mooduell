@@ -19,28 +19,26 @@
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * statistics - array: An array with values.
-    * opengames - string: HTML string for loading table.
-    * finishedgames - string: HTML string for loading table.
-    * highscores - string: HTML string for loading table.
+    * opengames - array
+    * finishedgames - array
+    * warnings - array: Array of warnings.
+    * quizname - string
+    * mooduellid - string
+    * questions - array
+    * highscores - array
+    * categories - array
+    * statistics - object
 
     Example context (json):
     {
-       "opengames": "<table></table>",
-       "finishedgames": "<table></table>",
+       "opengames": [],
+       "finishedgames": [],
        "warnings": [],
        "quizname": "test",
        "mooduellid": "409",
-       "questions": "<table></table",
-       "highscores": "<table></table",
-       "categories": [
-          {
-             "catid": "7",
-             "contextid": "1",
-             "catname": "MooDuell Präsentation",
-             "courseid": "50"
-          }
-       ],
+       "questions": [],
+       "highscores": [],
+       "categories": [],
        "statistics": {
           "courseid": "50",
           "number_of_active_users": "3",
@@ -49,7 +47,7 @@
           "number_of_answers": "4",
           "percentage_of_correct_answers": false,
           "eq_id": false,
-          "eq_name": "",
+          "eq_name": "Wieviel ist 1 plus 1?",
           "eq_correct_count": 0,
           "hq_id": "5",
           "hq_name": "Wählen Sie alle FALSCHEN ANTWORTEN aus",
@@ -101,13 +99,15 @@
         {{{finishedgames}}}
     </div>
     <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+        <ul>
         {{#categories}}
             <li>
                 <a href="../../question/edit.php?courseid={{courseid}}&category={{catid}}%2C{{contextid}}">
-                {{#str}} addquestionstocategory, mod_mooduell, {{catname}}{{/str}}
+                {{#str}} addquestionstocategory, mod_mooduell, {{catname}} {{/str}}
                 </a>
             </li>
         {{/categories}}
+        </ul>
         {{{questions}}}
     </div>
     <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
