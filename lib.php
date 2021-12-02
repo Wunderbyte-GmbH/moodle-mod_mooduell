@@ -415,11 +415,10 @@ if ($CFG->version >= 2021051700) {
      * @return bool True if completed, false if not, $type if conditions not set.
      */
     function mooduell_get_completion_state($course, $cm, $userid, $type) {
-        global $DB;
+        global $DB, $USER;
 
         // If completion option is enabled, evaluate it and return true/false.
         $mooduellid = $cm->instance;
-        $mooduell = $DB->get_record('mooduell', array('id' => $mooduellid), '*', MUST_EXIST);
 
         $mooduellinstance = mooduell::get_mooduell_by_instance($mooduellid);
         $studentstatistics = $mooduellinstance->return_list_of_statistics_student();
@@ -430,14 +429,28 @@ if ($CFG->version >= 2021051700) {
 
         foreach ($completionmodes as $completionmode => $statsfield) {
 
-            if ($targetnumber = $DB->get_field(
-                'mooduell_challenges',
-                'targetnumber',
-                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+            if ($challenge = $DB->get_record('mooduell_challenges', [
+                'mooduellid' => $mooduellid,
+                'challengetype' => $completionmode]
             )) {
 
-                // Check the required number (targetnumber) against the actual number.
-                if ($studentstatistics[$statsfield] >= $targetnumber) {
+                // If the challenge is already expired take the result value from the challenge results table.
+                if ($cm->completion == 2 && $cm->completionexpected != 0 && time() > $cm->completionexpected) {
+                    if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                        'mooduellid' => $mooduellid,
+                        'challengeid' => $challenge->id,
+                        'userid' => $USER->id
+                    ])) {
+                        // Error prevention.
+                        $actualnumber = 0;
+                    }
+                } else {
+                    // Else retrieve the actual number from the statistics.
+                    $actualnumber = (int) $studentstatistics[$statsfield];
+                }
+
+                // Check the actual number against the target number.
+                if ($actualnumber >= $challenge->targetnumber) {
                     $completion = $completion && true;
                 } else {
                     $completion = false;
