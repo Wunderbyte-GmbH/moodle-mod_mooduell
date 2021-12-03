@@ -141,17 +141,15 @@ class mod_mooduell_mod_form extends moodleform_mod
         $mform->addHelpButton('waitfornextquestion', 'waitfornextquestion', 'mod_mooduell');
         $this->apply_admin_defaults();
 
-        // We add the categories for the random question.
-        // $listofcategories = $this->get_categories_of_context_from_db();
-
         // First, create an array of contexts (containing course context only).
         $arrayofcontexts[] = \context_course::instance($COURSE->id);
 
-        // Retrieve list of categories with questionlib.
+        // Now, retrieve a list of categories with a function from questionlib.
         $listofcategories = [];
         $cats = question_category_options($arrayofcontexts, false, 0, false);
         $cats = array_pop($cats);
         foreach ($cats as $key => $value) {
+            // Repair the keys, so they'll work in our dropdown.
             $keypair = explode(',', $key);
             $newkey = $keypair[0];
             $listofcategories[$newkey] = $value;
@@ -250,7 +248,6 @@ class mod_mooduell_mod_form extends moodleform_mod
      */
     private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform) {
 
-        // $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
         $categoryoptions = $listofcategories;
         $catweightoptions = $this->return_list_of_category_weight_options();
 
@@ -268,94 +265,6 @@ class mod_mooduell_mod_form extends moodleform_mod
         }
         $mform->addGroup($formgroup, 'categoriesgroup' . $counter, get_string('questionscategorygroup', 'mod_mooduell'));
     }
-
-    /**
-     * Build the categories list.
-     * @param array $list
-     * @return array
-     * @throws coding_exception
-     * @throws dml_exception
-     */
-    /*private function return_list_of_category_options(array $list) {
-
-        global $DB;
-
-        $names = array();
-        $spaces = "";
-        $previousitem = null;
-
-        foreach ($list as $item) {
-            if ($item->parent == 0) {
-                $spaces = "";
-            } else if ($previousitem && $previousitem->id == $item->parent) {
-                $spaces .= "-";
-            } else {
-                $spaces = "-";
-                $parent = $this->return_parent_for_item_in_list($list, $item);
-
-                while ($parent->parent != 0) {
-                    $parent = $this->return_parent_for_item_in_list($list, $parent);
-                    $spaces .= "-";
-                }
-            }
-            if ($item->parent != 0) {
-
-                // Here we fetch the number of available questions from our DB.
-                $numberofquestions = $DB->count_records('question', ['category' => $item->id]);
-
-                if ($numberofquestions == 0) {
-                    $questionsstring = '(' . get_string('noquestions', 'mod_mooduell') . ')';
-                } else if ($numberofquestions == 1) {
-                    $questionsstring = '(1 ' . get_string('question', 'mod_mooduell') . ')';
-                } else {
-                    $questionsstring = '(' . $numberofquestions . ' ' . get_string('questions', 'mod_mooduell') . ')';
-                }
-
-                $idkey = (string) $item->id;
-                $names[$idkey] = $spaces . "> " . $item->name . ' ' . $questionsstring;
-            }
-            $previousitem = $item;
-        }
-        return $names;
-    }*/
-
-    /**
-     * Returns the parent of an item in list.
-     * @param array $list
-     * @param object $item
-     * @return mixed
-     */
-    /*private function return_parent_for_item_in_list(array $list, object $item) {
-        foreach ($list as $parentitem) {
-            if ($item->parent == $parentitem->id) {
-                $parent = $parentitem;
-                break;
-            }
-        }
-        return $parent;
-    }*/
-
-    /**
-     * Generate a sorted list.
-     * @param array $listofcategories
-     * @return array
-     */
-    /*private function generate_sorted_list(array $listofcategories) {
-        $sortedcategories = array();
-
-        foreach ($listofcategories as $category) {
-            if ($category->parent == 0) {
-                $sortedcategories[] = $category;
-                foreach ($this->return_children_in_list($category, $listofcategories) as $child) {
-                    if ($child) {
-                        $sortedcategories[] = $child;
-                    }
-                }
-            }
-        }
-
-        return $sortedcategories;
-    }*/
 
     /**
      * Returns children in list.
@@ -394,32 +303,6 @@ class mod_mooduell_mod_form extends moodleform_mod
             100 => '100'
         );
     }
-
-    /**
-     * Get categories of context from db.
-     * @return array
-     * @throws dml_exception
-     */
-    /*private function get_categories_of_context_from_db() {
-        global $DB;
-
-        $context = $this->context;
-        $listofcontextids = explode('/', $context->path);
-
-        // Then the SQL query is built from the relevant categories.
-        $sql = 'SELECT * FROM {question_categories} WHERE';
-        foreach ($listofcontextids as $key => $entry) {
-            if ($entry != '') {
-                $sql .= ' contextid = ' . $entry;
-                if ($key < count($listofcontextids) - 1) {
-                    $sql .= ' OR';
-                }
-            }
-        }
-        $sql .= ';';
-
-        return $DB->get_records_sql($sql);
-    }*/
 
     /**
      * Set defaults and prepare data for form.
