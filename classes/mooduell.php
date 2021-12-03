@@ -456,7 +456,7 @@ class mooduell {
 
         $mooduellid = $this->cm->instance;
 
-        $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname
+        $sql = "SELECT DISTINCT q.*, qc.contextid, qc.name AS categoryname
                 FROM {mooduell_categories} mc
                 JOIN {question_categories} qc
                 ON mc.category=qc.id
@@ -481,7 +481,7 @@ class mooduell {
 
         $mooduellid = $this->cm->instance;
 
-        $sql = "SELECT qa.*
+        $sql = "SELECT DISTINCT qa.*
                 FROM {mooduell_categories} mc
                 JOIN {question_categories} qc
                 ON mc.category=qc.id
