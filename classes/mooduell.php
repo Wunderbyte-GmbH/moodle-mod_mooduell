@@ -337,7 +337,7 @@ class mooduell
 
         $sqldata = $this->return_sql_for_all_questions_of_quiz();
 
-        $sql = "SELECT " . $sqldata['select'] .
+        $sql = "SELECT DISTINCT " . $sqldata['select'] .
             " FROM " . $sqldata['from'] .
             " WHERE " . $sqldata['where'];
 
@@ -402,7 +402,7 @@ class mooduell
 
         $mooduellid = $this->cm->instance;
 
-        $sql = "SELECT qa.*
+        $sql = "SELECT DISTINCT qa.*
                 FROM {mooduell_categories} mc
                 JOIN {question_categories} qc
                 ON mc.category=qc.id
