@@ -32,6 +32,7 @@ global $CFG;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->libdir.'/questionlib.php');
 
 /**
  * Module instance settings form.
@@ -89,7 +90,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      */
     private function mooduell_elements() {
 
-        global $DB;
+        global $COURSE, $DB;
 
         // Get MooDuell id.
         $mooduellid = $this->get_mooduell_id();
@@ -141,7 +142,20 @@ class mod_mooduell_mod_form extends moodleform_mod
         $this->apply_admin_defaults();
 
         // We add the categories for the random question.
-        $listofcategories = $this->get_categories_of_context_from_db();
+        // $listofcategories = $this->get_categories_of_context_from_db();
+
+        // First, create an array of contexts (containing course context only).
+        $arrayofcontexts[] = \context_course::instance($COURSE->id);
+
+        // Retrieve list of categories with questionlib.
+        $listofcategories = [];
+        $cats = question_category_options($arrayofcontexts, false, 0, false);
+        $cats = array_pop($cats);
+        foreach ($cats as $key => $value) {
+            $keypair = explode(',', $key);
+            $newkey = $keypair[0];
+            $listofcategories[$newkey] = $value;
+        }
 
         $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
         if (count($listofcategories) > 0) {
@@ -236,7 +250,8 @@ class mod_mooduell_mod_form extends moodleform_mod
      */
     private function add_categories_group(int $counter, $selectedcategory, array $listofcategories, object $mform) {
 
-        $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
+        // $categoryoptions = $this->return_list_of_category_options($this->generate_sorted_list($listofcategories));
+        $categoryoptions = $listofcategories;
         $catweightoptions = $this->return_list_of_category_weight_options();
 
         $formgroup = array();
@@ -261,7 +276,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @throws coding_exception
      * @throws dml_exception
      */
-    private function return_list_of_category_options(array $list) {
+    /*private function return_list_of_category_options(array $list) {
 
         global $DB;
 
@@ -302,7 +317,7 @@ class mod_mooduell_mod_form extends moodleform_mod
             $previousitem = $item;
         }
         return $names;
-    }
+    }*/
 
     /**
      * Returns the parent of an item in list.
@@ -310,7 +325,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @param object $item
      * @return mixed
      */
-    private function return_parent_for_item_in_list(array $list, object $item) {
+    /*private function return_parent_for_item_in_list(array $list, object $item) {
         foreach ($list as $parentitem) {
             if ($item->parent == $parentitem->id) {
                 $parent = $parentitem;
@@ -318,14 +333,14 @@ class mod_mooduell_mod_form extends moodleform_mod
             }
         }
         return $parent;
-    }
+    }*/
 
     /**
      * Generate a sorted list.
      * @param array $listofcategories
      * @return array
      */
-    private function generate_sorted_list(array $listofcategories) {
+    /*private function generate_sorted_list(array $listofcategories) {
         $sortedcategories = array();
 
         foreach ($listofcategories as $category) {
@@ -340,7 +355,7 @@ class mod_mooduell_mod_form extends moodleform_mod
         }
 
         return $sortedcategories;
-    }
+    }*/
 
     /**
      * Returns children in list.
@@ -385,7 +400,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      * @return array
      * @throws dml_exception
      */
-    private function get_categories_of_context_from_db() {
+    /*private function get_categories_of_context_from_db() {
         global $DB;
 
         $context = $this->context;
@@ -404,7 +419,7 @@ class mod_mooduell_mod_form extends moodleform_mod
         $sql .= ';';
 
         return $DB->get_records_sql($sql);
-    }
+    }*/
 
     /**
      * Set defaults and prepare data for form.
