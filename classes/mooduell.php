@@ -337,7 +337,7 @@ class mooduell
 
         $sqldata = $this->return_sql_for_all_questions_of_quiz();
 
-        $sql = "SELECT " . $sqldata['select'] .
+        $sql = "SELECT DISTINCT " . $sqldata['select'] .
             " FROM " . $sqldata['from'] .
             " WHERE " . $sqldata['where'];
 
