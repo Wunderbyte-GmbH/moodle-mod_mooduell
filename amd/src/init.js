@@ -157,7 +157,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
 
                         var domNodes = $($.parseHTML(res.content));
 
-                        if (domNodes.length > 2) {
+                        if (domNodes.length >= 2) {
                             replaceDownloadLink(id, domNodes, 'opengames');
                             replaceResetTableLink(id, domNodes, callLoadOpenGames);
                             replacePaginationLinks(id, domNodes, callLoadOpenGames);
@@ -169,7 +169,6 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                         $('#opengamestable').removeClass('hidden');
                     },
                     fail: function() {
-                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#opengamestable').removeClass('hidden');
                     }
@@ -212,7 +211,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
 
                         var domNodes = $($.parseHTML(res.content));
 
-                        if (domNodes.length > 2) {
+                        if (domNodes.length >= 2) {
                             replaceDownloadLink(id, domNodes, 'finishedgames');
                             replaceResetTableLink(id, domNodes, callLoadFinishedGames);
                             replacePaginationLinks(id, domNodes, callLoadFinishedGames);
@@ -224,7 +223,6 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                         $('#finishedgamestable').removeClass('hidden');
                     },
                     fail: function() {
-                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#finishedgamestable').removeClass('hidden');
                     }
@@ -261,7 +259,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
 
                         var domNodes = $($.parseHTML(res.content));
 
-                        if (domNodes.length > 2) {
+                        if (domNodes.length >= 2) {
                             replaceDownloadLink(id, domNodes, 'highscores');
                             replaceResetTableLink(id, domNodes, callLoadHighScores);
                             replacePaginationLinks(id, domNodes, callLoadHighScores);
@@ -273,7 +271,6 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                         $('#highscorestable').removeClass('hidden');
                     },
                     fail: function() {
-                        // Debug: alert('fail');
                         $('#spinner div').addClass('hidden');
                         $('#highscorestable').removeClass('hidden');
                     }
@@ -380,7 +377,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, ajax) {
                 }
                 $.each(arrayOfItems, function() {
                     if ($(this).prop("tagName") == 'FORM') {
-                        var quizid = getUrlParameter('id');
+                        var quizid = id;
                         $(this).append('<input type="hidden" name="quizid" value="' + quizid + '">');
                         $(this).append('<input type="hidden" name="action" value="' + action + '">');
                     }
