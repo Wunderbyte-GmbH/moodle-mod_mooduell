@@ -834,7 +834,7 @@ class mooduell {
             if ($user->profile['mooduell_alias'] && strlen($user->profile['mooduell_alias']) > 0) {
                 $returnstring = $user->profile['mooduell_alias'];
             } else {
-                $returnstring = get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;
+                $returnstring = get_string('userhasnonickname', 'mod_mooduell');
             }
 
         } else {
