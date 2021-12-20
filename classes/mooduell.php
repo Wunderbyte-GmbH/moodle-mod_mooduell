@@ -392,7 +392,7 @@ class mooduell
     }
 
     /**
-     * Function to fetch all answers for this instance, but before runnig through instantiation.
+     * Function to fetch all answers for this instance, but before running through instantiation.
      * @return array
      * @throws dml_exception
      */
