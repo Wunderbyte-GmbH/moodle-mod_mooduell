@@ -151,17 +151,12 @@ class question_control {
         if ($data) {
             $this->questionid = $data->id;
             $this->name = $data->name;
-            $this->questiontext = $data->questiontext;
+            $this->questiontext = strip_tags($data->questiontext);
             $this->questiontextformat = $data->questiontextformat;
             $this->questiontype = $data->qtype;
             $this->category = $data->category;
             $this->categoryname = isset($data->categoryname) ? $data->categoryname : null;
             $this->courseid = $COURSE->id;
-
-            // TODO: Delete, only for debugging.
-            if ($this->questiontype == 'ddwtos') {
-                echo 'found it';
-            }
 
             // We need the context id, but it might be there already.
             $this->contextid = $data->contextid ?? $DB->get_field('question_categories',
@@ -218,6 +213,12 @@ class question_control {
      * @return array The feedback array.
      */
     public function return_answers_feedback(): array {
+
+        // There is no answer-specific feedback for drag and drop with text (ddwtos) questions.
+        if ($this->questiontype == 'ddwtos') {
+            return [];
+        }
+
         $answers = $this->answers;
 
         $answersfeedbackarray = [];
@@ -277,6 +278,10 @@ class question_control {
             case 'truefalse':
                 list($resultarray, $iscorrect) =
                     $this->validate_single_multichoice_truefalse_question($answerids, $showcorrectanswer);
+                break;
+            case 'ddwtos':
+                $resultarray = []; // TODO.
+                $iscorrect = 0; // TODO.
                 break;
             default:
                 $resultarray = [];
@@ -448,6 +453,20 @@ class question_control {
      */
     private function check_for_right_number_of_answers() {
 
+        // For drag and drop with text questions we do not need to check, if answers are correct.
+        // We only need to know, if there is at least one answer.
+        if ($this->questiontype == 'ddwtos') {
+            if (empty($this->answers)) {
+                $this->warnings[] = [
+                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
+                ];
+                $this->status = get_string('notok', 'mod_mooduell');
+            } else {
+                return;
+            }
+        }
+
+        // Check for single and multichoice questions.
         $countcorrectanswers = 0;
         foreach ($this->answers as $answer) {
             if ($answer->correct) {
@@ -463,6 +482,8 @@ class question_control {
             // If there only is one correct answer, convert to singlechoice.
             $this->questiontype = 'singlechoice';
         }
+
+        return;
     }
 
     /**

@@ -81,9 +81,9 @@ class overview_teacher implements renderable, templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-        $data = $this->data;
 
-        return $data;
+        return $this->data;
+
     }
 
     /**
