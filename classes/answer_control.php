@@ -74,10 +74,12 @@ class answer_control {
 
             // Only strip HTML-Tags and remove markdown, if it's a text format.
             if ($data->answerformat == 1) {
-                // No HTML Tags anymore!
-                $this->answertext = strip_tags($this->answertext);
-                // If there is still markdown in answers, we want to render it properly.
-                $this->answertext = format_text($this->answertext, 4);
+
+                // If there is still markdown in answers, we need to render it properly.
+                $this->answertext = format_text($this->answertext, FORMAT_MARKDOWN);
+
+                // Now, we will remove all HTML tags and trim whitespaces.
+                $this->answertext = trim(strip_tags($this->answertext));
             }
 
             // The answer fraction (percentage).
