@@ -277,8 +277,6 @@ class mooduell
             return $this->questions;
         }
 
-        global $DB;
-
         $questions = array();
 
         $listofquestions = $this->return_list_of_questions();
@@ -286,6 +284,14 @@ class mooduell
 
         foreach ($listofquestions as $entry) {
             $newquestion = new question_control($entry, $listofanswers);
+
+            // Add empty combined feedback (for ddwtos questions) to prevent webservice errors.
+            $combinedfeedback = new stdClass;
+            $combinedfeedback->correctfeedback = null;
+            $combinedfeedback->partiallycorrectfeedback = null;
+            $combinedfeedback->incorrectfeedback = null;
+            $newquestion->combinedfeedback = $combinedfeedback;
+
             $questions[$entry->id] = $newquestion;
         }
 

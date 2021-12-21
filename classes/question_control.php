@@ -37,64 +37,34 @@ defined('MOODLE_INTERNAL') || die();
  */
 class question_control {
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     public $questionid;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $imageurl;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $imagetext;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $questiontext = '';
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $questiontype;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $questiontextformat;
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     public $category;
 
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     public $categoryname;
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     public $courseid;
 
     /**
@@ -103,39 +73,22 @@ class question_control {
      */
     public $contextid;
 
-    /**
-     *
-     * @var int answered (null=no, 1 = falsely, 2 = correctly)
-     */
+    /** @var int answered (null = no, 1 = falsely, 2 = correctly) */
     public $playeraanswered;
 
-    /**
-     *
-     * @var int answered (null=no, 1 = falsely, 2 = correctly)
-     */
+    /** @var int answered (null=no, 1 = falsely, 2 = correctly) */
     public $playerbanswered;
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     public $length;
 
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     public $status;
 
-    /**
-     *
-     * @var array of answer_control class
-     */
+    /** @var array of answer_control class */
     public $answers;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $warnings = [];
 
     /**
@@ -172,7 +125,41 @@ class question_control {
 
             $this->extract_image();
 
+            // Add answers.
             $this->answers = $this->return_answers($listofanswers);
+
+            // For drag and drop questions with text, we include the "combined feedback".
+            if ($this->questiontype = 'ddwtos') {
+                if ($combinedfeedback = $DB->get_record('question_ddwtos', ['questionid' => $this->questionid],
+                    'correctfeedback, partiallycorrectfeedback, incorrectfeedback')) {
+
+                    // Remove HTML and decode HTML entities like "&nbsp;".
+                    if (!empty($combinedfeedback->correctfeedback)) {
+                        $combinedfeedback->correctfeedback =
+                            trim(strip_tags(html_entity_decode($combinedfeedback->correctfeedback)));
+                    }
+
+                    if (!empty($combinedfeedback->partiallycorrectfeedback)) {
+                        $combinedfeedback->partiallycorrectfeedback =
+                            trim(strip_tags(html_entity_decode($combinedfeedback->partiallycorrectfeedback)));
+                    }
+
+                    if (!empty($combinedfeedback->incorrectfeedback)) {
+                        $combinedfeedback->incorrectfeedback =
+                            trim(strip_tags(html_entity_decode($combinedfeedback->incorrectfeedback)));
+                    }
+                }
+            } else {
+                // Use empty combined feedback for question types that don't support it.
+                // This is needed to prevent webservice validation erros.
+                $combinedfeedback = new stdClass;
+                $combinedfeedback->correctfeedback = null;
+                $combinedfeedback->partiallycorrectfeedback = null;
+                $combinedfeedback->incorrectfeedback = null;
+            }
+
+            // Add combined feedback to the question.
+            $this->combinedfeedback = $combinedfeedback;
 
             $this->check_question();
         }
