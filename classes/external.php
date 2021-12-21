@@ -25,7 +25,6 @@
 
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
-use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
 
 defined('MOODLE_INTERNAL') || die();
@@ -550,56 +549,55 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_game_data_returns() {
         return new external_single_structure(array(
-                        'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
-                        'gameid' => new external_value(PARAM_INT, 'gameid'),
-                        'playeraid' => new external_value(PARAM_INT, 'player A id'),
-                        'playerbid' => new external_value(PARAM_INT, 'player B id'),
-                        'winnerid' => new external_value(PARAM_INT, 'winner id'),
-                        'timemodified' => new external_value(PARAM_INT, 'time modified'),
-                        'status' => new external_value(PARAM_INT, 'status'),
-                        'challenges' => new external_multiple_structure(new external_single_structure(array(
-                                                'id' => new external_value(PARAM_INT, 'challenge id'),
-                                                'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
-                                                'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
-                                                'actualnumber' => new external_value(PARAM_INT, 'actual number'),
-                                                'status' => new external_value(PARAM_TEXT, 'challenge status'),
-                                                'targetnumber' => new external_value(PARAM_INT, 'target number'),
-                                                'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
-                                                'targetdate' => new external_value(PARAM_INT,
-                                                    'unix timestamp of expected completion date'),
-                                                'challengerank' => new external_value(PARAM_INT,
-                                                    'a user\'s ranking within a challenge'),
-                                                'localizedstrings' => new external_multiple_structure(
-                                                    new external_single_structure(array(
-                                                        'lang' => new external_value(PARAM_TEXT, 'language identifier'),
-                                                        'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
-                                                        'stringval' => new external_value(PARAM_TEXT, 'string value')
-                                                    ))
-                                                )
-                                        )
-                                )
-                        ),
-                        'questions' => new external_multiple_structure(new external_single_structure(array(
-                                                'questionid' => new external_value(PARAM_INT, 'questionid'),
-                                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                                                'questiontype' => new external_value(PARAM_RAW, 'qtype'),
-                                                'category' => new external_value(PARAM_INT, 'category'),
-                                                'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
-                                                'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
-                                                'imageurl' => new external_value(PARAM_RAW, 'image URL'),
-                                                'imagetext' => new external_value(PARAM_RAW, 'image Text'),
-                                                'answers' => new external_multiple_structure(new external_single_structure(array(
-                                                                        'id' => new external_value(PARAM_INT, 'answerid'),
-                                                                        'answertext' => new external_value(PARAM_RAW,
-                                                                                'answer text')
-                                                                )
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
+            'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
+            'gameid' => new external_value(PARAM_INT, 'gameid'),
+            'playeraid' => new external_value(PARAM_INT, 'player A id'),
+            'playerbid' => new external_value(PARAM_INT, 'player B id'),
+            'winnerid' => new external_value(PARAM_INT, 'winner id'),
+            'timemodified' => new external_value(PARAM_INT, 'time modified'),
+            'status' => new external_value(PARAM_INT, 'status'),
+            'challenges' => new external_multiple_structure(new external_single_structure(array(
+                'id' => new external_value(PARAM_INT, 'challenge id'),
+                'challengename' => new external_value(PARAM_TEXT, 'challenge name'),
+                'challengetype' => new external_value(PARAM_TEXT, 'challenge type'),
+                'actualnumber' => new external_value(PARAM_INT, 'actual number'),
+                'status' => new external_value(PARAM_TEXT, 'challenge status'),
+                'targetnumber' => new external_value(PARAM_INT, 'target number'),
+                'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
+                'targetdate' => new external_value(PARAM_INT,
+                    'unix timestamp of expected completion date'),
+                'challengerank' => new external_value(PARAM_INT,
+                    'a user\'s ranking within a challenge'),
+                'localizedstrings' => new external_multiple_structure(
+                    new external_single_structure(array(
+                        'lang' => new external_value(PARAM_TEXT, 'language identifier'),
+                        'stringkey' => new external_value(PARAM_TEXT, 'string identifier'),
+                        'stringval' => new external_value(PARAM_TEXT, 'string value')
+                    ))
                 )
-        );
+            ))),
+            'questions' => new external_multiple_structure(new external_single_structure(array(
+                'questionid' => new external_value(PARAM_INT, 'questionid'),
+                'questiontext' => new external_value(PARAM_RAW, 'question text'),
+                'questiontype' => new external_value(PARAM_RAW, 'qtype'),
+                'category' => new external_value(PARAM_INT, 'category'),
+                'playeraanswered' => new external_value(PARAM_INT, 'answer player a'),
+                'playerbanswered' => new external_value(PARAM_INT, 'answer player a'),
+                'imageurl' => new external_value(PARAM_RAW, 'image URL'),
+                'imagetext' => new external_value(PARAM_RAW, 'image Text'),
+                'answers' => new external_multiple_structure(new external_single_structure(array(
+                    'id' => new external_value(PARAM_INT, 'answerid'),
+                    'answertext' => new external_value(PARAM_RAW,
+                            'answer text')
+                ))),
+                'combinedfeedback' => new external_single_structure(array(
+                    'correctfeedback' => new external_value(PARAM_TEXT, 'correct feedback'),
+                    'partiallycorrectfeedback' => new external_value(PARAM_TEXT,
+                        'partially correct feedback'),
+                    'incorrectfeedback' => new external_value(PARAM_TEXT, 'incorrect feedback')
+                ))
+            )))
+        ));
     }
 
     /**
@@ -656,17 +654,15 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_quiz_users_returns() {
         return new external_multiple_structure(new external_single_structure(array(
-                                'id' => new external_value(PARAM_INT, 'userid'),
-                                'firstname' => new external_value(PARAM_RAW, 'firstname'),
-                                'lastname' => new external_value(PARAM_RAW, 'lastname'),
-                                'username' => new external_value(PARAM_RAW, 'username'),
-                                'alternatename' => new external_value(PARAM_RAW,
-                                        'nickname, stored as custom profile filed mooduell_alias'),
-                                'lang' => new external_value(PARAM_RAW, 'language'),
-                                'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
-                        )
-                )
-        );
+            'id' => new external_value(PARAM_INT, 'userid'),
+            'firstname' => new external_value(PARAM_RAW, 'firstname'),
+            'lastname' => new external_value(PARAM_RAW, 'lastname'),
+            'username' => new external_value(PARAM_RAW, 'username'),
+            'alternatename' => new external_value(PARAM_RAW,
+                    'nickname, stored as custom profile filed mooduell_alias'),
+            'lang' => new external_value(PARAM_RAW, 'language'),
+            'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl')
+        )));
     }
 
     /**
@@ -1232,20 +1228,25 @@ class mod_mooduell_external extends external_api {
     public static function load_questions_data_returns() {
         return new external_multiple_structure(new external_single_structure(array(
                                 'questionid' => new external_value(PARAM_INT, 'question id'),
-                                'imageurl' => new external_value(PARAM_RAW, 'iamgeurl'),
-                                'imagetext' => new external_value(PARAM_RAW, 'iamgetext'),
-                                'questiontext' => new external_value(PARAM_RAW, 'questiontext'),
-                                'questiontype' => new external_value(PARAM_RAW, 'questiontype'),
+                                'imageurl' => new external_value(PARAM_RAW, 'iamge url'),
+                                'imagetext' => new external_value(PARAM_RAW, 'iamge text'),
+                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
+                                'questiontype' => new external_value(PARAM_RAW, 'question type'),
                                 'category' => new external_value(PARAM_RAW, 'category'),
-                                'courseid' => new external_value(PARAM_INT, 'courseid'),
+                                'courseid' => new external_value(PARAM_INT, 'course id'),
                                 'status' => new external_value(PARAM_RAW, 'status'),
                                 'warnings' => new external_multiple_structure(new external_single_structure(array(
                                                 'message' => new external_value(PARAM_RAW, 'message'))
                                 )),
                                 'answers' => new external_multiple_structure(new external_single_structure(array(
-                                                'answertext' => new external_value(PARAM_RAW, 'answertext'),
+                                                'answertext' => new external_value(PARAM_RAW, 'answer text'),
                                                 'fraction' => new external_value(PARAM_RAW, 'fraction'))
-                                ))
+                                )),
+                                'combinedfeedback' => new external_single_structure(array(
+                                    'correctfeedback' => new external_value(PARAM_TEXT, 'correct feedback'),
+                                    'partiallycorrectfeedback' => new external_value(PARAM_TEXT, 'partially correct feedback'),
+                                    'incorrectfeedback' => new external_value(PARAM_TEXT, 'incorrect feedback'))
+                                )
                         )
                 )
         );

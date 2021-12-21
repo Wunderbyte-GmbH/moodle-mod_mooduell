@@ -413,6 +413,7 @@ class game_control {
                         "For some unknown reason we didn't receive the right number of questions");
             }
         }
+
         // We now have an "ordered" array of questions, categories are not mixed up.
         shuffle($questions);
 
@@ -479,9 +480,19 @@ class game_control {
         }
 
         foreach ($mquestions as $mquestion) {
+
             $question = new question_control($questionsdata[$mquestion->questionid]);
+
             $question->playeraanswered = $mquestion->playeraanswered;
             $question->playerbanswered = $mquestion->playerbanswered;
+
+            // Add empty combined feedback to prevent webservice errors.
+            $combinedfeedback = new stdClass;
+            $combinedfeedback->correctfeedback = null;
+            $combinedfeedback->partiallycorrectfeedback = null;
+            $combinedfeedback->incorrectfeedback = null;
+            $question->combinedfeedback = $combinedfeedback;
+
             $questions[] = $question;
         }
 
@@ -570,7 +581,7 @@ class game_control {
                 // Get the answer-specific feedbacks.
                 $answersfeedback = $activequestion->return_answers_feedback();
             } else {
-                throw new moodle_exception('noactivquestion', 'mooduell', null, null,
+                throw new moodle_exception('noactivequestion', 'mooduell', null, null,
                         "Couldn't find the question you wanted to answer");
             }
 
