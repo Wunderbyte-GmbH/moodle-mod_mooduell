@@ -600,11 +600,9 @@ class game_control {
                 }
                 break;
             case 'numerical':
+            case 'ddwtos':
                 // If correct, we set result to 2, if false, we set result to 1.
                 $iscorrect ? $result = 2 : $result = 1;
-                break;
-            case 'ddwtos':
-                $result = 2; // TODO: Implement drag and drop with text here.
                 break;
             default:
                 throw new moodle_exception('wrongquestiontype', 'mooduell', null, null,

@@ -405,12 +405,12 @@ class mooduell
         $sql = "SELECT DISTINCT qa.*
                 FROM {mooduell_categories} mc
                 JOIN {question_categories} qc
-                ON mc.category=qc.id
+                ON mc.category = qc.id
                 JOIN {question} q
-                ON q.category=qc.id
+                ON q.category = qc.id
                 JOIN {question_answers} qa
-                ON qa.question=q.id
-                WHERE mc.mooduellid=$mooduellid";
+                ON qa.question = q.id
+                WHERE mc.mooduellid = $mooduellid";
 
         if (!$listofanswers = $DB->get_records_sql($sql)) {
             return [];

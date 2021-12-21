@@ -187,10 +187,15 @@ class question_control {
     public function return_answers($listofanswers = null): array {
         global $DB;
 
+        // For drag and drop with text (ddwtos) questions, the order is important.
+        // So use ORDER BY in an SQL statement instead of get_records.
+        $sql = "SELECT * FROM {question_answers} WHERE question = :questionid ORDER BY id ASC";
+        $params = [
+            'questionid' => $this->questionid
+        ];
+
         if (!$listofanswers || count($listofanswers) === 0) {
-            $listofanswers = $DB->get_records('question_answers', [
-                    'question' => $this->questionid
-            ]);
+            $listofanswers = $DB->get_records_sql($sql, $params);
         }
 
         $answers = array();
@@ -280,8 +285,7 @@ class question_control {
                     $this->validate_single_multichoice_truefalse_question($answerids, $showcorrectanswer);
                 break;
             case 'ddwtos':
-                $resultarray = []; // TODO.
-                $iscorrect = 0; // TODO.
+                list($resultarray, $iscorrect) = $this->validate_ddwtos_question($answerids, $showcorrectanswer);
                 break;
             default:
                 $resultarray = [];
@@ -364,6 +368,42 @@ class question_control {
         // If setting to show correct answers is turned off, clear the result array.
         if (!$showcorrectanswer) {
             $resultarray = [];
+        }
+
+        return [$resultarray, $iscorrect];
+    }
+
+    /**
+     * Private function to validate drag and drop questions with text.
+     * @param array $answerids an array with answerids in the ORDER given by the user
+     * @param int $showcorrectanswer show correct answers in app or not
+     * @return array An array of results.
+     */
+    private function validate_ddwtos_question(array $answerids, int $showcorrectanswer): array {
+
+        $resultarray = [];
+        $iscorrect = 1; // True on initialization.
+
+        // Position in array is needed to determine right order.
+        $position = 0;
+
+        // Loop through all answers.
+        foreach ($this->answers as $answer) {
+
+            // Check if given answers are in the same order as correct answers.
+            if ($answer != $answerids[$position]) {
+                $iscorrect = 0;
+                break;
+            }
+
+            $position++; // Nex position.
+        }
+
+        // If setting to show correct answers is turned on, show them.
+        if ($showcorrectanswer) {
+            foreach ($this->answers as $answer) {
+                $resultarray[] = (int) $answer->id;
+            }
         }
 
         return [$resultarray, $iscorrect];
