@@ -22,7 +22,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
 use mod_mooduell\task\challenge_results_task;
 
