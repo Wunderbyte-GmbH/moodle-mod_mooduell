@@ -657,9 +657,10 @@ class game_control {
 
         foreach ($users as $user) {
 
-            profile_load_custom_fields($user);
+            // We don't need this, as the we get users with profile fields.
+            // profile_load_custom_fields($user);
 
-            if ($user->id === $this->gamedata->playeraid) {
+            if ($user->id == $this->gamedata->playeraid) {
                 if ($usefullnames) {
                     // Full user name.
                     $playeraname = $user->firstname . ' ' . $user->lastname;
@@ -667,9 +668,9 @@ class game_control {
                     // Nickname.
                     $playeraname = $user->profile['mooduell_alias'];
                 }
-
+                $playera = $user;
             }
-            if ($user->id === $this->gamedata->playerbid) {
+            if ($user->id == $this->gamedata->playerbid) {
                 if ($usefullnames) {
                     // Full user name.
                     $playerbname = $user->firstname . ' ' . $user->lastname;
@@ -677,6 +678,7 @@ class game_control {
                     // Nickname.
                     $playerbname = $user->profile['mooduell_alias'];
                 }
+                $playerb = $user;
             }
         }
 
@@ -693,27 +695,27 @@ class game_control {
         switch ($messagetype) {
             case 'youwin':
                 $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
-                $recepientid = $playera->id;
+                $recepientid = $playera->id ?? 0;
                 break;
             case 'youlose':
                 $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
-                $recepientid = $playera->id;
+                $recepientid = $playera->id ?? 0;
                 break;
             case 'draw':
                 $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
-                $recepientid = $playera->id;
+                $recepientid = $playera->id ?? 0;
                 break;
             case 'YOURTURNA':
                 $message = get_string('yourturn', 'mod_mooduell',  $playerbname);
-                $recepientid = $playera->id;
+                $recepientid = $playera->id ?? 0;
                 break;
             case 'YOURTURNB':
                 $message = get_string('yourturn', 'mod_mooduell',  $playeraname);
-                $recepientid = $playerb->id;
+                $recepientid = $playerb->id ?? 0;
                 break;
             case 'challenged':
                 $message = get_string($messagetype, 'mod_mooduell',  $playeraname);
-                $recepientid = $playerb->id;
+                $recepientid = $playerb->id ?? 0;
                 break;
         }
 
