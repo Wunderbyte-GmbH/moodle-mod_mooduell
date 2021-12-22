@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace mod_mooduell\completion;
 
-use coding_exception;
 use mod_mooduell\mooduell;
 use stdClass;
 
@@ -36,7 +35,7 @@ class completion_utils
      * ... and their associated field names in student statistics.
      * @return array $completionmodes
      */
-    public static function mooduell_get_completion_modes() {
+    public static function mooduell_get_completion_modes(): array {
         // List of completion modes and the according fields in table $studentstatistics.
         $completionmodes = [
             'completiongamesplayed' => 'number_of_games_finished',
