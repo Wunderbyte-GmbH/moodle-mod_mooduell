@@ -378,12 +378,12 @@ class question_control {
         foreach ($this->answers as $answer) {
 
             // Check if given answers are in the same order as correct answers.
-            if ($answer != $answerids[$position]) {
+            if ($answer->id != $answerids[$position]) {
                 $iscorrect = 0;
                 break;
             }
 
-            $position++; // Nex position.
+            $position++; // Next position.
         }
 
         // If setting to show correct answers is turned on, show them.
