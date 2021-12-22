@@ -129,7 +129,7 @@ class question_control {
             $this->answers = $this->return_answers($listofanswers);
 
             // For drag and drop questions with text, we include the "combined feedback".
-            if ($this->questiontype = 'ddwtos') {
+            if ($this->questiontype == 'ddwtos') {
                 if ($combinedfeedback = $DB->get_record('question_ddwtos', ['questionid' => $this->questionid],
                     'correctfeedback, partiallycorrectfeedback, incorrectfeedback')) {
 
