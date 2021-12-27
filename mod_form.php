@@ -365,7 +365,7 @@ class mod_mooduell_mod_form extends moodleform_mod
         $mooduellid = $this->get_mooduell_id();
 
         // Create an adhoc-task to store challenge results after expiration.
-        if ($mooduellid != 0 && $data->completion == 2 && $data->completionexpected > 0) {
+        if (isset($data->completion) && $mooduellid != 0 && $data->completion == 2 && $data->completionexpected > 0) {
             // Create task instance.
             $crtask = new challenge_results_task();
             // Add custom data to task.
