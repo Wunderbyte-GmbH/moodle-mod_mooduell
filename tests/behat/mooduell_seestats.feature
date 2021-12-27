@@ -26,24 +26,24 @@ Feature: See user stats
       | contextlevel | reference | name           |
       | Course       | C1        | Test questions |
     And the following "questions" exist:
-      | questioncategory | qtype | name                              | questiontext         |
-      | Test questions   | multichoice | Test question to be deleted | 1+1=                 |
-      | Test questions   | multichoice | Test question to be deleted | 2+2=                 |
-      | Test questions   | multichoice | Test question to be deleted | 3+3=                 |
-      | Test questions   | multichoice | Test question to be deleted | 4+4=                 |
-      | Test questions   | multichoice | Test question to be deleted | 5+5=                 |
-      | Test questions   | multichoice | Test question to be deleted | 6+6=                 |
-      | Test questions   | multichoice | Test question to be deleted | 7+7=                 |
-      | Test questions   | multichoice | Test question to be deleted | 8+8=                 |
-      | Test questions   | multichoice | Test question to be deleted | 9+9=                 |
+      | questioncategory | qtype | name                              | questiontext         | answer 1 | answer 2 |
+      | Test questions   | multichoice | Test question to be deleted | 1+1=                 | 2 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 2+2=                 | 4 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 3+3=                 | 6 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 4+4=                 | 8 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 5+5=                 | 10 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 6+6=                 | 12 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 7+7=                 | 14 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 8+8=                 | 16 | 7 |
+      | Test questions   | multichoice | Test question to be deleted | 9+9=                 | 18 | 7 |
 
   @javascript
-  Scenario: Opening the activity will show the tabs "Statistics"
+  Scenario: Opening the activity will show the tabs Statistics
     Given I log in as "teacher"
     When I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I navigate to "Edit settings" in current page administration
-    And I set the field "id_categoriesgroup0_category" to "-> Test questions (9 Questions)"
+    And I set the field "id_categoriesgroup0_category" to "Test questions (9)"
     And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
     And I start games in "Mooduell Test" against "user2"

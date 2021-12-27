@@ -68,7 +68,12 @@ class behat_mooduell extends behat_base
 
             // Play the first three question of game.
             while ($questioncounter < 3) {
-                $game->validate_question($game->gamedata->questions[$questioncounter]->questionid, [1]);
+
+                $questionid = $game->gamedata->questions[$questioncounter]->questionid;
+                // Retrieve random id of answerable questions.
+                $answerids = $DB->get_records('question_answers', ['question' => $questionid]);
+
+                $game->validate_question($questionid, $answerids);
                 ++$questioncounter;
             }
 
