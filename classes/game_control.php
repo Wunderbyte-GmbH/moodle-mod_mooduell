@@ -598,7 +598,7 @@ class game_control {
                 // There, we don't need the correct answerids, but just if the player has answered correctly.
                 // 1 = false, 2 = correct.
                 if (!$showcorrectanswer) {
-                    $result = $resultarray[0] == 1 ? 2 : 1;
+                    $result = (!isset($resultarray[0]) || !isset($resultarray[0]) == 1) ? 2 : 1;
                 } else {
                     foreach ($resultarray as $resultitem) {
                         if (count($resultarray) != count($answerids) || !in_array($resultitem, $answerids)) {
