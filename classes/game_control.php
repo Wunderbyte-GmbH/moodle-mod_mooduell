@@ -657,9 +657,6 @@ class game_control {
 
         foreach ($users as $user) {
 
-            // We don't need this, as the we get users with profile fields.
-            // profile_load_custom_fields($user);
-
             if ($user->id == $this->gamedata->playeraid) {
                 if ($usefullnames) {
                     // Full user name.
