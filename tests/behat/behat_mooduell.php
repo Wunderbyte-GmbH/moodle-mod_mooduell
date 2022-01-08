@@ -71,9 +71,9 @@ class behat_mooduell extends behat_base
 
                 $questionid = $game->gamedata->questions[$questioncounter]->questionid;
                 // Retrieve random id of answerable questions.
-                $answerids = $DB->get_records('question_answers', ['question' => $questionid]);
+                $answerids = $DB->get_fieldset_select('question_answers', 'id', 'question=:questionid', ['questionid' => $questionid]);
 
-                $game->validate_question($questionid, $answerids);
+                $game->validate_question($questionid, [$answerids[0]]);
                 ++$questioncounter;
             }
 

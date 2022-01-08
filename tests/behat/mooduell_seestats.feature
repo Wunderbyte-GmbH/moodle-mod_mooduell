@@ -20,8 +20,8 @@ Feature: See user stats
       | user2    | C1     | student        |
       | teacher  | C1     | editingteacher |
     And the following "activities" exist:
-      | activity   | name                | intro              | course | idnumber    |
-      | mooduell   | Mooduell Test       | Mooduell Test      | C1     | mooduell1   |
+      | activity   | name                | intro              | course | idnumber    | usefullnames |
+      | mooduell   | Mooduell Test       | Mooduell Test      | C1     | mooduell1   | 1 |
     And the following "question categories" exist:
       | contextlevel | reference | name           |
       | Course       | C1        | Test questions |
@@ -48,11 +48,7 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user1"
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
-    And I follow "Finished games"
-    And I follow "Questions"
     And I follow "Open games"
-    And I follow "Finished games"
-    And I follow "Questions"
-    And I follow "Open games"
+    And I wait "20" seconds
     And I follow "Statistics"
     Then I should see "Download table data as"
