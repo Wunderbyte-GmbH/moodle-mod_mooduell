@@ -22,9 +22,42 @@
     * headings - array: An array of table headings.
     * rows - array: An array of content rows for the table.
 
-    }}
+    Example context (json):
+    {
+        "categories" : [
+               {
+                  "catid":"7",
+                  "contextid":"1",
+                  "catname":"MooDuell Pr\u00e4sentation",
+                  "courseid":"50"
+               }
+        ],
+        "questions" : [
+            {
+                "questionid" : 2,
+                "imageurl" : "https://image.png",
+                "imagetext" : "my text",
+                "questiontext" : "my question",
+                "answers" : [
+                    {
+                        "answertext" : "this is the answer",
+                        "correct" : "true"
+                    }
+                ],
+                "questiontype" : "multichoice",
+                "length" : "77",
+                "categoryname" : "7",
+                "warnings" : [
+                    {
+                        "warningstet" : "this is a warning"
+                    }
+                ],
+                "status" : "OK"
+            }
+        ]
+    }
 
-<h2>{{quizname}}</h2>
+    }}
 
 <h3>{{#str}} listofquestions, mod_mooduell {{/str}}</h3>
 
