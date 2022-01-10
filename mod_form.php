@@ -147,11 +147,14 @@ class mod_mooduell_mod_form extends moodleform_mod
         $listofcategories = [];
         $cats = question_category_options($arrayofcontexts, false, 0, false);
         $cats = array_pop($cats);
-        foreach ($cats as $key => $value) {
-            // Repair the keys, so they'll work in our dropdown.
-            $keypair = explode(',', $key);
-            $newkey = $keypair[0];
-            $listofcategories[$newkey] = $value;
+
+        if (!empty($cats)) {
+            foreach ($cats as $key => $value) {
+                // Repair the keys, so they'll work in our dropdown.
+                $keypair = explode(',', $key);
+                $newkey = $keypair[0];
+                $listofcategories[$newkey] = $value;
+            }
         }
 
         $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
