@@ -5,9 +5,9 @@ This Moodle module allows you to play questions from your existing Moodle questi
 
 Click here to download the app.
 
-<a href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img width="150px"  alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a>
+<a href='https://apps.apple.com/at/app/u-mooduell/id1596475094'><img width="150px"  alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a>
 
-<a href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="170px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=at.ac.univie.uwmooduell'><img width="170px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 The App works exclusively with the Moodle Instance from the University of Vienna.
 
@@ -18,7 +18,7 @@ Please follow <https://docs.moodle.org/en/Installing_plugins#Installing_a_plugin
 the general instructions on how to install Moodle plugins.
 
 When installing from uploaded ZIP package or via Git, the "mooduell" directory is
-expected to be place under the "/mod" directory of your Moodle installation. 
+expected to be place under the "/mod" directory of your Moodle installation.
 
 You can't use this module fully withough using the App. Only the App allows actual playing of the quiz questions.
 In the App, no installation is necessary. Just login via your University of Vienna Login.
