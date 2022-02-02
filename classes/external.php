@@ -104,9 +104,11 @@ class mod_mooduell_external extends external_api {
     public static function start_attempt_returns() {
         return self::get_game_data_returns();
     }
-
-
-
+    /**
+     * Gets purchases from Database.
+     *
+     * @return void
+     */
     public static function get_mooduell_purchases() {
         global $COURSE, $USER;
 
@@ -121,7 +123,11 @@ class mod_mooduell_external extends external_api {
         self::validate_parameters(self::get_mooduell_purchases_parameters(), ['optional' => 0]);
         return mooduell::get_purchases($enrolledcourses, $quizzes);
     }
-
+    /**
+     * Defines return Parameters for get_mooduell_purchases.
+     *
+     * @return void
+     */
     public static function get_mooduell_purchases_returns() {
         return new external_single_structure(array('purchases' => new external_multiple_structure(new external_single_structure(
            array(
@@ -135,12 +141,22 @@ class mod_mooduell_external extends external_api {
            )
         ))));
     }
-
+    /**
+     * Defines Webservice Parameters for get_mooduell purchases.
+     *
+     * @return external_function_parameters
+     */
     public static function get_mooduell_purchases_parameters() {
         return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_OPTIONAL)));
     }
-
-
+    /**
+     * Stores a purchases to Database.
+     *
+     * @param  mixed $productid
+     * @param  mixed $purchasetoken
+     * @param  mixed $mooduellid
+     * @return void
+     */
     public static function update_iapurchases(string $productid, string $purchasetoken, int $mooduellid,
      int $courseid = null, string $store ) {
         global $USER, $CFG;
@@ -163,13 +179,21 @@ class mod_mooduell_external extends external_api {
         return mooduell::purchase_item($params);
 
     }
-
+    /**
+     * Return params for iapurchases.
+     *
+     * @return external_single_sctructure
+     */
     public static function update_iapurchases_returns() {
         return new external_single_structure(array(
             'status' => new external_value(PARAM_TEXT, 'status')
         ));
     }
-
+    /**
+     * Webservice params for iapurchases.
+     *
+     * @return external_function_parameters
+     */
     public static function update_iapurchases_parameters() {
         return new external_function_parameters(array(
             'productid' => new external_value(PARAM_RAW, 'productid'),

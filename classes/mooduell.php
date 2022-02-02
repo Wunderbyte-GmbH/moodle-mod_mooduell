@@ -352,7 +352,13 @@ class mooduell
         }
         return $listofquestions;
     }
-
+    /**
+     * Returns List of relevant Purchases
+     *
+     * @param  mixed $courses
+     * @param  mixed $quizzes
+     * @return void
+     */
     public static function get_purchases($courses, $quizzes) {
         global $DB, $USER, $CFG;
 
@@ -383,6 +389,12 @@ class mooduell
         return $returnitems;
     }
 
+    /**
+     * Purchase In App Item
+     *
+     * @param  mixed $purchase
+     * @return void
+     */
     public static function purchase_item($purchase) {
         global $DB, $CFG;
         // Check for existing Data.
