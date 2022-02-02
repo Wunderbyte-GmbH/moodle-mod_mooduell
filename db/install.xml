@@ -199,5 +199,24 @@
                 <KEY NAME="fk_userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="The Moodle USER id"/>
             </KEYS>
         </TABLE>
+        <TABLE NAME="mooduell_purchase" COMMENT="Holds data about In App Purchases.">
+          <FIELDS>
+              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+              <FIELD NAME="productid" TYPE="char" LENGTH="16" NOTNULL="true" SEQUENCE="false" COMMENT="Product Id"/>
+              <FIELD NAME="purchasetoken" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Receipt from either Apple/Google store. Used to verify purchase."/>
+              <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who bought the item."/>
+              <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Related Mooduell."/>
+              <FIELD NAME="platformid" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="Ref to Server/Platform."/>
+              <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Ref to Course."/>
+              <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of when the record was created."/>
+              <FIELD NAME="store" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Which Store was this item purchased on -&gt; iOS /Android"/>
+          </FIELDS>
+          <KEYS>
+              <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+              <KEY NAME="fk_userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="Reference to User."/>
+              <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id" COMMENT="Ref to MooDuell."/>
+              <KEY NAME="fk_courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id" COMMENT="Reference to Course."/>
+          </KEYS>
+       </TABLE>
     </TABLES>
 </XMLDB>

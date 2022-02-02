@@ -353,6 +353,60 @@ class mooduell
         return $listofquestions;
     }
 
+    public static function get_purchases($courses, $quizzes) {
+        global $DB, $USER, $CFG;
+
+        $userid = $USER->id;
+
+        $courseids = array();
+        foreach ($courses as $course) {
+            $courseids[] = $course->id;
+        }
+        $quizids = array();
+        foreach ($quizzes as $quiz) {
+            $quizids[] = $quiz->coursemodule;
+        }
+
+        list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
+        list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
+        list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
+
+        $params = array_merge($inparams, $inparams2, $inparams3);
+
+        $sql = "SELECT * FROM {mooduell_purchase}
+        WHERE userid = {$userid}
+        OR courseid $insqlcourses
+        OR mooduellid $insqlquizzes
+        OR platformid $insqlplatform";
+
+        $returnitems = array('purchases' => $DB->get_records_sql($sql, $params));
+        return $returnitems;
+    }
+
+    public static function purchase_item($purchase) {
+        global $DB, $CFG;
+        // Check for existing Data.
+        switch ($purchase['productid']) {
+            case 'unlockPlatform':
+                $existingdata = $DB->get_records('mooduell_purchase', array('platformid' => $CFG->wwwroot));
+                break;
+            case 'unlockCourse':
+                $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
+                break;
+            case 'unlockMooduell':
+                $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid']));
+                break;
+        }
+        if (!empty($existingdata)) {
+            return  ['status' => 0];
+        }
+        $newdata = $purchase;
+        $newdata['timecreated'] = time();
+        $DB->insert_record('mooduell_purchase', $newdata);
+
+        return ['status' => 1];
+    }
+
     /**
      * Priveleged function to build sql for all instances where all the questions have to be fetched.
      * Never use other function, as this would lead to inconsistencies and errors.

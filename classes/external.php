@@ -31,6 +31,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once('mooduell.php');
 
+
 /**
  * Class mod_mooduell_external
  */
@@ -103,6 +104,84 @@ class mod_mooduell_external extends external_api {
     public static function start_attempt_returns() {
         return self::get_game_data_returns();
     }
+
+
+
+    public static function get_mooduell_purchases() {
+        global $COURSE, $USER;
+
+        $context = context_course::instance($COURSE->id);
+        self::validate_context($context);
+
+        $student = is_enrolled($context, $USER->id, '', true);
+        $teacher = has_capability('moodle/course:manageactivities', $context);
+        $enrolledcourses = enrol_get_users_courses($USER->id, true);
+
+        $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
+        self::validate_parameters(self::get_mooduell_purchases_parameters(), ['optional' => 0]);
+        return mooduell::get_purchases($enrolledcourses, $quizzes);
+    }
+
+    public static function get_mooduell_purchases_returns() {
+        return new external_single_structure(array('purchases' => new external_multiple_structure(new external_single_structure(
+           array(
+            'productid' => new external_value(PARAM_RAW, 'productid'),
+            'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
+            'userid' => new external_value(PARAM_INT, 'userid'),
+            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
+            'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL),
+            'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
+            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+           )
+        ))));
+    }
+
+    public static function get_mooduell_purchases_parameters() {
+        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_OPTIONAL)));
+    }
+
+
+    public static function update_iapurchases(string $productid, string $purchasetoken, int $mooduellid,
+     int $courseid = null, string $store ) {
+        global $USER, $CFG;
+
+        $params = array(
+            'productid' => $productid,
+            'purchasetoken' => $purchasetoken,
+            'mooduellid' => $mooduellid,
+            'courseid' => $courseid,
+            'store' => $store,
+        );
+
+        $params = self::validate_parameters(self::update_iapurchases_parameters(), $params);
+
+        $params['userid'] = $USER->id;
+
+        if ($params['productid'] === 'unlockPlatform') {
+            $params['platformid'] = $CFG->wwwroot;
+        }
+        return mooduell::purchase_item($params);
+
+    }
+
+    public static function update_iapurchases_returns() {
+        return new external_single_structure(array(
+            'status' => new external_value(PARAM_TEXT, 'status')
+        ));
+    }
+
+    public static function update_iapurchases_parameters() {
+        return new external_function_parameters(array(
+            'productid' => new external_value(PARAM_RAW, 'productid'),
+            'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
+            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
+            'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
+            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+        ));
+
+    }
+
+
 
     /**
      * We answer a question with the array of ids of the answers. Depending on the internal setting of the MooDuell Instance...

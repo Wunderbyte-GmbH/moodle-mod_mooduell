@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 $services = array(
         'Wunderbyte MooDuell external' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' => array (
+                        'mod_mooduell_get_purchases',
+                        'mod_mooduell_update_iap',
                         'core_webservice_get_site_info',
                         'mod_mooduell_start_attempt',
                         'mod_mooduell_get_game_data',
@@ -52,6 +54,15 @@ $services = array(
 );
 
 $functions = array(
+        'mod_mooduell_update_iap' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'update_iapurchases',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Updates the IAP for the user',
+                'type' => 'write',
+                'capabilities' => 'mod/mooduell:viewinstance',
+                'ajax' => true,
+        ),
         'mod_mooduell_start_attempt' => array(
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'start_attempt',
@@ -233,5 +244,14 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        )
+        ),
+        'mod_mooduell_get_purchases' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_mooduell_purchases',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Returns a list of relevant purchases.',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:viewinstance',
+                'ajax' => true,
+        ),
 );

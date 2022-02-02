@@ -243,5 +243,32 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021113001, 'mooduell');
     }
 
+    if ($oldversion < 2022020200) {
+          // Define table mooduell_purchase to be created.
+          $table = new xmldb_table('mooduell_purchase');
+
+          // Adding fields to table mooduell_purchase.
+          $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+          $table->add_field('productid', XMLDB_TYPE_CHAR, '16', null, XMLDB_NOTNULL, null, null);
+          $table->add_field('purchasetoken', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+          $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+          $table->add_field('mooduellid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('platformid', XMLDB_TYPE_CHAR, '30', null, null, null, null);
+          $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+          $table->add_field('store', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+          // Adding keys to table mooduell_purchase.
+          $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+          $table->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+          $table->add_key('fk_courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+          $table->add_key('fk_mooduellid', XMLDB_KEY_FOREIGN, ['mooduellid'], 'mooduell', ['id']);
+          // Conditionally launch create table for mooduell_purchase.
+        if (!$dbman->table_exists($table)) {
+              $dbman->create_table($table);
+        }
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2022020200, 'mooduell');
+    }
+
     return true;
 }
