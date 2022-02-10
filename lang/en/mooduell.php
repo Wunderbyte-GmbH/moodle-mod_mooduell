@@ -50,6 +50,7 @@ $string['countdown'] = 'Countdown';
 $string['countdown_help'] = 'How much time will players have to answer a question';
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';
+$string['supporturl'] = 'Support URL';
 
 $string['viewgame'] = 'View game';
 $string['deletegame'] = 'Delete game';
