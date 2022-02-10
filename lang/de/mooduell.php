@@ -49,6 +49,8 @@ $string['countdown'] = 'Countdown';
 $string['countdown_help'] = 'Wie lange sollen die SpielerInnen Zeit haben, um die Fragen zu beantworten?';
 $string['nocountdown'] = 'Kein Countdown';
 $string['xseconds'] = '{$a} Sekunden';
+$string['supporturl'] = 'Support URL';
+
 
 $string['viewgame'] = 'Zeige Spiel';
 $string['deletegame'] = 'Lösche Spiel';

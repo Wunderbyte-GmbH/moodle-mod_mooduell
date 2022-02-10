@@ -104,6 +104,25 @@ class mod_mooduell_external extends external_api {
     public static function start_attempt_returns() {
         return self::get_game_data_returns();
     }
+
+    public static function get_mooduell_support() {
+        global $DB;
+        $url = $DB->get_record('config_plugins', ['plugin' => 'mooduell', 'name' => 'supporturl']);
+
+        $support = array(
+            'url' => $url->value
+        );
+
+        self::validate_parameters((self::get_mooduell_support_parameters()), ['optional' => 0]);
+        return $support;
+    }
+    public static function get_mooduell_support_returns() {
+           return new external_single_structure(array(
+                        'url' => new external_value(PARAM_TEXT, 'url')));
+    }
+    public static function get_mooduell_support_parameters() {
+        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_OPTIONAL)));
+    }
     /**
      * Gets purchases from Database.
      *
