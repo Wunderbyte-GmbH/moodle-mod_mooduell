@@ -319,6 +319,8 @@ class mooduell {
                 $data['highscores'] = [];
                 // Add the name of the instance.
                 $data['quizname'] = $this->cm->name;
+                $data['urlios'] = get_config('mooduell', 'storeios');
+                $data['urlandroid'] = get_config('mooduell', 'storeandroid');
                 $viewpage = new viewpage($data);
                 $out .= $output->render_viewpagestudents($viewpage);
                 break;

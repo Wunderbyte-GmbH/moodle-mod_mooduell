@@ -51,6 +51,8 @@ $string['countdown_help'] = 'How much time will players have to answer a questio
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';
 $string['supporturl'] = 'Support URL';
+$string['storeios'] = 'iOS App Store URL';
+$string['storeandroid'] = 'Android App Store URL';
 
 $string['viewgame'] = 'View game';
 $string['deletegame'] = 'Delete game';

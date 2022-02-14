@@ -77,6 +77,14 @@ if ($ADMIN->fulltree) {
             get_string('supporturl', 'mod_mooduell'),
             '', '', PARAM_TEXT));
 
+    $settings->add(new admin_setting_configtext('mooduell/storeios',
+            get_string('storeios', 'mod_mooduell'),
+            '', '', PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('mooduell/storeandroid',
+            get_string('storeandroid', 'mod_mooduell'),
+            '', '', PARAM_TEXT));
+
     $settings->add(new admin_setting_configcheckbox('mooduell/enablepush',
             get_string('enablepush', 'mod_mooduell'),
             '', 0));
