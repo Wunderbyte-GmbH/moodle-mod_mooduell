@@ -194,7 +194,7 @@ class mod_mooduell_external extends external_api {
                     // Entry to return.
                     $quizdetails = array();
 
-                    $quizdetails['quizid'] = $quiz->id;
+                    $quizdetails['quizid'] = $quiz->coursemodule;
                     $quizdetails['quizname'] = $quiz->name;
                     $returnquizzes[] = $quizdetails;
             }
