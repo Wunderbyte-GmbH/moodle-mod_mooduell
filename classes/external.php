@@ -104,6 +104,130 @@ class mod_mooduell_external extends external_api {
     public static function start_attempt_returns() {
         return self::get_game_data_returns();
     }
+
+    /**
+     * Returns all courses for user with capabilities
+     *
+     * @param  int $userid
+     * @return array
+     */
+    public static function get_courses_with_caps(int $userid = null) {
+        global $USER;
+        $params = array(
+            'userid' => $userid,
+        );
+        self::validate_parameters(self::get_courses_with_caps_parameters(), $params);
+        if ($userid === null) {
+            $userid = $USER->id;
+        }
+        $allcourses = enrol_get_users_courses($userid);
+        $capcourses = array();
+        foreach ($allcourses as $course) {
+            $context = context_course::instance($course->id);
+            $hascaps = has_capability('mod/mooduell:canpurchase', $context);
+            if ($hascaps) {
+                $item = array(
+                    'courseid' => $course->id,
+                    'coursename' => $course->fullname,
+                );
+                $capcourses[] = $item;
+            }
+        }
+
+        $return['courses'] = $capcourses;
+
+        return $return;
+    }
+
+    /**
+     * Defines return structure for get_courses_with_caps()
+     *
+     * @return external_single_structure
+     */
+    public static function get_courses_with_caps_returns() {
+            return new external_single_structure(array(
+                    'courses' => new external_multiple_structure(new external_single_structure(array(
+                            'courseid' => new external_value(PARAM_INT, 'id of course'),
+                            'coursename' => new external_value(PARAM_TEXT, 'name of course'),
+                    )))
+            ));
+    }
+
+    /**
+     * Defines params structure for get_courses_with_caps()
+     *
+     * @return external_function_parameters
+     */
+    public static function get_courses_with_caps_parameters() {
+        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_OPTIONAL)));
+    }
+
+    /**
+     * Returns all quizzes for user with capabilities
+     *
+     * @param  int $userid
+     * @return array
+     */
+    public static function get_quizzes_with_caps(int $userid = null) {
+        global $USER;
+
+        $params = array(
+            'userid' => $userid,
+        );
+        self::validate_parameters(self::get_quizzes_with_caps_parameters(), $params);
+        if ($userid === null) {
+            $userid = $USER->id;
+        }
+        $allcourses = enrol_get_users_courses($userid);
+        $capcourses = array();
+        foreach ($allcourses as $index => $course) {
+            $context = context_course::instance($course->id);
+            $hascaps = has_capability('mod/mooduell:canpurchase', $context);
+            if ($hascaps) {
+                $capcourses[$index] = $course;
+            }
+        }
+        $quizzes = get_all_instances_in_courses("mooduell", $capcourses);
+        if (!empty($quizzes)) {
+            $returquizzes = array();
+            foreach ($quizzes as $quiz) {
+                    // Entry to return.
+                    $quizdetails = array();
+
+                    $quizdetails['quizid'] = $quiz->id;
+                    $quizdetails['quizname'] = $quiz->name;
+                    $returnquizzes[] = $quizdetails;
+            }
+        } else {
+            $returnquizzes = [];
+        }
+        $returnarray['quizzes'] = $returnquizzes;
+        return $returnarray;
+    }
+
+    /**
+     * Defines return structure for get_quizzes_with_caps()
+     *
+     * @return external_single_structure
+     */
+    public static function get_quizzes_with_caps_returns() {
+        return new external_single_structure(array(
+            'quizzes' => new external_multiple_structure(new external_single_structure(array(
+                    'quizid' => new external_value(PARAM_INT, 'id of course'),
+                    'quizname' => new external_value(PARAM_TEXT, 'name of course'),
+            )))
+         ));
+    }
+
+    /**
+     * Defines params structure for get_quizzes_with_caps()
+     *
+     * @return external_function_parameters
+     */
+    public static function get_quizzes_with_caps_parameters() {
+        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_OPTIONAL)));
+    }
+
     /**
      * Return support information to client.
      * @return array
@@ -146,9 +270,8 @@ class mod_mooduell_external extends external_api {
 
         $context = context_course::instance($COURSE->id);
         self::validate_context($context);
-
-        $student = is_enrolled($context, $USER->id, '', true);
-        $teacher = has_capability('moodle/course:manageactivities', $context);
+        // $student = is_enrolled($context, $USER->id, '', true);
+        // $teacher = has_capability('moodle/course:manageactivities', $context);
         $enrolledcourses = enrol_get_users_courses($USER->id, true);
 
         $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
@@ -190,7 +313,7 @@ class mod_mooduell_external extends external_api {
      * @return void
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, int $mooduellid,
-     int $courseid = null, string $store ) {
+     int $courseid = null, string $store, int $ispublic ) {
         global $USER, $CFG;
 
         $params = array(
@@ -199,6 +322,7 @@ class mod_mooduell_external extends external_api {
             'mooduellid' => $mooduellid,
             'courseid' => $courseid,
             'store' => $store,
+            'ispublic' => $ispublic
         );
 
         $params = self::validate_parameters(self::update_iapurchases_parameters(), $params);
@@ -233,6 +357,7 @@ class mod_mooduell_external extends external_api {
             'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
             'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
             'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+            'ispublic' => new external_value(PARAM_INT, 'ispublic'),
         ));
 
     }

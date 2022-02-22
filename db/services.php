@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 $services = array(
         'Wunderbyte MooDuell external' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' => array (
+                        'mod_mooduell_get_courses_with_caps',
+                        'mod_mooduell_get_quizzes_with_caps',
                         'mod_mooduell_get_support',
                         'mod_mooduell_get_purchases',
                         'mod_mooduell_update_iap',
@@ -262,6 +264,24 @@ $functions = array(
                 'description' => 'Returns support information.',
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:viewinstance',
+                'ajax' => true,
+        ),
+        'mod_mooduell_get_courses_with_caps' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_courses_with_caps',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Returns courses that can be unlocked.',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:canpurchase',
+                'ajax' => true,
+        ),
+        'mod_mooduell_get_quizzes_with_caps' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_quizzes_with_caps',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Returns quizzes that can be unlocked.',
+                'type' => 'read',
+                'capabilities' => 'mod/mooduell:canpurchase',
                 'ajax' => true,
         ),
 );
