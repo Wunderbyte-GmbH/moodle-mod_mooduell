@@ -196,6 +196,7 @@ class mod_mooduell_external extends external_api {
 
                     $quizdetails['quizid'] = $quiz->coursemodule;
                     $quizdetails['quizname'] = $quiz->name;
+                    $quizdetails['courseid'] = $quiz->course;
                     $returnquizzes[] = $quizdetails;
             }
         } else {
@@ -213,8 +214,9 @@ class mod_mooduell_external extends external_api {
     public static function get_quizzes_with_caps_returns() {
         return new external_single_structure(array(
             'quizzes' => new external_multiple_structure(new external_single_structure(array(
-                    'quizid' => new external_value(PARAM_INT, 'id of course'),
-                    'quizname' => new external_value(PARAM_TEXT, 'name of course'),
+                    'quizid' => new external_value(PARAM_INT, 'id of quiz'),
+                    'quizname' => new external_value(PARAM_TEXT, 'name of quiz'),
+                    'courseid' => new external_value(PARAM_INT, 'id of course'),
             )))
          ));
     }
