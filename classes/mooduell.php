@@ -382,7 +382,7 @@ class mooduell
         $sql = "SELECT * FROM {mooduell_purchase}
         WHERE userid = {$userid}
         OR courseid $insqlcourses
-        OR mooduellid $insqlquizzes
+        OR mooduellid $insqlquizzes AND ispublic = 1
         OR platformid $insqlplatform";
 
         $returnitems = array('purchases' => $DB->get_records_sql($sql, $params));
