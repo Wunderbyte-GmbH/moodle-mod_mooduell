@@ -406,7 +406,7 @@ class mooduell
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
                 break;
             case 'unlockMooduell':
-                $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid']));
+                $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'], 'ispublic' => 1));
                 break;
         }
         if (!empty($existingdata)) {
