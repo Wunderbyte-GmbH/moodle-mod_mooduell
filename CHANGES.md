@@ -1,3 +1,8 @@
+## Version 1.0.5 (2022022300)
+* Bugfix: True-False question logic debugged
+* New Feature: Support FAQ Link in admin settings + webservice to pass link to app
+* New Feautre: Possibility to add Links to app store in admin settings
+
 ## Version 1.0.4 (2022010800)
 * Bugfix: Sometimes skipped push notifications.
 * Change: New URLs to u:mooduell Apps ins the App Stores.
