@@ -295,6 +295,7 @@ class mod_mooduell_external extends external_api {
             'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL),
             'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
             'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+            'ispublic' => new external_value(PARAM_INT, 'ispublic'),
            )
         ))));
     }
