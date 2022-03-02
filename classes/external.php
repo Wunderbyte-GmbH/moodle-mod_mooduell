@@ -332,7 +332,7 @@ class mod_mooduell_external extends external_api {
 
         $params['userid'] = $USER->id;
 
-        if ($params['productid'] === 'unlockPlatform') {
+        if ($params['productid'] === 'unlockplatform') {
             $params['platformid'] = $CFG->wwwroot;
         }
         return mooduell::purchase_item($params);

@@ -399,13 +399,13 @@ class mooduell
         global $DB, $CFG;
         // Check for existing Data.
         switch ($purchase['productid']) {
-            case 'unlockPlatform':
+            case 'unlockplatform':
                 $existingdata = $DB->get_records('mooduell_purchase', array('platformid' => $CFG->wwwroot));
                 break;
-            case 'unlockCourse':
+            case 'unlockcourse':
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
                 break;
-            case 'unlockMooduell':
+            case 'unlockquiz':
                 $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'], 'ispublic' => 1));
                 break;
         }
