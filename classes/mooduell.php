@@ -406,7 +406,13 @@ class mooduell
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
                 break;
             case 'unlockquiz':
-                $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'], 'ispublic' => 1));
+                if ($purchase['ispublic'] == 0) {
+                    $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'],
+                     'ispublic' => 0, 'userid' => $purchase['userid']));
+                } else {
+                    $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'],
+                     'ispublic' => 1));
+                }
                 break;
         }
         if (!empty($existingdata)) {
