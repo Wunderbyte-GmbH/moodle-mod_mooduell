@@ -401,9 +401,13 @@ class mooduell
         switch ($purchase['productid']) {
             case 'unlockplatform':
                 $existingdata = $DB->get_records('mooduell_purchase', array('platformid' => $CFG->wwwroot));
+                $item = 0;
+                $type = 'unlockplatform';
                 break;
             case 'unlockcourse':
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
+                $item = $purchase['courseid'];
+                $type = 'unlockcourse';
                 break;
             case 'unlockquiz':
                 if ($purchase['ispublic'] == 0) {
@@ -413,16 +417,18 @@ class mooduell
                     $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'],
                      'ispublic' => 1));
                 }
+                $item = $purchase['mooduellid'];
+                $type = 'unlockquiz';
                 break;
         }
         if (!empty($existingdata)) {
-            return  ['status' => 0];
+            return ['status' => 0, 'itemid' => $item, 'type' => $type ];
         }
         $newdata = $purchase;
         $newdata['timecreated'] = time();
         $DB->insert_record('mooduell_purchase', $newdata);
 
-        return ['status' => 1];
+        return ['status' => 1, 'itemid' => $item, 'type' => $type ];
     }
 
     /**

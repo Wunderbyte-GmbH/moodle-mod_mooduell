@@ -345,7 +345,9 @@ class mod_mooduell_external extends external_api {
      */
     public static function update_iapurchases_returns() {
         return new external_single_structure(array(
-            'status' => new external_value(PARAM_TEXT, 'status')
+            'status' => new external_value(PARAM_TEXT, 'status'),
+            'itemid' => new external_value(PARAM_INT, 'itemid'),
+            'type' => new external_value(PARAM_TEXT, 'type'),
         ));
     }
     /**
