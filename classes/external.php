@@ -236,10 +236,12 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_mooduell_support() {
         global $DB;
-        $url = $DB->get_record('config_plugins', ['plugin' => 'mooduell', 'name' => 'supporturl']);
+        $url = get_config('mooduell', 'supporturl');
+        $pay = get_config('mooduell', 'unlockplatform');
 
         $support = array(
-            'url' => $url->value
+            'url' => $url,
+            'unlock' => $pay
         );
 
         self::validate_parameters((self::get_mooduell_support_parameters()), ['optional' => 0]);
@@ -252,7 +254,9 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_mooduell_support_returns() {
            return new external_single_structure(array(
-                        'url' => new external_value(PARAM_TEXT, 'url')));
+                        'url' => new external_value(PARAM_TEXT, 'url'),
+                        'unlock' => new external_value(PARAM_BOOL, 'unlock')
+                    ));
     }
     /**
      * Defines support input parameters.

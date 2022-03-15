@@ -51,6 +51,7 @@ $string['countdown_help'] = 'How much time will players have to answer a questio
 $string['nocountdown'] = 'No Countdown';
 $string['xseconds'] = '{$a} seconds';
 $string['supporturl'] = 'Support URL';
+$string['unlockplatform'] = 'Disable Paymodel';
 
 $string['viewgame'] = 'View game';
 $string['deletegame'] = 'Delete game';

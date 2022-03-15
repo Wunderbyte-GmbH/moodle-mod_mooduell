@@ -89,4 +89,8 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('mooduell/enablepush',
             get_string('enablepush', 'mod_mooduell'),
             '', 0));
+
+    $settings->add(new admin_setting_configcheckbox('mooduell/unlockplatform',
+            get_string('unlockplatform', 'mod_mooduell'), "", 0));
+
 }

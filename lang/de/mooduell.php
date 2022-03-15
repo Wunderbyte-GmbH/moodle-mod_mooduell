@@ -50,6 +50,7 @@ $string['countdown_help'] = 'Wie lange sollen die SpielerInnen Zeit haben, um di
 $string['nocountdown'] = 'Kein Countdown';
 $string['xseconds'] = '{$a} Sekunden';
 $string['supporturl'] = 'Support URL';
+$string['unlockplatform'] = 'Zahlmodell deaktivieren';
 
 
 $string['viewgame'] = 'Zeige Spiel';
