@@ -427,7 +427,7 @@ class mooduell
         $newdata = $purchase;
         $newdata['timecreated'] = time();
         $manipulatedstring = $newdata['purchasetoken'];
-        $newdata['purchasetoken'] = str_replace('%', '+', $manipulatedstring);
+        $newdata['purchasetoken'] = str_replace('~', '+', $manipulatedstring);
         $DB->insert_record('mooduell_purchase', $newdata);
 
         return ['status' => 1, 'itemid' => $item, 'type' => $type ];
