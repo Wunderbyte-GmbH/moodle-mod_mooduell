@@ -294,6 +294,10 @@ class mod_mooduell_external extends external_api {
            array(
             'productid' => new external_value(PARAM_RAW, 'productid'),
             'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
+            'receipt' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
+            'signature' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
+            'orderid' => new external_value(PARAM_RAW, 'orderid', VALUE_OPTIONAL),
+            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL),
             'userid' => new external_value(PARAM_INT, 'userid'),
             'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
             'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL),
@@ -319,13 +323,18 @@ class mod_mooduell_external extends external_api {
      * @param  mixed $mooduellid
      * @return void
      */
-    public static function update_iapurchases(string $productid, string $purchasetoken, int $mooduellid,
+    public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
+     string $signature = null, string $orderid = null, string $free = null, int $mooduellid,
      int $courseid = null, string $store, int $ispublic ) {
         global $USER, $CFG;
 
         $params = array(
             'productid' => $productid,
             'purchasetoken' => $purchasetoken,
+            'receipt' => $receipt,
+            'signature' => $signature,
+            'orderid' => $orderid,
+            'free' => $free,
             'mooduellid' => $mooduellid,
             'courseid' => $courseid,
             'store' => $store,
@@ -363,6 +372,10 @@ class mod_mooduell_external extends external_api {
         return new external_function_parameters(array(
             'productid' => new external_value(PARAM_RAW, 'productid'),
             'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
+            'receipt' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
+            'signature' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
+            'orderid' => new external_value(PARAM_RAW, 'orderid', VALUE_OPTIONAL),
+            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL),
             'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
             'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
             'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),

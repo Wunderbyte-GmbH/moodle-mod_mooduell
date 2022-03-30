@@ -427,6 +427,10 @@ class mooduell
         $newdata = $purchase;
         $newdata['timecreated'] = time();
         $manipulatedstring = $newdata['purchasetoken'];
+        if ($newdata['signature']) {
+            $manipulatedsignature = $newdata['signature'];
+            $newdata['signature'] = str_replace('~', '+', $manipulatedsignature);
+        }
         $newdata['purchasetoken'] = str_replace('~', '+', $manipulatedstring);
         $DB->insert_record('mooduell_purchase', $newdata);
 

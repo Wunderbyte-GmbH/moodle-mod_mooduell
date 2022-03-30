@@ -149,6 +149,10 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="productid" TYPE="char" LENGTH="16" NOTNULL="true" SEQUENCE="false" COMMENT="Product Id"/>
         <FIELD NAME="purchasetoken" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Receipt from either Apple/Google store. Used to verify purchase."/>
+        <FIELD NAME="receipt" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Receip Item for Android"/>
+        <FIELD NAME="signature" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Signature for Android"/>
+        <FIELD NAME="orderid" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Order ID"/>
+        <FIELD NAME="free" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Free game or not."/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who bought the item."/>
         <FIELD NAME="mooduellid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Related Mooduell."/>
         <FIELD NAME="platformid" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="Ref to Server/Platform."/>
