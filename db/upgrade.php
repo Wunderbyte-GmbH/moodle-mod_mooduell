@@ -243,13 +243,13 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021113001, 'mooduell');
     }
 
-    if ($oldversion < 2022033000) {
+    if ($oldversion < 2022033101) {
           // Define table mooduell_purchase to be created.
           $table = new xmldb_table('mooduell_purchase');
 
           // Adding fields to table mooduell_purchase.
           $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-          $table->add_field('productid', XMLDB_TYPE_CHAR, '16', null, XMLDB_NOTNULL, null, null);
+          $table->add_field('productid', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
           $table->add_field('purchasetoken', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
           $table->add_field('receipt', XMLDB_TYPE_TEXT, null, null, null, null);
           $table->add_field('signature', XMLDB_TYPE_TEXT, null, null, null, null);
@@ -272,7 +272,7 @@ function xmldb_mooduell_upgrade($oldversion) {
               $dbman->create_table($table);
         }
         // Mooduell savepoint reached.
-        upgrade_mod_savepoint(true, 2022033000, 'mooduell');
+        upgrade_mod_savepoint(true, 2022033101, 'mooduell');
     }
 
     return true;

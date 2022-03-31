@@ -399,10 +399,10 @@ class mooduell
         global $DB, $CFG;
         // Check for existing Data.
         switch ($purchase['productid']) {
-            case 'unlockplatform':
+            case 'unlockplatformsubscription':
                 $existingdata = $DB->get_records('mooduell_purchase', array('platformid' => $CFG->wwwroot));
                 $item = 0;
-                $type = 'unlockplatform';
+                $type = 'unlockplatformsubscription';
                 break;
             case 'unlockcourse':
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
