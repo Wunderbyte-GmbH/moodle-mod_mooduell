@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_mooduell';
 $plugin->release = 'v1.1.1';
-$plugin->version = 2022033101;
+$plugin->version = 2022033102;
 $plugin->requires = 2020061500;
 $plugin->supported = [39, 311];
 $plugin->maturity = MATURITY_STABLE;

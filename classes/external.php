@@ -106,6 +106,31 @@ class mod_mooduell_external extends external_api {
     }
 
     /**
+     * Deletes a single purchase with an id as input
+     */
+    public static function delete_iapurchases($itemid) {
+        global $DB, $USER;
+        if ($DB->record_exists('mooduell_purchase', array('id' => $itemid))) {
+            $DB->delete_records('mooduell_purchase', array('id' => $itemid));
+            $returnarray['status'] = 1;
+        } else {
+            $returnarray['status'] = 0;
+        }
+        return $returnarray;
+    }
+
+    public static function delete_iapurchases_returns() {
+        return new external_single_structure(array(
+            'status' => new external_value(PARAM_TEXT, 'status')
+        ));
+    }
+
+    public static function delete_iapurchases_parameters() {
+        return new external_function_parameters(array('itemid' => new external_value(PARAM_INT, 'itemid')));
+    }
+
+
+    /**
      * Returns all courses for user with capabilities
      *
      * @param  int $userid
@@ -292,6 +317,7 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_purchases_returns() {
         return new external_single_structure(array('purchases' => new external_multiple_structure(new external_single_structure(
            array(
+            'id' => new external_value(PARAM_RAW, 'id'),
             'productid' => new external_value(PARAM_RAW, 'productid'),
             'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
             'receipt' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),

@@ -33,6 +33,7 @@ $services = array(
                         'mod_mooduell_get_quizzes_with_caps',
                         'mod_mooduell_get_support',
                         'mod_mooduell_get_purchases',
+                        'mod_mooduell_delete_iap',
                         'mod_mooduell_update_iap',
                         'core_webservice_get_site_info',
                         'mod_mooduell_start_attempt',
@@ -282,6 +283,15 @@ $functions = array(
                 'description' => 'Returns quizzes that can be unlocked.',
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:canpurchase',
+                'ajax' => true,
+        ),
+        'mod_mooduell_delete_iap' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'delete_iapurchases',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Deletes a single IAP',
+                'type' => 'write',
+                'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
 );
