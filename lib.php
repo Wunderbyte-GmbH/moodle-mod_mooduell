@@ -40,6 +40,8 @@ function mooduell_supports($feature) {
             return true;
         case FEATURE_USES_QUESTIONS:
             return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
         default:
             return null;
     }
