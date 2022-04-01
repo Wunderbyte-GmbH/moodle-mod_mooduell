@@ -1,3 +1,6 @@
+## Version 1.0.6 (2022040100)
+* New Feature: Support Instance description on course page
+
 ## Version 1.0.5 (2022022300)
 * Bugfix: True-False question logic debugged
 * New Feature: Support FAQ Link in admin settings + webservice to pass link to app
