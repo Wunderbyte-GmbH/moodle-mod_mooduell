@@ -45,6 +45,8 @@ function mooduell_supports($feature) {
             return true;
         case FEATURE_COMPLETION_HAS_RULES:
             return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
         default:
             return null;
     }

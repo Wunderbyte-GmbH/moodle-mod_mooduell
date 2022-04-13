@@ -1,3 +1,6 @@
+## unnamed version
+* New Feature: Support Instance description on course page
+
 ## Version 1.1.0 (2021120100)
 * New feature: MooDuell now contains activity completion challenges (including challenge expiration).
 
