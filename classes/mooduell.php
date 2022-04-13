@@ -401,9 +401,18 @@ class mooduell
         // Check for existing Data.
         switch ($purchase['productid']) {
             case 'unlockplatformsubscription':
-                $existingdata = $DB->get_records('mooduell_purchase', array('platformid' => $CFG->wwwroot));
+                if ($purchase['store'] == 'ios') {
+                    // Ios.
+                    $existingdata = $DB->get_records('mooduell_purchase', array('purchasetoken' => str_replace('~', '+', $purchase['purchasetoken'])));
+                } else {
+                    // Android.
+                    $existingdata = $DB->get_records('mooduell_purchase', array('purchasetoken' => str_replace('~', '+', $purchase['purchasetoken'])));
+                }
                 $item = 0;
                 $type = 'unlockplatformsubscription';
+                if (!empty($existingdata)) {
+                    return ['status' => 2, 'itemid' => $item, 'type' => $type ];
+                }
                 break;
             case 'unlockcourse':
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
