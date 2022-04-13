@@ -403,10 +403,12 @@ class mooduell
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
-                    $existingdata = $DB->get_records('mooduell_purchase', array('purchasetoken' => str_replace('~', '+', $purchase['purchasetoken'])));
+                    $existingdata = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
+                     'store' => 'ios'));
                 } else {
                     // Android.
-                    $existingdata = $DB->get_records('mooduell_purchase', array('purchasetoken' => str_replace('~', '+', $purchase['purchasetoken'])));
+                    $existingdata = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
+                     'store' => 'android'));
                 }
                 $item = 0;
                 $type = 'unlockplatformsubscription';
