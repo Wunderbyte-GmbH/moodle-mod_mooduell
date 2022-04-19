@@ -403,18 +403,15 @@ class mooduell
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
-                    $existingdata = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
+                    $existingsub = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
                      'store' => 'ios'));
                 } else {
                     // Android.
-                    $existingdata = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
+                    $existingsub = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
                      'store' => 'android'));
                 }
                 $item = 0;
                 $type = 'unlockplatformsubscription';
-                if (!empty($existingdata)) {
-                    return ['status' => 2, 'itemid' => $item, 'type' => $type ];
-                }
                 break;
             case 'unlockcourse':
                 $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
@@ -446,7 +443,11 @@ class mooduell
         $newdata['purchasetoken'] = str_replace('~', '+', $manipulatedstring);
         $DB->insert_record('mooduell_purchase', $newdata);
 
-        return ['status' => 1, 'itemid' => $item, 'type' => $type ];
+        if (!empty($existingsub)) {
+            return ['status' => 2, 'itemid' => $item, 'type' => $type ];
+        } else {
+            return ['status' => 1, 'itemid' => $item, 'type' => $type ];
+        }
     }
 
     /**
