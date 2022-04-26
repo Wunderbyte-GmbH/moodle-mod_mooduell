@@ -47,7 +47,8 @@ $services = array(
                         'mod_mooduell_set_alternatename',
                         'mod_mooduell_set_pushtokens',
                         'mod_mooduell_giveup_game',
-                        'mod_mooduell_update_profile_picture'
+                        'mod_mooduell_update_profile_picture',
+                        'core_badges_get_user_badges'
                 ),
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
@@ -294,4 +295,14 @@ $functions = array(
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
+        'core_badges_get_user_badges' => array(
+                'classname'     => 'core_badges_external',
+                'methodname'    => 'get_user_badges',
+                'description'   => 'Returns the list of badges awarded to a user.',
+                'type'          => 'read',
+                'capabilities'  => 'moodle/badges:viewotherbadges',
+                'services' => array(
+                        'mod_mooduell_external'
+                )
+            ),
 );

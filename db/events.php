@@ -80,5 +80,9 @@ $observers = array(
         array(
                 'eventname' => '\core\event\user_enrolment_created',
                 'callback' => 'mod_mooduell_observer::user_enrolment_created'
-        )
+        ),
+        array(
+                'eventname' => '\core\event\badge_awarded',
+                'callback' => 'mod_mooduell_observer::badge_awarded'
+        ),
 );
