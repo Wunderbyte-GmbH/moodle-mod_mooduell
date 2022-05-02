@@ -600,14 +600,14 @@ class game_control {
                 if (!$showcorrectanswer) {
                     $result = (!isset($resultarray[0]) || !isset($resultarray[0]) == 1) ? 2 : 1;
                 } else {
+                    // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
+                    $result = 2;
                     foreach ($resultarray as $resultitem) {
                         if (count($resultarray) != count($answerids) || !in_array($resultitem, $answerids)) {
                             $result = 1;
                             break;
                         }
                     }
-                    // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
-                    $result != 1 ? $result = 2 : null;
                 }
                 break;
             case 'numerical':
