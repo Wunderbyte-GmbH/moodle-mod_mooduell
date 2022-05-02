@@ -835,6 +835,14 @@ class mod_mooduell_external extends external_api {
         // Add challenges JSON string with completion data to $gamedata.
         $gamedata->challenges = completion_utils::get_completion_challenges_array($mooduell);
 
+        // On every call, we see if completion is already done.
+
+        $course = get_course($params['courseid']);
+        $completion = new completion_info($course);
+
+        // This calculates the completion and saves the state, which will also trigger the completion_update event, which triggers badges.
+        $completion->update_state($cm);
+
         return $gamedata;
     }
 
