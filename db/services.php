@@ -295,14 +295,4 @@ $functions = array(
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
         ),
-        'core_badges_get_user_badges' => array(
-                'classname'     => 'core_badges_external',
-                'methodname'    => 'get_user_badges',
-                'description'   => 'Returns the list of badges awarded to a user.',
-                'type'          => 'read',
-                'capabilities'  => 'moodle/badges:viewotherbadges',
-                'services' => array(
-                        'mod_mooduell_external'
-                )
-            ),
 );
