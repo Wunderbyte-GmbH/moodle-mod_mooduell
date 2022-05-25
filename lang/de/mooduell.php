@@ -218,3 +218,7 @@ $string['app:completiongamesplayed'] = 'Beende {$a} Spiele, um diese Herausforde
 $string['app:completiongameswon'] = 'Gewinne {$a} Spiele, um diese Herausforderung abzuschließen.';
 $string['app:completionrightanswers'] = 'Beantworte {$a} Fragen korrekt, um diese Herausforderung abzuschließen.';
 $string['app:completionrightanswersperc'] = 'Beantworte {$a}% aller Fragen korrekt, um diese Herausforderung abzuschließen.';
+
+// IAP
+
+$string['mooduell:canpurchase'] = 'Nutzerin darf kaufen';
