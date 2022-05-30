@@ -840,8 +840,10 @@ class mod_mooduell_external extends external_api {
         $course = get_course($params['courseid']);
         $completion = new completion_info($course);
 
-        // This calculates the completion and saves the state, which will also trigger the completion_update event, which triggers badges.
-        $completion->update_state($cm);
+        if ($cm->completion != COMPLETION_TRACKING_MANUAL) {
+            // This calculates the completion and saves the state, which will also trigger the completion_update event, which triggers badges.
+            $completion->update_state($cm);
+        }
 
         return $gamedata;
     }
