@@ -104,7 +104,7 @@ class question_control {
         if ($data) {
             $this->questionid = $data->id;
             $this->name = $data->name;
-            $this->questiontext = strip_tags($data->questiontext);
+            $this->questiontext = $data->questiontext;
             $this->questiontextformat = $data->questiontextformat;
             $this->questiontype = $data->qtype;
             $this->category = $data->category;
