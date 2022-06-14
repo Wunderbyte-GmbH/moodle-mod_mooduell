@@ -29,7 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 $services = array(
         'Wunderbyte MooDuell Tokens' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' => array (
-                        'mod_mooduell_get_user_token'
+                        'mod_mooduell_get_user_token',
+                        'core_webservice_get_site_info'
                 ),
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_tokens',
