@@ -27,6 +27,7 @@ namespace mod_mooduell;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
+use mod_mooduell\manage_tokens;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,21 +38,14 @@ require_once($CFG->dirroot . '/mod/mooduell/thirdparty/vendor/autoload.php');
 /**
  * This class handles the QR Code creation
  */
-class qr_code
-{
+class qr_code {
     /**
      * Creates QR Code with pin for current User and returns QRImage that can be displayed.
      */
     public function generate_qr_code() {
-        global $CFG, $DB;
+        global $CFG, $DB, $USER;
 
-        $service = $DB->get_record('external_services', array('shortname' => 'mod_mooduell_external', 'enabled' => 1));
-        if (empty($service)) {
-            // Will throw exception if no token found.
-            return;
-        }
-        // Setup qrcode parameters.
-        $tokenobject = external_generate_token_for_current_user($service);
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
 
         $url = $CFG->wwwroot;
 
