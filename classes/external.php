@@ -24,6 +24,7 @@
  */
 
 use mod_mooduell\game_control;
+use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\completion_utils;
 
@@ -131,6 +132,42 @@ class mod_mooduell_external extends external_api {
 
 
     /**
+     * Returns external web token while using QR webservice token
+     */
+    public static function get_usertoken() {
+        global $USER;
+        $params = array();
+        self::validate_parameters(self::get_usertoken_parameters(), $params);
+
+        // Returns mooduell_external token and delete mooduell_tokens token.
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_external', 0);
+        manage_tokens::delete_user_token('mod_mooduell_tokens');
+        $token = $tokenobject->token;
+        $return['token'] = $token;
+
+        return $return;
+    }
+
+    /**
+     * Defines return structure for get_ustertoken()
+     *
+     * @return external_single_structure
+     */
+    public static function get_usertoken_returns() {
+        return new external_single_structure(array(
+            'token' => new external_value(PARAM_RAW, 'token'),
+        ));
+    }
+
+    /**
+     * Defines parameters for get_ustertoken()
+     *
+     */
+    public static function get_usertoken_parameters() {
+        return new external_function_parameters(array());
+    }
+
+    /**
      * Returns all courses for user with capabilities
      *
      * @param  int $userid
@@ -164,11 +201,6 @@ class mod_mooduell_external extends external_api {
         return $return;
     }
 
-    /**
-     * Defines return structure for get_courses_with_caps()
-     *
-     * @return external_single_structure
-     */
     public static function get_courses_with_caps_returns() {
             return new external_single_structure(array(
                     'courses' => new external_multiple_structure(new external_single_structure(array(

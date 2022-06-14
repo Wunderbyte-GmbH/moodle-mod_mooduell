@@ -69,17 +69,31 @@ class manage_tokens {
     }
 
     /**
+     * Function to delete temporary QR Webservice Token
+     */
+    public static function delete_user_token($servicename) {
+        // Get Service id.
+        global $USER, $DB;
+         $service = $DB->get_record('external_services', array('shortname' => $servicename));
+        if (empty($service)) {
+            // Will throw exception if no token found.
+            return;
+        }
+        $DB->delete_records('external_tokens', array('userid' => $USER->id, 'externalserviceid' => $service->id));
+    }
+
+    /**
      * Function to generate a token for a specific MooDuell user.
      *
      * @param int $userid The id of the user for which a token should be created.
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function generate_token_for_user(int $userid) {
+    public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0) {
 
         global $DB, $USER;
 
-        $mooduellwebservice = $DB->get_record('external_services', ['shortname' => 'mod_mooduell_external', 'enabled' => 1]);
+        $mooduellwebservice = $DB->get_record('external_services', ['shortname' => $servicename, 'enabled' => 1]);
         if (empty($mooduellwebservice)) {
             // Will throw an exception if the service can't be found.
             throw new moodle_exception('servicenotavailable', 'webservice');
@@ -137,7 +151,11 @@ class manage_tokens {
             $token->timecreated = time();
             $token->externalserviceid = $mooduellwebservice->id;
             // Tokens created by this function do not expire.
-            $token->validuntil = 0;
+            if ($duration == 0) {
+                $token->validuntil = 0;
+            } else {
+                $token->validuntil = time() + $duration;
+            }
             $token->iprestriction = null;
             $token->sid = null;
             $token->lastaccess = null;
@@ -158,5 +176,6 @@ class manage_tokens {
             $event->add_record_snapshot('external_tokens', $eventtoken);
             $event->trigger();
         }
+        return $token;
     }
 }

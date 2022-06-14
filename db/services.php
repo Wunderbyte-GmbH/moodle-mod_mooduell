@@ -27,6 +27,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 $services = array(
+        'Wunderbyte MooDuell Tokens' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
+                'functions' => array (
+                        'mod_mooduell_get_user_token'
+                ),
+                'restrictedusers' => 0,
+                'shortname' => 'mod_mooduell_tokens',
+                'downloadfiles' => 1,    // Allow file downloads.
+                'uploadfiles'  => 1,      // Allow file uploads.
+                'enabled' => 1
+        ),
         'Wunderbyte MooDuell external' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' => array (
                         'mod_mooduell_get_courses_with_caps',
@@ -58,7 +68,17 @@ $services = array(
         )
 );
 
+
 $functions = array(
+        'mod_mooduell_get_user_token' => array(
+                'classname' => 'mod_mooduell_external',
+                'methodname' => 'get_usertoken',
+                'classpath' => 'mod/mooduell/classes/external.php',
+                'description' => 'Returns user token for current user',
+                'type' => 'write',
+                'capabilities' => 'mod/mooduell:viewinstance',
+                'ajax' => true,
+        ),
         'mod_mooduell_update_iap' => array(
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'update_iapurchases',
