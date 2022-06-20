@@ -1,5 +1,12 @@
-## unnamed version
+## Version 2.0.0 (2022062000)
+* New Feature: Supports In App Purchases
 * New Feature: Support Instance description on course page
+* New Feautre: Possibility to add Links to app store in admin settings
+* New Feature: MooDuell now supports Drag and Drop question type.
+* New Feature: Challenges have been added.
+* New Feature: Badges have been added.
+* New Feature: MooDuell now supports QR-Login.
+Bugfixes: Multiple Bug Fixes
 
 ## Version 1.1.0 (2021120100)
 * New feature: MooDuell now contains activity completion challenges (including challenge expiration).
@@ -9,4 +16,4 @@
 * New feature: General feedback can be turned on/off in instance and plugin settings.
 
 ## Version 0.9.2
-Initial version for the University of Vienna.
+Initial version for Wunderbyte Mooduell.
