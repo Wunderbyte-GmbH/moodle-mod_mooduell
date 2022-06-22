@@ -75,8 +75,7 @@ const ACCEPTEDTYPES = [
  *
  * @package mod_mooduell
  */
-class mooduell
-{
+class mooduell {
 
     /**
      * @var stdClass|null fieldset record of mooduell instance

@@ -38,6 +38,8 @@ use moodle_exception;
 use stdClass;
 use tool_dataprivacy\context_instance;
 use user_picture;
+use mod_mooduell\task\send_push_notification_task;
+
 
 define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
@@ -643,8 +645,26 @@ class game_control {
 
         $this->save_my_turn_status();
 
+        // Id from cm and game id
         // Do we need to send a push notification? If so, we'll do it here.
-        $this->send_notifcation_if_necessary();
+        // Create Task to send notifications as soon as possible.
+
+        $userid = $USER->id;
+        $now = time();
+        $nextruntime = strtotime($now);
+
+        $taskdata = new stdClass();
+        $taskdata->cm = $this->mooduell->cm;
+        $taskdata->gameid = $this->gamedata->gameid;
+        $taskdata->gamedata = $this->gamedata;
+
+        $sendnotificationtask = new send_push_notification_task();
+        $sendnotificationtask->set_userid($userid);
+        $sendnotificationtask->set_next_run_time($nextruntime);
+        $sendnotificationtask->set_custom_data($taskdata);
+        \core\task\manager::reschedule_or_queue_adhoc_task($sendnotificationtask);
+
+        // $this->send_notifcation_if_necessary();
 
         return [$resultarray, $iscorrect, $answersfeedback];
     }
@@ -652,26 +672,26 @@ class game_control {
     /**
      * There are a couple of cases where we have to send different types of messages. Here we check which one we nned.
      */
-    private function send_notifcation_if_necessary() {
+    public function send_notifcation_if_necessary($gamedata) {
 
         $i = 0;
         $j = 0;
-        foreach ($this->gamedata->questions as $question) {
+        foreach ($gamedata->questions as $question) {
 
             $i += $question->playeraanswered != null ? 1 : 0;
             $j += $question->playerbanswered != null ? 1 : 0;
 
         }
 
-        if ($this->gamedata->status === 3) {
+        if ($gamedata->status === 3) {
             // Notify Player A.
-            if ($this->gamedata->winnerid === $this->gamedata->playeraid) {
+            if ($gamedata->winnerid === $gamedata->playeraid) {
                 // You won.
                 $this->send_push_notification('youwin');
-            } else if ($this->gamedata->winnerid === 0) {
+            } else if ($gamedata->winnerid === 0) {
                 // You played draw.
                 $this->send_push_notification('draw');
-            } else if ($this->gamedata->winnerid === $this->gamedata->playerbid) {
+            } else if ($gamedata->winnerid === $gamedata->playerbid) {
                 // You lost.
                 $this->send_push_notification('youlose');
             }
