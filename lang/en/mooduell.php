@@ -224,7 +224,7 @@ $string['privacy:metadata:mooduell_pushtokens:numberofnotifications'] = 'The num
 
 $string['pincode'] = "Your PinCode: ";
 $string['qrtitle'] = "QR Login - How to:";
-$string['qrdesc'] = "To login on your Smartphone, scan this personal QR-Code with the MooDuell App and verify the process with your unique 4-digit pincode.";
+$string['qrdesc'] = "To login on your Smartphone, scan this personal QR-Code with the MooDuell App.";
 
 // Activity completion.
 $string['completiongamesplayed'] = 'User has to finish number of games';
@@ -254,7 +254,9 @@ $string['app:completiongameswon'] = 'Win {$a} games to complete this challenge.'
 $string['app:completionrightanswers'] = 'Answer {$a} questions correctly to complete this challenge.';
 $string['app:completionrightanswersperc'] = 'Answer {$a}% of all questions correctly to complete this challenge.';
 
-// IAP.
+$string['showqr'] = 'Show QR Code';
+$string['close'] = 'Close';
+// IAP
 
 $string['mooduell:canpurchase'] = 'User can purchase';
 
