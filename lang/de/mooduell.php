@@ -188,7 +188,7 @@ $string['mooduell:play'] = 'MooDuell spielen';
 
 $string['pincode'] = "Dein PinCode: ";
 $string['qrtitle'] = "Anleitung QR-Login:";
-$string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode in der App und bestätige den Login mit dem einmaligen Pincode.";
+$string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode mit der MooDuell-App.";
 
 
 // Activity completion.
@@ -218,6 +218,9 @@ $string['app:completiongamesplayed'] = 'Beende {$a} Spiele, um diese Herausforde
 $string['app:completiongameswon'] = 'Gewinne {$a} Spiele, um diese Herausforderung abzuschließen.';
 $string['app:completionrightanswers'] = 'Beantworte {$a} Fragen korrekt, um diese Herausforderung abzuschließen.';
 $string['app:completionrightanswersperc'] = 'Beantworte {$a}% aller Fragen korrekt, um diese Herausforderung abzuschließen.';
+
+$string['showqr'] = 'QR-Code anzeigen';
+$string['close'] = 'Schließen';
 
 // IAP
 

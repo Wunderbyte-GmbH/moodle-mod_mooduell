@@ -49,39 +49,84 @@
         <div class="col-md">
             <div class="row">
                 <div class="col-sm">{{#str}} univiemooduellappstore, mod_mooduell {{/str}}</div>
-                <div class="col-sm" style="text-align: center;"><a href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img style="width: 140px; max-width: 100%" alt='Download from Apple App Store' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'/></a></div>
+                <div class="col-sm" style="text-align: center;"><a
+                        href='https://apps.apple.com/at/app/univie-mooduell/id1496638765'><img
+                            style="width: 140px; max-width: 100%" alt='Download from Apple App Store'
+                            src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg' /></a>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm">{{#str}} univiemooduellplaystore, mod_mooduell {{/str}}</div>
-                <div class="col-sm" style="text-align: center;"><a href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img style="width: 160px; max-width: 100%" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a></div>
+                <div class="col-sm" style="text-align: center;"><a
+                        href='https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell&hl=de&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img
+                            style="width: 160px; max-width: 100%" alt='Get it on Google Play'
+                            src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' /></a>
+                </div>
             </div>
         </div>
-        <div class="col-md">
-            <h4>{{#str}} qrtitle, mod_mooduell {{/str}}</h4>
-            <p>{{#str}} qrdesc, mod_mooduell {{/str}}</p>
+        <div class="col-md" style="display: flex; justify-content:center; align-items: center;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                {{#str}} showqr, mod_mooduell {{/str}}
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">QR Code Login</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md">
+                                <h4>{{#str}} qrtitle, mod_mooduell {{/str}}</h4>
+                                <p>{{#str}} qrdesc, mod_mooduell {{/str}}</p>
+                            </div>
+                            {{#qrimage}}
+                            <div class="col-md" style="text-align: center">
+                                <img style="width:200px" src="{{qrimage}}" />
+                            </div>
+                            {{/qrimage}}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {{#qrimage}}
-        <div class="col-md" style="text-align: center">
-            <img style="width:200px" src="{{qrimage}}"/>
-        </div>
-        {{/qrimage}}
     </div>
 </div>
 {{/statistics}}
 
 <ul class="nav nav-tabs" id="mooduellTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="statistics-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="true"><h4>{{#str}}
-            statistics, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link active" id="statistics-tab" data-toggle="tab" href="#statistics" role="tab"
+            aria-controls="statistics" aria-selected="true">
+            <h4>{{#str}}
+                statistics, mod_mooduell {{/str}}</h4>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="opengames-tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames" aria-selected="true"><h4>{{#str}} opengames, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link" id="opengames-tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames"
+            aria-selected="true">
+            <h4>{{#str}} opengames, mod_mooduell {{/str}}</h4>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="finishedgames-tab" data-toggle="tab" href="#finishedgames" role="tab" aria-controls="finishedgames" aria-selected="false"><h4>{{#str}} finishedgames, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link" id="finishedgames-tab" data-toggle="tab" href="#finishedgames" role="tab"
+            aria-controls="finishedgames" aria-selected="false">
+            <h4>{{#str}} finishedgames, mod_mooduell {{/str}}</h4>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="highscores-tab" data-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link" id="highscores-tab" data-toggle="tab" href="#highscores" role="tab"
+            aria-controls="highscores" aria-selected="false">
+            <h4>{{#str}} highscores, mod_mooduell {{/str}}</h4>
+        </a>
     </li>
 </ul>
 <div class="tab-content" id="mooduellTabContent">

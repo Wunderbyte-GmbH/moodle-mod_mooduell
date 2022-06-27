@@ -51,12 +51,9 @@ class qr_code {
 
         $token = $tokenobject->token;
 
-        $pincode = rand(1000, 9999);
-
-        $qrstring = $url . ';' . $token . ';' . $pincode;
+        $qrstring = $url . ';' . $token;
         // Base64 encode the qr code.
         $basestring = base64_encode($qrstring);
-        $text = get_string('pincode', 'mod_mooduell');
         // Create QR code.
         // Create a basic QR code.
         $qrcode = new QrCode($basestring);
@@ -68,8 +65,6 @@ class qr_code {
             ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
             ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
             ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
-            ->setLabel($text . $pincode, 16, $CFG->dirroot . '/mod/mooduell/thirdparty/vendor/endroid/qrcode/assets//noto_sans.otf'
-            , LabelAlignment::CENTER)
             ->setLogoWidth(230)
             ->setValidateResult(false);
 
