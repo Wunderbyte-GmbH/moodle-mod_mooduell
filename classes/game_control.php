@@ -650,8 +650,7 @@ class game_control {
         // Create Task to send notifications as soon as possible.
 
         $userid = $USER->id;
-        $now = time();
-        $nextruntime = strtotime($now);
+        $nextruntime = time();
 
         $taskdata = new stdClass();
         $taskdata->cm = $this->mooduell->cm;
