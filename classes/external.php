@@ -40,15 +40,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Starts new game against another user.
-     * @param int $courseid
-     * @param int $quizid
-     * @param int $playerbid
-     * @return false|mixed|stdClass
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws invalid_parameter_exception
-     * @throws moodle_exception
-     * @throws restricted_context_exception
+     *
+     * @param  mixed $courseid
+     * @param  mixed $quizid
+     * @param  mixed $playerbid
+     * @return void
      */
     public static function start_attempt(int $courseid, int $quizid, int $playerbid) {
         $params = array(
@@ -108,8 +104,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Deletes a single purchase with an id as input
+     *
+     * @param int $itemid
+     * @return void
      */
-    public static function delete_iapurchases($itemid) {
+    public static function delete_iapurchases(int $itemid) {
         global $DB, $USER;
         if ($DB->record_exists('mooduell_purchase', array('id' => $itemid))) {
             $DB->delete_records('mooduell_purchase', array('id' => $itemid));
@@ -120,12 +119,22 @@ class mod_mooduell_external extends external_api {
         return $returnarray;
     }
 
+    /**
+     * Define return of iapurchases
+     *
+     * @return void
+     */
     public static function delete_iapurchases_returns() {
         return new external_single_structure(array(
             'status' => new external_value(PARAM_TEXT, 'status')
         ));
     }
 
+    /**
+     * Defines paramters for deleting iapurchases
+     *
+     * @return void
+     */
     public static function delete_iapurchases_parameters() {
         return new external_function_parameters(array('itemid' => new external_value(PARAM_INT, 'itemid')));
     }
@@ -171,7 +180,7 @@ class mod_mooduell_external extends external_api {
      * Returns all courses for user with capabilities
      *
      * @param  int $userid
-     * @return array
+     * @return void
      */
     public static function get_courses_with_caps(int $userid = null) {
         global $USER;
@@ -201,6 +210,11 @@ class mod_mooduell_external extends external_api {
         return $return;
     }
 
+    /**
+     * Get the courses with caps returns
+     *
+     * @return external_single_structure
+     */
     public static function get_courses_with_caps_returns() {
             return new external_single_structure(array(
                     'courses' => new external_multiple_structure(new external_single_structure(array(
@@ -333,10 +347,7 @@ class mod_mooduell_external extends external_api {
 
         $context = context_course::instance($COURSE->id);
         self::validate_context($context);
-        // $student = is_enrolled($context, $USER->id, '', true);
-        // $teacher = has_capability('moodle/course:manageactivities', $context);
         $enrolledcourses = enrol_get_users_courses($USER->id, true);
-
         $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
         self::validate_parameters(self::get_mooduell_purchases_parameters(), ['optional' => 0]);
         return mooduell::get_purchases($enrolledcourses, $quizzes);
@@ -377,9 +388,16 @@ class mod_mooduell_external extends external_api {
     /**
      * Stores a purchases to Database.
      *
-     * @param  mixed $productid
-     * @param  mixed $purchasetoken
-     * @param  mixed $mooduellid
+     * @param  string $productid
+     * @param  string $purchasetoken
+     * @param  string $receipt
+     * @param  string $signature
+     * @param  string $orderid
+     * @param  string $free
+     * @param  int $mooduellid
+     * @param  int $courseid
+     * @param  string $store
+     * @param  int $ispublic
      * @return void
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
@@ -873,7 +891,8 @@ class mod_mooduell_external extends external_api {
         $completion = new completion_info($course);
 
         if ($cm->completion != COMPLETION_TRACKING_MANUAL) {
-            // This calculates the completion and saves the state, which will also trigger the completion_update event, which triggers badges.
+            // This calculates the completion and saves the state.
+            // Which will also trigger the completion_update event, which triggers badges.
             $completion->update_state($cm);
         }
 

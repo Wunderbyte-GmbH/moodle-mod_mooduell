@@ -30,8 +30,6 @@ use mod_mooduell\output\list_action;
 use mod_mooduell\output\renderer;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * MooDuell Table sql class.
  */

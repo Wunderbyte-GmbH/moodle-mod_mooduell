@@ -30,8 +30,6 @@ use renderable;
 use renderer_base;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * viewpage class to display view.php
  * @package mod_mooduell

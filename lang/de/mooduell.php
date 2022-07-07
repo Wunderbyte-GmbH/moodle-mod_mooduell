@@ -222,8 +222,6 @@ $string['app:completionrightanswersperc'] = 'Beantworte {$a}% aller Fragen korre
 $string['showqr'] = 'QR-Code anzeigen';
 $string['close'] = 'Schließen';
 
-// IAP
-
 $string['mooduell:canpurchase'] = 'Nutzerin darf kaufen';
 
 // Settings.

@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace mod_mooduell\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 use mod_mooduell\completion\completion_utils;
 use coding_exception;
 use mod_mooduell\game_control;

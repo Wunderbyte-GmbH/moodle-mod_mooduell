@@ -28,8 +28,6 @@ use plugin_renderer_base;
 use templatable;
 use template;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Renderer class.
  * @package mod_mooduell

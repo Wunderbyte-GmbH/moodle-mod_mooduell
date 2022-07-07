@@ -23,8 +23,6 @@
  */
 namespace mod_mooduell;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class for MooDuell answers.
  * @package mod_mooduell

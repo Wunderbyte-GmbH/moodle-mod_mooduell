@@ -69,7 +69,10 @@ class manage_tokens {
     }
 
     /**
-     * Function to delete temporary QR Webservice Token
+     * Deletes a user token for a given service.
+     *
+     * @param  mixed $servicename
+     * @return void
      */
     public static function delete_user_token($servicename) {
         // Get Service id.
@@ -86,8 +89,11 @@ class manage_tokens {
      * Function to generate a token for a specific MooDuell user.
      *
      * @param int $userid The id of the user for which a token should be created.
+     * @param string $servicename
+     * @param int $duration
      * @throws coding_exception
      * @throws dml_exception
+     * @return void
      */
     public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0) {
 

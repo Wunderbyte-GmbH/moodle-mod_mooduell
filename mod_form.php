@@ -41,8 +41,7 @@ require_once($CFG->libdir.'/questionlib.php');
  * @copyright 2020 Wunderbyte GmbH <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_mooduell_mod_form extends moodleform_mod
-{
+class mod_mooduell_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements

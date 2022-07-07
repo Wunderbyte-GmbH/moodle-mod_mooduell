@@ -34,8 +34,6 @@ use mod_mooduell\output\renderer;
 use mod_mooduell\question_control;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * MooDuell Table sql class.
  */

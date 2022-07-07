@@ -25,8 +25,6 @@
 
 namespace mod_mooduell\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_mooduell course module viewed event class.
  *
