@@ -23,7 +23,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
 use mod_mooduell\game_finished;
 use mod_mooduell\manage_tokens;
@@ -40,8 +39,7 @@ use mod_mooduell\event\question_wrongly_answered;
  * @copyright  2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_mooduell_observer
-{
+class mod_mooduell_observer {
 
     /**
      * Will be triggered when a game has been finished.
@@ -253,13 +251,7 @@ class mod_mooduell_observer
         // $event->userid is the user who did the enrolment (which is irrelevant in this case).
 
         $context = $event->get_context();
-
         $cmid = $context->instanceid;
-
-
-
-
-
         return true;
     }
 }

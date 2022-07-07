@@ -28,8 +28,6 @@ use coding_exception;
 use dml_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class question_control for mod_mooduell.
  *

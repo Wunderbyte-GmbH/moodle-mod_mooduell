@@ -28,8 +28,6 @@ use local_wunderbyte_table\wunderbyte_table;
 use mod_mooduell\mooduell;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * MooDuell Table sql class.
  */

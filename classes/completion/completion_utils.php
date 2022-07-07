@@ -28,8 +28,7 @@ use stdClass;
  * @copyright 2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_utils
-{
+class completion_utils {
     /**
      * Helper function to retrieve a list of all completion modes ...
      * ... and their associated field names in student statistics.

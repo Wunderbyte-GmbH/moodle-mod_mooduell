@@ -27,8 +27,6 @@ use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Return if the plugin supports $feature.
  *

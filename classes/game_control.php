@@ -663,8 +663,6 @@ class game_control {
         $sendnotificationtask->set_custom_data($taskdata);
         \core\task\manager::reschedule_or_queue_adhoc_task($sendnotificationtask);
 
-        // $this->send_notifcation_if_necessary();
-
         return [$resultarray, $iscorrect, $answersfeedback];
     }
 

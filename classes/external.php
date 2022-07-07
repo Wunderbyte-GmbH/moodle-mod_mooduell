@@ -333,10 +333,7 @@ class mod_mooduell_external extends external_api {
 
         $context = context_course::instance($COURSE->id);
         self::validate_context($context);
-        // $student = is_enrolled($context, $USER->id, '', true);
-        // $teacher = has_capability('moodle/course:manageactivities', $context);
         $enrolledcourses = enrol_get_users_courses($USER->id, true);
-
         $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
         self::validate_parameters(self::get_mooduell_purchases_parameters(), ['optional' => 0]);
         return mooduell::get_purchases($enrolledcourses, $quizzes);
@@ -873,7 +870,8 @@ class mod_mooduell_external extends external_api {
         $completion = new completion_info($course);
 
         if ($cm->completion != COMPLETION_TRACKING_MANUAL) {
-            // This calculates the completion and saves the state, which will also trigger the completion_update event, which triggers badges.
+            // This calculates the completion and saves the state, 
+            // Which will also trigger the completion_update event, which triggers badges.
             $completion->update_state($cm);
         }
 
