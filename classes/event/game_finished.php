@@ -24,8 +24,6 @@
 
 namespace mod_mooduell\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_mooduell game finished event class.
  *

@@ -256,6 +256,5 @@ $string['app:completionrightanswersperc'] = 'Answer {$a}% of all questions corre
 
 $string['showqr'] = 'Show QR Code';
 $string['close'] = 'Close';
-// IAP
 
 $string['mooduell:canpurchase'] = 'User can purchase';

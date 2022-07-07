@@ -531,7 +531,7 @@ class game_control {
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
      * @param int $questionid
      * @param array $answerids
-     * @return mixed
+     * @return void
      * @throws dml_exception
      * @throws moodle_exception
      */
@@ -663,13 +663,14 @@ class game_control {
         $sendnotificationtask->set_custom_data($taskdata);
         \core\task\manager::reschedule_or_queue_adhoc_task($sendnotificationtask);
 
-        // $this->send_notifcation_if_necessary();
-
         return [$resultarray, $iscorrect, $answersfeedback];
     }
 
     /**
-     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned.
+     * There are a couple of cases where we have to send different types of messages. Here we check which one we need.
+     *
+     * @param  mixed $gamedata
+     * @return void
      */
     public function send_notifcation_if_necessary($gamedata) {
 
