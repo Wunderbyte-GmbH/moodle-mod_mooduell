@@ -108,8 +108,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Deletes a single purchase with an id as input
+     *
+     * @param integer $itemid
+     * @return void
      */
-    public static function delete_iapurchases($itemid) {
+    public static function delete_iapurchases(int $itemid) {
         global $DB, $USER;
         if ($DB->record_exists('mooduell_purchase', array('id' => $itemid))) {
             $DB->delete_records('mooduell_purchase', array('id' => $itemid));
@@ -120,6 +123,11 @@ class mod_mooduell_external extends external_api {
         return $returnarray;
     }
 
+    /**
+     * Define return of iapurchases
+     *
+     * @return void
+     */
     public static function delete_iapurchases_returns() {
         return new external_single_structure(array(
             'status' => new external_value(PARAM_TEXT, 'status')
@@ -870,7 +878,7 @@ class mod_mooduell_external extends external_api {
         $completion = new completion_info($course);
 
         if ($cm->completion != COMPLETION_TRACKING_MANUAL) {
-            // This calculates the completion and saves the state, 
+            // This calculates the completion and saves the state.
             // Which will also trigger the completion_update event, which triggers badges.
             $completion->update_state($cm);
         }
