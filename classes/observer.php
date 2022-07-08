@@ -244,6 +244,7 @@ class mod_mooduell_observer {
      * This will create a token for the new user.
      *
      * @param \core\event\user_enrolment_created $event The event.
+     * @param \core\event\badge_awarded $event
      * @return bool True on success.
      */
     public static function badge_awarded(\core\event\badge_awarded $event): bool {

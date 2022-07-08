@@ -110,7 +110,7 @@ class mod_mooduell_external extends external_api {
      * Deletes a single purchase with an id as input
      *
      * @param integer $itemid
-     * @return void
+     * @return array
      */
     public static function delete_iapurchases(int $itemid) {
         global $DB, $USER;
@@ -126,7 +126,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Define return of iapurchases
      *
-     * @return void
+     * @return external_single_structure
      */
     public static function delete_iapurchases_returns() {
         return new external_single_structure(array(
@@ -134,6 +134,11 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
+    /**
+     * Define parameters of iapurchases
+     *
+     * @return external_function_parameters
+     */
     public static function delete_iapurchases_parameters() {
         return new external_function_parameters(array('itemid' => new external_value(PARAM_INT, 'itemid')));
     }
@@ -178,7 +183,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Returns all courses for user with capabilities
      *
-     * @param  int $userid
+     * @param  integer $userid
      * @return array
      */
     public static function get_courses_with_caps(int $userid = null) {
@@ -208,7 +213,11 @@ class mod_mooduell_external extends external_api {
 
         return $return;
     }
-
+    /**
+     * Defines returns structure for get_ustertoken()
+     *
+     * @return external_single_structure
+     */
     public static function get_courses_with_caps_returns() {
             return new external_single_structure(array(
                     'courses' => new external_multiple_structure(new external_single_structure(array(
@@ -385,7 +394,7 @@ class mod_mooduell_external extends external_api {
      * @param  mixed $productid
      * @param  mixed $purchasetoken
      * @param  mixed $mooduellid
-     * @return void
+     * @return false|mixed|stdClass
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
      string $signature = null, string $orderid = null, string $free = null, int $mooduellid,

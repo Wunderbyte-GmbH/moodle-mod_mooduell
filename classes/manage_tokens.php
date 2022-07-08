@@ -86,7 +86,7 @@ class manage_tokens {
     /**
      * Function to generate a token for a specific MooDuell user.
      *
-     * @param int $userid The id of the user for which a token should be created.
+     * @param integer $userid The id of the user for which a token should be created.
      * @throws coding_exception
      * @throws dml_exception
      */

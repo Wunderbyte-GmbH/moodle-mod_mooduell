@@ -529,7 +529,7 @@ class game_control {
      * ... (validation will be up to the App)...
      * ... or we return 0 for false and 1 for correctly answered.
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
-     * @param int $questionid
+     * @param integer $questionid
      * @param array $answerids
      * @return mixed
      * @throws dml_exception
@@ -667,7 +667,8 @@ class game_control {
     }
 
     /**
-     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned.
+     * There are a couple of cases where we have to send different types of messages. Here we check which one we need.
+     * @param mixed $gamedata
      */
     public function send_notifcation_if_necessary($gamedata) {
 
