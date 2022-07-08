@@ -91,6 +91,7 @@ class manage_tokens {
      * @param integer $duration
      * @throws coding_exception
      * @throws dml_exception
+     * @return void
      */
     public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0) {
 

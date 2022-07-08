@@ -531,7 +531,7 @@ class game_control {
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
      * @param integer $questionid
      * @param array $answerids
-     * @return mixed
+     * @return void
      * @throws dml_exception
      * @throws moodle_exception
      */
