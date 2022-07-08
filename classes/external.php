@@ -40,9 +40,9 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Starts new game against another user.
-     * @param int $courseid
-     * @param int $quizid
-     * @param int $playerbid
+     * @param integer $courseid
+     * @param integer $quizid
+     * @param integer $playerbid
      * @return false|mixed|stdClass
      * @throws coding_exception
      * @throws dml_exception
@@ -126,7 +126,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Define return of iapurchases
      *
-     * @return external_single_structure
+     * @return void
      */
     public static function delete_iapurchases_returns() {
         return new external_single_structure(array(
@@ -134,11 +134,6 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
-    /**
-     * Define parameters of iapurchases
-     *
-     * @return external_function_parameters
-     */
     public static function delete_iapurchases_parameters() {
         return new external_function_parameters(array('itemid' => new external_value(PARAM_INT, 'itemid')));
     }
@@ -213,8 +208,9 @@ class mod_mooduell_external extends external_api {
 
         return $return;
     }
+
     /**
-     * Defines returns structure for get_ustertoken()
+     * Get the courses with caps returns
      *
      * @return external_single_structure
      */

@@ -70,7 +70,6 @@ class manage_tokens {
 
     /**
      * Function to delete temporary QR Webservice Token
-     * @param string $servicename
      */
     public static function delete_user_token($servicename) {
         // Get Service id.
