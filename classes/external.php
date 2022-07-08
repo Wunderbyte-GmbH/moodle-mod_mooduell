@@ -393,7 +393,14 @@ class mod_mooduell_external extends external_api {
      *
      * @param  mixed $productid
      * @param  mixed $purchasetoken
+     * @param  string|null $receipt
+     * @param  string|null $signature
+     * @param  string|null $orderid
+     * @param  string|null $free
      * @param  mixed $mooduellid
+     * @param  int|null $courseid
+     * @param  string $store
+     * @param  integer $ispublic
      * @return false|mixed|stdClass
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
