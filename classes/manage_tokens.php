@@ -42,7 +42,7 @@ class manage_tokens {
     /**
      * Function to generate tokens for all users of a course in which a new MooDuell instance has been created.
      *
-     * @param int $cmid The course module id of the MooDuell instance.
+     * @param integer $cmid The course module id of the MooDuell instance.
      * @throws coding_exception
      * @throws dml_exception
      */
@@ -70,6 +70,7 @@ class manage_tokens {
 
     /**
      * Function to delete temporary QR Webservice Token
+     * @param string $servicename
      */
     public static function delete_user_token($servicename) {
         // Get Service id.
