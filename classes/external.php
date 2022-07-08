@@ -109,7 +109,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Deletes a single purchase with an id as input
      *
-     * @param integer $itemid
+     * @param int $itemid
      * @return void
      */
     public static function delete_iapurchases(int $itemid) {
@@ -183,7 +183,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Returns all courses for user with capabilities
      *
-     * @param  integer $userid
+     * @param  int $userid
      * @return void
      */
     public static function get_courses_with_caps(int $userid = null) {
@@ -397,10 +397,10 @@ class mod_mooduell_external extends external_api {
      * @param  string $signature
      * @param  string $orderid
      * @param  string $free
-     * @param  integer $mooduellid
-     * @param  integer $courseid
+     * @param  int $mooduellid
+     * @param  int $courseid
      * @param  string $store
-     * @param  integer $ispublic
+     * @param  int $ispublic
      * @return void
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,

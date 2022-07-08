@@ -42,7 +42,7 @@ class manage_tokens {
     /**
      * Function to generate tokens for all users of a course in which a new MooDuell instance has been created.
      *
-     * @param integer $cmid The course module id of the MooDuell instance.
+     * @param int $cmid The course module id of the MooDuell instance.
      * @throws coding_exception
      * @throws dml_exception
      */
@@ -86,9 +86,9 @@ class manage_tokens {
     /**
      * Function to generate a token for a specific MooDuell user.
      *
-     * @param integer $userid The id of the user for which a token should be created.
+     * @param int $userid The id of the user for which a token should be created.
      * @param string $servicename
-     * @param integer $duration
+     * @param int $duration
      * @throws coding_exception
      * @throws dml_exception
      * @return void

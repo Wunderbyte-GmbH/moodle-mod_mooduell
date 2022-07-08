@@ -529,7 +529,7 @@ class game_control {
      * ... (validation will be up to the App)...
      * ... or we return 0 for false and 1 for correctly answered.
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
-     * @param integer $questionid
+     * @param int $questionid
      * @param array $answerids
      * @return void
      * @throws dml_exception
