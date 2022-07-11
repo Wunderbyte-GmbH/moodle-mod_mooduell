@@ -23,7 +23,6 @@
  */
 
 namespace mod_mooduell\event;
-    
 /**
  * The mod_mooduell question_answered event class.
  *

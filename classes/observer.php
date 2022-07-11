@@ -239,12 +239,13 @@ class mod_mooduell_observer {
         return true;
     }
 
+
     /**
      * Will be triggered when a new user enrolment has been created.
      * This will create a token for the new user.
      *
-     * @param \core\event\user_enrolment_created $event The event.
-     * @return bool True on success.
+     * @param  mixed $event
+     * @return bool
      */
     public static function badge_awarded(\core\event\badge_awarded $event): bool {
         // The $event->relateduserid stores the user for which to create the token.

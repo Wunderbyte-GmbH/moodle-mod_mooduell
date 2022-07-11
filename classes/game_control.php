@@ -667,7 +667,10 @@ class game_control {
     }
 
     /**
-     * There are a couple of cases where we have to send different types of messages. Here we check which one we nned.
+     * There are a couple of cases where we have to send different types of messages. Here we check which one we need.
+     *
+     * @param  mixed $gamedata
+     * @return void
      */
     public function send_notifcation_if_necessary($gamedata) {
 

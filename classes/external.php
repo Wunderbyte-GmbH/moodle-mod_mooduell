@@ -40,15 +40,11 @@ class mod_mooduell_external extends external_api {
 
     /**
      * Starts new game against another user.
-     * @param integer $courseid
-     * @param integer $quizid
-     * @param integer $playerbid
-     * @return false|mixed|stdClass
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws invalid_parameter_exception
-     * @throws moodle_exception
-     * @throws restricted_context_exception
+     *
+     * @param  mixed $courseid
+     * @param  mixed $quizid
+     * @param  mixed $playerbid
+     * @return void
      */
     public static function start_attempt(int $courseid, int $quizid, int $playerbid) {
         $params = array(
@@ -134,6 +130,11 @@ class mod_mooduell_external extends external_api {
         ));
     }
 
+    /**
+     * Defines paramters for deleting iapurchases
+     *
+     * @return void
+     */
     public static function delete_iapurchases_parameters() {
         return new external_function_parameters(array('itemid' => new external_value(PARAM_INT, 'itemid')));
     }
