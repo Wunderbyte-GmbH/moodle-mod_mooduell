@@ -240,7 +240,7 @@ class mooduell {
      */
     public function return_list_of_games($student = false, $finished = null, $timemodified = 0) {
 
-        global $DB;
+        global $DB, $CFG;
 
         $games = $this->return_games_for_this_instance($student, $finished, $timemodified);
 
@@ -277,7 +277,6 @@ class mooduell {
         }
 
         $questions = array();
-
         $listofquestions = $this->return_list_of_questions();
         $listofanswers = $this->return_list_of_answers();
 
@@ -456,18 +455,33 @@ class mooduell {
      * @return array
      */
     public function return_sql_for_all_questions_of_quiz(): array {
-
+        global $CFG;
         $mooduellid = $this->cm->instance;
 
         $sqldata = [];
-        $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
-        $sqldata['from'] = "{mooduell_categories} mc
-                            JOIN {question_categories} qc
-                            ON qc.id=mc.category
-                            RIGHT JOIN {question} q
-                            ON qc.id=q.category";
-        $sqldata['where'] = "mc.mooduellid=:mooduellid";
-        $sqldata['params'] = array('mooduellid' => $mooduellid);
+        // Code for Moodle > 4.0 .
+        if ($CFG->version >= 2022041900) {
+            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
+            $sqldata['from'] = "{mooduell_categories} mc
+                                JOIN {question_categories} qc
+                                ON qc.id=mc.category
+                                LEFT JOIN {question_bank_entries} qbe
+                                ON qc.id=qbe.questioncategoryid
+                                RIGHT JOIN {question} q
+                                ON qbe.id=q.id";
+            $sqldata['where'] = "mc.mooduellid=:mooduellid";
+            $sqldata['params'] = array('mooduellid' => $mooduellid);
+        } else {
+            // Code for Moodle < 4.0 .
+            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
+            $sqldata['from'] = "{mooduell_categories} mc
+                                JOIN {question_categories} qc
+                                ON qc.id=mc.category
+                                RIGHT JOIN {question} q
+                                ON qc.id=q.category";
+            $sqldata['where'] = "mc.mooduellid=:mooduellid";
+            $sqldata['params'] = array('mooduellid' => $mooduellid);
+        }
         return $sqldata;
     }
 
@@ -479,17 +493,35 @@ class mooduell {
      * @return array
      */
     public function return_sql_for_questions_in_game(stdClass $game): array {
+        global $CFG;
 
         $sqldata = [];
-        $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
-        $sqldata['from'] = "{mooduell_questions} mq
-                            LEFT JOIN {question} q
-                            ON mq.questionid=q.id
-                            LEFT JOIN {question_categories} qc
-                            ON q.category=qc.id";
-        $sqldata['where'] = "mq.gameid=:gameid
-                            ORDER BY mq.id ASC";
-        $sqldata['params'] = array('gameid' => $game->id);
+
+        // Code for Moodle > 4.0 .
+        if ($CFG->version >= 2022041900) {
+            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
+            $sqldata['from'] = "{mooduell_questions} mq
+                                LEFT JOIN {question} q
+                                ON mq.questionid=q.id
+                                LEFT JOIN {question_bank_entries} qbe
+                                ON   q.id=qbe.id
+                                LEFT JOIN {question_categories} qc
+                                ON qbe.questioncategoryid=qc.id";
+            $sqldata['where'] = "mq.gameid=:gameid
+                                ORDER BY mq.id ASC";
+            $sqldata['params'] = array('gameid' => $game->id);
+        } else {
+            // Code for Moodle < 4.0 .
+            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
+            $sqldata['from'] = "{mooduell_questions} mq
+                                LEFT JOIN {question} q
+                                ON mq.questionid=q.id
+                                LEFT JOIN {question_categories} qc
+                                ON q.category=qc.id";
+            $sqldata['where'] = "mq.gameid=:gameid
+                                ORDER BY mq.id ASC";
+            $sqldata['params'] = array('gameid' => $game->id);
+        }
         return $sqldata;
     }
 
@@ -500,20 +532,35 @@ class mooduell {
      */
     private function return_list_of_answers() {
 
-        global $DB;
+        global $DB, $CFG;
 
         $mooduellid = $this->cm->instance;
 
-        $sql = "SELECT DISTINCT qa.*
-                FROM {mooduell_categories} mc
-                JOIN {question_categories} qc
-                ON mc.category = qc.id
-                JOIN {question} q
-                ON q.category = qc.id
-                JOIN {question_answers} qa
-                ON qa.question = q.id
-                WHERE mc.mooduellid = $mooduellid";
-
+        // Code for Moodle > 4.0 .
+        if ($CFG->version >= 2022041900) {
+            $sql = "SELECT DISTINCT qa.*
+            FROM {mooduell_categories} mc
+            JOIN {question_categories} qc
+            ON mc.category = qc.id
+            JOIN {question_bank_entries} qbe
+            ON   qbe.questioncategoryid = qc.id
+            JOIN {question} q
+            ON q.id = qbe.id
+            JOIN {question_answers} qa
+            ON qa.question = q.id
+            WHERE mc.mooduellid = $mooduellid";
+        } else {
+            // Code for Moodle < 4.0 .
+            $sql = "SELECT DISTINCT qa.*
+                    FROM {mooduell_categories} mc
+                    JOIN {question_categories} qc
+                    ON mc.category = qc.id
+                    JOIN {question} q
+                    ON q.category = qc.id
+                    JOIN {question_answers} qa
+                    ON qa.question = q.id
+                    WHERE mc.mooduellid = $mooduellid";
+        }
         if (!$listofanswers = $DB->get_records_sql($sql)) {
             return [];
         }
@@ -836,7 +883,7 @@ class mooduell {
      * @throws dml_exception
      */
     public function return_name_by_id(int $userid) {
-        global $DB, $CFG;
+        global $DB;
 
         require_once("$CFG->dirroot/user/profile/lib.php");
 
