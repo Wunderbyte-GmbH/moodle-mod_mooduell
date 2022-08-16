@@ -909,7 +909,7 @@ class mooduell {
      * @throws dml_exception
      */
     public function return_name_by_id(int $userid) {
-        global $DB;
+        global $DB, $CFG;
 
         require_once("$CFG->dirroot/user/profile/lib.php");
 
