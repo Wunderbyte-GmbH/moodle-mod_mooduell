@@ -30,6 +30,7 @@ use mod_mooduell\qr_code;
 use mod_mooduell\tables\table_games;
 use mod_mooduell\tables\table_highscores;
 use mod_mooduell\tables\table_questions;
+use moodle_url;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -130,6 +131,14 @@ class overview_student implements renderable, templatable {
         $gamestable->define_headers($tabledata->headers);
         $gamestable->define_help_for_headers($tabledata->help);
 
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $gamestable->define_baseurl($baseurl->out());
+
         ob_start();
         $gamestable->out(40, true);
         return ob_get_clean();
@@ -158,6 +167,14 @@ class overview_student implements renderable, templatable {
         $highscorestable->define_columns($tabledata->columns);
         $highscorestable->define_headers($tabledata->headers);
         $highscorestable->define_help_for_headers($tabledata->help);
+
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $highscorestable->define_baseurl($baseurl->out());
 
         ob_start();
         $highscorestable->out(40, true);
