@@ -29,6 +29,7 @@ use mod_mooduell\mooduell;
 use mod_mooduell\tables\table_games;
 use mod_mooduell\tables\table_highscores;
 use mod_mooduell\tables\table_questions;
+use moodle_url;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -130,6 +131,14 @@ class overview_teacher implements renderable, templatable {
 
         $gamestable->is_downloading('', 'mooduell_games');
 
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $gamestable->define_baseurl($baseurl->out());
+
         ob_start();
         $gamestable->out(10, true);
         return ob_get_clean();
@@ -162,6 +171,14 @@ class overview_teacher implements renderable, templatable {
 
         $highscorestable->is_downloading('', 'mooduell_highscores');
 
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $highscorestable->define_baseurl($baseurl->out());
+
         ob_start();
         $highscorestable->out(40, true);
         return ob_get_clean();
@@ -193,6 +210,14 @@ class overview_teacher implements renderable, templatable {
         $questionstable->define_help_for_headers($tabledata->help);
 
         $questionstable->is_downloading('', 'mooduell_questions');
+
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $questionstable->define_baseurl($baseurl->out());
 
         ob_start();
         $questionstable->out(40, true);
