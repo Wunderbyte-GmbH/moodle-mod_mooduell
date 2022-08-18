@@ -54,8 +54,15 @@ class list_id implements renderable, templatable {
 
         global $CFG, $PAGE, $COURSE;
 
+        // Code for Moodle > 4.0 .
+        if ($CFG->version >= 2022041900) {
+            $path = '/question/bank/editquestion/question.php';
+        } else {
+            $path = '/question/question.php';
+        }
+
         $returnurl = "/mod/mooduell/view.php?id=$cmid#questions";
-        $editquestionurl = new moodle_url('/question/question.php',
+        $editquestionurl = new moodle_url($path,
                                 array(
                                     'id' => $question->questionid,
                                     'courseid' => $COURSE->id,
