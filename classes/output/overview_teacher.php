@@ -139,6 +139,8 @@ class overview_teacher implements renderable, templatable {
 
         $gamestable->define_baseurl($baseurl->out());
 
+        $gamestable->infinitescroll = 40;
+
         list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
 
         return $html;
@@ -179,6 +181,8 @@ class overview_teacher implements renderable, templatable {
 
         $highscorestable->define_baseurl($baseurl->out());
 
+        $highscorestable->infinitescroll = 40;
+
         list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
 
         return $html;
@@ -211,8 +215,6 @@ class overview_teacher implements renderable, templatable {
 
         $questionstable->is_downloading('', 'mooduell_questions');
 
-        $questionstable->infinitescroll = 9;
-
         // It's important to have the baseurl defined, we use it as a return url at one point.
         $baseurl = new moodle_url(
             $_SERVER['REQUEST_URI'],
@@ -220,6 +222,8 @@ class overview_teacher implements renderable, templatable {
         );
 
         $questionstable->define_baseurl($baseurl->out());
+
+        $questionstable->infinitescroll = 40;
 
         list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(40, true);
         // $html = $questionstable->out(40, true);
