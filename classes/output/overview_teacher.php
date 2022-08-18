@@ -139,9 +139,9 @@ class overview_teacher implements renderable, templatable {
 
         $gamestable->define_baseurl($baseurl->out());
 
-        ob_start();
-        $gamestable->out(10, true);
-        return ob_get_clean();
+        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
+
+        return $html;
     }
 
 
@@ -179,9 +179,9 @@ class overview_teacher implements renderable, templatable {
 
         $highscorestable->define_baseurl($baseurl->out());
 
-        ob_start();
-        $highscorestable->out(40, true);
-        return ob_get_clean();
+        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
+
+        return $html;
     }
 
     /**
@@ -219,8 +219,9 @@ class overview_teacher implements renderable, templatable {
 
         $questionstable->define_baseurl($baseurl->out());
 
-        ob_start();
-        $questionstable->out(40, true);
-        return ob_get_clean();
+        // list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(40, true);
+        $html = $questionstable->out(40, true);
+
+        return $html;
     }
 }
