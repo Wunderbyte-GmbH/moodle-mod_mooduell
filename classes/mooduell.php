@@ -1039,13 +1039,20 @@ class mooduell {
      * @throws dml_exception
      */
     public function return_list_of_statistics_teacher() {
-        global $DB;
+        global $DB, $CFG;
 
         $mooduellid = $this->cm->instance;
 
         $listofstatistics = [];
         $listofstatistics['cmid'] = $this->cm->id;
         $listofstatistics['courseid'] = $this->course->id;
+
+        // Code for Moodle > 4.0 .
+        if ($CFG->version >= 2022041900) {
+            $listofstatistics['path'] = '/question/bank/editquestion/question.php';
+        } else {
+            $listofstatistics['path'] = '/question/question.php';
+        }
 
         // Number of distinct users who have played a MooDuell game.
         $sql = "select count(*) active_users from (

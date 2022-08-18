@@ -139,6 +139,8 @@ class overview_student implements renderable, templatable {
 
         $gamestable->define_baseurl($baseurl->out());
 
+        $gamestable->infinitescroll = 40;
+
         list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
 
         return $html;
@@ -175,6 +177,8 @@ class overview_student implements renderable, templatable {
         );
 
         $highscorestable->define_baseurl($baseurl->out());
+
+        $highscorestable->infinitescroll = 40;
 
         list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
 
