@@ -100,7 +100,7 @@ class list_action implements renderable, templatable {
         $questionstable->define_headers($tabledata->headers);
         $questionstable->define_help_for_headers($tabledata->help);
 
-        list($idstring, $encodedtable, $html) = $questionstable->outhtml(9, true);
+        list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(9, true);
 
         return $html;
     }
