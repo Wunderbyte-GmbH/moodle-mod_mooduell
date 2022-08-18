@@ -461,7 +461,7 @@ class mooduell {
         $sqldata = [];
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
-            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
+            $sqldata['select'] = "q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category";
             $sqldata['from'] = "{mooduell_categories} mc
                                 JOIN {question_categories} qc
                                 ON qc.id=mc.category
@@ -1298,7 +1298,7 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         // We override the select in this case, as we need slightly different fields.
-        $select = "q.id id, q.questiontext text, q.qtype type, qc.name category";
+        $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
 
         return [$select, $sqldata['from'], $sqldata['where'], $sqldata['params']];
     }
