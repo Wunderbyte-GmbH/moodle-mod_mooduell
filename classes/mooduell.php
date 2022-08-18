@@ -499,7 +499,7 @@ class mooduell {
 
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
-            $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
+            $sqldata['select'] = "q.*, mq.id as mqid, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
             $sqldata['from'] = "{mooduell_questions} mq
                                 LEFT JOIN {question} q
                                 ON mq.questionid=q.id
@@ -507,8 +507,7 @@ class mooduell {
                                 ON   q.id=qbe.id
                                 LEFT JOIN {question_categories} qc
                                 ON qbe.questioncategoryid=qc.id";
-            $sqldata['where'] = "mq.gameid=:gameid
-                                ORDER BY mq.id ASC";
+            $sqldata['where'] = "mq.gameid=:gameid";
             $sqldata['params'] = array('gameid' => $game->id);
         } else {
             // Code for Moodle < 4.0 .
