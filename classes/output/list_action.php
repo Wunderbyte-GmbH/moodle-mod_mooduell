@@ -60,7 +60,10 @@ class list_action implements renderable, templatable {
 
         $this->data['counter'] = (int) $counter;
         $this->data['deletelink'] = $mooduell->cm->id;
-        $this->data['thisgametable'] = $this->render_questions_table_for_game($game, $mooduell);
+        list($idstring, $encodedtable, $html) = $this->render_questions_table_for_game($game, $mooduell);
+        $this->data['thisgametable'] = $html;
+        $this->data['encodedtable'] = $encodedtable;
+        $this->data['idstring'] = $idstring;
     }
 
     /**
@@ -79,9 +82,9 @@ class list_action implements renderable, templatable {
      * @param stdClass $game
      * @param mooduell $mooduell
      * @param int $counter
-     * @return string
+     * @return array
      */
-    private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, int $counter = null):string {
+    private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, int $counter = null):array {
         global $PAGE;
 
         $tablename = bin2hex(random_bytes(12));
@@ -98,8 +101,16 @@ class list_action implements renderable, templatable {
         $questionstable->define_headers($tabledata->headers);
         $questionstable->define_help_for_headers($tabledata->help);
 
-        list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(9, true);
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
 
-        return $html;
+        $questionstable->use_pages = true;
+
+        $questionstable->define_baseurl($baseurl->out());
+
+        return $questionstable->lazyouthtml(9, true);
     }
 }

@@ -137,9 +137,9 @@ class overview_student implements renderable, templatable {
 
         $gamestable->define_baseurl($baseurl->out());
 
-        ob_start();
-        $gamestable->out(40, true);
-        return ob_get_clean();
+        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
+
+        return $html;
     }
 
 
@@ -174,8 +174,8 @@ class overview_student implements renderable, templatable {
 
         $highscorestable->define_baseurl($baseurl->out());
 
-        ob_start();
-        $highscorestable->out(40, true);
-        return ob_get_clean();
+        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
+
+        return $html;
     }
 }
