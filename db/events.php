@@ -71,38 +71,44 @@ $observers = array(
                 'eventname' => 'mod_mooduell\event\question_wrongly_answered',
                 'callback' => 'mod_mooduell_observer::question_wrongly_answered'
         ),
-
         array(
-                'eventname' => '\core\event\course_module_created',
-                'callback' => 'mod_mooduell_observer::course_module_created'
+                'eventname' => 'core\event\course_module_created',
+                'callback' => 'mod_mooduell_observer::course_module_created',
+                'internal'  => false,
         ),
-
         array(
                 'eventname' => '\core\event\user_enrolment_created',
-                'callback' => 'mod_mooduell_observer::user_enrolment_created'
+                'callback' => 'mod_mooduell_observer::user_enrolment_created',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\badge_awarded',
-                'callback' => 'mod_mooduell_observer::badge_awarded'
+                'callback' => 'mod_mooduell_observer::badge_awarded',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\question_category_deleted',
-                'callback' => 'mod_mooduell_observer::delete_cache'
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\question_category_updated',
-                'callback' => 'mod_mooduell_observer::delete_cache'
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\question_category_updated',
-                'callback' => 'mod_mooduell_observer::delete_cache'
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\question_deleted',
-                'callback' => 'mod_mooduell_observer::delete_cache'
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
         ),
         array(
                 'eventname' => '\core\event\question_updated',
-                'callback' => 'mod_mooduell_observer::delete_cache'
-        ),
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
+        )
 );
