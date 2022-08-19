@@ -360,20 +360,20 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_purchases_returns() {
         return new external_single_structure(array('purchases' => new external_multiple_structure(new external_single_structure(
            array(
-            'id' => new external_value(PARAM_RAW, 'id'),
-            'productid' => new external_value(PARAM_RAW, 'productid'),
-            'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
-            'receipt' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
-            'signature' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
-            'orderid' => new external_value(PARAM_RAW, 'orderid', VALUE_OPTIONAL),
-            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL),
+            'id' => new external_value(PARAM_INT, 'id'),
+            'productid' => new external_value(PARAM_INT, 'productid'),
+            'purchasetoken' => new external_value(PARAM_TEXT, 'purchasetoken'),
+            'receipt' => new external_value(PARAM_TEXT, 'receipt', VALUE_OPTIONAL, ''),
+            'signature' => new external_value(PARAM_TEXT, 'signature', VALUE_OPTIONAL, ''),
+            'orderid' => new external_value(PARAM_INT, 'orderid', VALUE_OPTIONAL, ''),
+            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL, 0),
             'userid' => new external_value(PARAM_INT, 'userid'),
-            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
-            'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL),
-            'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
-            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL, 0),
+            'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL, ''),
+            'courseid' => new external_value(PARAM_INT, 'courseid', VALUE_OPTIONAL, 0),
+            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL, ''),
             'ispublic' => new external_value(PARAM_INT, 'ispublic'),
-            'timecreated' => new external_value(PARAM_RAW, 'timecreated', VALUE_OPTIONAL)
+            'timecreated' => new external_value(PARAM_INT, 'timecreated', VALUE_OPTIONAL, 0)
            )
         ))));
     }
