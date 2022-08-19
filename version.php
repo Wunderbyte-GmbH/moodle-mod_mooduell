@@ -25,11 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_mooduell';
-$plugin->release = 'v2.0.0';
-$plugin->version = 2022062700;
+$plugin->release = 'v2.0.1';
+$plugin->version = 2022081900;
 $plugin->requires = 2020061500;
-$plugin->supported = [39, 311];
+$plugin->supported = [39, 311, 40];
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'local_wunderbyte_table' => 2021102100
+    'local_wunderbyte_table' => 2022081800
 );
