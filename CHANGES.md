@@ -1,3 +1,6 @@
+## Version 2.0.0 (2022081900)
+* Bugfixes: Display bugs of tables in combination with Wunderbyte Table
+
 ## Version 2.0.0 (2022062000)
 * New Feature: Supports In App Purchases
 * New Feature: Support Instance description on course page
