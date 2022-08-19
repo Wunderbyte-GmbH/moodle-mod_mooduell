@@ -85,4 +85,24 @@ $observers = array(
                 'eventname' => '\core\event\badge_awarded',
                 'callback' => 'mod_mooduell_observer::badge_awarded'
         ),
+        array(
+                'eventname' => '\core\event\question_category_deleted',
+                'callback' => 'mod_mooduell_observer::delete_cache'
+        ),
+        array(
+                'eventname' => '\core\event\question_category_updated',
+                'callback' => 'mod_mooduell_observer::delete_cache'
+        ),
+        array(
+                'eventname' => '\core\event\question_category_updated',
+                'callback' => 'mod_mooduell_observer::delete_cache'
+        ),
+        array(
+                'eventname' => '\core\event\question_deleted',
+                'callback' => 'mod_mooduell_observer::delete_cache'
+        ),
+        array(
+                'eventname' => '\core\event\question_updated',
+                'callback' => 'mod_mooduell_observer::delete_cache'
+        ),
 );

@@ -40,8 +40,7 @@ use mod_mooduell\event\question_wrongly_answered;
  * @copyright  2021 Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_mooduell_observer
-{
+class mod_mooduell_observer {
 
     /**
      * Will be triggered when a game has been finished.
@@ -256,9 +255,19 @@ class mod_mooduell_observer
 
         $cmid = $context->instanceid;
 
+        return true;
+    }
 
+    /**
+     * Will be triggered by a number of events regarding question manipulation.
+     * We need to update our cached tables, therefore we listen and do nothing bug triggering the corresponding event.
+     *
+     * @param any $event The event.
+     * @return bool True on success.
+     */
+    public static function delete_cache($event): bool {
 
-
+        cache_helper::purge_by_event('setbacktablescache');
 
         return true;
     }

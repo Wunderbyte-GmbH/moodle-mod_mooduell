@@ -25,6 +25,7 @@
 
 namespace mod_mooduell;
 
+use cache_helper;
 use \mod_mooduell\mooduell;
 
 /**
@@ -102,5 +103,7 @@ class game_finished {
                 $DB->insert_record('mooduell_highscores', $entry);
             }
         }
+
+        cache_helper::purge_by_event('setbacktablescache');
     }
 }

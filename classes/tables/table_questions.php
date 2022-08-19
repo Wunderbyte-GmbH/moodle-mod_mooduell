@@ -79,6 +79,8 @@ class table_questions extends wunderbyte_table {
         $this->action = $action;
 
         $this->renderer = $PAGE->get_renderer('mod_mooduell');
+
+        $this->define_cache('mod_mooduell', 'tablescache');
     }
 
     /**

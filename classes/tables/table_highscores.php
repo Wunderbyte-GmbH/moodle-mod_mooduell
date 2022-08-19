@@ -58,6 +58,8 @@ class table_highscores extends wunderbyte_table {
             $this->mooduell = $mooduell;
         }
         $this->action = $action;
+
+        $this->define_cache('mod_mooduell', 'tablescache');
     }
 
     /* COLUMNS for HIGHSCORES */
