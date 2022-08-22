@@ -431,7 +431,7 @@ class game_control {
      * @throws moodle_exception
      */
     public function get_questions() {
-        global $DB;
+        global $DB, $CFG;
 
         // In order to view image files in mod_mooduell, we have to register mod_mooduell in question_usages.
         self::register_for_question_usage($this->mooduell->context);
@@ -472,10 +472,17 @@ class game_control {
         $searcharray = substr($searcharray, 0, -2);
         $searcharray .= ')';
 
-        $sql = "SELECT *
-                FROM {question} q
-                WHERE q.id IN $searcharray";
-
+        if ($CFG->version >= 2022041900) {
+            $sql = "SELECT *, qbe.questioncategoryid as category
+            FROM {question} q
+            JOIN {question_bank_entries} qbe
+            ON qbe.id = q.id
+            WHERE q.id IN $searcharray";
+        } else {
+            $sql = "SELECT *
+            FROM {question} q
+            WHERE q.id IN $searcharray";
+        }
         if (!$questionsdata = $DB->get_records_sql($sql)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
