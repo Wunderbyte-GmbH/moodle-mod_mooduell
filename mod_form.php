@@ -90,7 +90,7 @@ class mod_mooduell_mod_form extends moodleform_mod
      */
     private function mooduell_elements() {
 
-        global $COURSE, $DB;
+        global $COURSE, $DB, $CFG;
 
         // Get MooDuell id.
         $mooduellid = $this->get_mooduell_id();
@@ -146,7 +146,12 @@ class mod_mooduell_mod_form extends moodleform_mod
 
         // Now, retrieve a list of categories with a function from questionlib.
         $listofcategories = [];
-        $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
+        if ($CFG->version >= 2022041900) {
+            $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
+        } else {
+            $cats = question_category_options($arrayofcontexts, false, 0, false);
+
+        }
         $cats = array_pop($cats);
 
         if (!empty($cats)) {
