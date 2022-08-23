@@ -652,23 +652,7 @@ class game_control {
 
         $this->save_my_turn_status();
 
-        // Id from cm and game id
-        // Do we need to send a push notification? If so, we'll do it here.
-        // Create Task to send notifications as soon as possible.
-
-        $userid = $USER->id;
-        $nextruntime = time();
-
-        $taskdata = new stdClass();
-        $taskdata->cm = $this->mooduell->cm;
-        $taskdata->gameid = $this->gamedata->gameid;
-        $taskdata->gamedata = $this->gamedata;
-
-        $sendnotificationtask = new send_push_notification_task();
-        $sendnotificationtask->set_userid($userid);
-        $sendnotificationtask->set_next_run_time($nextruntime);
-        $sendnotificationtask->set_custom_data($taskdata);
-        \core\task\manager::reschedule_or_queue_adhoc_task($sendnotificationtask);
+        $this->send_notifcation_if_necessary($this->gamedata);
 
         return [$resultarray, $iscorrect, $answersfeedback];
     }
@@ -680,9 +664,11 @@ class game_control {
      * @return void
      */
     public function send_notifcation_if_necessary($gamedata) {
-
+        global $USER;
         $i = 0;
         $j = 0;
+        $send = false;
+        $message = '';
         foreach ($gamedata->questions as $question) {
 
             $i += $question->playeraanswered != null ? 1 : 0;
@@ -694,23 +680,46 @@ class game_control {
             // Notify Player A.
             if ($gamedata->winnerid === $gamedata->playeraid) {
                 // You won.
-                $this->send_push_notification('youwin');
+                $send = true;
+                $message = 'youwin';
             } else if ($gamedata->winnerid === 0) {
                 // You played draw.
-                $this->send_push_notification('draw');
+                $send = true;
+                $message = 'draw';
             } else if ($gamedata->winnerid === $gamedata->playerbid) {
                 // You lost.
-                $this->send_push_notification('youlose');
+                $send = true;
+                $message = 'youlose';
             }
         } else if ($i === 3 && $j === 0) {
             // Player b is challenged.
-            $this->send_push_notification('challenged');
+            $send = true;
+            $message = 'challenged';
         } else if ($i === 3 && $j === 6) {
             // Player a's turn.
-            $this->send_push_notification('YOURTURNA');
+            $send = true;
+            $message = 'YOURTURNA';
         } else if ($i === 9 && $j === 6) {
             // Player b's turn.
-            $this->send_push_notification('YOURTURNB');
+            $send = true;
+            $message = 'YOURTURNB';
+        }
+
+        if ($send === true) {
+            $userid = $USER->id;
+            $nextruntime = time();
+
+            $taskdata = new stdClass();
+            $taskdata->cm = $this->mooduell->cm;
+            $taskdata->gameid = $this->gamedata->gameid;
+            $taskdata->gamedata = $this->gamedata;
+            $taskdata->message = $message;
+
+            $sendnotificationtask = new send_push_notification_task();
+            $sendnotificationtask->set_userid($userid);
+            $sendnotificationtask->set_next_run_time($nextruntime);
+            $sendnotificationtask->set_custom_data($taskdata);
+            \core\task\manager::reschedule_or_queue_adhoc_task($sendnotificationtask);
         }
     }
 
@@ -1158,7 +1167,7 @@ class game_control {
      * @throws \coding_exception
      * @throws dml_exception
      */
-    private function send_push_notification(string $messagetype) {
+    public function send_push_notification(string $messagetype) {
         $pushenabled = get_config('mooduell', 'enablepush');
 
         if ($pushenabled) {

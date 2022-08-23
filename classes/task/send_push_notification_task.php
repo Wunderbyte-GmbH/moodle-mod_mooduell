@@ -43,7 +43,7 @@ class send_push_notification_task extends \core\task\adhoc_task {
             $mooduell = new mooduell($taskdata->cm->id);
             $gamecontroller = new game_control($mooduell, $taskdata->gameid);
 
-            $gamecontroller->send_notifcation_if_necessary($taskdata->gamedata);
+            $gamecontroller->send_push_notification($taskdata->message);
         }
 
     }
