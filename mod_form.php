@@ -24,6 +24,7 @@
 
 use mod_mooduell\completion\completion_utils;
 use mod_mooduell\task\challenge_results_task;
+use mod_quiz\question\bank\qbank_helper;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -145,7 +146,7 @@ class mod_mooduell_mod_form extends moodleform_mod
 
         // Now, retrieve a list of categories with a function from questionlib.
         $listofcategories = [];
-        $cats = question_category_options($arrayofcontexts, false, 0, false);
+        $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
         $cats = array_pop($cats);
 
         if (!empty($cats)) {
