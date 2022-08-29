@@ -1,3 +1,6 @@
+## Version 2.0.3 (2022082900)
+* Support for Moodle 4
+
 ## Version 2.0.0 (2022081900)
 * Bugfixes: Display bugs of tables in combination with Wunderbyte Table
 
