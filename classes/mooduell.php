@@ -1328,9 +1328,9 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         // We override the select in this case, as we need slightly different fields.
-        $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
+        // $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
 
-        return [$select, $sqldata['from'], $sqldata['where'], $sqldata['params']];
+        return [$sqldata['select'], $sqldata['from'], $sqldata['where'], $sqldata['params']];
     }
 
     /**
