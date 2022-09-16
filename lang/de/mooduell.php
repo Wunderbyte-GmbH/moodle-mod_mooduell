@@ -222,3 +222,7 @@ $string['app:completionrightanswersperc'] = 'Beantworte {$a}% aller Fragen korre
 // IAP
 
 $string['mooduell:canpurchase'] = 'Nutzerin darf kaufen';
+
+// Settings.
+$string['appstoreurl'] = "Link zum Apple App Store";
+$string['playstoreurl'] = "Link zum Google Play Store";

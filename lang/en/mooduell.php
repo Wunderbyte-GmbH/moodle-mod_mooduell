@@ -254,6 +254,10 @@ $string['app:completiongameswon'] = 'Win {$a} games to complete this challenge.'
 $string['app:completionrightanswers'] = 'Answer {$a} questions correctly to complete this challenge.';
 $string['app:completionrightanswersperc'] = 'Answer {$a}% of all questions correctly to complete this challenge.';
 
-// IAP
+// IAP.
 
 $string['mooduell:canpurchase'] = 'User can purchase';
+
+// Settings.
+$string['appstoreurl'] = "Link to the Apple App Store";
+$string['playstoreurl'] = "Link to the Google Play Store";
