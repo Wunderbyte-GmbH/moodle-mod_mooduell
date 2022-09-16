@@ -465,12 +465,10 @@ class game_control {
             return $this->gamedata;
         }
 
-        $searcharray = '(';
+        $searcharray = [];
         foreach ($mquestions as $mquestion) {
-            $searcharray .= "$mquestion->questionid, ";
+            $searcharray[] = $mquestion->questionid;
         }
-        $searcharray = substr($searcharray, 0, -2);
-        $searcharray .= ')';
 
         list($inorequal, $params) = $DB->get_in_or_equal($searcharray, SQL_PARAMS_NAMED);
 
@@ -501,7 +499,7 @@ class game_control {
             FROM {question} q
             WHERE q.id $inorequal";
         }
-        if (!$questionsdata = $DB->get_records_sql($sql)) {
+        if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
         }
