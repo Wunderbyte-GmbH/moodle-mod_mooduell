@@ -110,5 +110,10 @@ $observers = array(
                 'eventname' => '\core\event\question_updated',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
+        ),
+        array(
+                'eventname' => '\core\event\question_created',
+                'callback' => 'mod_mooduell_observer::delete_cache',
+                'internal'  => false,
         )
 );
