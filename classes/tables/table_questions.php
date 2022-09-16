@@ -97,7 +97,13 @@ class table_questions extends wunderbyte_table {
         if (isset($this->questions[$question->id])) {
             $question = $this->questions[$question->id];
         } else {
-            return $question->id;
+            // If we don't find the question cached, we need to fetch them.
+            // The reason is most likely that the category or questions were changed or versioned.
+
+            $question = new question_control($question);
+
+            $this->questions[$question->questionid] = $question;
+
         }
         $id = new list_id($question, $this->mooduell->cm->id);
 
