@@ -370,7 +370,10 @@ class mooduell {
         foreach ($quizzes as $quiz) {
             $quizids[] = $quiz->coursemodule;
         }
-
+        if (count($quizids) == null) {
+            $returnitems = array('purchases' => []);
+            return $returnitems;
+        }
         list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
         list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
         list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
