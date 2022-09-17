@@ -1,4 +1,4 @@
-@mod @mod_mooduell @core_completion @core_question @javascript
+@mod @mod_mooduell @core_completion @core_question @javascript @_file_upload
 Feature: See user stats
   In order to allow see the progress
   As a teacher
@@ -36,13 +36,42 @@ Feature: See user stats
       | Test questions   | multichoice | Test question to be deleted | 7+7=                 | 14 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 8+8=                 | 16 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 9+9=                 | 18 | 7 |
+    And I am on the "C1" "core_question > course question import" page logged in as "teacher"
+    And I set the field "id_format_xml" to "1"
+    And I upload "mod/mooduell/tests/fixtures/testquestions.xml" file to "Import" filemanager
+    And I press "id_submitbutton"
+    Then I should see "Parsing questions from import file."
+
+  @javascript
+  Scenario: Load questions and select category in mooduell
+    Given I log in as "teacher"
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    And I follow "Settings"
+    And I press "Save and return to course"
+    And I start games in "Mooduell Test" against "user1"
+    And I start games in "Mooduell Test" against "user2"
+    And I follow "Mooduell Test"
+    And I follow "Statistics"
+    And I follow "Open games"
+    And I should see "Username 1"
+    And I should see "Username 2"
+    And I click on "td.columnclass.action a" "css_element"
+    And I wait "155" seconds
+    And I should see "No image"
+    And I should see "OK"
+    And I press 'Close'
+    And I follow "Finished games"
+    And I follow "Highscores"
+    And I wait "39" seconds
 
   @javascript
   Scenario: Opening the activity will show the tabs Statistics
     Given I log in as "teacher"
     When I am on "Course 1" course homepage
     And I follow "Mooduell Test"
-    And I navigate to "Settings" in current page administration
+    And I follow "Settings"
+    And I navigate to "Edit settings" in current page administration
     And I set the field "id_categoriesgroup0_category" to "Test questions (9)"
     And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
