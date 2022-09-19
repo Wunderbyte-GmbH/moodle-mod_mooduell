@@ -73,6 +73,9 @@ class overview_student implements renderable, templatable {
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $mooduell->return_list_of_statistics_student();
 
+        $data['appstorelink'] = get_config('mooduell', 'appstoreurl');
+        $data['playstorelink'] = get_config('mooduell', 'playstoreurl');
+
         $this->data = $data;
     }
 

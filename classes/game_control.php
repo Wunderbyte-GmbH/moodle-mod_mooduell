@@ -465,25 +465,28 @@ class game_control {
             return $this->gamedata;
         }
 
-        $searcharray = '(';
+        $searcharray = [];
         foreach ($mquestions as $mquestion) {
-            $searcharray .= "$mquestion->questionid, ";
+            $searcharray[] = $mquestion->questionid;
         }
-        $searcharray = substr($searcharray, 0, -2);
-        $searcharray .= ')';
+
+        list($inorequal, $params) = $DB->get_in_or_equal($searcharray, SQL_PARAMS_NAMED);
 
         if ($CFG->version >= 2022041900) {
-            $sql = "SELECT *, qbe.questioncategoryid as category
-            FROM {question} q
-            JOIN {question_bank_entries} qbe
-            ON qbe.id = q.id
-            WHERE q.id IN $searcharray";
+            $sql = "SELECT q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category
+
+                    FROM {question} q
+                    JOIN {question_versions} qv ON q.id=qv.questionid
+                    JOIN {question_bank_entries} qbe ON qbe.id=qv.questionbankentryid
+                    JOIN {question_categories} qc ON qbe.questioncategoryid=qc.id
+
+                    WHERE q.id $inorequal";
         } else {
             $sql = "SELECT *
             FROM {question} q
-            WHERE q.id IN $searcharray";
+            WHERE q.id $inorequal";
         }
-        if (!$questionsdata = $DB->get_records_sql($sql)) {
+        if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
         }

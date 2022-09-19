@@ -138,6 +138,7 @@ class overview_teacher implements renderable, templatable {
         );
 
         $gamestable->define_baseurl($baseurl->out());
+        $gamestable->define_cache('mod_mooduell', 'tablescache');
 
         $gamestable->infinitescroll = 40;
 
@@ -180,6 +181,7 @@ class overview_teacher implements renderable, templatable {
         );
 
         $highscorestable->define_baseurl($baseurl->out());
+        $highscorestable->define_cache('mod_mooduell', 'tablescache');
 
         $highscorestable->infinitescroll = 40;
 
@@ -222,6 +224,7 @@ class overview_teacher implements renderable, templatable {
         );
 
         $questionstable->define_baseurl($baseurl->out());
+        $questionstable->define_cache('mod_mooduell', 'tablescache');
 
         $questionstable->infinitescroll = 40;
 

@@ -258,3 +258,7 @@ $string['showqr'] = 'Show QR Code';
 $string['close'] = 'Close';
 
 $string['mooduell:canpurchase'] = 'User can purchase';
+
+// Settings.
+$string['appstoreurl'] = "Link to the Apple App Store";
+$string['playstoreurl'] = "Link to the Google Play Store";

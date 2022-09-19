@@ -223,3 +223,7 @@ $string['showqr'] = 'QR-Code anzeigen';
 $string['close'] = 'Schließen';
 
 $string['mooduell:canpurchase'] = 'Nutzerin darf kaufen';
+
+// Settings.
+$string['appstoreurl'] = "Link zum Apple App Store";
+$string['playstoreurl'] = "Link zum Google Play Store";

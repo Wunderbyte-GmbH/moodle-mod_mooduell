@@ -370,7 +370,10 @@ class mooduell {
         foreach ($quizzes as $quiz) {
             $quizids[] = $quiz->coursemodule;
         }
-
+        if (count($quizids) == null) {
+            $returnitems = array('purchases' => []);
+            return $returnitems;
+        }
         list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
         list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
         list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
@@ -459,17 +462,29 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         $sqldata = [];
-        // Code for Moodle > 4.0 .
+        // Code for Moodle > 4.0.
         if ($CFG->version >= 2022041900) {
             $sqldata['select'] = "q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category";
             $sqldata['from'] = "{mooduell_categories} mc
                                 JOIN {question_categories} qc
-                                ON qc.id=mc.category
+                                ON qc.id = mc.category
                                 LEFT JOIN {question_bank_entries} qbe
-                                ON qc.id=qbe.questioncategoryid
-                                RIGHT JOIN {question} q
-                                ON qbe.id=q.id";
-            $sqldata['where'] = "mc.mooduellid=:mooduellid";
+                                ON qbe.questioncategoryid = qc.id
+                                JOIN (
+                                    SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
+                                    FROM {question_versions} qv1
+                                    JOIN (
+                                        SELECT questionbankentryid, max(version) maxversion
+                                        FROM {question_versions}
+                                        GROUP BY questionbankentryid
+                                    ) qv2
+                                    ON qv1.questionbankentryid = qv2.questionbankentryid
+                                    AND qv1.version = qv2.maxversion
+                                ) qv
+                                ON qbe.id = qv.questionbankentryid
+                                JOIN {question} q
+                                ON q.id = qv.questionid";
+            $sqldata['where'] = "mc.mooduellid = :mooduellid";
             $sqldata['params'] = array('mooduellid' => $mooduellid);
         } else {
             // Code for Moodle < 4.0 .
@@ -479,7 +494,7 @@ class mooduell {
                                 ON qc.id=mc.category
                                 RIGHT JOIN {question} q
                                 ON qc.id=q.category";
-            $sqldata['where'] = "mc.mooduellid=:mooduellid";
+            $sqldata['where'] = "mc.mooduellid = :mooduellid";
             $sqldata['params'] = array('mooduellid' => $mooduellid);
         }
         return $sqldata;
@@ -538,16 +553,28 @@ class mooduell {
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT DISTINCT qa.*
-            FROM {mooduell_categories} mc
-            JOIN {question_categories} qc
-            ON mc.category = qc.id
-            JOIN {question_bank_entries} qbe
-            ON   qbe.questioncategoryid = qc.id
-            JOIN {question} q
-            ON q.id = qbe.id
-            JOIN {question_answers} qa
-            ON qa.question = q.id
-            WHERE mc.mooduellid = $mooduellid";
+                    FROM {mooduell_categories} mc
+                    JOIN {question_categories} qc
+                    ON qc.id = mc.category
+                    LEFT JOIN {question_bank_entries} qbe
+                    ON qbe.questioncategoryid = qc.id
+                    JOIN (
+                        SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
+                        FROM {question_versions} qv1
+                        JOIN (
+                            SELECT questionbankentryid, max(version) maxversion
+                            FROM {question_versions}
+                            GROUP BY questionbankentryid
+                        ) qv2
+                        ON qv1.questionbankentryid = qv2.questionbankentryid
+                        AND qv1.version = qv2.maxversion
+                    ) qv
+                    ON qbe.id = qv.questionbankentryid
+                    JOIN {question} q
+                    ON q.id = qv.questionid
+                    JOIN {question_answers} qa
+                    ON qa.question = q.id
+                    WHERE mc.mooduellid = $mooduellid";
         } else {
             // Code for Moodle < 4.0 .
             $sql = "SELECT DISTINCT qa.*
@@ -1304,9 +1331,9 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         // We override the select in this case, as we need slightly different fields.
-        $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
+        // $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
 
-        return [$select, $sqldata['from'], $sqldata['where'], $sqldata['params']];
+        return [$sqldata['select'], $sqldata['from'], $sqldata['where'], $sqldata['params']];
     }
 
     /**

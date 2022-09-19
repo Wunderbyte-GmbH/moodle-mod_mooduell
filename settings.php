@@ -30,67 +30,121 @@ global $ADMIN;
 
 if ($ADMIN->fulltree) {
 
-    $setting = new admin_setting_configcheckbox('mooduell/usefullnames',
-            get_string('usefullnames', 'mod_mooduell'), "", 0);
-    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
-    $settings->add($setting);
+        $setting = new admin_setting_configcheckbox(
+                'mooduell/usefullnames',
+                get_string('usefullnames', 'mod_mooduell'),
+                "",
+                0
+        );
+        $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+        $settings->add($setting);
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/showcontinuebutton',
-            get_string('showcontinuebutton', 'mod_mooduell'), "", 0));
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/showcontinuebutton',
+                get_string('showcontinuebutton', 'mod_mooduell'),
+                "",
+                0
+        ));
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/showcorrectanswer',
-            get_string('showcorrectanswer', 'mod_mooduell'), "", 0));
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/showcorrectanswer',
+                get_string('showcorrectanswer', 'mod_mooduell'),
+                "",
+                0
+        ));
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/showgeneralfeedback',
-        get_string('showgeneralfeedback', 'mod_mooduell'), "", 0));
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/showgeneralfeedback',
+                get_string('showgeneralfeedback', 'mod_mooduell'),
+                "",
+                0
+        ));
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/showanswersfeedback',
-        get_string('showanswersfeedback', 'mod_mooduell'), "", 0));
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/showanswersfeedback',
+                get_string('showanswersfeedback', 'mod_mooduell'),
+                "",
+                0
+        ));
 
-    $name = new lang_string('countdown', 'mod_mooduell');
-    $options = array(
-            "0" => get_string('nocountdown', 'mod_mooduell'),
-            "10" => get_string('xseconds', 'mod_mooduell', 10),
-            "20" => get_string('xseconds', 'mod_mooduell', 20),
-            "30" => get_string('xseconds', 'mod_mooduell', 30),
-            "60" => get_string('xseconds', 'mod_mooduell', 60),
-            "90" => get_string('xseconds', 'mod_mooduell', 90),
-            "120" => get_string('xseconds', 'mod_mooduell', 120),
-    );
-    $settings->add(new admin_setting_configselect('mooduell/countdown',
-            $name,
-            "",
-            -1,
-            $options));
+        $name = new lang_string('countdown', 'mod_mooduell');
+        $options = array(
+                "0" => get_string('nocountdown', 'mod_mooduell'),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30),
+                "60" => get_string('xseconds', 'mod_mooduell', 60),
+                "90" => get_string('xseconds', 'mod_mooduell', 90),
+                "120" => get_string('xseconds', 'mod_mooduell', 120),
+        );
+        $settings->add(new admin_setting_configselect(
+                'mooduell/countdown',
+                $name,
+                "",
+                -1,
+                $options
+        ));
 
-    $name = new lang_string('clicktomoveon', 'mod_mooduell');
-    $options = array(
-            "0" => get_string('clicktomoveon', 'mod_mooduell'),
-            "2" => get_string('xseconds', 'mod_mooduell', 2),
-            "5" => get_string('xseconds', 'mod_mooduell', 5),
-            "10" => get_string('xseconds', 'mod_mooduell', 10),
-            "20" => get_string('xseconds', 'mod_mooduell', 20),
-            "30" => get_string('xseconds', 'mod_mooduell', 30),
-    );
-    $settings->add(new admin_setting_configselect('mooduell/waitfornextquestion',
-            $name,
-            "",
-            -1,
-            $options));
+        $name = new lang_string('clicktomoveon', 'mod_mooduell');
+        $options = array(
+                "0" => get_string('clicktomoveon', 'mod_mooduell'),
+                "2" => get_string('xseconds', 'mod_mooduell', 2),
+                "5" => get_string('xseconds', 'mod_mooduell', 5),
+                "10" => get_string('xseconds', 'mod_mooduell', 10),
+                "20" => get_string('xseconds', 'mod_mooduell', 20),
+                "30" => get_string('xseconds', 'mod_mooduell', 30),
+        );
+        $settings->add(new admin_setting_configselect(
+                'mooduell/waitfornextquestion',
+                $name,
+                "",
+                -1,
+                $options
+        ));
 
-    $settings->add(new admin_setting_configtext('mooduell/pushtoken',
-            get_string('pushtoken', 'mod_mooduell'),
-            '', '', PARAM_TEXT));
+        $settings->add(new admin_setting_configtext(
+                'mooduell/pushtoken',
+                get_string('pushtoken', 'mod_mooduell'),
+                '',
+                '',
+                PARAM_TEXT
+        ));
 
-    $settings->add(new admin_setting_configtext('mooduell/supporturl',
-            get_string('supporturl', 'mod_mooduell'),
-            '', '', PARAM_TEXT));
+        $settings->add(new admin_setting_configtext(
+                'mooduell/supporturl',
+                get_string('supporturl', 'mod_mooduell'),
+                '',
+                '',
+                PARAM_URL
+        ));
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/enablepush',
-            get_string('enablepush', 'mod_mooduell'),
-            '', 0));
+        $settings->add(new admin_setting_configtext(
+                'mooduell/appstoreurl',
+                get_string('appstoreurl', 'mod_mooduell'),
+                '',
+                'https://apps.apple.com/kw/app/u-mooduell/id1596475094',
+                PARAM_URL
+        ));
 
-    $settings->add(new admin_setting_configcheckbox('mooduell/unlockplatform',
-            get_string('unlockplatform', 'mod_mooduell'), "", 0));
+        $settings->add(new admin_setting_configtext(
+                'mooduell/playstoreurl',
+                get_string('playstoreurl', 'mod_mooduell'),
+                '',
+                'https://play.google.com/store/apps/details?id=at.ac.univie.uwmooduell',
+                PARAM_URL
+        ));
 
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/enablepush',
+                get_string('enablepush', 'mod_mooduell'),
+                '',
+                0
+        ));
+
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/unlockplatform',
+                get_string('unlockplatform', 'mod_mooduell'),
+                "",
+                0
+        ));
 }

@@ -177,6 +177,8 @@ class mod_mooduell_observer {
             $qwrongevent->trigger();
         }
 
+        self::delete_cache($event);
+
         return true;
     }
 
@@ -239,19 +241,19 @@ class mod_mooduell_observer {
         return true;
     }
 
+
     /**
      * Will be triggered when a new user enrolment has been created.
      * This will create a token for the new user.
      *
-     * @param \core\event\user_enrolment_created $event The event.
-     * @return bool True on success.
+     * @param  mixed $event
+     * @return bool
      */
     public static function badge_awarded(\core\event\badge_awarded $event): bool {
         // The $event->relateduserid stores the user for which to create the token.
         // $event->userid is the user who did the enrolment (which is irrelevant in this case).
 
         $context = $event->get_context();
-
         $cmid = $context->instanceid;
 
         return true;
