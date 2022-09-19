@@ -474,25 +474,12 @@ class game_control {
 
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category
-                    FROM {mooduell_categories} mc
-                            JOIN {question_categories} qc
-                            ON qc.id = mc.category
-                            LEFT JOIN {question_bank_entries} qbe
-                            ON qbe.questioncategoryid = qc.id
-                            JOIN (
-                                SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
-                                FROM {question_versions} qv1
-                                JOIN (
-                                    SELECT questionbankentryid, max(version) maxversion
-                                    FROM {question_versions}
-                                    GROUP BY questionbankentryid
-                                ) qv2
-                                ON qv1.questionbankentryid = qv2.questionbankentryid
-                                AND qv1.version = qv2.maxversion
-                            ) qv
-                            ON qbe.id = qv.questionbankentryid
-                            JOIN {question} q
-                            ON q.id = qv.questionid
+
+                    FROM m_question q
+                    JOIN m_question_versions qv ON q.id=qv.questionid
+                    JOIN m_question_bank_entries qbe ON qbe.id=qv.questionbankentryid
+                    JOIN m_question_categories qc ON qbe.questioncategoryid=qc.id
+
                     WHERE q.id $inorequal";
         } else {
             $sql = "SELECT *
@@ -502,6 +489,11 @@ class game_control {
         if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
+
+
+
+
+
         }
 
         foreach ($mquestions as $mquestion) {
