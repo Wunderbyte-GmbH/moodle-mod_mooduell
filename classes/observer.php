@@ -177,6 +177,8 @@ class mod_mooduell_observer {
             $qwrongevent->trigger();
         }
 
+        self::delete_cache($event);
+
         return true;
     }
 
