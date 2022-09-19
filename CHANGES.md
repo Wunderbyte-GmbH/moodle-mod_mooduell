@@ -1,3 +1,7 @@
+## Version 2.0.5 (2022091901)
+* Bugfixe: Revised Caching strategy
+* Bugfix: SQL for Moodle 4 improved.
+
 ## Version 2.0.4 (2022091900)
 * Additional Changes for Moodle 4
 
