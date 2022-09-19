@@ -475,10 +475,10 @@ class game_control {
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category
 
-                    FROM m_question q
-                    JOIN m_question_versions qv ON q.id=qv.questionid
-                    JOIN m_question_bank_entries qbe ON qbe.id=qv.questionbankentryid
-                    JOIN m_question_categories qc ON qbe.questioncategoryid=qc.id
+                    FROM {question} q
+                    JOIN {question_versions} qv ON q.id=qv.questionid
+                    JOIN {question_bank_entries} qbe ON qbe.id=qv.questionbankentryid
+                    JOIN {question_categories} qc ON qbe.questioncategoryid=qc.id
 
                     WHERE q.id $inorequal";
         } else {
@@ -489,11 +489,6 @@ class game_control {
         if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
-
-
-
-
-
         }
 
         foreach ($mquestions as $mquestion) {
