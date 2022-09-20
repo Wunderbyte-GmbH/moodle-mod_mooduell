@@ -230,7 +230,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_courses_with_caps_parameters() {
-        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_OPTIONAL)));
+        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_REQUIRED)));
     }
 
     /**
@@ -298,7 +298,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_quizzes_with_caps_parameters() {
-        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_OPTIONAL)));
+        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_REQUIRED)));
     }
 
     /**
@@ -335,7 +335,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_support_parameters() {
-        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_OPTIONAL)));
+        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_REQUIRED)));
     }
     /**
      * Gets purchases from Database.
@@ -383,7 +383,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_purchases_parameters() {
-        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_OPTIONAL)));
+        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_REQUIRED)));
     }
     /**
      * Stores a purchases to Database.
@@ -449,13 +449,13 @@ class mod_mooduell_external extends external_api {
         return new external_function_parameters(array(
             'productid' => new external_value(PARAM_RAW, 'productid'),
             'purchasetoken' => new external_value(PARAM_RAW, 'purchasetoken'),
-            'receipt' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
-            'signature' => new external_value(PARAM_RAW, 'signature', VALUE_OPTIONAL),
-            'orderid' => new external_value(PARAM_RAW, 'orderid', VALUE_OPTIONAL),
-            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL),
-            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL),
-            'courseid' => new external_value(PARAM_INT, 'platformid', VALUE_OPTIONAL),
-            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL),
+            'receipt' => new external_value(PARAM_RAW, 'signature'),
+            'signature' => new external_value(PARAM_RAW, 'signature'),
+            'orderid' => new external_value(PARAM_RAW, 'orderid'),
+            'free' => new external_value(PARAM_INT, 'free'),
+            'mooduellid' => new external_value(PARAM_INT, 'mooduellid'),
+            'courseid' => new external_value(PARAM_INT, 'platformid'),
+            'store' => new external_value(PARAM_TEXT, 'store'),
             'ispublic' => new external_value(PARAM_INT, 'ispublic'),
         ));
 
@@ -1466,342 +1466,4 @@ class mod_mooduell_external extends external_api {
                 )
         );
     }
-
-    /**
-     * Loads highscore data via ajax to display on the website.
-     * @param int $quizid
-     * @param int|null $pageid
-     * @param string|null $tsort
-     * @param string|null $thide
-     * @param string|null $tshow
-     * @param int|null $tdir
-     * @param int|null $treset
-     * @return array
-     * @throws coding_exception
-     * @throws invalid_parameter_exception
-     */
-    public static function load_highscore_data(int $quizid,
-            $pageid = null,
-            $tsort = null,
-            $thide = null,
-            $tshow = null,
-            $tdir = null,
-            $treset = null) {
-        global $DB, $COURSE, $CFG;
-
-        $params = array(
-                'quizid' => $quizid,
-                'pageid' => $pageid,
-                'tsort' => $tsort,
-                'thide' => $thide,
-                'tshow' => $tshow,
-                'tdir' => $tdir,
-                'treset' => $treset
-        );
-
-        $params = self::validate_parameters(self::load_highscore_data_parameters(), $params);
-
-        // We set the (optional) parameters for tablelib to fetch them.
-        $_POST['page'] = $params['pageid'];
-        $_POST['tsort'] = $params['tsort'];
-        $_POST['thide'] = $params['thide'];
-        $_POST['tshow'] = $params['tshow'];
-        $_POST['tdir'] = $params['tdir'];
-        $_POST['treset'] = $params['treset'];
-
-        $_POST['action'] = 'highscores';
-        $_POST['quizid'] = $params['quizid'];
-
-        // Differentiate between teacher and student views.
-        $context = context_course::instance($COURSE->id);
-        $view = 'student';
-        if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // Because of the capability to manage activities.
-        }
-        // Now we set the view parameter for tablelib to fetch it.
-        $_POST['view'] = $view;
-
-        ob_start();
-
-        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
-
-        $result['content'] = ob_get_clean();
-
-        return $result;
-    }
-
-    /**
-     * Describes the paramters for load_highscore_data.
-     * @return external_function_parameters
-     */
-    public static function load_highscore_data_parameters() {
-        return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
-                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
-                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
-                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
-                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
-                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
-                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
-                )
-        );
-    }
-
-    /**
-     * Describes the return value for load_highscore_data.
-     * @return external_multiple_structure
-     */
-    public static function load_highscore_data_returns() {
-        return new external_single_structure(array(
-                        'content' => new external_value(PARAM_RAW, 'content of table')
-                )
-        );
-    }
-
-    /**
-     * Loads question data to display on the website.
-     * @param int $quizid
-     * @return array
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws invalid_parameter_exception
-     * @throws moodle_exception
-     */
-    public static function load_questions_data(int $quizid) {
-
-        $params = array(
-                'quizid' => $quizid,
-        );
-
-        $params = self::validate_parameters(self::load_questions_data_parameters(), $params);
-
-        $mooduell = new mooduell($params['quizid']);
-
-        return $mooduell->return_list_of_all_questions_in_quiz();
-    }
-
-    /**
-     * Describes the paramters for load_question_data.
-     * @return external_function_parameters
-     */
-    public static function load_questions_data_parameters() {
-        return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_FILE, 'quizid')
-                )
-        );
-    }
-
-    /**
-     * Describes the return value for load_highscore_data.
-     * @return external_multiple_structure
-     */
-    public static function load_questions_data_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-                                'questionid' => new external_value(PARAM_INT, 'question id'),
-                                'imageurl' => new external_value(PARAM_RAW, 'iamge url'),
-                                'imagetext' => new external_value(PARAM_RAW, 'iamge text'),
-                                'questiontext' => new external_value(PARAM_RAW, 'question text'),
-                                'questiontype' => new external_value(PARAM_RAW, 'question type'),
-                                'category' => new external_value(PARAM_RAW, 'category'),
-                                'courseid' => new external_value(PARAM_INT, 'course id'),
-                                'status' => new external_value(PARAM_RAW, 'status'),
-                                'warnings' => new external_multiple_structure(new external_single_structure(array(
-                                                'message' => new external_value(PARAM_RAW, 'message'))
-                                )),
-                                'answers' => new external_multiple_structure(new external_single_structure(array(
-                                                'answertext' => new external_value(PARAM_RAW, 'answer text'),
-                                                'fraction' => new external_value(PARAM_RAW, 'fraction'))
-                                )),
-                                'combinedfeedback' => new external_single_structure(array(
-                                    'correctfeedback' => new external_value(PARAM_TEXT, 'correct feedback'),
-                                    'partiallycorrectfeedback' => new external_value(PARAM_TEXT, 'partially correct feedback'),
-                                    'incorrectfeedback' => new external_value(PARAM_TEXT, 'incorrect feedback'))
-                                )
-                        )
-                )
-        );
-    }
-    /**
-     * Returns the list of open games to display on the website.
-     * @param int $quizid
-     * @param int|null $pageid
-     * @param string|null $tsort
-     * @param string|null $thide
-     * @param string|null $tshow
-     * @param int|null $tdir
-     * @param int|null $treset
-     * @return array
-     * @throws coding_exception
-     * @throws invalid_parameter_exception
-     */
-    public static function load_opengames_data(
-            $quizid,
-            $pageid = null,
-            $tsort = null,
-            $thide = null,
-            $tshow = null,
-            $tdir = null,
-            $treset = null) {
-        global $COURSE, $CFG;
-
-        $params = array(
-                'quizid' => $quizid,
-                'pageid' => $pageid,
-                'tsort' => $tsort,
-                'thide' => $thide,
-                'tshow' => $tshow,
-                'tdir' => $tdir,
-                'treset' => $treset
-        );
-
-        $params = self::validate_parameters(self::load_opengames_data_parameters(), $params);
-
-        // We set the (optional) parameters for tablelib to fetch them.
-        $_POST['page'] = $params['pageid'];
-        $_POST['tsort'] = $params['tsort'];
-        $_POST['thide'] = $params['thide'];
-        $_POST['tshow'] = $params['tshow'];
-        $_POST['tdir'] = $params['tdir'];
-        $_POST['treset'] = $params['treset'];
-
-        $_POST['action'] = 'opengames';
-        $_POST['quizid'] = $params['quizid'];
-
-        // Differentiate between teacher and student views.
-        $context = context_course::instance($COURSE->id);
-        $view = 'student'; // Default.
-        if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // Because of the capability to manage activities.
-        }
-        // Now we set the view parameter for tablelib to fetch it.
-        $_POST['view'] = $view;
-
-        ob_start();
-
-        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
-
-        $result['content'] = ob_get_clean();
-
-        return $result;
-    }
-
-    /**
-     * Describes the paramters for load_opengames_data.
-     * @return external_function_parameters
-     */
-    public static function load_opengames_data_parameters() {
-        return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
-                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
-                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
-                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
-                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
-                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
-                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
-                )
-        );
-    }
-
-    /**
-     * Describes the return value for load_question_data.
-     * @return external_multiple_structure
-     */
-    public static function load_opengames_data_returns() {
-        return new external_single_structure(array(
-                        'content' => new external_value(PARAM_RAW, 'content of table')
-                )
-        );
-    }
-
-    /**
-     * Returns the list of finished games to display on the website.
-     * @param int $quizid
-     * @param int|null $pageid
-     * @param string|null $tsort
-     * @param string|null $thide
-     * @param string|null $tshow
-     * @param int|null $tdir
-     * @param int|null $treset
-     * @return array
-     * @throws coding_exception
-     * @throws invalid_parameter_exception
-     */
-    public static function load_finishedgames_data(int $quizid,
-            $pageid = null,
-            $tsort = null,
-            $thide = null,
-            $tshow = null,
-            $tdir = null,
-            $treset = null) {
-        global $COURSE, $CFG;
-
-        $params = array(
-                'quizid' => $quizid,
-                'pageid' => $pageid,
-                'tsort' => $tsort,
-                'thide' => $thide,
-                'tshow' => $tshow,
-                'tdir' => $tdir,
-                'treset' => $treset
-        );
-
-        $params = self::validate_parameters(self::load_finishedgames_data_parameters(), $params);
-
-        // We set the (optional) parameters for tablelib to fetch them.
-        $_POST['page'] = $params['pageid'];
-        $_POST['tsort'] = $params['tsort'];
-        $_POST['thide'] = $params['thide'];
-        $_POST['tshow'] = $params['tshow'];
-        $_POST['tdir'] = $params['tdir'];
-        $_POST['treset'] = $params['treset'];
-
-        $_POST['action'] = 'finishedgames';
-        $_POST['quizid'] = $params['quizid'];
-
-        // Differentiate between teacher and student views.
-        $context = context_course::instance($COURSE->id);
-        $view = 'student'; // Default.
-        if (has_capability('moodle/course:manageactivities', $context)) {
-            $view = 'teacher'; // Because of the capability to manage activities.
-        }
-        // Now we set the view parameter for tablelib to fetch it.
-        $_POST['view'] = $view;
-
-        ob_start();
-
-        include("$CFG->dirroot/mod/mooduell/mooduell_table.php");
-
-        $result['content'] = ob_get_clean();
-
-        return $result;
-    }
-
-    /**
-     * Describes the paramters for load_finishedgames_data.
-     * @return external_function_parameters
-     */
-    public static function load_finishedgames_data_parameters() {
-        return new external_function_parameters(array(
-                        'quizid'  => new external_value(PARAM_INT, 'quizid'),
-                        'pageid'  => new external_value(PARAM_INT, 'pageid', VALUE_OPTIONAL),
-                        'tsort'   => new external_value(PARAM_RAW, 'sort value', VALUE_OPTIONAL),
-                        'thide'   => new external_value(PARAM_RAW, 'hide value', VALUE_OPTIONAL),
-                        'tshow'   => new external_value(PARAM_RAW, 'show value', VALUE_OPTIONAL),
-                        'tdir'    => new external_value(PARAM_INT, 'dir value', VALUE_OPTIONAL),
-                        'treset'  => new external_value(PARAM_INT, 'reset value', VALUE_OPTIONAL),
-                )
-        );
-    }
-
-    /**
-     * Describes the return values for load_finished_data.
-     * @return external_multiple_structure
-     */
-    public static function load_finishedgames_data_returns() {
-        return new external_single_structure(array(
-                    'content' => new external_value(PARAM_RAW, 'html content')
-                )
-        );
-    }
-
 }
