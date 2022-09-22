@@ -27,6 +27,7 @@ namespace mod_mooduell;
 use coding_exception;
 use context_system;
 use dml_exception;
+use moodle_exception;
 use stdClass;
 
 /**
@@ -93,7 +94,7 @@ class manage_tokens {
      * @param int $duration
      * @throws coding_exception
      * @throws dml_exception
-     * @return void
+     * @return stdClass
      */
     public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0) {
 
