@@ -57,13 +57,11 @@ Feature: See user stats
     And I should see "Username 1"
     And I should see "Username 2"
     And I click on "td.columnclass.action a" "css_element"
-    And I wait "155" seconds
     And I should see "No image"
     And I should see "OK"
-    And I press 'Close'
+    And I click on "div.modal-footer button" "css_element"
     And I follow "Finished games"
     And I follow "Highscores"
-    And I wait "39" seconds
 
   @javascript
   Scenario: Opening the activity will show the tabs Statistics
@@ -78,6 +76,5 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
     And I follow "Open games"
-    And I wait "20" seconds
     And I follow "Statistics"
     ## Then I should see "Download table data as"
