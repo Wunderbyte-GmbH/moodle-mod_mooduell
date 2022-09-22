@@ -235,42 +235,6 @@ $functions = array(
                         'mod_mooduell_external'
                 )
         ),
-        'mod_mooduell_load_highscore_data' => array(
-                'classname' => 'mod_mooduell_external',
-                'methodname' => 'load_highscore_data',
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'Ajax load list of highscores',
-                'type' => 'read',
-                'capabilities' => 'mod/mooduell:viewinstance',
-                'ajax' => true,
-        ),
-        'mod_mooduell_load_questions_data' => array(
-                'classname' => 'mod_mooduell_external',
-                'methodname' => 'load_questions_data',
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'Ajax load list of questions',
-                'type' => 'read',
-                'capabilities' => 'mod/mooduell:viewinstance',
-                'ajax' => true,
-        ),
-        'mod_mooduell_load_opengames_data' => array(
-                'classname' => 'mod_mooduell_external',
-                'methodname' => 'load_opengames_data',
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'Ajax load list of opengames',
-                'type' => 'read',
-                'capabilities' => 'mod/mooduell:viewinstance',
-                'ajax' => true,
-        ),
-        'mod_mooduell_load_finishedgames_data' => array(
-                'classname' => 'mod_mooduell_external',
-                'methodname' => 'load_finishedgames_data',
-                'classpath' => 'mod/mooduell/classes/external.php',
-                'description' => 'Ajax load list of finishedgames',
-                'type' => 'read',
-                'capabilities' => 'mod/mooduell:viewinstance',
-                'ajax' => true,
-        ),
         'mod_mooduell_get_purchases' => array(
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_mooduell_purchases',

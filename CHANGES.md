@@ -1,3 +1,9 @@
+## Version 2.0.6 (2022092200)
+* Feature: QR code only visible in modal
+* Bugfix: Added another purge cache event
+* Bugfix: Fix failing modal in behat test
+* Bugfix: Special case where result was not calculated correctly
+
 ## Version 2.0.5 (2022091901)
 * Bugfixe: Revised Caching strategy
 * Bugfix: SQL for Moodle 4 improved.

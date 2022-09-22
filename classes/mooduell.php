@@ -1044,9 +1044,14 @@ class mooduell {
             return [];
         }
 
-        $categoriesdata = [];
+        $categorydata = [];
 
         foreach ($mooduellcategories as $moodcat) {
+
+            if (empty($moodcat->categor)) {
+                continue;
+            }
+
             $tempentry = $DB->get_record('question_categories', array('id' => $moodcat->category));
             $entry = [];
             $entry['catid'] = $tempentry->id;
@@ -1452,7 +1457,7 @@ class mooduell {
         $headers[] = get_string('questiontext', 'mooduell');
         $help[] = null;
 
-        $columns[] = 'type';
+        $columns[] = 'qtype';
         $headers[] = get_string('questiontype', 'mooduell');
         $help[] = null;
 

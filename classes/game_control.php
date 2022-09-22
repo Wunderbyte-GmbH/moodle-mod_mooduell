@@ -610,7 +610,9 @@ class game_control {
                 // There, we don't need the correct answerids, but just if the player has answered correctly.
                 // 1 = false, 2 = correct.
                 if (!$showcorrectanswer) {
-                    $result = (!isset($resultarray[0]) || !isset($resultarray[0]) == 1) ? 2 : 1;
+
+                    // If correct, we set result to 2, if false, we set result to 1.
+                    $iscorrect ? $result = 2 : $result = 1;
                 } else {
                     // If we haven't set result to 1 (which means false), we can set it to 2 (correct).
                     $result = 2;
