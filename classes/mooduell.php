@@ -1452,7 +1452,7 @@ class mooduell {
         $headers[] = get_string('questiontext', 'mooduell');
         $help[] = null;
 
-        $columns[] = 'type';
+        $columns[] = 'qtype';
         $headers[] = get_string('questiontype', 'mooduell');
         $help[] = null;
 
