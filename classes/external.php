@@ -182,15 +182,10 @@ class mod_mooduell_external extends external_api {
      * @param  int $userid
      * @return void
      */
-    public static function get_courses_with_caps(int $userid = null) {
+    public static function get_courses_with_caps() {
         global $USER;
-        $params = array(
-            'userid' => $userid,
-        );
-        self::validate_parameters(self::get_courses_with_caps_parameters(), $params);
-        if ($userid === null) {
-            $userid = $USER->id;
-        }
+        $userid = $USER->id;
+        self::validate_parameters(self::get_courses_with_caps_parameters(), array());
         $allcourses = enrol_get_users_courses($userid);
         $capcourses = array();
         foreach ($allcourses as $course) {
@@ -230,7 +225,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_courses_with_caps_parameters() {
-        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_REQUIRED)));
+        return new external_function_parameters(array());
     }
 
     /**
@@ -242,13 +237,9 @@ class mod_mooduell_external extends external_api {
     public static function get_quizzes_with_caps(int $userid = null) {
         global $USER;
 
-        $params = array(
-            'userid' => $userid,
-        );
-        self::validate_parameters(self::get_quizzes_with_caps_parameters(), $params);
-        if ($userid === null) {
-            $userid = $USER->id;
-        }
+        $userid = $USER->id;
+        self::validate_parameters(self::get_quizzes_with_caps_parameters(), array());
+
         $allcourses = enrol_get_users_courses($userid);
         $capcourses = array();
         foreach ($allcourses as $index => $course) {
@@ -298,7 +289,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_quizzes_with_caps_parameters() {
-        return new external_function_parameters(array('userid' => new external_value(PARAM_INT, 'userid', VALUE_REQUIRED)));
+        return new external_function_parameters(array());
     }
 
     /**
@@ -315,7 +306,7 @@ class mod_mooduell_external extends external_api {
             'unlock' => $pay
         );
 
-        self::validate_parameters((self::get_mooduell_support_parameters()), ['optional' => 0]);
+        self::validate_parameters((self::get_mooduell_support_parameters()), array());
         return $support;
     }
     /**
@@ -335,7 +326,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_support_parameters() {
-        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_REQUIRED)));
+        return new external_function_parameters(array());
     }
     /**
      * Gets purchases from Database.
@@ -349,7 +340,7 @@ class mod_mooduell_external extends external_api {
         self::validate_context($context);
         $enrolledcourses = enrol_get_users_courses($USER->id, true);
         $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
-        self::validate_parameters(self::get_mooduell_purchases_parameters(), ['optional' => 0]);
+        self::validate_parameters(self::get_mooduell_purchases_parameters(), array());
         return mooduell::get_purchases($enrolledcourses, $quizzes);
     }
     /**
@@ -383,7 +374,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_purchases_parameters() {
-        return new external_function_parameters(array('optional' => new external_value(PARAM_INT, 'optional', VALUE_REQUIRED)));
+        return new external_function_parameters(array());
     }
     /**
      * Stores a purchases to Database.
