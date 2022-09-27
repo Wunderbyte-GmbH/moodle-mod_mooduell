@@ -1,3 +1,6 @@
+## Version 2.0.7 (2022092700)
+* Bugfix: Help URL not showing correctly
+
 ## Version 2.0.6 (2022092200)
 * Feature: QR code only visible in modal
 * Bugfix: Added another purge cache event
