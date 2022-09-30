@@ -26,6 +26,7 @@
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
 use mod_mooduell\question_control;
+use SebastianBergmann\Environment\Console;
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
@@ -82,6 +83,86 @@ class behat_mooduell extends behat_base {
     }
 
     /**
+     * Plays all open questions of the active player
+     * @Given /^I play all open questions$/
+     * @return void
+     */
+    public static function i_play_all_open_questions() {
+
+        global $USER;
+
+        $data = mod_mooduell_external::get_games_by_courses([], 0);
+
+        $numgames = 0;
+        $quizzes  = $data["quizzes"];
+        $numquizzes = count($quizzes);
+        if ($numquizzes == 0) {
+            throw new moodle_exception("Testerror", "mod_mooduell", "", $numgames, "Anzahl der Spiele ist: " . $numgames);
+        }
+
+        foreach ($data["quizzes"] as $quiz) {
+            $games = $quiz['games'];
+            $courseid = $quiz['courseid'];
+            $quizid = $quiz['quizid'];
+            $mooduell = mooduell::get_mooduell_by_instance($quizid);
+            throw new moodle_exception("Testerror", "mod_mooduell", "", "Anzahl der Spiele ist: " . $numgames);
+
+            foreach ($games as $game) {
+                ++$numgames;
+                $gameid = $game['gameid'];
+                // Status: NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished!
+                $status = $game['status'];
+
+                $activeuser = $USER->id;
+                $playera = $game['playeraid'];
+                $playerb = $game['playerbid'];
+
+                $isplayera = ($status == '1') && ($activeuser == $playera);
+
+                $gamedata = mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
+                $questions = $gamedata->questions;
+
+                if (!$questioncounter = self::return_question_counter($questions, $isplayera)) {
+                    continue;
+                }
+
+                $gamedata = (object)mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
+                $game = new game_control($mooduell, $gameid, $gamedata);
+
+                while ($questioncounter < 9) {
+                    try {
+                        $questionid = $questions[$questioncounter]->questionid;
+                        $answerid = $questions[$questioncounter]->answers[0]->id;
+                        $game->validate_question($questionid, [$answerid]);
+                    } catch (Exception $e) {
+                        break;
+                    }
+                    ++$questioncounter;
+                }
+            }
+        }
+
+    }
+
+    /**""
+     * Returns questioncounter for active player
+     * @param array $questions
+     * @param bool $isplayera
+     * @return null|int
+     */
+    private static function return_question_counter(array $questions, bool $isplayera) {
+        $questioncounter = 0;
+        foreach ($questions as $question) {
+            $activeplayeranswered = $isplayera ? $question->playeraanswered : $question->playerbanswered;
+            if ($activeplayeranswered === null) {
+                return $questioncounter;
+            }
+            ++$questioncounter;
+        }
+        return null;
+    }
+
+    /**
      * Get a mooduell by name.
      *
      * @param string $name mooduell name.
@@ -114,4 +195,5 @@ class behat_mooduell extends behat_base {
 
         return $DB->get_record('user', ['username' => $name]);
     }
+
 }
