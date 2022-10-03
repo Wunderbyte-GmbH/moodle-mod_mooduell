@@ -6,11 +6,11 @@ Feature: See user stats
 
   Background:
     Given the following "users" exist:
-      | username | firstname | lastname |
-      | user1    | Username  | 1        |
-      | user2    | Username  | 2        |
-      | teacher  | Teacher   | 3        |
-      | manager  | Manager   | 4        |
+      | username | firstname | lastname | profile_field_mooduell_alias |
+      | user1    | Username  | 1        | Duell user1 |
+      | user2    | Username  | 2        | Duell user2 |
+      | teacher  | Teacher   | 3        | Duell teacher |
+      | manager  | Manager   | 4        | Duell manager |
     And the following "courses" exist:
       | fullname | shortname |
       | Course 1 | C1        |
@@ -63,13 +63,14 @@ Feature: See user stats
     And I follow "Finished games"
     And I follow "Highscores"
 
+
+
   @javascript
   Scenario: Opening the activity will show the tabs Statistics
     Given I log in as "teacher"
     When I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
-    And I navigate to "Edit settings" in current page administration
     And I set the field "id_categoriesgroup0_category" to "Test questions (9)"
     And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
@@ -77,4 +78,59 @@ Feature: See user stats
     And I follow "Mooduell Test"
     And I follow "Open games"
     And I follow "Statistics"
-    ## Then I should see "Download table data as"
+    Then I should see "Active users"
+
+
+
+  @javascript
+  Scenario: Edit question and check version
+    Given I log in as "teacher"
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    And I follow "Settings"
+    And I press "Save and return to course"  
+    And I start games in "Mooduell Test" against "user1"
+    And I start games in "Mooduell Test" against "user2"  
+    When I follow "Mooduell Test"
+    And I follow "Questions"
+    And I should see "No image"
+    And I should see "OK"
+    And I click on "td.columnclass.id a" "css_element"
+    And I press "Cancel"
+    And I click on "td.columnclass.id a" "css_element"
+    Then I should see "Version 1"
+    When I press "Save changes and continue editing"
+    And I wait "6" seconds
+    Then I should see "Version 2"
+    When I press "submitbutton"
+    And I click on "td.columnclass.id a" "css_element"
+    Then I should see "Version 1"
+
+
+
+  @javascript
+  Scenario: Use full names
+    Given I log in as "admin"
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    And I follow "Settings"
+    And I set the field "usefullnames" to "0"
+    And I press "Save and return to course"  
+    And I start games in "Mooduell Test" against "user1"
+    When I follow "Mooduell Test"
+    And I follow "Open games"
+    Then I should see "Duell user1"
+
+
+
+  @javascript 
+  Scenario: Button check easiest and hardest question
+    Given I log in as "teacher"
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    And I follow "Settings"
+    And I press "Save and return to course"
+    And I start games in "Mooduell Test" against "user1"
+    And I follow "Mooduell Test"
+    Then I click on "div.bg-info a" "css_element"
+    Then I click on "div.bg-danger a" "css_element"
