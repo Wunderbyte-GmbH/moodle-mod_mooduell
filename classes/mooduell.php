@@ -31,6 +31,7 @@ use coding_exception;
 use context_module;
 use core_customfield\category;
 use \cm_info;
+use context;
 use dml_exception;
 use mod_mooduell\game_control;
 use mod_mooduell\output\viewpage;
@@ -1483,5 +1484,44 @@ class mooduell {
         $tabledata->help = $help;
 
         return $tabledata;
+    }
+
+    /**
+     * Returns list of users enrolled into course.
+     *
+     * @param context $context
+     * @param string $withcapability
+     * @param int $groupid 0 means ignore groups, USERSWITHOUTGROUP without any group and any other value limits the result by group id
+     * @param string $userfields requested user record fields
+     * @param string $orderby
+     * @param int $limitfrom return a subset of records, starting at this point (optional, required if $limitnum is set).
+     * @param int $limitnum return a subset comprising this many records (optional, required if $limitfrom is set).
+     * @param bool $onlyactive consider only active enrolments in enabled plugins and time restrictions
+     * @return array of user records
+     */
+    public static function get_enrolled_users_with_profile_mooduell_alias(context $context, $withcapability = '', $groupid = 0, $userfields = 'u.*', $orderby = null,
+            $limitfrom = 0, $limitnum = 0, $onlyactive = false) {
+        global $DB;
+
+        list($esql, $params) = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);
+        $sql = "SELECT $userfields, s1.data mooduellalias
+                FROM {user} u
+                JOIN ($esql) je ON je.id = u.id
+                LEFT JOIN (SELECT ud.data, ud.userid
+                    FROM {user_info_data} ud
+                    LEFT JOIN {user_info_field} uif ON ud.fieldid=uif.id
+                    WHERE uif.shortname='mooduell_alias') as s1
+                ON s1.userid=u.id
+                WHERE u.deleted = 0";
+
+        if ($orderby) {
+            $sql = "$sql ORDER BY $orderby";
+        } else {
+            list($sort, $sortparams) = users_order_by_sql('u');
+            $sql = "$sql ORDER BY $sort";
+            $params = array_merge($params, $sortparams);
+        }
+
+        return $DB->get_records_sql($sql, $params, $limitfrom, $limitnum);
     }
 }

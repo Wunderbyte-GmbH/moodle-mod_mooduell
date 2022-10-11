@@ -140,43 +140,33 @@ class game_control {
         global $PAGE;
 
         $context = $mooduell->context;
-        $users = get_enrolled_users($context);
+        $users = mooduell::get_enrolled_users_with_profile_mooduell_alias($context, '', 0, 'u.*', null, 0 , 0, true);
+
+        $enrolledusers = get_enrolled_users($context, '', 0, 'u.*', null, 0 , 0, true);
 
         $filteredusers = array();
 
         foreach ($users as $user) {
-            // We need to skip users who are missing the capability ...
-            // ... to view the current MooDuell instance (3rd parameter of is_enrolled)
-            // Also skip users with no active enrolement status (4th parameter of is_enrolled).
-            if (!is_enrolled($context, $user, 'mod/mooduell:viewinstance', true)) {
-                continue;
-            }
 
-            profile_load_custom_fields($user);
+            // Instead of using the profile_load_custom_fields function, we included this call directly in the sql above.
+            $user->profile_field_mooduell_alias = $user->mooduellalias ?? '';
 
-            // We want to make sure we have no disruption in the transition, so we use alternate name...
-            // ... when there is no moodle alias name.
-            if (!$user->profile['mooduell_alias'] && strlen($user->alternatename) > 0) {
-                $user->profile_field_mooduell_alias = $user->alternatename;
-                profile_save_data($user);
-            }
-
-            // First we check if the user needs an alternatename and if he has one.
+            // // First we check if the user needs an alternatename and if he has one.
             if ($mooduell->settings->usefullnames == 0
-            && strlen($user->profile['mooduell_alias']) == 0) {
+            && strlen($user->profile_field_mooduell_alias) == 0) {
                 continue;
             } else {
                 // For backward compatibility we didn't change the "alternatename" key, but we now return ...
                 // ...custom profile field mooduell_alias instead of alternatename.
-                $user->alternatename = $user->profile['mooduell_alias'];
+                $user->alternatename = $user->profile_field_mooduell_alias ?? '';
             }
 
             // We need to specifiy userid already when calling modinfo.
-            $modinfo = get_fast_modinfo($mooduell->course->id, $user->id);
+            $modinfo = get_fast_modinfo($mooduell->course, $user->id);
             $cm = $modinfo->get_cm($mooduell->cm->id);
 
-            if ($cm->uservisible) {
-                $filteredusers[] = $user;
+            if (!$cm->uservisible) {
+                continue;
             }
 
             if ($loadprofile) {
@@ -184,6 +174,8 @@ class game_control {
                 $userpicture->size = 1; // Size f1.
                 $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
             }
+
+            $filteredusers[] = $user;
         }
         return $filteredusers;
     }
