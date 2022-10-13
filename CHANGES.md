@@ -1,3 +1,6 @@
+## Version 2.0.8 (2022101300)
+* Improved Performance when fetching quiz users
+
 ## Version 2.0.7 (2022092700)
 * Bugfix: Help URL not showing correctly
 
