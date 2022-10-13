@@ -103,6 +103,14 @@ if ($ADMIN->fulltree) {
         ));
 
         $settings->add(new admin_setting_configtext(
+                'mooduell/cachetime',
+                get_string('cachetime', 'mod_mooduell'),
+                '',
+                300,
+                PARAM_INT
+        ));
+
+        $settings->add(new admin_setting_configtext(
                 'mooduell/pushtoken',
                 get_string('pushtoken', 'mod_mooduell'),
                 '',

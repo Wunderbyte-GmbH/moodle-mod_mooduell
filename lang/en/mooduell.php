@@ -262,3 +262,4 @@ $string['mooduell:canpurchase'] = 'User can purchase';
 // Settings.
 $string['appstoreurl'] = "Link to the Apple App Store";
 $string['playstoreurl'] = "Link to the Google Play Store";
+$string['cachetime'] = "Cache in seconds. Longer times will improve performance.";

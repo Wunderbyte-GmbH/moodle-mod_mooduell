@@ -30,6 +30,7 @@ require_once("$CFG->libdir/enrollib.php");
 require_once("$CFG->dirroot/user/lib.php");
 require_once("$CFG->dirroot/user/profile/lib.php");
 
+use cache;
 use DateTime;
 use dml_exception;
 use mod_mooduell\event\game_finished;
@@ -139,10 +140,30 @@ class game_control {
 
         global $PAGE;
 
+        // We can use a cache to speed up this function significantly.
+        // As all the users get the same result, we only have to make sure that we don't call the expensive function too often.
+        $cachetime = get_config('mooduell', 'cachetime');
+
+        if ($cachetime > 0) {
+            $cache = cache::make('mod_mooduell', 'userscache');
+
+            // We use one general key for all, as this is the same for all users.
+            $timemodified = $cache->get('timemodified');
+            $now = time();
+            // If the cachetime has not yet expired...
+            $timeexpire = $timemodified + $cachetime;
+            if ($timeexpire > $now) {
+
+                $enrolledusers = $cache->get('enrolledusers');
+
+                return $enrolledusers;
+            }
+            // We don't have to purge the cache, as it will be overwritten below.
+
+        }
+
         $context = $mooduell->context;
         $users = mooduell::get_enrolled_users_with_profile_mooduell_alias($context, '', 0, 'u.*', null, 0 , 0, true);
-
-        $enrolledusers = get_enrolled_users($context, '', 0, 'u.*', null, 0 , 0, true);
 
         $filteredusers = array();
 
@@ -177,6 +198,14 @@ class game_control {
 
             $filteredusers[] = $user;
         }
+
+        // Save to cache, if cache is used at all.
+        if ($cachetime > 0) {
+
+            $cache->set('enrolledusers', $filteredusers);
+            $cache->set('timemodified', $now);
+        }
+
         return $filteredusers;
     }
 
