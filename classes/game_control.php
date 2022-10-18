@@ -147,14 +147,19 @@ class game_control {
         if ($cachetime > 0) {
             $cache = cache::make('mod_mooduell', 'userscache');
 
+            // The cache key is composed of the mooduell id.
+
+            $cachekey = "enrolledusers_" . $mooduell->settings->id;
+            $cachekeytimemodified = "timemodified" . $mooduell->settings->id;
+
             // We use one general key for all, as this is the same for all users.
-            $timemodified = $cache->get('timemodified');
+            $timemodified = $cache->get($cachekeytimemodified);
             $now = time();
             // If the cachetime has not yet expired...
             $timeexpire = $timemodified + $cachetime;
             if ($timeexpire > $now) {
 
-                $enrolledusers = $cache->get('enrolledusers');
+                $enrolledusers = $cache->get($cachekey);
 
                 return $enrolledusers;
             }
@@ -190,7 +195,9 @@ class game_control {
                 continue;
             }
 
-            if ($loadprofile) {
+            // If we use the cache at all, we always want to execute this on fetch.
+            // Because we need the value in the cache store.
+            if ($loadprofile || $cachetime > 0) {
                 $userpicture = new user_picture($user);
                 $userpicture->size = 1; // Size f1.
                 $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
@@ -202,8 +209,8 @@ class game_control {
         // Save to cache, if cache is used at all.
         if ($cachetime > 0) {
 
-            $cache->set('enrolledusers', $filteredusers);
-            $cache->set('timemodified', $now);
+            $cache->set($cachekey, $filteredusers);
+            $cache->set($cachekeytimemodified, $now);
         }
 
         return $filteredusers;
