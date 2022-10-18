@@ -29,13 +29,13 @@ $definitions = array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => true,
-        'staticaccelerationsize' => 1,
+        'staticaccelerationsize' => 5,
         'invalidationevents' => ['setbacktablescache']
     ),
     'userscache' => array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
-        'staticacceleration' => true,
+        'staticacceleration' => false,
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackuserscache']
     )
