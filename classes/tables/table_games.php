@@ -75,9 +75,9 @@ class table_games extends wunderbyte_table {
 
     /**
      * Function to return the players name instead of id
-     * @param stdClass $game
+     * @param object $game
      */
-    public function col_playeraid(stdClass $game) {
+    public function col_playeraid($game) {
         if ($game->playeraid) {
             $name = $this->mooduell->return_name_by_id($game->playeraid);
 
@@ -87,9 +87,9 @@ class table_games extends wunderbyte_table {
 
     /**
      * Function to return the players name instead of id
-     * @param stdClass $game
+     * @param object $game
      */
-    public function col_playerbid(stdClass $game) {
+    public function col_playerbid($game) {
         if ($game->playerbid) {
             $name = $this->mooduell->return_name_by_id($game->playerbid);
 
@@ -99,9 +99,9 @@ class table_games extends wunderbyte_table {
 
     /**
      * Function to return the readable date instead of timestamp.
-     * @param stdClass $game
+     * @param object $game
      */
-    public function col_timemodified(stdClass $game) {
+    public function col_timemodified($game) {
         if ($game->timemodified) {
             if (current_language() === 'de') {
                 $monthnamesde = [
@@ -132,9 +132,9 @@ class table_games extends wunderbyte_table {
 
     /**
      * Function to return the MooDuell id.
-     * @param stdClass $game
+     * @param object $game
      */
-    public function col_mooduellid(stdClass $game) {
+    public function col_mooduellid($game) {
         if ($game->mooduellid) {
 
             $name = $game->mooduellid;
@@ -145,9 +145,9 @@ class table_games extends wunderbyte_table {
 
     /**
      * Function to return clickable action links.
-     * @param stdClass $game
+     * @param object $game
      */
-    public function col_action(stdClass $game) {
+    public function col_action($game) {
 
         $action = new list_action($game->id, $game, $this->mooduell);
         return $this->renderer->render_list_action($action);
