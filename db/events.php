@@ -97,11 +97,6 @@ $observers = array(
                 'internal'  => false,
         ),
         array(
-                'eventname' => '\core\event\question_category_updated',
-                'callback' => 'mod_mooduell_observer::delete_cache',
-                'internal'  => false,
-        ),
-        array(
                 'eventname' => '\core\event\question_deleted',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,

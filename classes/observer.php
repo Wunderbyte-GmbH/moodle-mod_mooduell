@@ -177,7 +177,7 @@ class mod_mooduell_observer {
             $qwrongevent->trigger();
         }
 
-        self::delete_cache($event);
+        self::delete_cache($event, true);
 
         return true;
     }
@@ -266,9 +266,12 @@ class mod_mooduell_observer {
      * @param any $event The event.
      * @return bool True on success.
      */
-    public static function delete_cache($event): bool {
+    public static function delete_cache($event = null, $onlytables = false): bool {
 
         cache_helper::purge_by_event('setbacktablescache');
+        if (!$onlytables) {
+            cache_helper::purge_by_event('setbackquestionscache');
+        }
 
         return true;
     }

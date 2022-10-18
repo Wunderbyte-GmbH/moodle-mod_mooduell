@@ -26,6 +26,7 @@ namespace mod_mooduell;
 
 defined('MOODLE_INTERNAL') || die();
 
+use cache;
 use \moodle_url;
 use coding_exception;
 use context_module;
@@ -273,8 +274,28 @@ class mooduell {
      */
     public function return_list_of_all_questions_in_quiz() {
 
+        // If we have them already instantiated, we can return them right away.
         if ($this->questions && count($this->questions) > 0) {
             return $this->questions;
+        }
+
+        // Even though we don't use a cachetime here but we invalidate by events...
+        // ... we still want the possibility to NOT use cache.
+        // So we link it to a cachetime bigger than 0.
+        $cachetime = get_config('mooduell', 'cachetime');
+
+        if ($cachetime > 0) {
+
+            // Next we take a look in the cache.
+            $cache = cache::make('mod_mooduell', 'questionscache');
+
+            $cachekey = 'questions_' . $this->settings->id;
+
+            if ($questions = $cache->get($cachekey)) {
+                $this->questions = $questions;
+                return $questions;
+            }
+
         }
 
         $questions = array();
@@ -295,6 +316,11 @@ class mooduell {
         }
 
         $this->questions = $questions;
+
+        // We only set cache if cachetime is bigger than 0.
+        if ($cachetime > 0) {
+            $cache->set($cachekey, $questions);
+        }
 
         return $questions;
     }

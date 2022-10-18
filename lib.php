@@ -134,6 +134,9 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
         $moduleinstance->usefullnames = 0;
     }
 
+    // We need to trigger the delete cache event in the observer:
+    mod_mooduell_observer::delete_cache();
+
     return $DB->update_record('mooduell', $moduleinstance);
 }
 

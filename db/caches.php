@@ -38,6 +38,13 @@ $definitions = array(
         'staticacceleration' => false,
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackuserscache']
+    ),
+    'questionscache' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => false,
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['setbackquestionscache']
     )
 );
 
