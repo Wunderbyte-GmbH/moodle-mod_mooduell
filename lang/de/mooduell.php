@@ -228,3 +228,7 @@ $string['mooduell:canpurchase'] = 'Nutzerin darf kaufen';
 $string['appstoreurl'] = "Link zum Apple App Store";
 $string['playstoreurl'] = "Link zum Google Play Store";
 $string['cachetime'] = "Cache in Sekunden. Längere Zeiten verbessern performance.";
+
+// Caches.
+$string['cachedef_tablescache'] = "Cache für Tabellen im Plugin";
+$string['cachedef_userscache'] = "Cache für Users und ihre Permissions in der App";
