@@ -1183,9 +1183,11 @@ class game_control {
             $mooduell->return_list_of_all_questions_in_quiz();
         } // Else do nothing.
 
+        $okstring = get_string('ok', 'mod_mooduell');
+
         foreach ($mooduell->questions as $question) {
             if ($question->category == $category->category
-                    && $question->status == get_string('ok', 'mod_mooduell')) {
+                    && $question->status == $okstring) {
                 $returnarray[] = $question;
             }
         }
