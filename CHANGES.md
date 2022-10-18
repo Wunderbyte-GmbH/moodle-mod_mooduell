@@ -1,3 +1,7 @@
+## Version 2.0.9 (2022101800)
+* Improved caching
+* Small bugfixes
+
 ## Version 2.0.8 (2022101300)
 * Improved Performance when fetching quiz users
 
