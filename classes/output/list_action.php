@@ -95,7 +95,7 @@ class list_action implements renderable, templatable {
 
         $questionstable->set_sql($sqldata['select'], $sqldata['from'], $sqldata['where'], $sqldata['params']);
 
-        $tabledata = $mooduell->return_cols_for_questions_table();
+        $tabledata = $mooduell->return_cols_for_questions_table(true);
 
         $questionstable->define_columns($tabledata->columns);
         $questionstable->define_headers($tabledata->headers);
@@ -107,7 +107,7 @@ class list_action implements renderable, templatable {
             $_GET
         );
 
-        $questionstable->use_pages = true;
+        // $questionstable->use_pages = true;
 
         $questionstable->define_baseurl($baseurl->out());
 

@@ -1470,7 +1470,7 @@ class mooduell {
      * @return stdClass
      * @throws coding_exception
      */
-    public function return_cols_for_questions_table(): stdClass {
+    public function return_cols_for_questions_table($modal = false): stdClass {
 
         $columns[] = 'id';
         $headers[] = get_string('questionid', 'mooduell');
@@ -1488,21 +1488,23 @@ class mooduell {
         $headers[] = get_string('questiontype', 'mooduell');
         $help[] = null;
 
-        $columns[] = 'length';
-        $headers[] = get_string('questiontextlength', 'mooduell');
-        $help[] = null;
+        if (!$modal) {
+            $columns[] = 'length';
+            $headers[] = get_string('questiontextlength', 'mooduell');
+            $help[] = null;
 
-        $columns[] = 'category';
-        $headers[] = get_string('category', 'mooduell');
-        $help[] = null;
+            $columns[] = 'category';
+            $headers[] = get_string('category', 'mooduell');
+            $help[] = null;
 
-        $columns[] = 'warnings';
-        $headers[] = get_string('warnings', 'mooduell');
-        $help[] = null;
+            $columns[] = 'warnings';
+            $headers[] = get_string('warnings', 'mooduell');
+            $help[] = null;
 
-        $columns[] = 'status';
-        $headers[] = get_string('questionstatus', 'mooduell');
-        $help[] = null;
+            $columns[] = 'status';
+            $headers[] = get_string('questionstatus', 'mooduell');
+            $help[] = null;
+        }
 
         $tabledata = new stdClass();
         $tabledata->columns = $columns;
