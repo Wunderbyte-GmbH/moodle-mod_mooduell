@@ -58,7 +58,6 @@ Feature: See user stats
     And I should see "Username 2"
     And I click on "td.columnclass.action a" "css_element"
     And I should see "No image"
-    And I should see "OK"
     And I click on "div.modal-footer button" "css_element"
     And I follow "Finished games"
     And I follow "Highscores"
@@ -88,9 +87,9 @@ Feature: See user stats
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
-    And I press "Save and return to course"  
+    And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
-    And I start games in "Mooduell Test" against "user2"  
+    And I start games in "Mooduell Test" against "user2"
     When I follow "Mooduell Test"
     And I follow "Questions"
     And I should see "No image"
@@ -115,7 +114,7 @@ Feature: See user stats
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I set the field "usefullnames" to "0"
-    And I press "Save and return to course"  
+    And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
     When I follow "Mooduell Test"
     And I follow "Open games"
@@ -123,7 +122,7 @@ Feature: See user stats
 
 
 
-  @javascript 
+  @javascript
   Scenario: Button check easiest and hardest question
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
