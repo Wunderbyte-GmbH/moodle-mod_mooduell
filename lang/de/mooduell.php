@@ -232,3 +232,4 @@ $string['cachetime'] = "Cache in Sekunden. Längere Zeiten verbessern performanc
 // Caches.
 $string['cachedef_tablescache'] = "Cache für Tabellen im Plugin";
 $string['cachedef_userscache'] = "Cache für Users und ihre Permissions in der App";
+$string['cachedef_questionscache'] = "Cache Fragen für spiele.";
