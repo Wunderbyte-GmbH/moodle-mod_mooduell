@@ -266,6 +266,6 @@ $string['playstoreurl'] = "Link to the Google Play Store";
 $string['cachetime'] = "Cache in seconds. Longer times will improve performance.";
 
 // Caches.
-$string['cachedef_tablescache'] = "Cache for tables in the plugin";
-$string['cachedef_userscache'] = "Cache users and their permissions in the app";
-$string['cachedef_questionscache'] = "Cache for MooDuell questions";
+$string['cachedef_tablescache'] = "Cache for tables in the plugin.";
+$string['cachedef_userscache'] = "Cache users and their permissions in the app.";
+$string['cachedef_questionscache'] = "Cache questions for games.";
