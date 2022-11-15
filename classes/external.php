@@ -301,9 +301,15 @@ class mod_mooduell_external extends external_api {
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
 
+        // Set minimum requirem App Version here.
+        $versions = array(
+            "ios" => '1.0.0',
+            "android" => '1.0.0'
+        );
         $support = array(
             'url' => $url,
-            'unlock' => $pay
+            'unlock' => $pay,
+            'versions' => $versions
         );
 
         self::validate_parameters((self::get_mooduell_support_parameters()), array());
@@ -317,7 +323,12 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_support_returns() {
            return new external_single_structure(array(
                         'url' => new external_value(PARAM_TEXT, 'url'),
-                        'unlock' => new external_value(PARAM_BOOL, 'unlock')
+                        'unlock' => new external_value(PARAM_BOOL, 'unlock'),
+                        'versions' => new external_single_structure(
+                        array(
+                            "ios" => new external_value(PARAM_RAW, 'ios app version'),
+                            "android" => new external_value(PARAM_RAW, 'android app version'),
+                        ))
                     ));
     }
     /**
