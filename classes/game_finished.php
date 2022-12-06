@@ -94,9 +94,13 @@ class game_finished {
             // If the entry could be found in the database.
             if (!empty($data)) {
                 // ... then update the existing record.
+                if ($data->score == $entry->score) {
+                    $entry->timemodified = $data->timemodified;
+                } else {
+                    $entry->timemodified = time();
+                }
                 $entry->id = $data->id;
                 $entry->timecreated = $data->timecreated;
-                $entry->timemodified = time();
                 $DB->update_record('mooduell_highscores', $entry);
             } else {
                 // ... otherwise, insert a new record.

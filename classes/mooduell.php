@@ -1075,7 +1075,7 @@ class mooduell {
 
         foreach ($mooduellcategories as $moodcat) {
 
-            if (empty($moodcat->categor)) {
+            if (empty($moodcat->category)) {
                 continue;
             }
 

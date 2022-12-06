@@ -137,10 +137,10 @@ class overview_teacher implements renderable, templatable {
             $_GET
         );
 
-        $gamestable->define_baseurl($baseurl->out());
         $gamestable->define_cache('mod_mooduell', 'tablescache');
 
         $gamestable->infinitescroll = 40;
+        $gamestable->showdownloadbutton = true;
 
         list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
 
@@ -180,10 +180,10 @@ class overview_teacher implements renderable, templatable {
             $_GET
         );
 
-        $highscorestable->define_baseurl($baseurl->out());
         $highscorestable->define_cache('mod_mooduell', 'tablescache');
 
         $highscorestable->infinitescroll = 40;
+        $highscorestable->showdownloadbutton = true;
 
         list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
 
@@ -223,7 +223,6 @@ class overview_teacher implements renderable, templatable {
             $_GET
         );
 
-        $questionstable->define_baseurl($baseurl->out());
         $questionstable->define_cache('mod_mooduell', 'tablescache');
 
         $questionstable->infinitescroll = 40;
