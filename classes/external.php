@@ -1408,6 +1408,28 @@ class mod_mooduell_external extends external_api {
         if (!isset($fileinfo['filecontent'])) {
             throw new moodle_exception('nofile');
         }
+        $context = context_system::instance();
+        $fs = get_file_storage();
+
+        // Prepare file record object.
+        $fileinfo = array(
+                'contextid' => $context->id,
+                'component' => 'mod_mooduell',
+                'filearea' => 'aliasavatar',
+                'itemid' => $USER->id,
+                'filepath' => '/',
+                'filename' => 'profilepicture.jpg');
+
+        // Check if file already existing.
+        // Get file.
+        $existingfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+        // Delete it if it exists.
+        if ($existingfile) {
+            $existingfile->delete();
+        }
+
         // Saving file.
         $dir = make_temp_directory('wsupload').'/';
 
@@ -1423,24 +1445,21 @@ class mod_mooduell_external extends external_api {
             $savedfilepath = $dir.$filename;
         }
 
-        $fileinfo['filecontent'] = strtr($fileinfo['filecontent'], '._-', '+/=');
+        $fileinfo['filecontent'] = strtr($filecontent, '._-', '+/=');
 
         file_put_contents($savedfilepath, base64_decode($fileinfo['filecontent']));
 
         require_once( $CFG->libdir . '/gdlib.php' );
 
-        // Uppload avatar from the temporary file.
-        $usericonid = process_new_icon( context_user::instance( $USER->id, MUST_EXIST ), 'user', 'icon', 0, $savedfilepath );
-        // Specify icon id for the desired user with id $newuser->id (in our case).
-        if ( $usericonid ) {
-            $DB->set_field( 'user', 'picture', $usericonid, array( 'id' => $USER->id ) );
-        }
-
         @chmod($savedfilepath, $CFG->filepermissions);
         unset($fileinfo['filecontent']);
 
+        $fs->create_file_from_pathname($fileinfo, $savedfilepath);
+
         // Delete temporary files.
         unset( $savedfilepath );
+
+        cache_helper::purge_by_event('setbackuserscache');
 
         return ['status' => 1];
     }

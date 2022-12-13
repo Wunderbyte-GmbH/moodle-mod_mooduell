@@ -31,6 +31,7 @@ require_once("$CFG->dirroot/user/lib.php");
 require_once("$CFG->dirroot/user/profile/lib.php");
 
 use cache;
+use context_system;
 use DateTime;
 use dml_exception;
 use mod_mooduell\event\game_finished;
@@ -40,7 +41,7 @@ use stdClass;
 use tool_dataprivacy\context_instance;
 use user_picture;
 use mod_mooduell\task\send_push_notification_task;
-
+use moodle_url;
 
 define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
 
@@ -200,7 +201,22 @@ class game_control {
             if ($loadprofile || $cachetime > 0) {
                 $userpicture = new user_picture($user);
                 $userpicture->size = 1; // Size f1.
-                $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
+
+                $systemcontext = context_system::instance();
+
+                $fs = get_file_storage();
+                $existingfile = $fs->get_file($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id, '/',
+                'profilepicture.jpg');
+
+                if (!$existingfile) {
+                    // Do What ?.
+                    $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
+                } else {
+                    $moodleurl = moodle_url::make_pluginfile_url($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id, '/',
+                    'profilepicture.jpg');
+                    $pictureurl = $moodleurl->__toString();
+                    $user->profileimageurl = $pictureurl;
+                }
             }
 
             $filteredusers[] = $user;
