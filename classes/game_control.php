@@ -205,15 +205,21 @@ class game_control {
                 $systemcontext = context_system::instance();
 
                 $fs = get_file_storage();
-                $existingfile = $fs->get_file($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id, '/',
-                'profilepicture.jpg');
-
+                $files = $fs->get_area_files($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id);
+                $fetchedfilename = '';
+                $existingfile = '';
+                foreach ($files as $f) {
+                    $filename = $f->get_filename();
+                    if (strpos($filename, 'jpg')) {
+                        $existingfile = $f;
+                        $fetchedfilename = $filename;
+                    }
+                }
                 if (!$existingfile) {
-                    // Do What ?.
                     $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
                 } else {
                     $moodleurl = moodle_url::make_pluginfile_url($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id, '/',
-                    'profilepicture.jpg');
+                    $filename);
                     $pictureurl = $moodleurl->__toString();
                     $user->profileimageurl = $pictureurl;
                 }

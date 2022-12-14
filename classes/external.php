@@ -1418,16 +1418,12 @@ class mod_mooduell_external extends external_api {
                 'filearea' => 'aliasavatar',
                 'itemid' => $USER->id,
                 'filepath' => '/',
-                'filename' => 'profilepicture.jpg');
+                'filename' => $filename.time().'.jpg');
 
-        // Check if file already existing.
-        // Get file.
-        $existingfile = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-
-        // Delete it if it exists.
-        if ($existingfile) {
-            $existingfile->delete();
+        $files = $fs->get_area_files($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+        $fileinfo['itemid']);
+        foreach ($files as $f) {
+            $f->delete();
         }
 
         // Saving file.
@@ -1461,7 +1457,7 @@ class mod_mooduell_external extends external_api {
 
         cache_helper::purge_by_event('setbackuserscache');
 
-        return ['status' => 1];
+        return ['filename' => $fileinfo['filename']];
     }
 
     /**
@@ -1483,7 +1479,7 @@ class mod_mooduell_external extends external_api {
      */
     public static function update_profile_picture_returns() {
         return new external_single_structure(array(
-                        'status' => new external_value(PARAM_INT, 'status')
+                        'filename' => new external_value(PARAM_TEXT, 'image url')
                 )
         );
     }
