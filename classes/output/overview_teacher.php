@@ -131,18 +131,15 @@ class overview_teacher implements renderable, templatable {
 
         $gamestable->is_downloading('', 'mooduell_games');
 
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
         $gamestable->define_cache('mod_mooduell', 'tablescache');
 
-        $gamestable->infinitescroll = 40;
-        $gamestable->showdownloadbutton = true;
+        $gamestable->stickyheader = false;
+        $gamestable->showcountlabel = true;
+        $gamestable->pageable(true);
 
-        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(40, true);
+        $gamestable->showdownloadbutton = false;
+
+        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(20, true);
 
         return $html;
     }
@@ -174,18 +171,15 @@ class overview_teacher implements renderable, templatable {
 
         $highscorestable->is_downloading('', 'mooduell_highscores');
 
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
         $highscorestable->define_cache('mod_mooduell', 'tablescache');
 
-        $highscorestable->infinitescroll = 40;
+        $highscorestable->stickyheader = false;
+        $highscorestable->showcountlabel = true;
+        $highscorestable->pageable(true);
+
         $highscorestable->showdownloadbutton = true;
 
-        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(40, true);
+        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(20, true);
 
         return $html;
     }
