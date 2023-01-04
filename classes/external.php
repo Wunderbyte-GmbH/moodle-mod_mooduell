@@ -1333,7 +1333,7 @@ class mod_mooduell_external extends external_api {
                 'gameid' => $gameid,
         );
 
-        $params = self::validate_parameters(self::giveup_game_parameters(), $params);
+            $params = self::validate_parameters(self::giveup_game_parameters(), $params);
 
         $entry = $DB->get_record('mooduell_games', array('id' => $params['gameid']));
 
@@ -1408,6 +1408,14 @@ class mod_mooduell_external extends external_api {
         if (!isset($fileinfo['filecontent'])) {
             throw new moodle_exception('nofile');
         }
+
+        list($w, $h) = getimagesizefromstring(base64_decode($filecontent));
+        // Somehow 2 large Image made it to here, caancel upload.
+        if ($w > 1000 || $h > 1000) {
+
+            return ['filename' => 'TOOLARGE'];
+        }
+
         $context = context_system::instance();
         $fs = get_file_storage();
 
@@ -1449,7 +1457,6 @@ class mod_mooduell_external extends external_api {
 
         @chmod($savedfilepath, $CFG->filepermissions);
         unset($fileinfo['filecontent']);
-
         $fs->create_file_from_pathname($fileinfo, $savedfilepath);
 
         // Delete temporary files.
