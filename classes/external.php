@@ -1411,7 +1411,7 @@ class mod_mooduell_external extends external_api {
 
         list($w, $h) = getimagesizefromstring(base64_decode($filecontent));
         // Somehow 2 large Image made it to here, caancel upload.
-        if ($w > 1000 || $h > 1000) {
+        if ($w > 500 || $h > 500) {
 
             return ['filename' => 'TOOLARGE'];
         }
