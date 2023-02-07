@@ -304,7 +304,7 @@ class mod_mooduell_external extends external_api {
         // Set minimum requirem App Version here.
         $versions = array(
             "ios" => '1.0.0',
-            "android" => '1.0.0'
+            "android" => '0.9.0'
         );
         $support = array(
             'url' => $url,
@@ -1411,7 +1411,7 @@ class mod_mooduell_external extends external_api {
 
         list($w, $h) = getimagesizefromstring(base64_decode($filecontent));
         // Somehow 2 large Image made it to here, caancel upload.
-        if ($w > 500 || $h > 500) {
+        if ($w > 500 || $h > 1000) {
 
             return ['filename' => 'TOOLARGE'];
         }
