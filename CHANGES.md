@@ -1,3 +1,9 @@
+## Version 2.1.0 (2023030900)
+* New Feature: Avatars
+* Bugix: Highscores last changed fixed. 
+* Bugix: Download table re-added.
+* Bugix: Multiple minor bugfixes.
+
 ## Version 2.0.9 (2022101800)
 * Improved caching
 * Small bugfixes
