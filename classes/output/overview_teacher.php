@@ -137,7 +137,7 @@ class overview_teacher implements renderable, templatable {
         $gamestable->showcountlabel = true;
         $gamestable->pageable(true);
 
-        $gamestable->showdownloadbutton = false;
+        $gamestable->showdownloadbutton = true;
 
         list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(20, true);
 
