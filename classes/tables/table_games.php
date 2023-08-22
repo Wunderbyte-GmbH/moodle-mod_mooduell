@@ -42,33 +42,15 @@ class table_games extends wunderbyte_table {
     public $action;
 
     /**
-     * Instance of mooduell class.
-     *
-     * @var mooduell
-     */
-    public $mooduell;
-
-    /**
-     * @var renderer
-     */
-    private $renderer;
-
-    /**
      * mooduell_table constructor
      * @param string $action
-     * @param mooduell $mooduell
      */
-    public function __construct($action, mooduell $mooduell = null) {
+    public function __construct($action) {
         global $PAGE;
 
         parent::__construct($action);
 
-        if ($mooduell) {
-            $this->mooduell = $mooduell;
-        }
         $this->action = $action;
-
-        $this->renderer = $PAGE->get_renderer('mod_mooduell');
 
         $this->define_cache('mod_mooduell', 'tablescache');
     }
@@ -79,7 +61,9 @@ class table_games extends wunderbyte_table {
      */
     public function col_playeraid(stdClass $game) {
         if ($game->playeraid) {
-            $name = $this->mooduell->return_name_by_id($game->playeraid);
+
+            $mooduell = mooduell::get_instance($game->mooduellid);
+            $name = $mooduell->return_name_by_id($game->playeraid);
 
             return $name;
         }
@@ -91,7 +75,8 @@ class table_games extends wunderbyte_table {
      */
     public function col_playerbid(stdClass $game) {
         if ($game->playerbid) {
-            $name = $this->mooduell->return_name_by_id($game->playerbid);
+            $mooduell = mooduell::get_instance($game->mooduellid);
+            $name = $mooduell->return_name_by_id($game->playerbid);
 
             return $name;
         }
@@ -149,7 +134,11 @@ class table_games extends wunderbyte_table {
      */
     public function col_action(stdClass $game) {
 
-        $action = new list_action($game->id, $game, $this->mooduell);
-        return $this->renderer->render_list_action($action);
+        global $OUTPUT;
+
+        $mooduell = mooduell::get_instance($game->mooduellid);
+        $action = new list_action($game->id, $game, $mooduell);
+
+        return $OUTPUT->render_from_template('mod_mooduell/list_action', $action);
     }
 }

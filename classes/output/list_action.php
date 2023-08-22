@@ -89,7 +89,7 @@ class list_action implements renderable, templatable {
 
         $tablename = bin2hex(random_bytes(12));
 
-        $questionstable = new table_questions($tablename, $mooduell);
+        $questionstable = new table_questions($tablename, $mooduell->cm->id);
 
         $sqldata = $mooduell->return_sql_for_questions_in_game($game);
 

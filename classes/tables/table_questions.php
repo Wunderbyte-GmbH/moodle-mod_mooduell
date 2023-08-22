@@ -46,14 +46,9 @@ class table_questions extends wunderbyte_table {
     public $action;
 
     /**
-     * @var mooduell
+     * @var int
      */
-    public $mooduell;
-
-    /**
-     * @var renderer
-     */
-    private $renderer;
+    public $mooduellid;
 
     /**
      * @var array
@@ -63,20 +58,18 @@ class table_questions extends wunderbyte_table {
     /**
      * mooduell_table constructor
      * @param string $action
-     * @param mooduell $mooduell
+     * @param mooduell $mooduellid
      */
-    public function __construct($action, mooduell $mooduell = null) {
+    public function __construct($action, mooduell $mooduellid) {
 
         global $PAGE;
 
         parent::__construct($action);
 
-        if ($mooduell) {
-            $this->mooduell = $mooduell;
+        if ($mooduellid) {
+            $this->mooduellid = $mooduellid;
         }
         $this->action = $action;
-
-        $this->renderer = $PAGE->get_renderer('mod_mooduell');
 
         $this->define_cache('mod_mooduell', 'tablescache');
     }
@@ -88,8 +81,12 @@ class table_questions extends wunderbyte_table {
      */
     public function col_id(stdClass $question) {
 
+        global $OUTPUT;
+
+        $mooduell = mooduell::get_instance($this->mooduellid);
+
         if (!$this->questions) {
-            $this->questions = $this->mooduell->return_list_of_all_questions_in_quiz();
+            $this->questions = $mooduell->return_list_of_all_questions_in_quiz();
         }
 
         if (isset($this->questions[$question->id])) {
@@ -103,10 +100,9 @@ class table_questions extends wunderbyte_table {
             $this->questions[$question->questionid] = $question;
 
         }
-        $id = new list_id($question, $this->mooduell->cm->id);
+        $id = new list_id($question, $mooduell->cm->id);
 
-        $out = $this->renderer->render_list_id($id);
-        return $out;
+        return $OUTPUT->render_from_template('mod_mooduell/list_id', $id);
     }
 
     /**
@@ -116,6 +112,8 @@ class table_questions extends wunderbyte_table {
      */
     public function col_image(stdClass $question) {
 
+        global $OUTPUT;
+
         if (isset($this->questions[$question->id])) {
             $question = $this->questions[$question->id];
         } else {
@@ -123,8 +121,7 @@ class table_questions extends wunderbyte_table {
         }
         $image = new list_image($question);
 
-        $out = $this->renderer->render_list_image($image);
-        return $out;
+        return $OUTPUT->render_from_template('mod_mooduell/list_image', $image);
     }
 
     /**
@@ -134,14 +131,16 @@ class table_questions extends wunderbyte_table {
      */
     public function col_text(stdClass $question) {
 
+        global $OUTPUT;
+
         if (isset($this->questions[$question->id])) {
             $question = $this->questions[$question->id];
         } else {
             return json_encode($question);
         }
         $image = new list_text($question);
-        $out = $this->renderer->render_list_text($image);
-        return $out;
+
+        return $OUTPUT->render_from_template('mod_mooduell/list_text', $image);
     }
 
     /**
@@ -167,14 +166,16 @@ class table_questions extends wunderbyte_table {
      */
     public function col_warnings(stdClass $question) {
 
+        global $OUTPUT;
+
         if (isset($this->questions[$question->id])) {
             $question = $this->questions[$question->id];
         } else {
             return json_encode($question);
         }
         $warnings = new list_warnings($question);
-        $out = $this->renderer->render_list_warnings($warnings);
-        return $out;
+
+        return $OUTPUT->render_from_template('mod_mooduell/list_warnings', $warnings);
     }
 
     /**
