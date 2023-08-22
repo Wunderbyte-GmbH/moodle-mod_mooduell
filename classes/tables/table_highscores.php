@@ -40,20 +40,20 @@ class table_highscores extends wunderbyte_table {
     public $action;
 
     /**
-     * @var mooduell
+     * @var int mooduellid
      */
-    public $mooduell;
+    public $mooduellid;
 
     /**
      * mooduell_table constructor
      * @param string $action
-     * @param mooduell $mooduell
+     * @param mooduell $mooduellid
      */
-    public function __construct($action, mooduell $mooduell = null) {
+    public function __construct($action, int $mooduellid) {
         parent::__construct($action);
 
-        if ($mooduell) {
-            $this->mooduell = $mooduell;
+        if ($mooduellid) {
+            $this->mooduellid = $mooduellid;
         }
         $this->action = $action;
 
@@ -82,7 +82,8 @@ class table_highscores extends wunderbyte_table {
     public function col_userid(stdClass $highscoreentry) {
         if ($highscoreentry->userid) {
 
-            $username = $this->mooduell->return_name_by_id($highscoreentry->userid);
+            $mooduell = mooduell::get_instance($this->mooduellid);
+            $username = $mooduell->return_name_by_id($highscoreentry->userid);
 
             return $username;
         }

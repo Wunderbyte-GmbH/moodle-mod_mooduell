@@ -116,7 +116,7 @@ class overview_teacher implements renderable, templatable {
 
         $tablename = bin2hex(random_bytes(12));
 
-        $gamestable = new table_games($tablename, $mooduell);
+        $gamestable = new table_games($tablename, $mooduell->cm->id);
 
         $finishedgames = $action == 'finishedgames' ? true : false;
 
@@ -154,7 +154,7 @@ class overview_teacher implements renderable, templatable {
     private function render_highscores_table(mooduell $mooduell):string {
 
         $tablename = bin2hex(random_bytes(12));
-        $highscorestable = new table_highscores($tablename, $mooduell);
+        $highscorestable = new table_highscores($tablename, $mooduell->cm->id);
         // Sort the table by descending score by default.
         $highscorestable->sort_default_column = 'score';
         $highscorestable->sort_default_order = SORT_DESC;

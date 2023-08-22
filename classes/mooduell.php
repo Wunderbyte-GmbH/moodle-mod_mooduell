@@ -80,6 +80,11 @@ const ACCEPTEDTYPES = [
 class mooduell {
 
     /**
+     * @var array mooduell instances
+     */
+    private static $instances = [];
+
+    /**
      * @var stdClass|null fieldset record of mooduell instance
      */
     public $settings = null;
@@ -133,6 +138,22 @@ class mooduell {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
         $this->context = context_module::instance($this->cm->id);
+
+        self::$instances[$id] = $this;
+    }
+
+    /**
+     * Singleton of Mooduell.
+     * @param int $id
+     * @return mooduell
+     */
+    public static function get_instance($id) {
+
+        if (isset(self::$instances[$id])) {
+            return self::$instances[$id];
+        } else {
+            return new mooduell($id);
+        }
     }
 
     /**

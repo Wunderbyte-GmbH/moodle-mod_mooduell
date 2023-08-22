@@ -119,7 +119,7 @@ class overview_student implements renderable, templatable {
      * @return string
      */
     private function render_games_table(mooduell $mooduell, string $action):string {
-        $gamestable = new table_games($action, $mooduell);
+        $gamestable = new table_games($action, $mooduell->cm->id);
 
         $finishedgames = $action == 'finishedgames' ? true : false;
 
@@ -152,7 +152,7 @@ class overview_student implements renderable, templatable {
      */
     private function render_highscores_table(mooduell $mooduell):string {
 
-        $highscorestable = new table_highscores('highscores', $mooduell);
+        $highscorestable = new table_highscores('highscores', $mooduell->cm->id);
         // Sort the table by descending score by default.
         $highscorestable->sort_default_column = 'score';
         $highscorestable->sort_default_order = SORT_DESC;
