@@ -45,11 +45,14 @@ class table_games extends wunderbyte_table {
      * mooduell_table constructor
      * @param string $action
      */
-    public function __construct($action) {
-        global $PAGE;
+    public function __construct($action, int $mooduellid) {
+        global $PAGE, $USER;
 
-        parent::__construct($action);
+        parent::__construct($action . $USER->id . $mooduellid);
 
+        if ($mooduellid) {
+            $this->mooduellid = $mooduellid;
+        }
         $this->action = $action;
 
         $this->define_cache('mod_mooduell', 'tablescache');
@@ -62,7 +65,7 @@ class table_games extends wunderbyte_table {
     public function col_playeraid($game) {
         if ($game->playeraid) {
 
-            $mooduell = mooduell::get_instance($game->mooduellid);
+            $mooduell = mooduell::get_instance($this->mooduellid);
             $name = $mooduell->return_name_by_id($game->playeraid);
 
             return $name;
@@ -75,7 +78,7 @@ class table_games extends wunderbyte_table {
      */
     public function col_playerbid($game) {
         if ($game->playerbid) {
-            $mooduell = mooduell::get_instance($game->mooduellid);
+            $mooduell = mooduell::get_instance($this->mooduellid);
             $name = $mooduell->return_name_by_id($game->playerbid);
 
             return $name;
@@ -120,9 +123,9 @@ class table_games extends wunderbyte_table {
      * @param object $game
      */
     public function col_mooduellid($game) {
-        if ($game->mooduellid) {
+        if ($this->mooduellid) {
 
-            $name = $game->mooduellid;
+            $name = $this->mooduellid;
 
             return $name;
         }
@@ -136,7 +139,7 @@ class table_games extends wunderbyte_table {
 
         global $OUTPUT;
 
-        $mooduell = mooduell::get_instance($game->mooduellid);
+        $mooduell = mooduell::get_instance($this->mooduellid);
         $action = new list_action($game->id, $game, $mooduell);
 
         return $OUTPUT->render_from_template('mod_mooduell/list_action', $action);

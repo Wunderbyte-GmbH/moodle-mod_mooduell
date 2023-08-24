@@ -128,6 +128,7 @@ class overview_teacher implements renderable, templatable {
         $gamestable->define_columns($tabledata->columns);
         $gamestable->define_headers($tabledata->headers);
         $gamestable->define_help_for_headers($tabledata->help);
+        $gamestable->define_sortablecolumns($tabledata->columns);
 
         $gamestable->is_downloading('', 'mooduell_games');
 
@@ -194,7 +195,7 @@ class overview_teacher implements renderable, templatable {
 
         $tablename = bin2hex(random_bytes(12));
 
-        $questionstable = new table_questions($tablename, $mooduell);
+        $questionstable = new table_questions($tablename, $mooduell->cm->id);
         // Sort the table by descending score by default.
         $questionstable->sort_default_column = 'id';
         $questionstable->sort_default_order = SORT_ASC;

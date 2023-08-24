@@ -60,11 +60,11 @@ class table_questions extends wunderbyte_table {
      * @param string $action
      * @param mooduell $mooduellid
      */
-    public function __construct($action, mooduell $mooduellid) {
+    public function __construct($action, int $mooduellid) {
 
         global $PAGE;
 
-        parent::__construct($action);
+        parent::__construct($action . $mooduellid);
 
         if ($mooduellid) {
             $this->mooduellid = $mooduellid;
@@ -102,7 +102,7 @@ class table_questions extends wunderbyte_table {
         }
         $id = new list_id($question, $mooduell->cm->id);
 
-        return $OUTPUT->render_from_template('mod_mooduell/list_id', $id);
+        return $OUTPUT->render_from_template('mod_mooduell/list_id', $id->export_for_template($OUTPUT));
     }
 
     /**
@@ -121,7 +121,7 @@ class table_questions extends wunderbyte_table {
         }
         $image = new list_image($question);
 
-        return $OUTPUT->render_from_template('mod_mooduell/list_image', $image);
+        return $OUTPUT->render_from_template('mod_mooduell/list_image', $image->export_for_template($OUTPUT));
     }
 
     /**
@@ -140,7 +140,7 @@ class table_questions extends wunderbyte_table {
         }
         $image = new list_text($question);
 
-        return $OUTPUT->render_from_template('mod_mooduell/list_text', $image);
+        return $OUTPUT->render_from_template('mod_mooduell/list_text', $image->export_for_template($OUTPUT));
     }
 
     /**
@@ -175,7 +175,7 @@ class table_questions extends wunderbyte_table {
         }
         $warnings = new list_warnings($question);
 
-        return $OUTPUT->render_from_template('mod_mooduell/list_warnings', $warnings);
+        return $OUTPUT->render_from_template('mod_mooduell/list_warnings', $warnings->export_for_template($OUTPUT));
     }
 
     /**

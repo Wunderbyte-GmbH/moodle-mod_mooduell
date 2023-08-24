@@ -81,7 +81,7 @@ class list_id implements renderable, templatable {
      * @param renderer_base $output
      * @return array
      */
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template($output) {
         return $this->data;
     }
 }

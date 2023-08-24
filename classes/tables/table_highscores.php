@@ -50,7 +50,7 @@ class table_highscores extends wunderbyte_table {
      * @param mooduell $mooduellid
      */
     public function __construct($action, int $mooduellid) {
-        parent::__construct($action);
+        parent::__construct($action . $mooduellid);
 
         if ($mooduellid) {
             $this->mooduellid = $mooduellid;
