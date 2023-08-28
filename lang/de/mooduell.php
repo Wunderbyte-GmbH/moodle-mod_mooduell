@@ -189,7 +189,7 @@ $string['mooduell:play'] = 'MooDuell spielen';
 $string['pincode'] = "Dein PinCode: ";
 $string['qrtitle'] = "Anleitung QR-Login:";
 $string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach diesen persönlichen QRCode mit der MooDuell-App.";
-
+$string['qrshare'] = "Alternativ kannst du den QR-Code auch direkt auf deinem Smartphone benutzen. Klicke dafür einfach den Code an und teile ihn mit deiner mooduell-App um dich anzumelden";
 
 // Activity completion.
 $string['completiongamesplayed'] = 'Teilnehmer*in muss Anzahl Spiele beenden';

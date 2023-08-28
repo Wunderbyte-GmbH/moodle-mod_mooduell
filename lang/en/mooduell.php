@@ -225,6 +225,7 @@ $string['privacy:metadata:mooduell_pushtokens:numberofnotifications'] = 'The num
 $string['pincode'] = "Your PinCode: ";
 $string['qrtitle'] = "QR Login - How to:";
 $string['qrdesc'] = "To login on your Smartphone, scan this personal QR-Code with the MooDuell App.";
+$string['qrshare'] = 'You can also use this QR-Code directly from your Smartphone. To Login just touch the Code and share it to your mooduell App.';
 
 // Activity completion.
 $string['completiongamesplayed'] = 'User has to finish number of games';
