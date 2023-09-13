@@ -1,3 +1,7 @@
+## Version 2.1.1 (2023091300)
+* Supports Moodle 4.2
+* Feature: QR Code can now be shared to App
+
 ## Version 2.1.0 (2023030900)
 * New Feature: Avatars
 * Bugix: Highscores last changed fixed. 
