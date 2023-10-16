@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = [
 
-        'status' => array(),
+        'status' => [],
 ];

@@ -77,13 +77,16 @@ if ($ADMIN->fulltree) {
                 "90" => get_string('xseconds', 'mod_mooduell', 90),
                 "120" => get_string('xseconds', 'mod_mooduell', 120),
         );
-        $settings->add(new admin_setting_configselect(
-                'mooduell/countdown',
+        $setting = new admin_setting_configselect(
+                'countdown',
                 $name,
                 "",
                 -1,
                 $options
-        ));
+        );
+
+        $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+        $settings->add($setting);
 
         $name = new lang_string('clicktomoveon', 'mod_mooduell');
         $options = array(

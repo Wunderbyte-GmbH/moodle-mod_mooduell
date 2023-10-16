@@ -73,7 +73,7 @@ class mod_mooduell_external extends external_api {
         // We create a new game: Save parameters to DB & trigger notification event.
         $startgameresult = $gamecontroller->start_new_game($params['playerbid']);
 
-        $result = array();
+        $result = [];
         $result['status'] = $startgameresult;
 
         // Add challenges array with completion data to $startgameresult.
@@ -145,7 +145,7 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_usertoken() {
         global $USER;
-        $params = array();
+        $params = [];
         self::validate_parameters(self::get_usertoken_parameters(), $params);
 
         // Returns mooduell_external token and delete mooduell_tokens token.
@@ -173,7 +173,7 @@ class mod_mooduell_external extends external_api {
      *
      */
     public static function get_usertoken_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters([]);
     }
 
     /**
@@ -185,9 +185,9 @@ class mod_mooduell_external extends external_api {
     public static function get_courses_with_caps() {
         global $USER;
         $userid = $USER->id;
-        self::validate_parameters(self::get_courses_with_caps_parameters(), array());
+        self::validate_parameters(self::get_courses_with_caps_parameters(), []);
         $allcourses = enrol_get_users_courses($userid);
-        $capcourses = array();
+        $capcourses = [];
         foreach ($allcourses as $course) {
             $context = context_course::instance($course->id);
             $hascaps = has_capability('mod/mooduell:canpurchase', $context);
@@ -225,7 +225,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_courses_with_caps_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters([]);
     }
 
     /**
@@ -238,10 +238,10 @@ class mod_mooduell_external extends external_api {
         global $USER;
 
         $userid = $USER->id;
-        self::validate_parameters(self::get_quizzes_with_caps_parameters(), array());
+        self::validate_parameters(self::get_quizzes_with_caps_parameters(), []);
 
         $allcourses = enrol_get_users_courses($userid);
-        $capcourses = array();
+        $capcourses = [];
         foreach ($allcourses as $index => $course) {
             $context = context_course::instance($course->id);
             $hascaps = has_capability('mod/mooduell:canpurchase', $context);
@@ -251,10 +251,10 @@ class mod_mooduell_external extends external_api {
         }
         $quizzes = get_all_instances_in_courses("mooduell", $capcourses);
         if (!empty($quizzes)) {
-            $returquizzes = array();
+            $returquizzes = [];
             foreach ($quizzes as $quiz) {
                     // Entry to return.
-                    $quizdetails = array();
+                    $quizdetails = [];
 
                     $quizdetails['quizid'] = $quiz->coursemodule;
                     $quizdetails['quizname'] = $quiz->name;
@@ -289,7 +289,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_quizzes_with_caps_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters([]);
     }
 
     /**
@@ -312,7 +312,7 @@ class mod_mooduell_external extends external_api {
             'versions' => $versions
         );
 
-        self::validate_parameters((self::get_mooduell_support_parameters()), array());
+        self::validate_parameters((self::get_mooduell_support_parameters()), []);
         return $support;
     }
     /**
@@ -337,7 +337,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_support_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters([]);
     }
     /**
      * Gets purchases from Database.
@@ -351,7 +351,7 @@ class mod_mooduell_external extends external_api {
         self::validate_context($context);
         $enrolledcourses = enrol_get_users_courses($USER->id, true);
         $quizzes = get_all_instances_in_courses("mooduell", $enrolledcourses);
-        self::validate_parameters(self::get_mooduell_purchases_parameters(), array());
+        self::validate_parameters(self::get_mooduell_purchases_parameters(), []);
         return mooduell::get_purchases($enrolledcourses, $quizzes);
     }
     /**
@@ -385,7 +385,7 @@ class mod_mooduell_external extends external_api {
      * @return external_function_parameters
      */
     public static function get_mooduell_purchases_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters([]);
     }
     /**
      * Stores a purchases to Database.
@@ -610,7 +610,7 @@ class mod_mooduell_external extends external_api {
         // But we only want the quizzes array, no warnings.
         $warnings = $returnedquizzes['warnings'];
         $quizzes = $returnedquizzes['quizzes'];
-        $returnedquizzes = array();
+        $returnedquizzes = [];
 
         // Now we run through all the quizzes to find the matching games.
         foreach ($quizzes as $quiz) {
@@ -643,13 +643,13 @@ class mod_mooduell_external extends external_api {
                     ];
                 }
             } else {
-                $quiz['games'] = array();
+                $quiz['games'] = [];
             }
 
             $returnedquizzes[] = $quiz;
         }
 
-        $result = array();
+        $result = [];
         $result['quizzes'] = $returnedquizzes;
         $result['warnings'] = $warnings;
         return $result;
@@ -663,7 +663,7 @@ class mod_mooduell_external extends external_api {
     public static function get_games_by_courses_parameters() {
         return new external_function_parameters(array(
                         'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
-                                'Array of course ids', VALUE_DEFAULT, array()),
+                                'Array of course ids', VALUE_DEFAULT, []),
                         'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
                                 VALUE_DEFAULT, -1),
                 )
@@ -736,8 +736,8 @@ class mod_mooduell_external extends external_api {
      * @throws invalid_parameter_exception
      */
     public static function get_quizzes_by_courses(array $courseids, int $timemodfied) {
-        $warnings = array();
-        $returnedquizzes = array();
+        $warnings = [];
+        $returnedquizzes = [];
 
         $params = array(
                 'courseids' => $courseids,
@@ -745,7 +745,7 @@ class mod_mooduell_external extends external_api {
         );
         $params = self::validate_parameters(self::get_quizzes_by_courses_parameters(), $params);
 
-        $mycourses = array();
+        $mycourses = [];
         if (empty($params['courseids'])) {
             $mycourses = enrol_get_my_courses();
             $params['courseids'] = array_keys($mycourses);
@@ -770,7 +770,7 @@ class mod_mooduell_external extends external_api {
                 $course = get_course($quiz->course);
 
                 // Entry to return.
-                $quizdetails = array();
+                $quizdetails = [];
                 // First, we return information that any user can see in the web interface.
                 $quizdetails['quizid'] = $quiz->coursemodule;
                 $quizdetails['quizname'] = 'testname';
@@ -801,7 +801,7 @@ class mod_mooduell_external extends external_api {
                 $returnedquizzes[] = $quizdetails;
             }
         }
-        $result = array();
+        $result = [];
         $result['quizzes'] = $returnedquizzes;
         $result['warnings'] = $warnings;
         return $result;
@@ -814,7 +814,7 @@ class mod_mooduell_external extends external_api {
     public static function get_quizzes_by_courses_parameters() {
         return new external_function_parameters(array(
                         'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
-                                'Array of course ids', VALUE_DEFAULT, array()),
+                                'Array of course ids', VALUE_DEFAULT, []),
                         'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
                                 VALUE_DEFAULT, -1),
                 )

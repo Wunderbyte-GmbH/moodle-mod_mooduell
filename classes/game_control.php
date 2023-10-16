@@ -171,7 +171,7 @@ class game_control {
         $context = $mooduell->context;
         $users = mooduell::get_enrolled_users_with_profile_mooduell_alias($context, '', 0, 'u.*', null, 0 , 0, true);
 
-        $filteredusers = array();
+        $filteredusers = [];
 
         foreach ($users as $user) {
 
@@ -411,7 +411,7 @@ class game_control {
      */
     private function set_random_questions() {
         global $DB;
-        $questions = array();
+        $questions = [];
 
         $categories = $DB->get_records('mooduell_categories', [
                 'mooduellid' => $this->mooduell->cm->instance
@@ -498,7 +498,7 @@ class game_control {
                     "we received the wrong number of questions linked to our Mooduell game");
         }
 
-        $questions = array();
+        $questions = [];
         // If we have questions in our instance, we can return them right away.
         if ($this->mooduell->questions && count($this->mooduell->questions) > 0) {
             foreach ($mquestions as $mquestion) {

@@ -305,7 +305,7 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=[]) {
 
        // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_SYSTEM) {
@@ -365,7 +365,7 @@ function mooduell_question_pluginfile(
     int $slot,
     array $args,
     int $forcedownload,
-    array $options = array()
+    array $options = []
 ) {
 
     // Make sure the filearea is one of those used by the plugin.

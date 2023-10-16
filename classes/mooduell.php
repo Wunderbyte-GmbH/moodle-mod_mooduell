@@ -108,12 +108,12 @@ class mooduell {
     /**
      * @var array
      */
-    public $questions = array();
+    public $questions = [];
 
     /**
      * @var array
      */
-    public $usernames = array();
+    public $usernames = [];
 
     /**
      * Mooduell constructor.
@@ -319,7 +319,7 @@ class mooduell {
 
         }
 
-        $questions = array();
+        $questions = [];
         $listofquestions = $this->return_list_of_questions();
         $listofanswers = $this->return_list_of_answers();
 
@@ -410,11 +410,11 @@ class mooduell {
 
         $userid = $USER->id;
 
-        $courseids = array();
+        $courseids = [];
         foreach ($courses as $course) {
             $courseids[] = $course->id;
         }
-        $quizids = array();
+        $quizids = [];
         foreach ($quizzes as $quiz) {
             $quizids[] = $quiz->coursemodule;
         }

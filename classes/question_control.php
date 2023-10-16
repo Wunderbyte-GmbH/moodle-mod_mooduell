@@ -188,7 +188,7 @@ class question_control {
             $listofanswers = $DB->get_records_sql($sql, $params);
         }
 
-        $answers = array();
+        $answers = [];
         if ($listofanswers && count($listofanswers) > 0) {
             foreach ($listofanswers as $k => $val) {
                 if ($val->question == $this->questionid) {

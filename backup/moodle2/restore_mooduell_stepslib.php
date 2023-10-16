@@ -38,7 +38,7 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
      */
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
 
         $userinfo = $this->get_setting_value('userinfo');
 

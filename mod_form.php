@@ -126,6 +126,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if (isset($config->countdown)) {
             $mform->setDefault('countdown', $config->countdown);
         }
+        $mform->setDefault('countdown', $config->countdown);
         $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
 
         $mform->addElement(
@@ -258,7 +259,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $categoryoptions = $listofcategories;
         $catweightoptions = $this->return_list_of_category_weight_options();
 
-        $formgroup = array();
+        $formgroup = [];
         $formgroup[] = &$mform->createElement('select', 'category',
             get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
         if ($selectedcategory) {
@@ -280,7 +281,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return array
      */
     private function return_children_in_list(object $parent, array $list) {
-        $children = array();
+        $children = [];
 
         foreach ($list as $child) {
 
@@ -402,7 +403,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $result = [];
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
-            $group = array();
+            $group = [];
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
             $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
             $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 30));
