@@ -55,9 +55,9 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('mooduellname', 'mod_mooduell'), array(
+        $mform->addElement('text', 'name', get_string('mooduellname', 'mod_mooduell'), [
             'size' => '64'
-        ));
+        ]);
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -162,7 +162,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
         }
 
-        $listofmooduellcats = $DB->get_records('mooduell_categories', array('mooduellid' => $mooduellid));
+        $listofmooduellcats = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
         if (count($listofcategories) > 0) {
             // First, there is the explanation.
             $mform->addElement(
@@ -301,14 +301,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
      * @return string[]
      */
     private function return_list_of_category_weight_options() {
-        return array(
+        return [
             0 => '0',
             17 => '17',
             33 => '33',
             50 => '50',
             66 => '66',
             100 => '100'
-        );
+        ];
     }
 
     /**
@@ -404,12 +404,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         foreach ($completionmodes as $mode => $field) {
             $group = [];
             $group[] = $mform->createElement('checkbox', $mode . 'enabled', '', get_string($mode, 'mooduell'));
-            $group[] = $mform->createElement('text', $mode, '', array('size' => 2));
-            $group[] = $mform->createElement('text', $mode . 'name', '', array('size' => 30));
+            $group[] = $mform->createElement('text', $mode, '', ['size' => 2]);
+            $group[] = $mform->createElement('text', $mode . 'name', '', ['size' => 30]);
             $mform->setType($mode, PARAM_INT);
             $mform->setType($mode . 'name', PARAM_TEXT);
 
-            $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), array(' '), false);
+            $mform->addGroup($group, $mode . 'group', get_string($mode . 'label', 'mooduell'), [' '], false);
             $mform->addHelpButton($mode . 'group', $mode . 'label', 'mooduell');
 
             $mform->hideIf($mode, $mode . 'enabled', 'notchecked');

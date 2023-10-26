@@ -5,11 +5,11 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
-return array(
-    'Symfony\\Polyfill\\Php70\\' => array($vendorDir . '/symfony/polyfill-php70'),
-    'Symfony\\Component\\PropertyAccess\\' => array($vendorDir . '/symfony/property-access'),
-    'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
-    'Symfony\\Component\\Inflector\\' => array($vendorDir . '/symfony/inflector'),
-    'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
-    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
-);
+return [
+    'Symfony\\Polyfill\\Php70\\' => [$vendorDir . '/symfony/polyfill-php70'],
+    'Symfony\\Component\\PropertyAccess\\' => [$vendorDir . '/symfony/property-access'],
+    'Symfony\\Component\\OptionsResolver\\' => [$vendorDir . '/symfony/options-resolver'],
+    'Symfony\\Component\\Inflector\\' => [$vendorDir . '/symfony/inflector'],
+    'MyCLabs\\Enum\\' => [$vendorDir . '/myclabs/php-enum/src'],
+    'Endroid\\QrCode\\' => [$vendorDir . '/endroid/qrcode/src'],
+];

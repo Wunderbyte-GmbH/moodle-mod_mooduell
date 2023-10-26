@@ -116,7 +116,7 @@ class question_control {
 
             // We need the context id, but it might be there already.
             $this->contextid = $data->contextid ?? $DB->get_field('question_categories',
-                    'contextid', array('id' => $this->category));
+                    'contextid', ['id' => $this->category]);
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
             if (isset($data->playeraanswered)) {
@@ -442,7 +442,7 @@ class question_control {
 
         // Retrieve the question usage id from Db.
         // If it's not there before, it's introduced to the dB in game_control.php, before calling question_control.
-        $quids = $DB->get_records('question_usages', array('component' => 'mod_mooduell'));
+        $quids = $DB->get_records('question_usages', ['component' => 'mod_mooduell']);
 
         if ($quids && count($quids) > 0) {
             $quid = array_shift($quids);

@@ -54,7 +54,7 @@ class restore_mooduell_activity_task extends restore_activity_task {
         $contents = [];
 
         $contents[] = new restore_decode_content('mooduell',
-                array('intro', 'content'),
+                ['intro', 'content'],
                 'mooduell');
         return $contents;
     }

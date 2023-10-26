@@ -68,7 +68,7 @@ if ($ADMIN->fulltree) {
         ));
 
         $name = new lang_string('countdown', 'mod_mooduell');
-        $options = array(
+        $options = [
                 "0" => get_string('nocountdown', 'mod_mooduell'),
                 "10" => get_string('xseconds', 'mod_mooduell', 10),
                 "20" => get_string('xseconds', 'mod_mooduell', 20),
@@ -76,7 +76,7 @@ if ($ADMIN->fulltree) {
                 "60" => get_string('xseconds', 'mod_mooduell', 60),
                 "90" => get_string('xseconds', 'mod_mooduell', 90),
                 "120" => get_string('xseconds', 'mod_mooduell', 120),
-        );
+        ];
         $setting = new admin_setting_configselect(
                 'countdown',
                 $name,
@@ -89,14 +89,14 @@ if ($ADMIN->fulltree) {
         $settings->add($setting);
 
         $name = new lang_string('clicktomoveon', 'mod_mooduell');
-        $options = array(
+        $options = [
                 "0" => get_string('clicktomoveon', 'mod_mooduell'),
                 "2" => get_string('xseconds', 'mod_mooduell', 2),
                 "5" => get_string('xseconds', 'mod_mooduell', 5),
                 "10" => get_string('xseconds', 'mod_mooduell', 10),
                 "20" => get_string('xseconds', 'mod_mooduell', 20),
                 "30" => get_string('xseconds', 'mod_mooduell', 30),
-        );
+        ];
         $settings->add(new admin_setting_configselect(
                 'mooduell/waitfornextquestion',
                 $name,

@@ -70,7 +70,7 @@ final class RGBLuminanceSource extends LuminanceSource {
 
 // In order to measure pure decoding speed, we convert the entire image to a greyscale array
 // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-        $this->luminances = array();
+        $this->luminances = [];
           //$this->luminances = $this->grayScaleToBitmap($this->grayscale());
 
         foreach ($pixels as $key => $pixel) {
@@ -181,7 +181,7 @@ function getMiddleBrightnessPerArea($image)
         $minmax[$i] = fill_array(0,$numSqrtArea,0);
         for ($i2 = 0; $i2 < $numSqrtArea; $i2++)
         {
-            $minmax[$i][$i2] = array(0,0);
+            $minmax[$i][$i2] = [0,0];
         }
     }
     for ($ay = 0; $ay < $numSqrtArea; $ay++)
@@ -203,10 +203,10 @@ function getMiddleBrightnessPerArea($image)
             //minmax[ax][ay][0] = (minmax[ax][ay][0] + minmax[ax][ay][1]) / 2;
         }
     }
-    $middle = array();
+    $middle = [];
     for ($i3 = 0; $i3 < $numSqrtArea; $i3++)
     {
-        $middle[$i3] = array();
+        $middle[$i3] = [];
     }
     for ($ay = 0; $ay < $numSqrtArea; $ay++)
     {
@@ -253,7 +253,7 @@ function grayScaleToBitmap ($grayScale)
         }
         $width = $this->getWidth();
         if ($row == null || count($row) < $width) {
-            $row = array();
+            $row = [];
         }
         $offset = ($y + $this->top) * $this->dataWidth + $this->left;
         $row = arraycopy($this->luminances,$offset, $row, 0, $width);
@@ -272,7 +272,7 @@ function grayScaleToBitmap ($grayScale)
         }
 
         $area = $width * $height;
-        $matrix = array();
+        $matrix = [];
         $inputOffset = $this->top * $this->dataWidth + $this->left;
 
 // If the width matches the full width of the underlying data, perform a single copy.

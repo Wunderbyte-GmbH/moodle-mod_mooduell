@@ -6,68 +6,68 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitbff4620984b261e897ee47ddcfd1b8ca
 {
-    public static $files = array (
+    public static $files =  [
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '626dcc41390ebdaa619faa02d99943b0' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/common/customFunctions.php',
-    );
+    ];
 
-    public static $prefixLengthsPsr4 = array (
+    public static $prefixLengthsPsr4 =  [
         'S' => 
-        array (
+         [
             'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Inflector\\' => 28,
-        ),
+        ],
         'M' => 
-        array (
+         [
             'MyCLabs\\Enum\\' => 13,
-        ),
+        ],
         'E' => 
-        array (
+         [
             'Endroid\\QrCode\\' => 15,
-        ),
-    );
+        ],
+    ];
 
-    public static $prefixDirsPsr4 = array (
+    public static $prefixDirsPsr4 =  [
         'Symfony\\Polyfill\\Php70\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
-        ),
+        ],
         'Symfony\\Component\\PropertyAccess\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/symfony/property-access',
-        ),
+        ],
         'Symfony\\Component\\OptionsResolver\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
-        ),
+        ],
         'Symfony\\Component\\Inflector\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/symfony/inflector',
-        ),
+        ],
         'MyCLabs\\Enum\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-        ),
+        ],
         'Endroid\\QrCode\\' => 
-        array (
+         [
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-        ),
-    );
+        ],
+    ];
 
-    public static $prefixesPsr0 = array (
+    public static $prefixesPsr0 =  [
         'B' => 
-        array (
+         [
             'BaconQrCode' => 
-            array (
+             [
                 0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
-    public static $classMap = array (
+    public static $classMap =  [
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
@@ -134,7 +134,7 @@ class ComposerStaticInitbff4620984b261e897ee47ddcfd1b8ca
         'Zxing\\ReaderException' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/ReaderException.php',
         'Zxing\\Result' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Result.php',
         'Zxing\\ResultPoint' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/ResultPoint.php',
-    );
+    ];
 
     public static function getInitializer(ClassLoader $loader)
     {

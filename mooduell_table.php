@@ -127,7 +127,7 @@ function load_games_table_data(int $mooduellid, object $table, string $view, boo
             // Student view is the default view.
         default:
             $where .= " AND (playeraid = :userid1 OR playerbid = :userid2)";
-            $params = array('userid1' => $USER->id, 'userid2' => $USER->id);
+            $params = ['userid1' => $USER->id, 'userid2' => $USER->id];
             break;
     }
 
@@ -181,7 +181,7 @@ function load_highscores_table_data(int $mooduellid, object $table) {
     $fields = "*";
     $from = "{mooduell_highscores}";
     $where = "mooduellid = :mooduellid1";
-    $params = array('mooduellid1' => $mooduellid);
+    $params = ['mooduellid1' => $mooduellid];
 
     $table->set_sql($fields, $from, $where, $params);
 

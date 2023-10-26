@@ -36,11 +36,11 @@ abstract class DataMask
     /**
      * See ISO 18004:2006 6.8.1
      */
-    private static $DATA_MASKS = array();
+    private static $DATA_MASKS = [];
 
     static function Init()
     {
-        self::$DATA_MASKS = array(
+        self::$DATA_MASKS = [
             new DataMask000(),
             new DataMask001(),
             new DataMask010(),
@@ -49,7 +49,7 @@ abstract class DataMask
             new DataMask101(),
             new DataMask110(),
             new DataMask111(),
-        );
+        ];
     }
 
     function __construct()

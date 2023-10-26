@@ -68,7 +68,7 @@ throw new IllegalArgumentException("Crop rectangle does not fit within image dat
     }
     $width = $this->getWidth();
     if ($row == null || count($row) < $width) {
-        $row = array();//new byte[width];
+        $row = [];//new byte[width];
     }
     $offset = ($y + $this->top) * $this->dataWidth + $this->left;
       $row = arraycopy($this->yuvData, $offset, $row, 0, $width);
@@ -87,7 +87,7 @@ throw new IllegalArgumentException("Crop rectangle does not fit within image dat
     }
 
     $area = $width * $height;
-    $matrix = array();//new byte[area];
+    $matrix = [];//new byte[area];
     $inputOffset = $this->top * $this->dataWidth + $this->left;
 
     // If the width matches the full width of the underlying data, perform a single copy.
@@ -126,7 +126,7 @@ throw new IllegalArgumentException("Crop rectangle does not fit within image dat
   public function renderThumbnail() {
 $width = intval($this->getWidth() / self::$THUMBNAIL_SCALE_FACTOR);
     $height = intval($this->getHeight() / self::$THUMBNAIL_SCALE_FACTOR);
-    $pixels = array();//new int[width * height];
+    $pixels = [];//new int[width * height];
     $yuv = $this->yuvData;
     $inputOffset = $this->top * $this->dataWidth + $this->left;
 

@@ -34,18 +34,18 @@ class Mode extends AbstractEnum
      *
      * @var array
      */
-    protected static $characterCountBitsForVersions = array(
-        self::TERMINATOR           => array(0, 0, 0),
-        self::NUMERIC              => array(10, 12, 14),
-        self::ALPHANUMERIC         => array(9, 11, 13),
-        self::STRUCTURED_APPEND    => array(0, 0, 0),
-        self::BYTE                 => array(8, 16, 16),
-        self::ECI                  => array(0, 0, 0),
-        self::KANJI                => array(8, 10, 12),
-        self::FNC1_FIRST_POSITION  => array(0, 0, 0),
-        self::FNC1_SECOND_POSITION => array(0, 0, 0),
-        self::HANZI                => array(8, 10, 12),
-    );
+    protected static $characterCountBitsForVersions = [
+        self::TERMINATOR           => [0, 0, 0],
+        self::NUMERIC              => [10, 12, 14],
+        self::ALPHANUMERIC         => [9, 11, 13],
+        self::STRUCTURED_APPEND    => [0, 0, 0],
+        self::BYTE                 => [8, 16, 16],
+        self::ECI                  => [0, 0, 0],
+        self::KANJI                => [8, 10, 12],
+        self::FNC1_FIRST_POSITION  => [0, 0, 0],
+        self::FNC1_SECOND_POSITION => [0, 0, 0],
+        self::HANZI                => [8, 10, 12],
+    ];
 
     /**
      * Gets the number of bits used in a specific QR code version.

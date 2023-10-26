@@ -33,21 +33,21 @@ class Encoder
      *
      * @var array
      */
-    protected static $alphanumericTable = array(
+    protected static $alphanumericTable = [
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x00-0x0f
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x10-0x1f
         36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43,  // 0x20-0x2f
         0,   1,  2,  3,  4,  5,  6,  7,  8,  9, 44, -1, -1, -1, -1, -1,  // 0x30-0x3f
         -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  // 0x40-0x4f
         25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
-    );
+    ];
 
     /**
      * Codec cache.
      *
      * @var array
      */
-    protected static $codecs = array();
+    protected static $codecs = [];
 
     /**
      * Encodes "content" with the error correction level "ecLevel".
@@ -354,9 +354,9 @@ class Encoder
         }
 
         if ($blockId < $numRsBlocksInGroup1) {
-            return array($numDataBytesInGroup1, $numEcBytesInGroup1);
+            return [$numDataBytesInGroup1, $numEcBytesInGroup1];
         } else {
-            return array($numDataBytesInGroup2, $numEcBytesInGroup2);
+            return [$numDataBytesInGroup2, $numEcBytesInGroup2];
         }
     }
 

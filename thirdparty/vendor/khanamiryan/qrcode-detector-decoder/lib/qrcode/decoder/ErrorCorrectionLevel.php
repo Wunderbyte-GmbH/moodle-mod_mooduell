@@ -38,7 +38,7 @@ class ErrorCorrectionLevel {
     }
 
     public static function Init(){
-        self::$FOR_BITS = array(
+        self::$FOR_BITS = [
 
 
             new ErrorCorrectionLevel(0x00,1), //M
@@ -46,7 +46,7 @@ class ErrorCorrectionLevel {
             new ErrorCorrectionLevel(0x02,3), //H
             new ErrorCorrectionLevel(0x03,2), //Q
 
-        );
+        ];
     }
         /** L = ~7% correction */
       //  self::$L = new ErrorCorrectionLevel(0x01);

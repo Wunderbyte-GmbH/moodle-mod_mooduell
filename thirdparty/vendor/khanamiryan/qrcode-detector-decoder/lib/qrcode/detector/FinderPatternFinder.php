@@ -57,7 +57,7 @@ class FinderPatternFinder
         $this->image = $image;
 
 
-        $this->possibleCenters = array();//new ArrayList<>();
+        $this->possibleCenters = [];//new ArrayList<>();
         $this->crossCheckStateCount = fill_array(0,5,0);
         $this->resultPointCallback = $resultPointCallback;
     }
@@ -91,7 +91,7 @@ class FinderPatternFinder
         }
 
         $done = false;
-        $stateCount = array();
+        $stateCount = [];
         for ($i = $iSkip - 1; $i < $maxI && !$done; $i += $iSkip) {
             // Get a row of black/white values
             $stateCount[0] = 0;
@@ -623,7 +623,7 @@ class FinderPatternFinder
             $this->average = $totalModuleSize / (float)$startSize;
             $stdDev = (float)sqrt($square / $startSize - $this->average * $this->average);
 
-            usort($this->possibleCenters, array($this,'FurthestFromAverageComparator'));
+            usort($this->possibleCenters, [$this,'FurthestFromAverageComparator']);
 
             $limit = max(0.2 * $this->average, $stdDev);
 
@@ -647,14 +647,14 @@ class FinderPatternFinder
 
             $this->average = $totalModuleSize / (float)count($this->possibleCenters);
 
-            usort($this->possibleCenters, array($this,'CenterComparator'));
+            usort($this->possibleCenters, [$this,'CenterComparator']);
 
             array_slice($this->possibleCenters, 3, count($this->possibleCenters) - 3);
 
 
         }
 
-        return array($this->possibleCenters[0], $this->possibleCenters[1], $this->possibleCenters[2]);
+        return [$this->possibleCenters[0], $this->possibleCenters[1], $this->possibleCenters[2]];
 
 
     }

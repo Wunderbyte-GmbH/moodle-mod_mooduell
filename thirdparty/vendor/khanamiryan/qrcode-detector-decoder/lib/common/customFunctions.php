@@ -86,7 +86,7 @@ function floatToIntBits($float_val)
 
 function fill_array($index,$count,$value){
     if($count<=0){
-        return array(0);
+        return [0];
     }else {
         return array_fill($index, $count, $value);
     }

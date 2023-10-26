@@ -133,7 +133,7 @@ abstract class LuminanceSource {
 
 //@Override
     public final function toString() {
-        $row = array();
+        $row = [];
         $result = '';
         for ($y = 0;$y  < $this->height; $y++) {
             $row = $this->getRow($y, $row);

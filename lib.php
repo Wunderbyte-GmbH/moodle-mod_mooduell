@@ -149,16 +149,16 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
 function mooduell_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('mooduell', array('id' => $id));
+    $exists = $DB->get_record('mooduell', ['id' => $id]);
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('mooduell', array('id' => $id));
-    $DB->delete_records('mooduell_categories', array('mooduellid' => $id));
-    $DB->delete_records('mooduell_challenges', array('mooduellid' => $id));
-    $DB->delete_records('mooduell_games', array('mooduellid' => $id));
-    $DB->delete_records('mooduell_questions', array('mooduellid' => $id));
+    $DB->delete_records('mooduell', ['id' => $id]);
+    $DB->delete_records('mooduell_categories', ['mooduellid' => $id]);
+    $DB->delete_records('mooduell_challenges', ['mooduellid' => $id]);
+    $DB->delete_records('mooduell_games', ['mooduellid' => $id]);
+    $DB->delete_records('mooduell_questions', ['mooduellid' => $id]);
 
     return true;
 }
@@ -227,7 +227,7 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
                 $DB->update_record('mooduell_categories', $data);
             } else if ($foundrecord) {
                 // Else we have more foundrecords than new recors, we delete the found ones.
-                $DB->delete_records('mooduell_categories', array('id' => $foundrecord->id));
+                $DB->delete_records('mooduell_categories', ['id' => $foundrecord->id]);
             } else {
                 $data = new stdClass();
                 $data->mooduellid = $mooduellid;

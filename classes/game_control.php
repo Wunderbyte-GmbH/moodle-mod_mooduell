@@ -264,7 +264,7 @@ class game_control {
             $playedquestions = 0;
 
             // We need moduleid below.
-            $moduleid = $DB->get_field('modules', 'id', array('name' => 'mooduell'));
+            $moduleid = $DB->get_field('modules', 'id', ['name' => 'mooduell']);
 
             // To avoid checking visibility for every game, we only do it for every mooduell instance.
             // Therefore, we use this array.
@@ -278,7 +278,7 @@ class game_control {
 
                 // We run the database lookup only if we don't have an entry in our array yet.
                 if (!isset($visibletouser[$entry->mooduellid])) {
-                    $cm = $DB->get_record('course_modules', array('instance' => $entry->mooduellid, 'module' => $moduleid));
+                    $cm = $DB->get_record('course_modules', ['instance' => $entry->mooduellid, 'module' => $moduleid]);
 
                     $modinfo = get_fast_modinfo($cm->course);
                     $cm = $modinfo->get_cm($cm->id);
@@ -489,11 +489,11 @@ class game_control {
         // We have to make sure we have all the questions added to the normal game data.
         // Also, we use the mquestions here because we find the results attached to every question.
         // Therefore, we update the question class instances we already have.
-        $mquestions = $DB->get_records('mooduell_questions', array('gameid' => $this->gamedata->gameid), 'id');
+        $mquestions = $DB->get_records('mooduell_questions', ['gameid' => $this->gamedata->gameid], 'id');
 
         // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
         if (count($mquestions) != 9) {
-            $DB->delete_records('mooduell_games', array('id' => $this->gamedata->id));
+            $DB->delete_records('mooduell_games', ['id' => $this->gamedata->id]);
             throw new moodle_exception('wrongnumberofquestions1', 'mooduell', null, null,
                     "we received the wrong number of questions linked to our Mooduell game");
         }
@@ -572,7 +572,7 @@ class game_control {
     public static function register_for_question_usage(\context $context) {
         global $DB;
 
-        $entries = $DB->get_records('question_usages', array('contextid' => $context->id, 'component' => 'mod_mooduell'));
+        $entries = $DB->get_records('question_usages', ['contextid' => $context->id, 'component' => 'mod_mooduell']);
         if (empty($entries)) {
             $data = new stdClass();
             $data->contextid = $context->id;
@@ -685,12 +685,12 @@ class game_control {
         }
 
         // Trigger question answered event.
-        $event = question_answered::create(array(
+        $event = question_answered::create([
             'context' => $this->mooduell->context,
             'other' => [
                 'iscorrect' => $result == 2 ? true : false,
                 'questionid' => $questionid
-            ]));
+            ]]);
         $event->trigger();
 
         // We write the result of our question check.
@@ -860,21 +860,21 @@ class game_control {
         if (!$tokens || count($tokens) === 0) {
             return null;
         }
-        $fields = array
-        (
+        $fields = 
+        [
                 'registration_ids' => $tokens,
-                'data' => array(
+                'data' => [
                         "name" => "xyz",
                         'image' => 'https://www.example.com/images/minion.jpg'
-                ),
-                'notification' => array(
+                ],
+                'notification' => [
                         'body' => $message,
                         'title' => $message,
                         'sound' => 'default',
                         'icon' => 'icon',
                         'badge' => 1
-                )
-        );
+                ]
+        ];
 
         return $fields;
     }
@@ -890,7 +890,7 @@ class game_control {
 
         global $DB;
 
-        $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
+        $data = $DB->get_records('mooduell_pushtokens', ['userid' => $userid]);
 
         $returnarray = [];
 
@@ -1073,13 +1073,13 @@ class game_control {
         // ... so we can trigger the game_finished event.
         if ($updatestatus && $this->is_game_finished()) {
 
-            $event = game_finished::create(array(
+            $event = game_finished::create([
                 'context' => $this->mooduell->context,
                 'objectid' => $this->mooduell->cm->id,
                 'relateduserid' => $relateduserid,
                 'other' => ['playeraid' => $this->gamedata->playeraid,
                             'playerbid' => $this->gamedata->playerbid,
-                            'winnerid' => $this->gamedata->winnerid]));
+                            'winnerid' => $this->gamedata->winnerid]]);
             $event->trigger();
         }
     }
@@ -1238,11 +1238,11 @@ class game_control {
 
             $apiaccesskey = get_config('mooduell', 'pushtoken');
 
-            $headers = array
-            (
+            $headers = 
+            [
                     'Authorization: key=' . $apiaccesskey,
                     'Content-Type: application/json'
-            );
+            ];
             $ch = curl_init();
             curl_setopt( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
             curl_setopt( $ch, CURLOPT_POST, true );

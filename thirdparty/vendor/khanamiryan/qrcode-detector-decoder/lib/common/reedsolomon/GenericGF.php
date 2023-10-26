@@ -76,8 +76,8 @@ final class GenericGF {
         $this->size = $size;
         $this->generatorBase = $b;
 
-        $this->expTable = array();
-        $this->logTable =array();
+        $this->expTable = [];
+        $this->logTable =[];
         $x = 1;
         for ($i = 0; $i < $size; $i++) {
             $this->expTable[$i] = $x;
@@ -91,8 +91,8 @@ final class GenericGF {
             $this->logTable[$this->expTable[$i]] = $i;
         }
         // logTable[0] == 0 but this should never be used
-        $this->zero = new GenericGFPoly($this, array(0));
-        $this->one = new GenericGFPoly($this, array(1));
+        $this->zero = new GenericGFPoly($this, [0]);
+        $this->one = new GenericGFPoly($this, [1]);
     }
 
     function getZero() {

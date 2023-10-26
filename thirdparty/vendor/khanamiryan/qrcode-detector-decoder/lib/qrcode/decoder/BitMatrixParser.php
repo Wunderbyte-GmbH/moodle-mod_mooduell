@@ -168,7 +168,7 @@ final class BitMatrixParser {
         if($version->getTotalCodewords()) {
             $result = fill_array(0, $version->getTotalCodewords(), 0);
         }else{
-            $result = array();
+            $result = [];
         }
         $resultOffset = 0;
         $currentByte = 0;

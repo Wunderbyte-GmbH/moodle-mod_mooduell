@@ -43,45 +43,45 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated.
-        $mooduell = new backup_nested_element('mooduell', array('id'), array(
+        $mooduell = new backup_nested_element('mooduell', ['id'], [
             'name', 'intro', 'introformat', 'quizid', 'usefullnames',
             'showcontinuebutton', 'showcorrectanswer', 'showgeneralfeedback', 'showanswersfeedback',
-            'countdown', 'waitfornextquestion', 'timecreated', 'timemodified'));
+            'countdown', 'waitfornextquestion', 'timecreated', 'timemodified']);
 
         $categories = new backup_nested_element('categories');
 
-        $category = new backup_nested_element('category', array('id'), array(
-                'mooduellid', 'category', 'weight'));
+        $category = new backup_nested_element('category', ['id'], [
+                'mooduellid', 'category', 'weight']);
 
         $challenges = new backup_nested_element('challenges');
 
-        $challenge = new backup_nested_element('challenge', array('id'), array(
-                'mooduellid', 'challengetype', 'targetnumber', 'challengename'));
+        $challenge = new backup_nested_element('challenge', ['id'], [
+                'mooduellid', 'challengetype', 'targetnumber', 'challengename']);
 
         $challengeresults = new backup_nested_element('challenge_results');
 
-        $challengeresult = new backup_nested_element('challenge_result', array('id'), array(
-                'mooduellid', 'challengeid', 'userid', 'result', 'timecreated', 'timemodified'));
+        $challengeresult = new backup_nested_element('challenge_result', ['id'], [
+                'mooduellid', 'challengeid', 'userid', 'result', 'timecreated', 'timemodified']);
 
         $games = new backup_nested_element('games');
 
-        $game = new backup_nested_element('game', array('id'), array(
+        $game = new backup_nested_element('game', ['id'], [
                 'mooduellid', 'playeraid', 'playerbid',
                 'playeratime', 'playerbtime', 'playeracorrect',
                 'playerbcorrect', 'winnerid', 'status',
                 'victorycoefficient', 'timemodified',
                 'timecreated', 'playeraresults', 'playerbresults',
-                'playeraqplayed', 'playerbqplayed'));
+                'playeraqplayed', 'playerbqplayed']);
 
         $pushtokens = new backup_nested_element('pushtokens');
 
-        $pushtoken = new backup_nested_element('pushtoken', array('id'), array(
-                'userid', 'identifier', 'model', 'pushtoken', 'numberofnotifications'));
+        $pushtoken = new backup_nested_element('pushtoken', ['id'], [
+                'userid', 'identifier', 'model', 'pushtoken', 'numberofnotifications']);
 
         $questions = new backup_nested_element('questions');
 
-        $question = new backup_nested_element('question', array('id'), array(
-                'mooduellid', 'gameid', 'questionid', 'playeraanswered', 'playerbanswered'));
+        $question = new backup_nested_element('question', ['id'], [
+                'mooduellid', 'gameid', 'questionid', 'playeraanswered', 'playerbanswered']);
 
         // Build the tree.
         $mooduell->add_child($categories);
@@ -103,15 +103,15 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $questions->add_child($question);
 
         // Define sources.
-        $mooduell->set_source_table('mooduell', array('id' => backup::VAR_ACTIVITYID));
-        $category->set_source_table('mooduell_categories', array('mooduellid' => backup::VAR_PARENTID));
-        $challenge->set_source_table('mooduell_challenges', array('mooduellid' => backup::VAR_PARENTID));
+        $mooduell->set_source_table('mooduell', ['id' => backup::VAR_ACTIVITYID]);
+        $category->set_source_table('mooduell_categories', ['mooduellid' => backup::VAR_PARENTID]);
+        $challenge->set_source_table('mooduell_challenges', ['mooduellid' => backup::VAR_PARENTID]);
 
         // Only if we include userinfo, we also include games, questions, challenge results & pushtokens.
         if ($userinfo) {
-            $game->set_source_table('mooduell_games', array('mooduellid' => backup::VAR_PARENTID));
-            $question->set_source_table('mooduell_questions', array('mooduellid' => backup::VAR_PARENTID));
-            $challengeresult->set_source_table('mooduell_challenge_results', array('mooduellid' => backup::VAR_PARENTID));
+            $game->set_source_table('mooduell_games', ['mooduellid' => backup::VAR_PARENTID]);
+            $question->set_source_table('mooduell_questions', ['mooduellid' => backup::VAR_PARENTID]);
+            $challengeresult->set_source_table('mooduell_challenge_results', ['mooduellid' => backup::VAR_PARENTID]);
 
             // Define id annotations.
             $game->annotate_ids('user', 'playeraid');

@@ -24,27 +24,27 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$definitions = array(
-    'tablescache' => array(
+$definitions = [
+    'tablescache' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => true,
         'staticaccelerationsize' => 5,
         'invalidationevents' => ['setbacktablescache']
-    ),
-    'userscache' => array(
+    ],
+    'userscache' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => false,
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackuserscache']
-    ),
-    'questionscache' => array(
+    ],
+    'questionscache' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => false,
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackquestionscache']
-    )
-);
+    ]
+];
 

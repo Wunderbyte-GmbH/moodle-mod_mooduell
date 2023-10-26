@@ -39,11 +39,11 @@ class GlobalHistogramBinarizer extends Binarizer {
     private static $LUMINANCE_SHIFT=3;
     private static $LUMINANCE_BUCKETS = 32;
 
-    private static $EMPTY = array();
+    private static $EMPTY = [];
 
-    private $luminances=array();
-    private $buckets = array();
-    private $source = array();
+    private $luminances=[];
+    private $buckets = [];
+    private $source = [];
 
     public function __construct($source) {
 
@@ -139,7 +139,7 @@ class GlobalHistogramBinarizer extends Binarizer {
 
     private function initArrays($luminanceSize) {
         if (count($this->luminances) < $luminanceSize) {
-            $this->luminances = array();
+            $this->luminances = [];
         }
         for ($x = 0; $x < self::$LUMINANCE_BUCKETS; $x++) {
             $this->buckets[$x] = 0;

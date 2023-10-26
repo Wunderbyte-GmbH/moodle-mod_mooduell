@@ -56,14 +56,14 @@ final class IMagickLuminanceSource extends LuminanceSource {
 
 // In order to measure pure decoding speed, we convert the entire image to a greyscale array
 // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-        $this->luminances = array();
+        $this->luminances = [];
 
         $image->setImageColorspace (\Imagick::COLORSPACE_GRAY);
        // $image->newPseudoImage(0, 0, "magick:rose");
         $pixels = $image->exportImagePixels(1, 1, $width, $height, "RGB", \Imagick::COLORSPACE_RGB);
 
-        $array = array();
-        $rgb = array();
+        $array = [];
+        $rgb = [];
 
 
             for($i=0;$i<count($pixels);$i+=3){
@@ -92,7 +92,7 @@ final class IMagickLuminanceSource extends LuminanceSource {
         }
         $width = $this->getWidth();
         if ($row == null || count($row) < $width) {
-            $row = array();
+            $row = [];
         }
         $offset = ($y + $this->top) * $this->dataWidth + $this->left;
         $row = arraycopy($this->luminances,$offset, $row, 0, $width);
@@ -111,7 +111,7 @@ final class IMagickLuminanceSource extends LuminanceSource {
         }
 
         $area = $width * $height;
-        $matrix = array();
+        $matrix = [];
         $inputOffset = $this->top * $this->dataWidth + $this->left;
 
 // If the width matches the full width of the underlying data, perform a single copy.

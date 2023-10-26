@@ -25,90 +25,90 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$observers = array(
+$observers = [
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\user_challenged',
                 'callback' => 'mod_mooduell_observer::user_challenged'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\leg_finished',
                 'callback' => 'mod_mooduell_observer::leg_finished'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\game_finished',
                 'callback' => 'mod_mooduell_observer::game_finished'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\game_won',
                 'callback' => 'mod_mooduell_observer::game_won'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\game_lost',
                 'callback' => 'mod_mooduell_observer::game_lost'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\game_draw',
                 'callback' => 'mod_mooduell_observer::game_draw'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\question_answered',
                 'callback' => 'mod_mooduell_observer::question_answered'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\question_correctly_answered',
                 'callback' => 'mod_mooduell_observer::question_correctly_answered'
-        ),
+        ],
 
-        array(
+        [
                 'eventname' => 'mod_mooduell\event\question_wrongly_answered',
                 'callback' => 'mod_mooduell_observer::question_wrongly_answered'
-        ),
-        array(
+        ],
+        [
                 'eventname' => 'core\event\course_module_created',
                 'callback' => 'mod_mooduell_observer::course_module_created',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\user_enrolment_created',
                 'callback' => 'mod_mooduell_observer::user_enrolment_created',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\badge_awarded',
                 'callback' => 'mod_mooduell_observer::badge_awarded',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\question_category_deleted',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\question_category_updated',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\question_deleted',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\question_updated',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        ),
-        array(
+        ],
+        [
                 'eventname' => '\core\event\question_created',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        )
-);
+        ]
+];

@@ -26,21 +26,21 @@ require_once("../../config.php");
 require_once("locallib.php");
 
 $id = required_param('id', PARAM_INT);
-$PAGE->set_url('/mod/quiz/index.php', array('id' => $id));
-if (!$course = $DB->get_record('course', array('id' => $id))) {
+$PAGE->set_url('/mod/quiz/index.php', ['id' => $id]);
+if (!$course = $DB->get_record('course', ['id' => $id])) {
     throw new moodle_exception('invalidcourseid');
 }
 $coursecontext = context_course::instance($id);
 require_login($course);
 $PAGE->set_pagelayout('incourse');
 
-$params = array(
+$params = [
         'context' => $coursecontext
-);
+];
 
-$PAGE->set_url('/mod/mooduell/index.php', array(
+$PAGE->set_url('/mod/mooduell/index.php', [
         'id' => $id
-));
+]);
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($coursecontext);
@@ -53,67 +53,67 @@ echo $OUTPUT->heading($modulenameplural);
 $mooduells = get_all_instances_in_course('mooduell', $course);
 
 if (empty($mooduells)) {
-    notice(get_string('nonewmodules', 'mod_mooduell'), new moodle_url('/course/view.php', array(
+    notice(get_string('nonewmodules', 'mod_mooduell'), new moodle_url('/course/view.php', [
             'id' => $course->id
-    )));
+    ]));
 }
 
 $table = new html_table();
 $table->attributes['class'] = 'generaltable mod_index';
 
 if ($course->format == 'weeks') {
-    $table->head = array(
+    $table->head = [
             get_string('week'),
             get_string('name')
-    );
-    $table->align = array(
+    ];
+    $table->align = [
             'center',
             'left'
-    );
+    ];
 } else if ($course->format == 'topics') {
-    $table->head = array(
+    $table->head = [
             get_string('topic'),
             get_string('name')
-    );
-    $table->align = array(
+    ];
+    $table->align = [
             'center',
             'left',
             'left',
             'left'
-    );
+    ];
 } else {
-    $table->head = array(
+    $table->head = [
             get_string('name')
-    );
-    $table->align = array(
+    ];
+    $table->align = [
             'left',
             'left',
             'left'
-    );
+    ];
 }
 
 foreach ($mooduells as $mooduell) {
     if (!$mooduell->visible) {
-        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', array(
+        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', [
                 'id' => $mooduell->coursemodule
-        )), format_string($mooduell->name, true), array(
+        ]), format_string($mooduell->name, true), [
                 'class' => 'dimmed'
-        ));
+        ]);
     } else {
-        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', array(
+        $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', [
                 'id' => $mooduell->coursemodule
-        )), format_string($mooduell->name, true));
+        ]), format_string($mooduell->name, true));
     }
 
     if ($course->format == 'weeks' or $course->format == 'topics') {
-        $table->data[] = array(
+        $table->data[] = [
                 $mooduell->section,
                 $link
-        );
+        ];
     } else {
-        $table->data[] = array(
+        $table->data[] = [
                 $link
-        );
+        ];
     }
 }
 

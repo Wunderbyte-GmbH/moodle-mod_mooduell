@@ -16,7 +16,7 @@ final class BitMatrix {
             $rowSize = intval(($width + 31) / 32);
         }
         if(!$bits){
-            $bits = fill_array(0,$rowSize*$height,0);array();//new int[rowSize * height];
+            $bits = fill_array(0,$rowSize*$height,0);[];//new int[rowSize * height];
         }
         $this->width = $width;
         $this->height = $height;
@@ -27,7 +27,7 @@ final class BitMatrix {
         if (!$stringRepresentation) {
             throw new \InvalidArgumentException();
         }
-        $bits = array();
+        $bits = [];
         $bitsPos = 0;
         $rowStartPos = 0;
         $rowLength = -1;
@@ -298,7 +298,7 @@ final class BitMatrix {
             return null;
         }
 
-        return array($left, $top, $width, $height);
+        return [$left, $top, $width, $height];
     }
 
     /**
@@ -323,7 +323,7 @@ final class BitMatrix {
             $bit++;
         }
         $x += $bit;
-        return array($x, $y);
+        return [$x, $y];
     }
 
     public function getBottomRightOnBit() {
@@ -345,7 +345,7 @@ final class BitMatrix {
         }
         $x += $bit;
 
-        return array($x, $y);
+        return [$x, $y];
     }
 
     /**

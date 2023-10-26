@@ -47,17 +47,17 @@ class Mode {
     {
 
 
-        self::$TERMINATOR = new Mode(array(0, 0, 0), 0x00); // Not really a mode...
-        self::$NUMERIC = new Mode(array(10, 12, 14), 0x01);
-        self::$ALPHANUMERIC = new Mode(array(9, 11, 13), 0x02);
-        self::$STRUCTURED_APPEND = new Mode(array(0, 0, 0), 0x03); // Not supported
-        self::$BYTE = new Mode(array(8, 16, 16), 0x04);
-        self::$ECI = new Mode(array(0, 0, 0), 0x07); // character counts don't apply
-        self::$KANJI = new Mode(array(8, 10, 12), 0x08);
-        self::$FNC1_FIRST_POSITION = new Mode(array(0, 0, 0), 0x05);
-        self::$FNC1_SECOND_POSITION  =new Mode(array(0, 0, 0), 0x09);
+        self::$TERMINATOR = new Mode([0, 0, 0], 0x00); // Not really a mode...
+        self::$NUMERIC = new Mode([10, 12, 14], 0x01);
+        self::$ALPHANUMERIC = new Mode([9, 11, 13], 0x02);
+        self::$STRUCTURED_APPEND = new Mode([0, 0, 0], 0x03); // Not supported
+        self::$BYTE = new Mode([8, 16, 16], 0x04);
+        self::$ECI = new Mode([0, 0, 0], 0x07); // character counts don't apply
+        self::$KANJI = new Mode([8, 10, 12], 0x08);
+        self::$FNC1_FIRST_POSITION = new Mode([0, 0, 0], 0x05);
+        self::$FNC1_SECOND_POSITION  =new Mode([0, 0, 0], 0x09);
         /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
-        self::$HANZI = new Mode(array(8, 10, 12), 0x0D);
+        self::$HANZI = new Mode([8, 10, 12], 0x0D);
     }
     /**
      * @param bits four bits encoding a QR Code data mode

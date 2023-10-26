@@ -56,11 +56,11 @@ final class GDLuminanceSource extends LuminanceSource {
 
 // In order to measure pure decoding speed, we convert the entire image to a greyscale array
 // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-        $this->luminances = array();
+        $this->luminances = [];
         //$this->luminances = $this->grayScaleToBitmap($this->grayscale());
 
-        $array = array();
-        $rgb = array();
+        $array = [];
+        $rgb = [];
 
 for($j=0;$j<$height;$j++){
     for($i=0;$i<$width;$i++){
@@ -116,7 +116,7 @@ for($j=0;$j<$height;$j++){
         }
         $width = $this->getWidth();
         if ($row == null || count($row) < $width) {
-            $row = array();
+            $row = [];
         }
         $offset = ($y + $this->top) * $this->dataWidth + $this->left;
         $row = arraycopy($this->luminances,$offset, $row, 0, $width);
@@ -135,7 +135,7 @@ for($j=0;$j<$height;$j++){
         }
 
         $area = $width * $height;
-        $matrix = array();
+        $matrix = [];
         $inputOffset = $this->top * $this->dataWidth + $this->left;
 
 // If the width matches the full width of the underlying data, perform a single copy.

@@ -132,12 +132,12 @@ class Detector {
 
         $bits = $this->sampleGrid($this->image, $transform, $dimension);
 
-        $points = array();
+        $points = [];
         if ($alignmentPattern == null) {
-            $points = array($bottomLeft, $topLeft, $topRight);
+            $points = [$bottomLeft, $topLeft, $topRight];
         } else {
            // die('$points = new ResultPoint[]{bottomLeft, topLeft, topRight, alignmentPattern};');
-$points =  array($bottomLeft, $topLeft, $topRight, $alignmentPattern);
+$points =  [$bottomLeft, $topLeft, $topRight, $alignmentPattern];
         }
         return new DetectorResult($bits, $points);
     }

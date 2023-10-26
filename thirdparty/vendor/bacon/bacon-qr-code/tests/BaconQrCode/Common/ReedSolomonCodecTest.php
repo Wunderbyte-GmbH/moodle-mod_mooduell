@@ -16,15 +16,15 @@ class ReedSolomonTest extends TestCase
 {
     public static function tabProvider()
     {
-        return array(
-            array(2, 0x7,   1, 1, 1),
-            array(3, 0xb,   1, 1, 2),
-            array(4, 0x13,  1, 1, 4),
-            array(5, 0x25,  1, 1, 6),
-            array(6, 0x43,  1, 1, 8),
-            array(7, 0x89,  1, 1, 10),
-            array(8, 0x11d, 1, 1, 32),
-        );
+        return [
+            [2, 0x7,   1, 1, 1],
+            [3, 0xb,   1, 1, 2],
+            [4, 0x13,  1, 1, 4],
+            [5, 0x25,  1, 1, 6],
+            [6, 0x43,  1, 1, 8],
+            [7, 0x89,  1, 1, 10],
+            [8, 0x11d, 1, 1, 32],
+        ];
     }
 
     /**
@@ -60,7 +60,7 @@ class ReedSolomonTest extends TestCase
             $tBlock         = clone $block;
             $parity         = SplFixedArray::fromArray(array_fill(0, $numRoots, 0), false);
             $errorLocations = SplFixedArray::fromArray(array_fill(0, $blockSize, 0), false);
-            $erasures       = array();
+            $erasures       = [];
 
             // Create parity
             $codec->encode($block, $parity);

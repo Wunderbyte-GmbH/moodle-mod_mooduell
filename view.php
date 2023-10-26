@@ -59,7 +59,7 @@ $mooduell->view_page();
 $triggeredevent = optional_param('triggered_event', null, PARAM_RAW);
 switch ($triggeredevent) {
     case 'game_finished':
-        $event = game_finished::create(array('context' => $context, 'objectid' => $mooduell->cm->id));
+        $event = game_finished::create(['context' => $context, 'objectid' => $mooduell->cm->id]);
         $event->trigger();
         break;
 
@@ -87,7 +87,7 @@ switch ($action) {
     case 'delete':
         // This check is not really necessary.
         if (has_capability('mod/mooduell:editgames', $context)) {
-            $PAGE->set_url('/mod/mooduell/view.php', array('id' => $id));
+            $PAGE->set_url('/mod/mooduell/view.php', ['id' => $id]);
             $mooduell->execute_action($action, $gameid);
         }
         break;

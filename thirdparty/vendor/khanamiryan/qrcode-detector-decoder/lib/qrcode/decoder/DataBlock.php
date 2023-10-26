@@ -65,7 +65,7 @@ final class DataBlock {
         }
 
         // Now establish DataBlocks of the appropriate size and number of data codewords
-        $result = array();//new DataBlock[$totalBlocks];
+        $result = [];//new DataBlock[$totalBlocks];
         $numResultBlocks = 0;
         foreach ($ecBlockArray as $ecBlock) {
             for ($i = 0; $i < $ecBlock->getCount(); $i++) {

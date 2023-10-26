@@ -31,7 +31,7 @@ class Eps extends AbstractRenderer
      *
      * @var array
      */
-    protected $colors = array();
+    protected $colors = [];
 
     /**
      * Current color.

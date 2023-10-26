@@ -159,21 +159,21 @@ class mod_mooduell_observer {
 
         if ($event->other['iscorrect'] == true) {
             // Question was answered correctly.
-            $qcorrectevent = question_correctly_answered::create(array(
+            $qcorrectevent = question_correctly_answered::create([
                 'context' => $context,
                 'other' => [
                     'questionid' => $questionid
                 ]
-            ));
+            ]);
             $qcorrectevent->trigger();
         } else {
             // Question was answered wrongly.
-            $qwrongevent = question_wrongly_answered::create(array(
+            $qwrongevent = question_wrongly_answered::create([
                 'context' => $context,
                 'other' => [
                     'questionid' => $questionid
                 ]
-            ));
+            ]);
             $qwrongevent->trigger();
         }
 

@@ -220,6 +220,6 @@ class MonochromeRectangleDetector {
     }
     $end--;
 
-    return $end > $start ? array($start, $end) : null;
+    return $end > $start ? [$start, $end] : null;
     }
 }

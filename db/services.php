@@ -26,20 +26,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$services = array(
-        'Wunderbyte MooDuell Tokens' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
-                'functions' => array (
+$services = [
+        'Wunderbyte MooDuell Tokens' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
+                'functions' =>  [
                         'mod_mooduell_get_user_token',
                         'core_webservice_get_site_info'
-                ),
+                ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_tokens',
                 'downloadfiles' => 1,    // Allow file downloads.
                 'uploadfiles'  => 1,      // Allow file uploads.
                 'enabled' => 1
-        ),
-        'Wunderbyte MooDuell external' => array( // Very important, don't rename or will break local_bookingapi plugin!!!
-                'functions' => array (
+        ],
+        'Wunderbyte MooDuell external' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
+                'functions' =>  [
                         'mod_mooduell_get_courses_with_caps',
                         'mod_mooduell_get_quizzes_with_caps',
                         'mod_mooduell_get_support',
@@ -60,18 +60,18 @@ $services = array(
                         'mod_mooduell_giveup_game',
                         'mod_mooduell_update_profile_picture',
                         'core_badges_get_user_badges'
-                ),
+                ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
                 'downloadfiles' => 1,    // Allow file downloads.
                 'uploadfiles'  => 1,      // Allow file uploads.
                 'enabled' => 1
-        )
-);
+        ]
+];
 
 
-$functions = array(
-        'mod_mooduell_get_user_token' => array(
+$functions = [
+        'mod_mooduell_get_user_token' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_usertoken',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -79,8 +79,8 @@ $functions = array(
                 'type' => 'write',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        ),
-        'mod_mooduell_update_iap' => array(
+        ],
+        'mod_mooduell_update_iap' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'update_iapurchases',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -88,8 +88,8 @@ $functions = array(
                 'type' => 'write',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        ),
-        'mod_mooduell_start_attempt' => array(
+        ],
+        'mod_mooduell_start_attempt' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'start_attempt',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -97,11 +97,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_game_data' => array(
+                ]
+        ],
+        'mod_mooduell_get_game_data' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_game_data',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -109,11 +109,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_quiz_users' => array(
+                ]
+        ],
+        'mod_mooduell_get_quiz_users' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_quiz_users',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -121,11 +121,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_quizzes_by_courses' => array(
+                ]
+        ],
+        'mod_mooduell_get_quizzes_by_courses' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_quizzes_by_courses',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -133,11 +133,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_games_by_courses' => array(
+                ]
+        ],
+        'mod_mooduell_get_games_by_courses' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_games_by_courses',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -146,11 +146,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_answer_question' => array(
+                ]
+        ],
+        'mod_mooduell_answer_question' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'answer_question',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -158,11 +158,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_user_stats' => array(
+                ]
+        ],
+        'mod_mooduell_get_user_stats' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_user_stats',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -170,11 +170,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_highscores' => array(
+                ]
+        ],
+        'mod_mooduell_get_highscores' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_highscores',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -182,11 +182,11 @@ $functions = array(
                 'type' => 'read',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_set_alternatename' => array(
+                ]
+        ],
+        'mod_mooduell_set_alternatename' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'set_alternatename',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -194,11 +194,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_set_pushtokens' => array(
+                ]
+        ],
+        'mod_mooduell_set_pushtokens' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'set_pushtokens',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -206,11 +206,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_giveup_game' => array(
+                ]
+        ],
+        'mod_mooduell_giveup_game' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'giveup_game',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -218,11 +218,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_update_profile_picture' => array(
+                ]
+        ],
+        'mod_mooduell_update_profile_picture' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'update_profile_picture',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -231,11 +231,11 @@ $functions = array(
                 'type' => 'write',
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
-                'services' => array(
+                'services' => [
                         'mod_mooduell_external'
-                )
-        ),
-        'mod_mooduell_get_purchases' => array(
+                ]
+        ],
+        'mod_mooduell_get_purchases' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_mooduell_purchases',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -243,8 +243,8 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        ),
-        'mod_mooduell_get_support' => array(
+        ],
+        'mod_mooduell_get_support' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_mooduell_support',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -252,8 +252,8 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        ),
-        'mod_mooduell_get_courses_with_caps' => array(
+        ],
+        'mod_mooduell_get_courses_with_caps' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_courses_with_caps',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -261,8 +261,8 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:canpurchase',
                 'ajax' => true,
-        ),
-        'mod_mooduell_get_quizzes_with_caps' => array(
+        ],
+        'mod_mooduell_get_quizzes_with_caps' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'get_quizzes_with_caps',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -270,8 +270,8 @@ $functions = array(
                 'type' => 'read',
                 'capabilities' => 'mod/mooduell:canpurchase',
                 'ajax' => true,
-        ),
-        'mod_mooduell_delete_iap' => array(
+        ],
+        'mod_mooduell_delete_iap' => [
                 'classname' => 'mod_mooduell_external',
                 'methodname' => 'delete_iapurchases',
                 'classpath' => 'mod/mooduell/classes/external.php',
@@ -279,5 +279,5 @@ $functions = array(
                 'type' => 'write',
                 'capabilities' => 'mod/mooduell:viewinstance',
                 'ajax' => true,
-        ),
-);
+        ],
+];

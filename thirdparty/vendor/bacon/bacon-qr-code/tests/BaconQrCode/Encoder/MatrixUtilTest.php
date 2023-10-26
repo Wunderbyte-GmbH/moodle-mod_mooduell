@@ -18,7 +18,7 @@ use ReflectionMethod;
 
 class MatrixUtilTest extends TestCase
 {
-    protected $methods = array();
+    protected $methods = [];
 
     public function setUp()
     {
@@ -245,10 +245,10 @@ class MatrixUtilTest extends TestCase
 
     public function testBuildMatrix()
     {
-        $bytes = array(
+        $bytes = [
             32, 65, 205, 69, 41, 220, 46, 128, 236, 42, 159, 74, 221, 244, 169,
             239, 150, 138, 70, 237, 85, 224, 96, 74, 219 , 61
-        );
+        ];
         $bits = new BitArray();
 
         foreach ($bytes as $byte) {

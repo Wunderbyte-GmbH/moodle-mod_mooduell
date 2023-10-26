@@ -66,13 +66,13 @@ final class AlignmentPatternFinder {
                          $moduleSize,
                          $resultPointCallback) {
         $this->image = $image;
-        $this->possibleCenters = array();
+        $this->possibleCenters = [];
         $this->startX = $startX;
         $this->startY = $startY;
         $this->width = $width;
         $this->height = $height;
         $this->moduleSize = $moduleSize;
-        $this->crossCheckStateCount = array();
+        $this->crossCheckStateCount = [];
         $this->resultPointCallback = $resultPointCallback;
     }
 
@@ -90,7 +90,7 @@ final class AlignmentPatternFinder {
         $middleI = $this->startY + ($height / 2);
         // We are looking for black/white/black modules in 1:1:1 ratio;
         // this tracks the number of black/white/black modules seen so far
-        $stateCount = array();
+        $stateCount = [];
         for ($iGen = 0; $iGen < $height; $iGen++) {
             // Search from middle outwards
             $i = $middleI + (($iGen & 0x01) == 0 ? ($iGen + 1) / 2 : -(($iGen + 1) / 2));

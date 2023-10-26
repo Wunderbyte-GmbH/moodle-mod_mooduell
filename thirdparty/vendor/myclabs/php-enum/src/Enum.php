@@ -29,7 +29,7 @@ abstract class Enum
      *
      * @var array
      */
-    protected static $cache = array();
+    protected static $cache = [];
 
     /**
      * Creates a new value of some type
@@ -102,7 +102,7 @@ abstract class Enum
      */
     public static function values()
     {
-        $values = array();
+        $values = [];
 
         foreach (static::toArray() as $key => $value) {
             $values[$key] = new static($value);

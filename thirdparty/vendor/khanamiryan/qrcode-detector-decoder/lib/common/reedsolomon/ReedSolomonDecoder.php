@@ -139,14 +139,14 @@ final class ReedSolomonDecoder {
         $inverse = $this->field->inverse($sigmaTildeAtZero);
         $sigma = $t->multiply($inverse);
         $omega = $r->multiply($inverse);
-        return array($sigma, $omega);
+        return [$sigma, $omega];
     }
 
     private function findErrorLocations($errorLocator) {
         // This is a direct application of Chien's search
         $numErrors = $errorLocator->getDegree();
         if ($numErrors == 1) { // shortcut
-            return array($errorLocator->getCoefficient(1) );
+            return [$errorLocator->getCoefficient(1) ];
         }
         $result = fill_array(0,$numErrors,0);
         $e = 0;

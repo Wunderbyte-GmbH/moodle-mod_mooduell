@@ -53,7 +53,7 @@ class CharacterSetEci extends AbstractEnum
      *
      * @var array
      */
-    protected static $nameToEci = array(
+    protected static $nameToEci = [
         'ISO-8859-1'   => self::ISO8859_1,
         'ISO-8859-2'   => self::ISO8859_2,
         'ISO-8859-3'   => self::ISO8859_3,
@@ -80,17 +80,17 @@ class CharacterSetEci extends AbstractEnum
         'ASCII'        => self::ASCII,
         'GBK'          => self::GB18030,
         'EUC-KR'       => self::EUC_KR,
-    );
+    ];
 
     /**
      * Additional possible values for character sets.
      *
      * @var array
      */
-    protected $additionalValues = array(
+    protected $additionalValues = [
         self::CP437 => 2,
         self::ASCII => 170,
-    );
+    ];
 
     /**
      * Gets character set ECI by value.

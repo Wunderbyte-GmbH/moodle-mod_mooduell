@@ -37,11 +37,11 @@ final class BitArray  {
 
 
 
-    public function __construct($bits=array(),$size=0) {
+    public function __construct($bits=[],$size=0) {
 
         if(!$bits&&!$size){
             $this->$size = 0;
-            $this->bits = array();
+            $this->bits = [];
         }elseif($bits&&!$size){
             $this->size = $bits;
             $this->bits = $this->makeArray($bits);
@@ -319,7 +319,7 @@ final class BitArray  {
      * Reverses all bits in the array.
      */
     public function reverse() {
-        $newBits = array();
+        $newBits = [];
         // reverse all int's first
         $len = (($this->size-1) / 32);
         $oldBitsLen = $len + 1;
@@ -357,7 +357,7 @@ final class BitArray  {
     }
 
     private static function makeArray($size) {
-        return array();
+        return [];
     }
 
     // @Override

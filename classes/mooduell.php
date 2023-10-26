@@ -132,9 +132,9 @@ class mooduell {
 
         $this->course = get_course($this->cm->course);
 
-        if (!$this->settings = $DB->get_record('mooduell', array(
+        if (!$this->settings = $DB->get_record('mooduell', [
             'id' => $this->cm->instance
-        ))) {
+        ])) {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
         $this->context = context_module::instance($this->cm->id);
@@ -419,7 +419,7 @@ class mooduell {
             $quizids[] = $quiz->coursemodule;
         }
         if (count($quizids) == null) {
-            $returnitems = array('purchases' => []);
+            $returnitems = ['purchases' => []];
             return $returnitems;
         }
         list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
@@ -434,7 +434,7 @@ class mooduell {
         OR mooduellid $insqlquizzes AND ispublic = 1
         OR platformid $insqlplatform";
 
-        $returnitems = array('purchases' => $DB->get_records_sql($sql, $params));
+        $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;
     }
 
@@ -452,28 +452,28 @@ class mooduell {
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
-                    $existingsub = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
-                     'store' => 'ios'));
+                    $existingsub = $DB->get_records('mooduell_purchase', ['productid' => $purchase['productid'],
+                     'store' => 'ios']);
                 } else {
                     // Android.
-                    $existingsub = $DB->get_records('mooduell_purchase', array('productid' => $purchase['productid'],
-                     'store' => 'android'));
+                    $existingsub = $DB->get_records('mooduell_purchase', ['productid' => $purchase['productid'],
+                     'store' => 'android']);
                 }
                 $item = 0;
                 $type = 'unlockplatformsubscription';
                 break;
             case 'unlockcourse':
-                $existingdata = $DB->get_records('mooduell_purchase', array('courseid' => $purchase['courseid']));
+                $existingdata = $DB->get_records('mooduell_purchase', ['courseid' => $purchase['courseid']]);
                 $item = $purchase['courseid'];
                 $type = 'unlockcourse';
                 break;
             case 'unlockquiz':
                 if ($purchase['ispublic'] == 0) {
-                    $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'],
-                     'ispublic' => 0, 'userid' => $purchase['userid']));
+                    $existingdata = $DB->get_records('mooduell_purchase', ['mooduellid' => $purchase['mooduellid'],
+                     'ispublic' => 0, 'userid' => $purchase['userid']]);
                 } else {
-                    $existingdata = $DB->get_records('mooduell_purchase', array('mooduellid' => $purchase['mooduellid'],
-                     'ispublic' => 1));
+                    $existingdata = $DB->get_records('mooduell_purchase', ['mooduellid' => $purchase['mooduellid'],
+                     'ispublic' => 1]);
                 }
                 $item = $purchase['mooduellid'];
                 $type = 'unlockquiz';
@@ -533,7 +533,7 @@ class mooduell {
                                 JOIN {question} q
                                 ON q.id = qv.questionid";
             $sqldata['where'] = "mc.mooduellid = :mooduellid";
-            $sqldata['params'] = array('mooduellid' => $mooduellid);
+            $sqldata['params'] = ['mooduellid' => $mooduellid];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
@@ -543,7 +543,7 @@ class mooduell {
                                 RIGHT JOIN {question} q
                                 ON qc.id=q.category";
             $sqldata['where'] = "mc.mooduellid = :mooduellid";
-            $sqldata['params'] = array('mooduellid' => $mooduellid);
+            $sqldata['params'] = ['mooduellid' => $mooduellid];
         }
         return $sqldata;
     }
@@ -571,7 +571,7 @@ class mooduell {
                                 LEFT JOIN {question_categories} qc
                                 ON qbe.questioncategoryid=qc.id";
             $sqldata['where'] = "mq.gameid=:gameid";
-            $sqldata['params'] = array('gameid' => $game->id);
+            $sqldata['params'] = ['gameid' => $game->id];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
@@ -582,7 +582,7 @@ class mooduell {
                                 ON q.category=qc.id";
             $sqldata['where'] = "mq.gameid=:gameid
                                 ORDER BY mq.id ASC";
-            $sqldata['params'] = array('gameid' => $game->id);
+            $sqldata['params'] = ['gameid' => $game->id];
         }
         return $sqldata;
     }
@@ -704,7 +704,7 @@ class mooduell {
 
         global $DB, $USER;
 
-        $data = $DB->get_records('mooduell_pushtokens', array('userid' => $userid));
+        $data = $DB->get_records('mooduell_pushtokens', ['userid' => $userid]);
         $returndata = [];
         if ($data && count($data) > 0) {
             foreach ($data as $entry) {
@@ -740,7 +740,7 @@ class mooduell {
 
         global $DB, $USER;
 
-        $data = $DB->get_record('mooduell_pushtokens', array('userid' => $userid, 'identifier' => $identifier));
+        $data = $DB->get_record('mooduell_pushtokens', ['userid' => $userid, 'identifier' => $identifier]);
 
         $updatedata = [
             'userid' => $userid,
@@ -774,7 +774,7 @@ class mooduell {
 
         // If there was no mooduellid, we have to retrieve it here.
         if (!$mooduellid) {
-            if (!$mooduellid = $DB->get_field('course_modules', 'instance', array('id' => $cmid))) {
+            if (!$mooduellid = $DB->get_field('course_modules', 'instance', ['id' => $cmid])) {
                 throw new moodle_exception(
                     'mooduellinstancedoesnotexist',
                     'mooduell',
@@ -791,7 +791,7 @@ class mooduell {
         // If we have a quizid, we only get highscore for one special game...
         // ...if there is no quiz id, we get highscore for all the games.
         if ($mooduellid != 0) {
-            $data = $DB->get_records('mooduell_games', array('mooduellid' => $mooduellid));
+            $data = $DB->get_records('mooduell_games', ['mooduellid' => $mooduellid]);
         } else {
             $data = $DB->get_records('mooduell_games');
         }
@@ -969,7 +969,7 @@ class mooduell {
         $usefullnames = $this->settings->usefullnames;
 
         // Get user record of user.
-        $user = $DB->get_record('user', array('id' => $userid));
+        $user = $DB->get_record('user', ['id' => $userid]);
 
         profile_load_custom_fields($user);
 
@@ -1001,17 +1001,17 @@ class mooduell {
      */
     public function view_page() {
         global $PAGE;
-        $event = event\course_module_viewed::create(array(
+        $event = event\course_module_viewed::create([
             'objectid' => $this->cm->instance,
             'context' => $this->context
-        ));
+        ]);
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot('mooduell', $this->settings);
         $event->trigger();
 
-        $PAGE->set_url('/mod/mooduell/view.php', array(
+        $PAGE->set_url('/mod/mooduell/view.php', [
             'id' => $this->cm->id
-        ));
+        ]);
         $PAGE->set_title(format_string($this->settings->name));
         $PAGE->set_heading(format_string($this->course->fullname));
         $PAGE->set_context($this->context);
@@ -1026,7 +1026,7 @@ class mooduell {
     public function user_exists(int $userid) {
         global $DB;
 
-        return $DB->record_exists('user', array('id' => $userid));
+        return $DB->record_exists('user', ['id' => $userid]);
     }
 
     /**
@@ -1049,8 +1049,8 @@ class mooduell {
     private function delete_game_by_id(int $gameid) {
         global $DB;
 
-        $DB->delete_records('mooduell_games', array('id' => $gameid));
-        $DB->delete_records('mooduell_questions', array('gameid' => $gameid));
+        $DB->delete_records('mooduell_games', ['id' => $gameid]);
+        $DB->delete_records('mooduell_questions', ['gameid' => $gameid]);
     }
 
     /**
@@ -1085,7 +1085,7 @@ class mooduell {
 
         global $DB;
 
-        $mooduellcategories = $DB->get_records('mooduell_categories', array('mooduellid' => $this->cm->instance));
+        $mooduellcategories = $DB->get_records('mooduell_categories', ['mooduellid' => $this->cm->instance]);
 
         // If we have no categories, we return an empty array.
         if (!($mooduellcategories && is_array($mooduellcategories))) {
@@ -1100,7 +1100,7 @@ class mooduell {
                 continue;
             }
 
-            $tempentry = $DB->get_record('question_categories', array('id' => $moodcat->category));
+            $tempentry = $DB->get_record('question_categories', ['id' => $moodcat->category]);
             $entry = [];
             $entry['catid'] = $tempentry->id;
             $entry['contextid'] = $tempentry->contextid;
@@ -1349,7 +1349,7 @@ class mooduell {
                 // Student view is the default view.
             default:
                 $where .= " AND (playeraid = :userid1 OR playerbid = :userid2)";
-                $params = array('userid1' => $USER->id, 'userid2' => $USER->id);
+                $params = ['userid1' => $USER->id, 'userid2' => $USER->id];
                 break;
         }
 
@@ -1367,7 +1367,7 @@ class mooduell {
         $fields = "*";
         $from = "{mooduell_highscores}";
         $where = "mooduellid = :mooduellid1";
-        $params = array('mooduellid1' => $this->cm->instance);
+        $params = ['mooduellid1' => $this->cm->instance];
 
         return [$fields, $from, $where, $params];
     }

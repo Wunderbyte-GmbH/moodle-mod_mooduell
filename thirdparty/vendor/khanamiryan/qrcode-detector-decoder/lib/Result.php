@@ -89,7 +89,7 @@ public function __construct($text,
 
   public function putMetadata($type, $value) {
     if ($this->resultMetadata == null) {
-        $this->resultMetadata = array();
+        $this->resultMetadata = [];
     }
     $resultMetadata[$type] =  $value;
 }

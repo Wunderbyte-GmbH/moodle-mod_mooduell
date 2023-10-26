@@ -78,12 +78,12 @@ class manage_tokens {
     public static function delete_user_token($servicename) {
         // Get Service id.
         global $USER, $DB;
-         $service = $DB->get_record('external_services', array('shortname' => $servicename));
+         $service = $DB->get_record('external_services', ['shortname' => $servicename]);
         if (empty($service)) {
             // Will throw exception if no token found.
             return;
         }
-        $DB->delete_records('external_tokens', array('userid' => $USER->id, 'externalserviceid' => $service->id));
+        $DB->delete_records('external_tokens', ['userid' => $USER->id, 'externalserviceid' => $service->id]);
     }
 
     /**
@@ -123,14 +123,14 @@ class manage_tokens {
             if (!empty($token->sid)) {
                 if (!\core\session\manager::session_exists($token->sid)) {
                     // This token will never be valid anymore, delete it.
-                    $DB->delete_records('external_tokens', array('sid' => $token->sid));
+                    $DB->delete_records('external_tokens', ['sid' => $token->sid]);
                     $unsettoken = true;
                 }
             }
 
             // Remove token if it is not valid anymore.
             if (!empty($token->validuntil) and $token->validuntil < time()) {
-                $DB->delete_records('external_tokens', array('token' => $token->token, 'tokentype' => EXTERNAL_TOKEN_PERMANENT));
+                $DB->delete_records('external_tokens', ['token' => $token->token, 'tokentype' => EXTERNAL_TOKEN_PERMANENT]);
                 $unsettoken = true;
             }
 
@@ -172,13 +172,13 @@ class manage_tokens {
 
             $eventtoken = clone $token;
             $eventtoken->privatetoken = null;
-            $params = array(
+            $params = [
                 'objectid' => $eventtoken->id,
                 'relateduserid' => $userid,
-                'other' => array(
+                'other' => [
                     'auto' => true
-                )
-            );
+                ]
+            ];
             $event = \core\event\webservice_token_created::create($params);
             $event->add_record_snapshot('external_tokens', $eventtoken);
             $event->trigger();

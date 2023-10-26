@@ -29,7 +29,7 @@ class Png extends AbstractRenderer
      *
      * @var array
      */
-    protected $colors = array();
+    protected $colors = [];
 
     /**
      * init(): defined by RendererInterface.

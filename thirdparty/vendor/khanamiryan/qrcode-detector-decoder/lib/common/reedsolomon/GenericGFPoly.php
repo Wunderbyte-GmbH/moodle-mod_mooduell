@@ -53,7 +53,7 @@ final class GenericGFPoly {
         $firstNonZero++;
       }
       if ($firstNonZero == $coefficientsLength) {
-        $this->coefficients = array(0);
+        $this->coefficients = [0];
       } else {
         $this->coefficients = fill_array(0,$coefficientsLength - $firstNonZero,0);
           $this->coefficients =  arraycopy($coefficients,
@@ -224,7 +224,7 @@ final class GenericGFPoly {
       $remainder = $remainder->addOrSubtract($term);
     }
 
-    return array($quotient, $remainder );
+    return [$quotient, $remainder ];
   }
 
   //@Override

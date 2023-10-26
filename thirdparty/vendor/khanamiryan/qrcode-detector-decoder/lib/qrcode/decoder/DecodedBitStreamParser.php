@@ -39,12 +39,12 @@ final class DecodedBitStreamParser {
     /**
      * See ISO 18004:2006, 6.4.4 Table 5
      */
-    private static  $ALPHANUMERIC_CHARS = array(
+    private static  $ALPHANUMERIC_CHARS = [
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         ' ', '$', '%', '*', '+', '-', '.', '/', ':'
-    );
+    ];
     private static  $GB2312_SUBSET = 1;
 
 
@@ -59,7 +59,7 @@ final class DecodedBitStreamParser {
                            $hints)  {
         $bits = new BitSource($bytes);
         $result = '';//new StringBuilder(50);
-        $byteSegments = array();
+        $byteSegments = [];
         $symbolSequence = -1;
         $parityData = -1;
 
@@ -184,7 +184,7 @@ final class DecodedBitStreamParser {
 
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as Shift_JIS afterwards
-        $buffer = array(0,2 * $count,0);
+        $buffer = [0,2 * $count,0];
         $offset = 0;
         while ($count > 0) {
             // Each 13 bits encodes a 2-byte character

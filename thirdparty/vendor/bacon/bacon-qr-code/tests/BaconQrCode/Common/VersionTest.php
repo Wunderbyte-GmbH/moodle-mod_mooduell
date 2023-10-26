@@ -15,10 +15,10 @@ class VersionTest extends TestCase
 {
     public static function versionProvider()
     {
-        $array = array();
+        $array = [];
 
         for ($i = 1; $i <= 40; $i++) {
-            $array[] = array($i, 4 * $i + 17);
+            $array[] = [$i, 4 * $i + 17];
         }
 
         return $array;
@@ -26,14 +26,14 @@ class VersionTest extends TestCase
 
     public static function decodeInformationProvider()
     {
-        return array(
-            array(7, 0x07c94),
-            array(12, 0x0c762),
-            array(17, 0x1145d),
-            array(22, 0x168c9),
-            array(27, 0x1b08e),
-            array(32, 0x209d5),
-        );
+        return [
+            [7, 0x07c94],
+            [12, 0x0c762],
+            [17, 0x1145d],
+            [22, 0x168c9],
+            [27, 0x1b08e],
+            [32, 0x209d5],
+        ];
     }
 
     /**

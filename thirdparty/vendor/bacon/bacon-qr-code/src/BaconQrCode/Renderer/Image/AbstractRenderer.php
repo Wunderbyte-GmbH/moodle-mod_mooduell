@@ -94,7 +94,7 @@ abstract class AbstractRenderer implements RendererInterface
      *
      * @var array
      */
-    protected $decorators = array();
+    protected $decorators = [];
 
     /**
      * Sets the margin around the QR code.

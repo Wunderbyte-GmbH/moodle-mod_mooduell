@@ -5,7 +5,7 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
-return array(
+return [
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
     'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
     'DivisionByZeroError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
@@ -72,4 +72,4 @@ return array(
     'Zxing\\ReaderException' => $vendorDir . '/khanamiryan/qrcode-detector-decoder/lib/ReaderException.php',
     'Zxing\\Result' => $vendorDir . '/khanamiryan/qrcode-detector-decoder/lib/Result.php',
     'Zxing\\ResultPoint' => $vendorDir . '/khanamiryan/qrcode-detector-decoder/lib/ResultPoint.php',
-);
+];

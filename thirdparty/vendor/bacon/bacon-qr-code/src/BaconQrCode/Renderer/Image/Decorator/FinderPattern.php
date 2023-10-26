@@ -33,30 +33,30 @@ class FinderPattern implements DecoratorInterface
      *
      * @var array
      */
-    protected static $outerPositionDetectionPattern = array(
-        array(1, 1, 1, 1, 1, 1, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 1, 1, 1, 1, 1, 1),
-    );
+    protected static $outerPositionDetectionPattern = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
 
     /**
      * Inner position detection pattern.
      *
      * @var array
      */
-    protected static $innerPositionDetectionPattern = array(
-        array(0, 0, 0, 0, 0, 0, 0),
-        array(0, 0, 0, 0, 0, 0, 0),
-        array(0, 0, 1, 1, 1, 0, 0),
-        array(0, 0, 1, 1, 1, 0, 0),
-        array(0, 0, 1, 1, 1, 0, 0),
-        array(0, 0, 0, 0, 0, 0, 0),
-        array(0, 0, 0, 0, 0, 0, 0),
-    );
+    protected static $innerPositionDetectionPattern = [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+    ];
 
     /**
      * Sets outer color.
@@ -133,11 +133,11 @@ class FinderPattern implements DecoratorInterface
         $multiple
     ) {
         $matrix    = $qrCode->getMatrix();
-        $positions = array(
-            array(0, 0),
-            array($matrix->getWidth() - 7, 0),
-            array(0, $matrix->getHeight() - 7),
-        );
+        $positions = [
+            [0, 0],
+            [$matrix->getWidth() - 7, 0],
+            [0, $matrix->getHeight() - 7],
+        ];
 
         foreach (self::$outerPositionDetectionPattern as $y => $row) {
             foreach ($row as $x => $isSet) {
@@ -172,11 +172,11 @@ class FinderPattern implements DecoratorInterface
         $multiple
     ) {
         $matrix    = $qrCode->getMatrix();
-        $positions = array(
-            array(0, 0),
-            array($matrix->getWidth() - 7, 0),
-            array(0, $matrix->getHeight() - 7),
-        );
+        $positions = [
+            [0, 0],
+            [$matrix->getWidth() - 7, 0],
+            [0, $matrix->getHeight() - 7],
+        ];
 
         $renderer->addColor('finder-outer', $this->getOuterColor());
         $renderer->addColor('finder-inner', $this->getInnerColor());

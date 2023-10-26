@@ -44,7 +44,7 @@ use Zxing\Qrcode\Detector\Detector;
 class QRCodeReader implements Reader {
 
 
-    private static $NO_POINTS = array();
+    private static $NO_POINTS = [];
     private $decoder;
 
     function __construct(){
@@ -70,7 +70,7 @@ class QRCodeReader implements Reader {
     // @Override
     public function decode($image, $hints=null){/* Map<DecodeHintType,?> hints*/
         $decoderResult = null;
-        $points = array();
+        $points = [];
         if ($hints != null && $hints['PURE_BARCODE']) {//hints.containsKey(DecodeHintType.PURE_BARCODE)) {
             $bits = $this->extractPureBits($image->getBlackMatrix());
             $decoderResult = $this->decoder->decode($bits, $hints);

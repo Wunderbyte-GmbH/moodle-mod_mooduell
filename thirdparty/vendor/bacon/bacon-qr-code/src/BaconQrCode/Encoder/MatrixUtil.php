@@ -24,99 +24,99 @@ class MatrixUtil
      *
      * @var array
      */
-    protected static $positionDetectionPattern = array(
-        array(1, 1, 1, 1, 1, 1, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 0, 1, 1, 1, 0, 1),
-        array(1, 0, 1, 1, 1, 0, 1),
-        array(1, 0, 1, 1, 1, 0, 1),
-        array(1, 0, 0, 0, 0, 0, 1),
-        array(1, 1, 1, 1, 1, 1, 1),
-    );
+    protected static $positionDetectionPattern = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
 
     /**
      * Position adjustment pattern.
      *
      * @var array
      */
-    protected static $positionAdjustmentPattern = array(
-        array(1, 1, 1, 1, 1),
-        array(1, 0, 0, 0, 1),
-        array(1, 0, 1, 0, 1),
-        array(1, 0, 0, 0, 1),
-        array(1, 1, 1, 1, 1),
-    );
+    protected static $positionAdjustmentPattern = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
 
     /**
      * Coordinates for position adjustment patterns for each version.
      *
      * @var array
      */
-    protected static $positionAdjustmentPatternCoordinateTable = array(
-        array(null, null, null, null, null, null, null), // Version 1
-        array(   6,   18, null, null, null, null, null), // Version 2
-        array(   6,   22, null, null, null, null, null), // Version 3
-        array(   6,   26, null, null, null, null, null), // Version 4
-        array(   6,   30, null, null, null, null, null), // Version 5
-        array(   6,   34, null, null, null, null, null), // Version 6
-        array(   6,   22,   38, null, null, null, null), // Version 7
-        array(   6,   24,   42, null, null, null, null), // Version 8
-        array(   6,   26,   46, null, null, null, null), // Version 9
-        array(   6,   28,   50, null, null, null, null), // Version 10
-        array(   6,   30,   54, null, null, null, null), // Version 11
-        array(   6,   32,   58, null, null, null, null), // Version 12
-        array(   6,   34,   62, null, null, null, null), // Version 13
-        array(   6,   26,   46,   66, null, null, null), // Version 14
-        array(   6,   26,   48,   70, null, null, null), // Version 15
-        array(   6,   26,   50,   74, null, null, null), // Version 16
-        array(   6,   30,   54,   78, null, null, null), // Version 17
-        array(   6,   30,   56,   82, null, null, null), // Version 18
-        array(   6,   30,   58,   86, null, null, null), // Version 19
-        array(   6,   34,   62,   90, null, null, null), // Version 20
-        array(   6,   28,   50,   72,   94, null, null), // Version 21
-        array(   6,   26,   50,   74,   98, null, null), // Version 22
-        array(   6,   30,   54,   78,  102, null, null), // Version 23
-        array(   6,   28,   54,   80,  106, null, null), // Version 24
-        array(   6,   32,   58,   84,  110, null, null), // Version 25
-        array(   6,   30,   58,   86,  114, null, null), // Version 26
-        array(   6,   34,   62,   90,  118, null, null), // Version 27
-        array(   6,   26,   50,   74,   98,  122, null), // Version 28
-        array(   6,   30,   54,   78,  102,  126, null), // Version 29
-        array(   6,   26,   52,   78,  104,  130, null), // Version 30
-        array(   6,   30,   56,   82,  108,  134, null), // Version 31
-        array(   6,   34,   60,   86,  112,  138, null), // Version 32
-        array(   6,   30,   58,   86,  114,  142, null), // Version 33
-        array(   6,   34,   62,   90,  118,  146, null), // Version 34
-        array(   6,   30,   54,   78,  102,  126,  150), // Version 35
-        array(   6,   24,   50,   76,  102,  128,  154), // Version 36
-        array(   6,   28,   54,   80,  106,  132,  158), // Version 37
-        array(   6,   32,   58,   84,  110,  136,  162), // Version 38
-        array(   6,   26,   54,   82,  110,  138,  166), // Version 39
-        array(   6,   30,   58,   86,  114,  142,  170), // Version 40
-    );
+    protected static $positionAdjustmentPatternCoordinateTable = [
+        [null, null, null, null, null, null, null], // Version 1
+        [   6,   18, null, null, null, null, null], // Version 2
+        [   6,   22, null, null, null, null, null], // Version 3
+        [   6,   26, null, null, null, null, null], // Version 4
+        [   6,   30, null, null, null, null, null], // Version 5
+        [   6,   34, null, null, null, null, null], // Version 6
+        [   6,   22,   38, null, null, null, null], // Version 7
+        [   6,   24,   42, null, null, null, null], // Version 8
+        [   6,   26,   46, null, null, null, null], // Version 9
+        [   6,   28,   50, null, null, null, null], // Version 10
+        [   6,   30,   54, null, null, null, null], // Version 11
+        [   6,   32,   58, null, null, null, null], // Version 12
+        [   6,   34,   62, null, null, null, null], // Version 13
+        [   6,   26,   46,   66, null, null, null], // Version 14
+        [   6,   26,   48,   70, null, null, null], // Version 15
+        [   6,   26,   50,   74, null, null, null], // Version 16
+        [   6,   30,   54,   78, null, null, null], // Version 17
+        [   6,   30,   56,   82, null, null, null], // Version 18
+        [   6,   30,   58,   86, null, null, null], // Version 19
+        [   6,   34,   62,   90, null, null, null], // Version 20
+        [   6,   28,   50,   72,   94, null, null], // Version 21
+        [   6,   26,   50,   74,   98, null, null], // Version 22
+        [   6,   30,   54,   78,  102, null, null], // Version 23
+        [   6,   28,   54,   80,  106, null, null], // Version 24
+        [   6,   32,   58,   84,  110, null, null], // Version 25
+        [   6,   30,   58,   86,  114, null, null], // Version 26
+        [   6,   34,   62,   90,  118, null, null], // Version 27
+        [   6,   26,   50,   74,   98,  122, null], // Version 28
+        [   6,   30,   54,   78,  102,  126, null], // Version 29
+        [   6,   26,   52,   78,  104,  130, null], // Version 30
+        [   6,   30,   56,   82,  108,  134, null], // Version 31
+        [   6,   34,   60,   86,  112,  138, null], // Version 32
+        [   6,   30,   58,   86,  114,  142, null], // Version 33
+        [   6,   34,   62,   90,  118,  146, null], // Version 34
+        [   6,   30,   54,   78,  102,  126,  150], // Version 35
+        [   6,   24,   50,   76,  102,  128,  154], // Version 36
+        [   6,   28,   54,   80,  106,  132,  158], // Version 37
+        [   6,   32,   58,   84,  110,  136,  162], // Version 38
+        [   6,   26,   54,   82,  110,  138,  166], // Version 39
+        [   6,   30,   58,   86,  114,  142,  170], // Version 40
+    ];
 
     /**
      * Type information coordinates.
      *
      * @var array
      */
-    protected static $typeInfoCoordinates = array(
-        array(8, 0),
-        array(8, 1),
-        array(8, 2),
-        array(8, 3),
-        array(8, 4),
-        array(8, 5),
-        array(8, 7),
-        array(8, 8),
-        array(7, 8),
-        array(5, 8),
-        array(4, 8),
-        array(3, 8),
-        array(2, 8),
-        array(1, 8),
-        array(0, 8),
-    );
+    protected static $typeInfoCoordinates = [
+        [8, 0],
+        [8, 1],
+        [8, 2],
+        [8, 3],
+        [8, 4],
+        [8, 5],
+        [8, 7],
+        [8, 8],
+        [7, 8],
+        [5, 8],
+        [4, 8],
+        [3, 8],
+        [2, 8],
+        [1, 8],
+        [0, 8],
+    ];
 
     /**
      * Version information polynomial.

@@ -30,14 +30,14 @@ class Svg extends AbstractRenderer
      *
      * @var array
      */
-    protected $colors = array();
+    protected $colors = [];
 
     /**
      * Prototype IDs.
      *
      * @var array
      */
-    protected $prototypeIds = array();
+    protected $prototypeIds = [];
 
     /**
      * init(): defined by RendererInterface.

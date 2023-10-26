@@ -58,7 +58,7 @@ function xmldb_mooduell_install() {
             'param2' => 2048
     ];
 
-    if (!$DB->record_exists('user_info_field', array('shortname' => $mooduellalias['shortname']))) {
+    if (!$DB->record_exists('user_info_field', ['shortname' => $mooduellalias['shortname']])) {
         $DB->insert_record('user_info_field', $mooduellalias);
     }
 
