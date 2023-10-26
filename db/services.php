@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $services = [
         'Wunderbyte MooDuell Tokens' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
-                'functions' =>  [
+                'functions' => [
                         'mod_mooduell_get_user_token',
                         'core_webservice_get_site_info',
                 ],
@@ -39,7 +39,7 @@ $services = [
                 'enabled' => 1,
         ],
         'Wunderbyte MooDuell external' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
-                'functions' =>  [
+                'functions' => [
                         'mod_mooduell_get_courses_with_caps',
                         'mod_mooduell_get_quizzes_with_caps',
                         'mod_mooduell_get_support',

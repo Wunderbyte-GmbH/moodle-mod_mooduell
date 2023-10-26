@@ -403,7 +403,7 @@ class mooduell {
      *
      * @param  mixed $courses
      * @param  mixed $quizzes
-     * @return void
+     * @return array
      */
     public static function get_purchases($courses, $quizzes) {
         global $DB, $USER, $CFG;
@@ -438,12 +438,11 @@ class mooduell {
         return $returnitems;
     }
 
-
     /**
      * Purchase In App Item
      *
      * @param  mixed $purchase
-     * @return void
+     * @return array
      */
     public static function purchase_item($purchase) {
         global $DB, $CFG;
@@ -452,12 +451,16 @@ class mooduell {
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
-                    $existingsub = $DB->get_records('mooduell_purchase', ['productid' => $purchase['productid'],
-                     'store' => 'ios']);
+                    $existingsub = $DB->get_records('mooduell_purchase', [
+                        'productid' => $purchase['productid'],
+                        'store' => 'ios',
+                    ]);
                 } else {
                     // Android.
-                    $existingsub = $DB->get_records('mooduell_purchase', ['productid' => $purchase['productid'],
-                     'store' => 'android']);
+                    $existingsub = $DB->get_records('mooduell_purchase', [
+                        'productid' => $purchase['productid'],
+                        'store' => 'android',
+                    ]);
                 }
                 $item = 0;
                 $type = 'unlockplatformsubscription';
@@ -469,18 +472,23 @@ class mooduell {
                 break;
             case 'unlockquiz':
                 if ($purchase['ispublic'] == 0) {
-                    $existingdata = $DB->get_records('mooduell_purchase', ['mooduellid' => $purchase['mooduellid'],
-                     'ispublic' => 0, 'userid' => $purchase['userid']]);
+                    $existingdata = $DB->get_records('mooduell_purchase', [
+                        'mooduellid' => $purchase['mooduellid'],
+                        'ispublic' => 0,
+                        'userid' => $purchase['userid'],
+                    ]);
                 } else {
-                    $existingdata = $DB->get_records('mooduell_purchase', ['mooduellid' => $purchase['mooduellid'],
-                     'ispublic' => 1]);
+                    $existingdata = $DB->get_records('mooduell_purchase', [
+                        'mooduellid' => $purchase['mooduellid'],
+                        'ispublic' => 1,
+                    ]);
                 }
                 $item = $purchase['mooduellid'];
                 $type = 'unlockquiz';
                 break;
         }
         if (!empty($existingdata)) {
-            return ['status' => 0, 'itemid' => $item, 'type' => $type ];
+            return ['status' => 0, 'itemid' => $item, 'type' => $type];
         }
         $newdata = $purchase;
         $newdata['timecreated'] = time();
@@ -493,9 +501,9 @@ class mooduell {
         $DB->insert_record('mooduell_purchase', $newdata);
 
         if (!empty($existingsub)) {
-            return ['status' => 2, 'itemid' => $item, 'type' => $type ];
+            return ['status' => 2, 'itemid' => $item, 'type' => $type];
         } else {
-            return ['status' => 1, 'itemid' => $item, 'type' => $type ];
+            return ['status' => 1, 'itemid' => $item, 'type' => $type];
         }
     }
 
@@ -900,7 +908,7 @@ class mooduell {
             $entry['played'] = $value->played;
             $entry['correct'] = $value->correct;
 
-            if (!empty($value->qplayed) and $value->qplayed > 0) {
+            if (!empty($value->qplayed) && $value->qplayed > 0) {
                 // Determine percentage of correctly answered questions by division through played questions.
                 $entry['correctpercentage'] = number_format((($value->correct / $value->qplayed) * 100), 1);
                 $entry['qplayed'] = $value->qplayed;
@@ -1375,7 +1383,7 @@ class mooduell {
     /**
      * Function to return the sql as array for table_questions class.
      *
-     * @return void
+     * @return array
      */
     public function return_sql_for_questions() {
 
@@ -1384,6 +1392,7 @@ class mooduell {
         $mooduellid = $this->cm->instance;
 
         // We override the select in this case, as we need slightly different fields.
+        // phpcs:ignore
         // $select = "q.id as id, q.questiontext as text, q.qtype as type, qc.name as category";
 
         return [$sqldata['select'], $sqldata['from'], $sqldata['where'], $sqldata['params']];
@@ -1540,7 +1549,8 @@ class mooduell {
      *
      * @param context $context
      * @param string $withcapability
-     * @param int $groupid 0 means ignore groups, USERSWITHOUTGROUP without any group and any other value limits the result by group id
+     * @param int $groupid
+     * 0 means ignore groups, USERSWITHOUTGROUP without any group and any other value limits the result by group id
      * @param string $userfields requested user record fields
      * @param string $orderby
      * @param int $limitfrom return a subset of records, starting at this point (optional, required if $limitnum is set).
@@ -1548,8 +1558,16 @@ class mooduell {
      * @param bool $onlyactive consider only active enrolments in enabled plugins and time restrictions
      * @return array of user records
      */
-    public static function get_enrolled_users_with_profile_mooduell_alias(context $context, $withcapability = '', $groupid = 0, $userfields = 'u.*', $orderby = null,
-            $limitfrom = 0, $limitnum = 0, $onlyactive = false) {
+    public static function get_enrolled_users_with_profile_mooduell_alias(
+            context $context,
+            $withcapability = '',
+            $groupid = 0,
+            $userfields = 'u.*',
+            $orderby = null,
+            $limitfrom = 0,
+            $limitnum = 0,
+            $onlyactive = false
+        ) {
         global $DB;
 
         list($esql, $params) = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);

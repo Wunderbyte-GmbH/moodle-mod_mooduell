@@ -107,6 +107,7 @@ class list_action implements renderable, templatable {
             $_GET
         );
 
+        // phpcs:ignore
         // $questionstable->use_pages = true;
 
         $questionstable->define_baseurl($baseurl->out());

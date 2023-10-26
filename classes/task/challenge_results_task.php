@@ -87,7 +87,8 @@ class challenge_results_task extends \core\task\adhoc_task {
         foreach ($completionmodes as $completionmode => $statsfield) {
 
             if ($challenge = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid,
-                                                                     'challengetype' => $completionmode])) {
+                                                                     'challengetype' => $completionmode,
+                                                                     ])) {
                 foreach ($players as $player) {
 
                     // Get the player's current statistics to set result values.
@@ -95,7 +96,8 @@ class challenge_results_task extends \core\task\adhoc_task {
 
                     if ($challengeresult = $DB->get_record('mooduell_challenge_results', ['mooduellid' => $mooduellid,
                                                                                           'challengeid' => $challenge->id,
-                                                                                          'userid' => $player->id])) {
+                                                                                          'userid' => $player->id,
+                                                                                          ])) {
 
                         if ($taskdata->completionexpected < $challengeresult->timemodified) {
                             echo 'Challenge results task: Could not update because a task with a later date has already run.'

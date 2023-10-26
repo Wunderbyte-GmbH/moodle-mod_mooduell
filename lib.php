@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 use core_completion\api;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
@@ -134,7 +136,7 @@ function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform 
         $moduleinstance->usefullnames = 0;
     }
 
-    // We need to trigger the delete cache event in the observer:
+    // We need to trigger the delete cache event in the observer.
     mod_mooduell_observer::delete_cache();
 
     return $DB->update_record('mooduell', $moduleinstance);
@@ -480,9 +482,9 @@ if ($CFG->version >= 2021051700) {
         foreach ($completionmodes as $completionmode => $statsfield) {
 
             if ($challenge = $DB->get_record('mooduell_challenges', [
-                'mooduellid' => $mooduellid,
-                'challengetype' => $completionmode]
-            )) {
+                    'mooduellid' => $mooduellid,
+                    'challengetype' => $completionmode,
+                ])) {
 
                 // If the challenge is already expired take the result value from the challenge results table.
                 if ($cm->completion == 2 && $cm->completionexpected != 0 && time() > $cm->completionexpected) {

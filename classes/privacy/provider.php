@@ -281,8 +281,11 @@ class provider implements
             // Before deleting mooduell_games we have to delete the associated mooduell_questions data.
             $where = 'gameid in (SELECT id FROM {mooduell_games} WHERE mooduellid = :mooduellid AND ' .
                 '(playeraid = :playeraid OR playerbid = :playerbid))';
-            $DB->delete_records_select('mooduell_questions', $where, ['mooduellid' => $instanceid,
-                'playeraid' => $userid, 'playerbid' => $userid]);
+            $DB->delete_records_select('mooduell_questions', $where, [
+                'mooduellid' => $instanceid,
+                'playeraid' => $userid,
+                'playerbid' => $userid,
+            ]);
 
             // Now we can delete the rest.
             $DB->delete_records('mooduell_games', ['mooduellid' => $instanceid, 'playeraid' => $userid]);

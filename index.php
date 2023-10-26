@@ -105,7 +105,7 @@ foreach ($mooduells as $mooduell) {
         ]), format_string($mooduell->name, true));
     }
 
-    if ($course->format == 'weeks' or $course->format == 'topics') {
+    if ($course->format == 'weeks' || $course->format == 'topics') {
         $table->data[] = [
                 $mooduell->section,
                 $link,

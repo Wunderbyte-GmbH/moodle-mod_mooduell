@@ -223,7 +223,6 @@ class overview_teacher implements renderable, templatable {
         $questionstable->infinitescroll = 40;
 
         list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(40, true);
-        // $html = $questionstable->out(40, true);
 
         return $html;
     }

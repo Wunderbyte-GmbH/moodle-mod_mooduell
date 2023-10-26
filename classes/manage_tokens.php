@@ -129,13 +129,13 @@ class manage_tokens {
             }
 
             // Remove token if it is not valid anymore.
-            if (!empty($token->validuntil) and $token->validuntil < time()) {
+            if (!empty($token->validuntil) && $token->validuntil < time()) {
                 $DB->delete_records('external_tokens', ['token' => $token->token, 'tokentype' => EXTERNAL_TOKEN_PERMANENT]);
                 $unsettoken = true;
             }
 
             // Remove token if its IP is restricted.
-            if (isset($token->iprestriction) and !address_in_subnet(getremoteaddr(), $token->iprestriction)) {
+            if (isset($token->iprestriction) && !address_in_subnet(getremoteaddr(), $token->iprestriction)) {
                 $unsettoken = true;
             }
 

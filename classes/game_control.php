@@ -66,8 +66,8 @@ class game_control {
      * Game_control constructor.
      * We set all the data we have at this moment and make it available to the instance of this class.
      * @param mooduell $mooduell
-     * @param null $gameid
-     * @param null $gamedata
+     * @param int|null $gameid
+     * @param mixed|null $gamedata
      * @throws \coding_exception
      * @throws dml_exception
      * @throws moodle_exception
@@ -178,7 +178,7 @@ class game_control {
             // Instead of using the profile_load_custom_fields function, we included this call directly in the sql above.
             $user->profile_field_mooduell_alias = $user->mooduellalias ?? '';
 
-            // // First we check if the user needs an alternatename and if he has one.
+            // First we check if the user needs an alternatename and if he has one.
             if ($mooduell->settings->usefullnames == 0
             && strlen($user->profile_field_mooduell_alias) == 0) {
                 continue;
@@ -591,7 +591,7 @@ class game_control {
      * We count as correctly answered alls questions with a fraction 0 and above, falsly only those below 0.
      * @param int $questionid
      * @param array $answerids
-     * @return void
+     * @return array
      * @throws dml_exception
      * @throws moodle_exception
      */
@@ -690,7 +690,8 @@ class game_control {
             'other' => [
                 'iscorrect' => $result == 2 ? true : false,
                 'questionid' => $questionid,
-            ]]);
+            ],
+        ]);
         $event->trigger();
 
         // We write the result of our question check.
@@ -860,7 +861,7 @@ class game_control {
         if (!$tokens || count($tokens) === 0) {
             return null;
         }
-        $fields = 
+        $fields =
         [
                 'registration_ids' => $tokens,
                 'data' => [
@@ -1077,9 +1078,12 @@ class game_control {
                 'context' => $this->mooduell->context,
                 'objectid' => $this->mooduell->cm->id,
                 'relateduserid' => $relateduserid,
-                'other' => ['playeraid' => $this->gamedata->playeraid,
-                            'playerbid' => $this->gamedata->playerbid,
-                            'winnerid' => $this->gamedata->winnerid]]);
+                'other' => [
+                    'playeraid' => $this->gamedata->playeraid,
+                    'playerbid' => $this->gamedata->playerbid,
+                    'winnerid' => $this->gamedata->winnerid,
+                ],
+            ]);
             $event->trigger();
         }
     }
@@ -1107,7 +1111,7 @@ class game_control {
     /**
      * Determine userid of winner.
      * Returns 0 on draw.
-     * @return int
+     * @return int[]
      */
     private function return_winnerid_and_correct_answers() {
 
@@ -1238,7 +1242,7 @@ class game_control {
 
             $apiaccesskey = get_config('mooduell', 'pushtoken');
 
-            $headers = 
+            $headers =
             [
                     'Authorization: key=' . $apiaccesskey,
                     'Content-Type: application/json',

@@ -360,24 +360,25 @@ class mod_mooduell_external extends external_api {
      * @return void
      */
     public static function get_mooduell_purchases_returns() {
-        return new external_single_structure(['purchases' => new external_multiple_structure(new external_single_structure(
-           [
-            'id' => new external_value(PARAM_INT, 'id'),
-            'productid' => new external_value(PARAM_INT, 'productid'),
-            'purchasetoken' => new external_value(PARAM_TEXT, 'purchasetoken'),
-            'receipt' => new external_value(PARAM_TEXT, 'receipt', VALUE_OPTIONAL, ''),
-            'signature' => new external_value(PARAM_TEXT, 'signature', VALUE_OPTIONAL, ''),
-            'orderid' => new external_value(PARAM_INT, 'orderid', VALUE_OPTIONAL, ''),
-            'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL, 0),
-            'userid' => new external_value(PARAM_INT, 'userid'),
-            'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL, 0),
-            'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL, ''),
-            'courseid' => new external_value(PARAM_INT, 'courseid', VALUE_OPTIONAL, 0),
-            'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL, ''),
-            'ispublic' => new external_value(PARAM_INT, 'ispublic'),
-            'timecreated' => new external_value(PARAM_INT, 'timecreated', VALUE_OPTIONAL, 0),
-           ]
-        ))]);
+        return new external_single_structure([
+            'purchases' => new external_multiple_structure(new external_single_structure(
+                [
+                    'id' => new external_value(PARAM_INT, 'id'),
+                    'productid' => new external_value(PARAM_INT, 'productid'),
+                    'purchasetoken' => new external_value(PARAM_TEXT, 'purchasetoken'),
+                    'receipt' => new external_value(PARAM_TEXT, 'receipt', VALUE_OPTIONAL, ''),
+                    'signature' => new external_value(PARAM_TEXT, 'signature', VALUE_OPTIONAL, ''),
+                    'orderid' => new external_value(PARAM_INT, 'orderid', VALUE_OPTIONAL, ''),
+                    'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL, 0),
+                    'userid' => new external_value(PARAM_INT, 'userid'),
+                    'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL, 0),
+                    'platformid' => new external_value(PARAM_TEXT, 'platformid', VALUE_OPTIONAL, ''),
+                    'courseid' => new external_value(PARAM_INT, 'courseid', VALUE_OPTIONAL, 0),
+                    'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL, ''),
+                    'ispublic' => new external_value(PARAM_INT, 'ispublic'),
+                    'timecreated' => new external_value(PARAM_INT, 'timecreated', VALUE_OPTIONAL, 0),
+                ])),
+            ]);
     }
     /**
      * Defines Webservice Parameters for get_mooduell purchases.
@@ -1245,7 +1246,8 @@ class mod_mooduell_external extends external_api {
                         'pushtokens' => new external_multiple_structure(new external_single_structure([
                                                 'identifier' => new external_value(PARAM_RAW, 'identifier'),
                                                 'model' => new external_value(PARAM_RAW, 'model'),
-                                                'pushtoken' => new external_value(PARAM_RAW, 'pushtoken')]
+                                                'pushtoken' => new external_value(PARAM_RAW, 'pushtoken'),
+                                                ]
                                 )
                         ),
                 ]
@@ -1403,7 +1405,9 @@ class mod_mooduell_external extends external_api {
         global $USER, $CFG, $DB;
 
         $fileinfo = self::validate_parameters(self::update_profile_picture_parameters(), [
-                'filename' => $filename, 'filecontent' => $filecontent]);
+                'filename' => $filename,
+                'filecontent' => $filecontent,
+            ]);
 
         if (!isset($fileinfo['filecontent'])) {
             throw new moodle_exception('nofile');
@@ -1421,15 +1425,15 @@ class mod_mooduell_external extends external_api {
 
         // Prepare file record object.
         $fileinfo = [
-                'contextid' => $context->id,
-                'component' => 'mod_mooduell',
-                'filearea' => 'aliasavatar',
-                'itemid' => $USER->id,
-                'filepath' => '/',
-                'filename' => $filename.time().'.jpg'];
+            'contextid' => $context->id,
+            'component' => 'mod_mooduell',
+            'filearea' => 'aliasavatar',
+            'itemid' => $USER->id,
+            'filepath' => '/',
+            'filename' => $filename.time().'.jpg',
+        ];
 
-        $files = $fs->get_area_files($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-        $fileinfo['itemid']);
+        $files = $fs->get_area_files($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'], $fileinfo['itemid']);
         foreach ($files as $f) {
             $f->delete();
         }

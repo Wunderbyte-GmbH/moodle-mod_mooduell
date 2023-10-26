@@ -46,22 +46,26 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
         $mooduell = new backup_nested_element('mooduell', ['id'], [
             'name', 'intro', 'introformat', 'quizid', 'usefullnames',
             'showcontinuebutton', 'showcorrectanswer', 'showgeneralfeedback', 'showanswersfeedback',
-            'countdown', 'waitfornextquestion', 'timecreated', 'timemodified']);
+            'countdown', 'waitfornextquestion', 'timecreated', 'timemodified',
+        ]);
 
         $categories = new backup_nested_element('categories');
 
         $category = new backup_nested_element('category', ['id'], [
-                'mooduellid', 'category', 'weight']);
+                'mooduellid', 'category', 'weight',
+        ]);
 
         $challenges = new backup_nested_element('challenges');
 
         $challenge = new backup_nested_element('challenge', ['id'], [
-                'mooduellid', 'challengetype', 'targetnumber', 'challengename']);
+                'mooduellid', 'challengetype', 'targetnumber', 'challengename',
+        ]);
 
         $challengeresults = new backup_nested_element('challenge_results');
 
         $challengeresult = new backup_nested_element('challenge_result', ['id'], [
-                'mooduellid', 'challengeid', 'userid', 'result', 'timecreated', 'timemodified']);
+                'mooduellid', 'challengeid', 'userid', 'result', 'timecreated', 'timemodified',
+        ]);
 
         $games = new backup_nested_element('games');
 
@@ -71,17 +75,20 @@ class backup_mooduell_activity_structure_step extends backup_activity_structure_
                 'playerbcorrect', 'winnerid', 'status',
                 'victorycoefficient', 'timemodified',
                 'timecreated', 'playeraresults', 'playerbresults',
-                'playeraqplayed', 'playerbqplayed']);
+                'playeraqplayed', 'playerbqplayed',
+        ]);
 
         $pushtokens = new backup_nested_element('pushtokens');
 
         $pushtoken = new backup_nested_element('pushtoken', ['id'], [
-                'userid', 'identifier', 'model', 'pushtoken', 'numberofnotifications']);
+                'userid', 'identifier', 'model', 'pushtoken', 'numberofnotifications',
+        ]);
 
         $questions = new backup_nested_element('questions');
 
         $question = new backup_nested_element('question', ['id'], [
-                'mooduellid', 'gameid', 'questionid', 'playeraanswered', 'playerbanswered']);
+                'mooduellid', 'gameid', 'questionid', 'playeraanswered', 'playerbanswered',
+        ]);
 
         // Build the tree.
         $mooduell->add_child($categories);
