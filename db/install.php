@@ -47,7 +47,7 @@ function xmldb_mooduell_install() {
         'name' => 'MooDuell Alias',
         'description' => 'An alias name for the users.',
         'categoryid' => $cat->id,
-        'visible' => 0
+        'visible' => 0,
     ]);
 
     return true;

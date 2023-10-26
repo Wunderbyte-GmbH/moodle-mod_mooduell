@@ -62,8 +62,6 @@ Feature: See user stats
     And I follow "Finished games"
     And I follow "Highscores"
 
-
-
   @javascript
   Scenario: Opening the activity will show the tabs Statistics
     Given I log in as "teacher"
@@ -78,8 +76,6 @@ Feature: See user stats
     And I follow "Open games"
     And I follow "Statistics"
     Then I should see "Active users"
-
-
 
   @javascript
   Scenario: Edit question and check version
@@ -105,8 +101,6 @@ Feature: See user stats
     And I click on "td.columnclass.id a" "css_element"
     Then I should see "Version 1"
 
-
-
   @javascript
   Scenario: Use full names
     Given I log in as "admin"
@@ -119,8 +113,6 @@ Feature: See user stats
     When I follow "Mooduell Test"
     And I follow "Open games"
     Then I should see "Duell user1"
-
-
 
   @javascript
   Scenario: Button check easiest and hardest question

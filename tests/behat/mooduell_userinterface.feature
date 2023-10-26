@@ -21,7 +21,6 @@ Feature: Check user interface
       | user2    | C1     | student        |
       | teacher  | C1     | editingteacher |
       | teacher2  | C1     | editingteacher |
-
     And the following "activities" exist:
       | activity   | name                | intro              | course | idnumber    | usefullnames |
       | mooduell   | Mooduell Test       | Mooduell Test      | C1     | mooduell1   | 1 |
@@ -48,33 +47,31 @@ Feature: Check user interface
   @javascript
   Scenario: Check tabs
     Given I log in as "user1"
-      And I am on "Course 1" course homepage
-      And I follow "Mooduell Test"
-      When I follow "Statistics"
-      Then I should see "Opponents"
-      Then I should see "Open games"
-      Then I should see "Finished games"
-      Then I should see "Games won"
-      Then I should see "Correct answers"
-      Then I should see "Correctly answered"
-      When I follow "Open games"
-      Then I should see "Last time played"
-      When I follow "Finished games"
-      Then I should see "Last time played"
-      When I follow "Highscores"
-      Then I should see "Ranking"
-
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    When I follow "Statistics"
+    Then I should see "Opponents"
+    Then I should see "Open games"
+    Then I should see "Finished games"
+    Then I should see "Games won"
+    Then I should see "Correct answers"
+    Then I should see "Correctly answered"
+    When I follow "Open games"
+    Then I should see "Last time played"
+    When I follow "Finished games"
+    Then I should see "Last time played"
+    When I follow "Highscores"
+    Then I should see "Ranking"
 
   @javascript
-  Scenario: Show QR Code 
+  Scenario: Show QR Code
     Given I log in as "user1"
-      And I am on "Course 1" course homepage
-      And I follow "Mooduell Test"
-      When I press "Show QR Code"
-      Then I should see "QR Code Login"
-  
+    And I am on "Course 1" course homepage
+    And I follow "Mooduell Test"
+    When I press "Show QR Code"
+    Then I should see "QR Code Login"
 
-  @javascript 
+  @javascript
   Scenario: Players listed in open games when admin starts the games
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
@@ -82,7 +79,7 @@ Feature: Check user interface
     And I follow "Settings"
     And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
-    When I log in as "user1"    
+    When I log in as "user1"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Open games"
@@ -90,17 +87,14 @@ Feature: Check user interface
     And I should see "Username 1"
     Then I wait "6" seconds
 
-
-
-
-  @javascript 
+  @javascript
   Scenario: Players listed in open games when user starts the games
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I press "Save and return to course"
-    When I log in as "user1"    
+    When I log in as "user1"
     And I am on "Course 1" course homepage
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
@@ -109,19 +103,15 @@ Feature: Check user interface
     And I should see "Username 2"
     Then I wait "60" seconds
 
-
-
-
-
-  @javascript 
-  Scenario: Finish games and list them in finished games 
+  @javascript
+  Scenario: Finish games and list them in finished games
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I press "Save and return to course"
     Given I start games in "Mooduell Test" against "user1"
-    When I log in as "user1"    
+    When I log in as "user1"
     And I am on "Course 1" course homepage
     And I play all open questions
     Then I wait "6" seconds
@@ -129,6 +119,3 @@ Feature: Check user interface
     And I am on "Course 1" course homepage
     And I play all open questions
     Then I wait "6" seconds
-    
-
-
