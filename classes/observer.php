@@ -246,7 +246,8 @@ class mod_mooduell_observer {
      * Will be triggered when a new user enrolment has been created.
      * This will create a token for the new user.
      *
-     * @param  mixed $event
+     * @param \core\event\badge_awarded $event
+     *
      * @return bool
      */
     public static function badge_awarded(\core\event\badge_awarded $event): bool {
@@ -263,7 +264,9 @@ class mod_mooduell_observer {
      * Will be triggered by a number of events regarding question manipulation.
      * We need to update our cached tables, therefore we listen and do nothing bug triggering the corresponding event.
      *
-     * @param any $event The event.
+     * @param mixed|null $event
+     * @param bool $onlytables
+     *
      * @return bool True on success.
      */
     public static function delete_cache($event = null, $onlytables = false): bool {

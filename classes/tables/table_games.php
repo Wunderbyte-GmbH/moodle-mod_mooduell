@@ -37,13 +37,15 @@ class table_games extends wunderbyte_table {
 
     /**
      * Parameter to store the action (what to show in the mooduell_table)
-     * @var String action ('opengames'|'finishedgames'|'questions'|'highscores')
+     * @var string action ('opengames'|'finishedgames'|'questions'|'highscores')
      */
     public $action;
 
     /**
      * mooduell_table constructor
+     *
      * @param string $action
+     * @param int $mooduellid
      */
     public function __construct($action, int $mooduellid) {
         global $PAGE, $USER;

@@ -1497,6 +1497,9 @@ class mooduell {
 
     /**
      * Function to set the SQL and load the data for highscores into the mooduell_table
+     *
+     * @param bool $modal
+     *
      * @return stdClass
      * @throws coding_exception
      */

@@ -35,7 +35,7 @@ class table_highscores extends wunderbyte_table {
 
     /**
      * Parameter to store the action (what to show in the mooduell_table)
-     * @var String action ('opengames'|'finishedgames'|'questions'|'highscores')
+     * @var string action ('opengames'|'finishedgames'|'questions'|'highscores')
      */
     public $action;
 
@@ -46,8 +46,9 @@ class table_highscores extends wunderbyte_table {
 
     /**
      * mooduell_table constructor
+     *
      * @param string $action
-     * @param mooduell $mooduellid
+     * @param int $mooduellid
      */
     public function __construct($action, int $mooduellid) {
         parent::__construct($action . $mooduellid);

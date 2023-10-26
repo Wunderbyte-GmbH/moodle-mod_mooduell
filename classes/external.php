@@ -41,10 +41,10 @@ class mod_mooduell_external extends external_api {
     /**
      * Starts new game against another user.
      *
-     * @param  mixed $courseid
-     * @param  mixed $quizid
-     * @param  mixed $playerbid
-     * @return void
+     * @param  int $courseid
+     * @param  int $quizid
+     * @param  int $playerbid
+     * @return mixed
      */
     public static function start_attempt(int $courseid, int $quizid, int $playerbid) {
         $params = [
@@ -179,8 +179,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Returns all courses for user with capabilities
      *
-     * @param  int $userid
-     * @return void
+     * @return array
      */
     public static function get_courses_with_caps() {
         global $USER;
