@@ -126,7 +126,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if (isset($config->countdown)) {
             $mform->setDefault('countdown', $config->countdown);
         }
-        $mform->setDefault('countdown', $config->countdown);
         $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
 
         $mform->addElement(
