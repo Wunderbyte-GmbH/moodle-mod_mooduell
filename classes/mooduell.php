@@ -27,11 +27,11 @@ namespace mod_mooduell;
 defined('MOODLE_INTERNAL') || die();
 
 use cache;
-use \moodle_url;
+use moodle_url;
 use coding_exception;
 use context_module;
 use core_customfield\category;
-use \cm_info;
+use cm_info;
 use context;
 use dml_exception;
 use mod_mooduell\game_control;

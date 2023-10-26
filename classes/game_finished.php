@@ -26,7 +26,7 @@
 namespace mod_mooduell;
 
 use cache_helper;
-use \mod_mooduell\mooduell;
+use mod_mooduell\mooduell;
 
 /**
  * Class game_finished contains functions to execute when the event game_finished is triggered.
