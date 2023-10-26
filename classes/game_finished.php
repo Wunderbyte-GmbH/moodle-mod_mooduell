@@ -76,7 +76,7 @@ class game_finished {
                 'qplayed'  => $entry->qplayed,
                 'qcpercentage' => $entry->correctpercentage,
                 'timecreated' => time(),
-                'timemodified' => time()
+                'timemodified' => time(),
             ];
         }
         // Sort the returned array by score.

@@ -62,7 +62,7 @@ class list_image implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = [
             'imageurl' => $this->question->imageurl,
-            'imagetext' => $this->question->imagetext
+            'imagetext' => $this->question->imagetext,
         ];
         return $data;
     }

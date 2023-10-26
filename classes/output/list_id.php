@@ -68,7 +68,7 @@ class list_id implements renderable, templatable {
                                     'courseid' => $COURSE->id,
                                     'sesskey' => sesskey(),
                                     'returnto' => 'url',
-                                    'returnurl' => $returnurl
+                                    'returnurl' => $returnurl,
                                 ]);
 
         $this->data['id'] = $question->questionid;

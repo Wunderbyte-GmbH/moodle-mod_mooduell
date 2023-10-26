@@ -69,7 +69,7 @@ const ACCEPTEDTYPES = [
     'multichoice',
     'singlechoice',
     'numerical',
-    'ddwtos'
+    'ddwtos',
 ];
 
 /**
@@ -133,7 +133,7 @@ class mooduell {
         $this->course = get_course($this->cm->course);
 
         if (!$this->settings = $DB->get_record('mooduell', [
-            'id' => $this->cm->instance
+            'id' => $this->cm->instance,
         ])) {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
@@ -277,7 +277,7 @@ class mooduell {
                 "playera" => $this->return_name_by_id($game->playeraid),
                 'playerb' => $this->return_name_by_id($game->playerbid),
                 'playeraresults' => $game->playeraresults,
-                'playerbresults' => $game->playerbresults
+                'playerbresults' => $game->playerbresults,
             ];
         }
         return $returngames;
@@ -367,7 +367,7 @@ class mooduell {
                 'score' => $entry->score,
                 'correct' => $entry->correct,
                 'correctpercentage' => $entry->correctpercentage,
-                'qplayed' => $entry->qplayed
+                'qplayed' => $entry->qplayed,
             ];
         }
 
@@ -712,7 +712,7 @@ class mooduell {
                 $returndata[] = [
                     'identifier' => $entry->identifier,
                     'model' => $entry->model,
-                    'pushtoken' => $entry->pushtoken
+                    'pushtoken' => $entry->pushtoken,
                 ];
             }
         }
@@ -747,7 +747,7 @@ class mooduell {
             'model' => $model,
             'identifier' => $identifier,
             'pushtoken' => $pushtoken,
-            'numberofnotifications' => 0
+            'numberofnotifications' => 0,
         ];
 
         if ($data) {
@@ -1003,14 +1003,14 @@ class mooduell {
         global $PAGE;
         $event = event\course_module_viewed::create([
             'objectid' => $this->cm->instance,
-            'context' => $this->context
+            'context' => $this->context,
         ]);
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot('mooduell', $this->settings);
         $event->trigger();
 
         $PAGE->set_url('/mod/mooduell/view.php', [
-            'id' => $this->cm->id
+            'id' => $this->cm->id,
         ]);
         $PAGE->set_title(format_string($this->settings->name));
         $PAGE->set_heading(format_string($this->course->fullname));
@@ -1069,7 +1069,7 @@ class mooduell {
         if (count($questions) < 9) {
             $returnarray[] = [
                 'id' => 1,
-                'message' => get_string('notenoughquestions', 'mod_mooduell')
+                'message' => get_string('notenoughquestions', 'mod_mooduell'),
             ];
         }
 

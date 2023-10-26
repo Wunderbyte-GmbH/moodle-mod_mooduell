@@ -86,7 +86,7 @@ class game_control {
 
             $data = $DB->get_record('mooduell_games', [
                     'id' => $gameid,
-                    'mooduellid' => $this->mooduell->cm->instance
+                    'mooduellid' => $this->mooduell->cm->instance,
             ]);
 
             if (!$data->id) {
@@ -285,7 +285,7 @@ class game_control {
 
                     // We store the visibility for this instance.
                     $visibletouser = [
-                        $entry->mooduellid => $cm->uservisible
+                        $entry->mooduellid => $cm->uservisible,
                     ];
                 } else if (!$visibletouser[$entry->mooduellid]) {
                     continue;
@@ -414,7 +414,7 @@ class game_control {
         $questions = [];
 
         $categories = $DB->get_records('mooduell_categories', [
-                'mooduellid' => $this->mooduell->cm->instance
+                'mooduellid' => $this->mooduell->cm->instance,
         ]);
 
         if (count($categories) == 0) {
@@ -689,7 +689,7 @@ class game_control {
             'context' => $this->mooduell->context,
             'other' => [
                 'iscorrect' => $result == 2 ? true : false,
-                'questionid' => $questionid
+                'questionid' => $questionid,
             ]]);
         $event->trigger();
 
@@ -865,15 +865,15 @@ class game_control {
                 'registration_ids' => $tokens,
                 'data' => [
                         "name" => "xyz",
-                        'image' => 'https://www.example.com/images/minion.jpg'
+                        'image' => 'https://www.example.com/images/minion.jpg',
                 ],
                 'notification' => [
                         'body' => $message,
                         'title' => $message,
                         'sound' => 'default',
                         'icon' => 'icon',
-                        'badge' => 1
-                ]
+                        'badge' => 1,
+                ],
         ];
 
         return $fields;
@@ -1241,7 +1241,7 @@ class game_control {
             $headers = 
             [
                     'Authorization: key=' . $apiaccesskey,
-                    'Content-Type: application/json'
+                    'Content-Type: application/json',
             ];
             $ch = curl_init();
             curl_setopt( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );

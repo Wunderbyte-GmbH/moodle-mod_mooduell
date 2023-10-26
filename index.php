@@ -35,11 +35,11 @@ require_login($course);
 $PAGE->set_pagelayout('incourse');
 
 $params = [
-        'context' => $coursecontext
+        'context' => $coursecontext,
 ];
 
 $PAGE->set_url('/mod/mooduell/index.php', [
-        'id' => $id
+        'id' => $id,
 ]);
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
@@ -54,7 +54,7 @@ $mooduells = get_all_instances_in_course('mooduell', $course);
 
 if (empty($mooduells)) {
     notice(get_string('nonewmodules', 'mod_mooduell'), new moodle_url('/course/view.php', [
-            'id' => $course->id
+            'id' => $course->id,
     ]));
 }
 
@@ -64,55 +64,55 @@ $table->attributes['class'] = 'generaltable mod_index';
 if ($course->format == 'weeks') {
     $table->head = [
             get_string('week'),
-            get_string('name')
+            get_string('name'),
     ];
     $table->align = [
             'center',
-            'left'
+            'left',
     ];
 } else if ($course->format == 'topics') {
     $table->head = [
             get_string('topic'),
-            get_string('name')
+            get_string('name'),
     ];
     $table->align = [
             'center',
             'left',
             'left',
-            'left'
+            'left',
     ];
 } else {
     $table->head = [
-            get_string('name')
+            get_string('name'),
     ];
     $table->align = [
             'left',
             'left',
-            'left'
+            'left',
     ];
 }
 
 foreach ($mooduells as $mooduell) {
     if (!$mooduell->visible) {
         $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', [
-                'id' => $mooduell->coursemodule
+                'id' => $mooduell->coursemodule,
         ]), format_string($mooduell->name, true), [
-                'class' => 'dimmed'
+                'class' => 'dimmed',
         ]);
     } else {
         $link = html_writer::link(new moodle_url('/mod/mooduell/view.php', [
-                'id' => $mooduell->coursemodule
+                'id' => $mooduell->coursemodule,
         ]), format_string($mooduell->name, true));
     }
 
     if ($course->format == 'weeks' or $course->format == 'topics') {
         $table->data[] = [
                 $mooduell->section,
-                $link
+                $link,
         ];
     } else {
         $table->data[] = [
-                $link
+                $link,
         ];
     }
 }

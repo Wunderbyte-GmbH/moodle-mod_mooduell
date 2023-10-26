@@ -489,7 +489,7 @@ if ($CFG->version >= 2021051700) {
                     if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                         'mooduellid' => $mooduellid,
                         'challengeid' => $challenge->id,
-                        'userid' => $USER->id
+                        'userid' => $USER->id,
                     ])) {
                         // Error prevention.
                         $actualnumber = 0;

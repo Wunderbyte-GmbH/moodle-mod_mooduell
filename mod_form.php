@@ -56,7 +56,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('mooduellname', 'mod_mooduell'), [
-            'size' => '64'
+            'size' => '64',
         ]);
 
         if (!empty($CFG->formatstringstriptags)) {
@@ -224,7 +224,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             "30" => get_string('xseconds', 'mod_mooduell', 30),
             "60" => get_string('xseconds', 'mod_mooduell', 60),
             "90" => get_string('xseconds', 'mod_mooduell', 90),
-            "120" => get_string('xseconds', 'mod_mooduell', 120)
+            "120" => get_string('xseconds', 'mod_mooduell', 120),
         ];
     }
 
@@ -241,7 +241,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             "5" => get_string('xseconds', 'mod_mooduell', 5),
             "10" => get_string('xseconds', 'mod_mooduell', 10),
             "20" => get_string('xseconds', 'mod_mooduell', 20),
-            "30" => get_string('xseconds', 'mod_mooduell', 30)
+            "30" => get_string('xseconds', 'mod_mooduell', 30),
         ];
     }
 
@@ -307,7 +307,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             33 => '33',
             50 => '50',
             66 => '66',
-            100 => '100'
+            100 => '100',
         ];
     }
 
@@ -379,7 +379,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $crtask->set_custom_data([
                 'cmid' => $cmid,
                 'mooduellid' => $mooduellid,
-                'completionexpected' => $data->completionexpected
+                'completionexpected' => $data->completionexpected,
             ]);
             $crtask->set_next_run_time($data->completionexpected);
 

@@ -42,7 +42,7 @@ class custom_completion extends activity_custom_completion {
             'completiongamesplayed',
             'completiongameswon',
             'completionrightanswers',
-            'completionrightanswersperc'
+            'completionrightanswersperc',
         ];
     }
 
@@ -63,7 +63,7 @@ class custom_completion extends activity_custom_completion {
             'completiongamesplayed' => get_string('completiondetail:gamesplayed', 'mod_mooduell', $gamesplayed),
             'completiongameswon' => get_string('completiondetail:gameswon', 'mod_mooduell', $gameswon),
             'completionrightanswers' => get_string('completiondetail:rightanswers', 'mod_mooduell', $rightanswers),
-            'completionrightanswersperc' => get_string('completiondetail:rightanswersperc', 'mod_mooduell', $rightanswersperc)
+            'completionrightanswersperc' => get_string('completiondetail:rightanswersperc', 'mod_mooduell', $rightanswersperc),
         ];
     }
 
@@ -98,7 +98,7 @@ class custom_completion extends activity_custom_completion {
                 if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                     'mooduellid' => $mooduellid,
                     'challengeid' => $challenge->id,
-                    'userid' => $USER->id
+                    'userid' => $USER->id,
                 ])) {
                     // Error prevention.
                     $actualnumber = 0;
@@ -135,7 +135,7 @@ class custom_completion extends activity_custom_completion {
             'completiongamesplayed',
             'completiongameswon',
             'completionrightanswers',
-            'completionrightanswersperc'
+            'completionrightanswersperc',
         ];
     }
 }

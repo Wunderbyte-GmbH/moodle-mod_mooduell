@@ -181,7 +181,7 @@ class question_control {
         // So use ORDER BY in an SQL statement instead of get_records.
         $sql = "SELECT * FROM {question_answers} WHERE question = :questionid ORDER BY id ASC";
         $params = [
-            'questionid' => $this->questionid
+            'questionid' => $this->questionid,
         ];
 
         if (!$listofanswers || count($listofanswers) === 0) {
@@ -488,7 +488,7 @@ class question_control {
         if ($this->questiontype == 'ddwtos') {
             if (empty($this->answers)) {
                 $this->warnings[] = [
-                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
+                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid),
                 ];
                 $this->status = get_string('notok', 'mod_mooduell');
             } else {
@@ -505,7 +505,7 @@ class question_control {
         }
         if ($countcorrectanswers < 1) {
             $this->warnings[] = [
-                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid)
+                    'message' => get_string('questionhasnocorrectanswers', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         } else if ($countcorrectanswers == 1 && $this->questiontype == 'multichoice') {
@@ -523,12 +523,12 @@ class question_control {
     private function check_for_right_length_of_questiontext() {
         if (strlen($this->questiontext) < MINLENGTH) {
             $this->warnings[] = [
-                    'message' => get_string('questiontexttooshort', 'mod_mooduell', $this->questionid)
+                    'message' => get_string('questiontexttooshort', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         } else if (strlen($this->questiontext) > MAXLENGTH) {
             $this->warnings[] = [
-                    'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid)
+                    'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         }
@@ -541,7 +541,7 @@ class question_control {
     private function check_for_right_type_of_question() {
         if (!in_array($this->questiontype, ACCEPTEDTYPES)) {
             $this->warnings[] = [
-                    'message' => get_string('wrongquestiontype', 'mod_mooduell', $this->questionid)
+                    'message' => get_string('wrongquestiontype', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         }

@@ -29,47 +29,47 @@ $observers = [
 
         [
                 'eventname' => 'mod_mooduell\event\user_challenged',
-                'callback' => 'mod_mooduell_observer::user_challenged'
+                'callback' => 'mod_mooduell_observer::user_challenged',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\leg_finished',
-                'callback' => 'mod_mooduell_observer::leg_finished'
+                'callback' => 'mod_mooduell_observer::leg_finished',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\game_finished',
-                'callback' => 'mod_mooduell_observer::game_finished'
+                'callback' => 'mod_mooduell_observer::game_finished',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\game_won',
-                'callback' => 'mod_mooduell_observer::game_won'
+                'callback' => 'mod_mooduell_observer::game_won',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\game_lost',
-                'callback' => 'mod_mooduell_observer::game_lost'
+                'callback' => 'mod_mooduell_observer::game_lost',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\game_draw',
-                'callback' => 'mod_mooduell_observer::game_draw'
+                'callback' => 'mod_mooduell_observer::game_draw',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\question_answered',
-                'callback' => 'mod_mooduell_observer::question_answered'
+                'callback' => 'mod_mooduell_observer::question_answered',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\question_correctly_answered',
-                'callback' => 'mod_mooduell_observer::question_correctly_answered'
+                'callback' => 'mod_mooduell_observer::question_correctly_answered',
         ],
 
         [
                 'eventname' => 'mod_mooduell\event\question_wrongly_answered',
-                'callback' => 'mod_mooduell_observer::question_wrongly_answered'
+                'callback' => 'mod_mooduell_observer::question_wrongly_answered',
         ],
         [
                 'eventname' => 'core\event\course_module_created',
@@ -110,5 +110,5 @@ $observers = [
                 'eventname' => '\core\event\question_created',
                 'callback' => 'mod_mooduell_observer::delete_cache',
                 'internal'  => false,
-        ]
+        ],
 ];

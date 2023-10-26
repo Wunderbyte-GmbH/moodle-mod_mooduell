@@ -104,7 +104,7 @@ class table_games extends wunderbyte_table {
                     9 => "September",
                     10 => "Oktober",
                     11 => "November",
-                    12 => "Dezember"
+                    12 => "Dezember",
                 ];
                 // Now build the German date string.
                 $name = date("d. ", $game->timemodified);

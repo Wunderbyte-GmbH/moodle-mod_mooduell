@@ -25,7 +25,7 @@ class MaskUtilTest extends TestCase
                     [0, 1, 0, 1, 0, 1],
                     [1, 0, 1, 0, 1, 0],
                     [0, 1, 0, 1, 0, 1],
-                ]
+                ],
             ],
             [
                 1,
@@ -36,7 +36,7 @@ class MaskUtilTest extends TestCase
                     [0, 0, 0, 0, 0, 0],
                     [1, 1, 1, 1, 1, 1],
                     [0, 0, 0, 0, 0, 0],
-                ]
+                ],
             ],
             [
                 2,
@@ -47,7 +47,7 @@ class MaskUtilTest extends TestCase
                     [1, 0, 0, 1, 0, 0],
                     [1, 0, 0, 1, 0, 0],
                     [1, 0, 0, 1, 0, 0],
-                ]
+                ],
             ],
             [
                 3,
@@ -58,7 +58,7 @@ class MaskUtilTest extends TestCase
                     [1, 0, 0, 1, 0, 0],
                     [0, 0, 1, 0, 0, 1],
                     [0, 1, 0, 0, 1, 0],
-                ]
+                ],
             ],
             [
                 4,
@@ -69,7 +69,7 @@ class MaskUtilTest extends TestCase
                     [0, 0, 0, 1, 1, 1],
                     [1, 1, 1, 0, 0, 0],
                     [1, 1, 1, 0, 0, 0],
-                ]
+                ],
             ],
             [
                 5,
@@ -80,7 +80,7 @@ class MaskUtilTest extends TestCase
                     [1, 0, 1, 0, 1, 0],
                     [1, 0, 0, 1, 0, 0],
                     [1, 0, 0, 0, 0, 0],
-                ]
+                ],
             ],
             [
                 6,
@@ -91,7 +91,7 @@ class MaskUtilTest extends TestCase
                     [1, 0, 1, 0, 1, 0],
                     [1, 0, 1, 1, 0, 1],
                     [1, 0, 0, 0, 1, 1],
-                ]
+                ],
             ],
             [
                 7,
@@ -102,7 +102,7 @@ class MaskUtilTest extends TestCase
                     [0, 1, 0, 1, 0, 1],
                     [1, 1, 1, 0, 0, 0],
                     [0, 1, 1, 1, 0, 0],
-                ]
+                ],
             ],
         ];
     }

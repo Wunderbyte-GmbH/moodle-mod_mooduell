@@ -65,7 +65,7 @@ class mod_mooduell_observer {
             $drawevent = game_draw::create([
                 'context' => $context,
                 'userid' => $playeraid,
-                'relateduserid' => $playerbid
+                'relateduserid' => $playerbid,
             ]);
             $drawevent->trigger();
         } else {
@@ -80,7 +80,7 @@ class mod_mooduell_observer {
             $wonevent = game_won::create([
                 'context' => $context,
                 'userid' => $winnerid,
-                'relateduserid' => $loserid
+                'relateduserid' => $loserid,
             ]);
             $wonevent->trigger();
 
@@ -88,7 +88,7 @@ class mod_mooduell_observer {
             $lostevent = game_lost::create([
                 'context' => $context,
                 'userid' => $loserid,
-                'relateduserid' => $winnerid
+                'relateduserid' => $winnerid,
             ]);
             $lostevent->trigger();
         }
@@ -162,8 +162,8 @@ class mod_mooduell_observer {
             $qcorrectevent = question_correctly_answered::create([
                 'context' => $context,
                 'other' => [
-                    'questionid' => $questionid
-                ]
+                    'questionid' => $questionid,
+                ],
             ]);
             $qcorrectevent->trigger();
         } else {
@@ -171,8 +171,8 @@ class mod_mooduell_observer {
             $qwrongevent = question_wrongly_answered::create([
                 'context' => $context,
                 'other' => [
-                    'questionid' => $questionid
-                ]
+                    'questionid' => $questionid,
+                ],
             ]);
             $qwrongevent->trigger();
         }

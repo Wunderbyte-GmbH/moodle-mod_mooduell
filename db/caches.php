@@ -30,21 +30,21 @@ $definitions = [
         'simplekeys' => true,
         'staticacceleration' => true,
         'staticaccelerationsize' => 5,
-        'invalidationevents' => ['setbacktablescache']
+        'invalidationevents' => ['setbacktablescache'],
     ],
     'userscache' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => false,
         'staticaccelerationsize' => 1,
-        'invalidationevents' => ['setbackuserscache']
+        'invalidationevents' => ['setbackuserscache'],
     ],
     'questionscache' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => false,
         'staticaccelerationsize' => 1,
-        'invalidationevents' => ['setbackquestionscache']
-    ]
+        'invalidationevents' => ['setbackquestionscache'],
+    ],
 ];
 

@@ -40,7 +40,7 @@ class completion_utils {
             'completiongamesplayed' => 'number_of_games_finished',
             'completiongameswon' => 'number_of_games_won',
             'completionrightanswers' => 'number_of_correct_answers',
-            'completionrightanswersperc' => 'percentage_of_correct_answers'
+            'completionrightanswersperc' => 'percentage_of_correct_answers',
         ];
 
         return $completionmodes;
@@ -77,7 +77,7 @@ class completion_utils {
                     if (!$challenge->actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                         'mooduellid' => $mooduellid,
                         'challengeid' => $challenge->id,
-                        'userid' => $USER->id
+                        'userid' => $USER->id,
                     ])) {
                         // Error prevention.
                         $challenge->actualnumber = 0;

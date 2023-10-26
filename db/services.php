@@ -30,13 +30,13 @@ $services = [
         'Wunderbyte MooDuell Tokens' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' =>  [
                         'mod_mooduell_get_user_token',
-                        'core_webservice_get_site_info'
+                        'core_webservice_get_site_info',
                 ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_tokens',
                 'downloadfiles' => 1,    // Allow file downloads.
                 'uploadfiles'  => 1,      // Allow file uploads.
-                'enabled' => 1
+                'enabled' => 1,
         ],
         'Wunderbyte MooDuell external' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
                 'functions' =>  [
@@ -59,14 +59,14 @@ $services = [
                         'mod_mooduell_set_pushtokens',
                         'mod_mooduell_giveup_game',
                         'mod_mooduell_update_profile_picture',
-                        'core_badges_get_user_badges'
+                        'core_badges_get_user_badges',
                 ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
                 'downloadfiles' => 1,    // Allow file downloads.
                 'uploadfiles'  => 1,      // Allow file uploads.
-                'enabled' => 1
-        ]
+                'enabled' => 1,
+        ],
 ];
 
 
@@ -98,8 +98,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_game_data' => [
                 'classname' => 'mod_mooduell_external',
@@ -110,8 +110,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_quiz_users' => [
                 'classname' => 'mod_mooduell_external',
@@ -122,8 +122,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_quizzes_by_courses' => [
                 'classname' => 'mod_mooduell_external',
@@ -134,8 +134,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_games_by_courses' => [
                 'classname' => 'mod_mooduell_external',
@@ -147,8 +147,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_answer_question' => [
                 'classname' => 'mod_mooduell_external',
@@ -159,8 +159,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_user_stats' => [
                 'classname' => 'mod_mooduell_external',
@@ -171,8 +171,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_highscores' => [
                 'classname' => 'mod_mooduell_external',
@@ -183,8 +183,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_set_alternatename' => [
                 'classname' => 'mod_mooduell_external',
@@ -195,8 +195,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_set_pushtokens' => [
                 'classname' => 'mod_mooduell_external',
@@ -207,8 +207,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_giveup_game' => [
                 'classname' => 'mod_mooduell_external',
@@ -219,8 +219,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_update_profile_picture' => [
                 'classname' => 'mod_mooduell_external',
@@ -232,8 +232,8 @@ $functions = [
                 'ajax' => true,
                 'capabilities' => 'mod/mooduell:play',
                 'services' => [
-                        'mod_mooduell_external'
-                ]
+                        'mod_mooduell_external',
+                ],
         ],
         'mod_mooduell_get_purchases' => [
                 'classname' => 'mod_mooduell_external',

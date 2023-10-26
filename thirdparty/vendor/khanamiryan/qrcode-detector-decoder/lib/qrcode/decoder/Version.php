@@ -39,7 +39,7 @@ class Version
         0x168C9, 0x177EC, 0x18EC4, 0x191E1, 0x1AFAB,
         0x1B08E, 0x1CC1A, 0x1D33F, 0x1ED75, 0x1F250,
         0x209D5, 0x216F0, 0x228BA, 0x2379F, 0x24B0B,
-        0x2542E, 0x26A64, 0x27541, 0x28C69
+        0x2542E, 0x26A64, 0x27541, 0x28C69,
     ];
 
     private static $VERSIONS;
@@ -532,7 +532,7 @@ class Version
                     new ECBlocks(30, [new ECB(34, 24),
                         new ECB(34, 25)]),
                     new ECBlocks(30, [new ECB(20, 15),
-                        new ECB(61, 16)])])
+                        new ECB(61, 16)])]),
         ];
     }
 }

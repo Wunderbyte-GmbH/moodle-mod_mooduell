@@ -398,7 +398,7 @@ class provider implements
             'contextlevel'  => CONTEXT_MODULE,
             'userida'       => $user->id,
             'useridb'       => $user->id,
-            'userid'        => $user->id
+            'userid'        => $user->id,
         ];
         $params += $contextparams;
 
@@ -458,7 +458,7 @@ class provider implements
                 'status' => $record->status,
                 'victorycoefficient' => $record->victorycoefficient . ' (Victories correlated to the strength of adversary)',
                 'timemodified' => transform::datetime($record->timemodified),
-                'timecreated' => transform::datetime($record->timecreated)
+                'timecreated' => transform::datetime($record->timecreated),
             ];
 
             $writer->export_data($subcontext, $data);
@@ -493,7 +493,7 @@ class provider implements
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
-            'userid2'       => $user->id
+            'userid2'       => $user->id,
         ];
         $params += $contextparams;
 
@@ -519,7 +519,7 @@ class provider implements
                 'qplayed' => $record->qplayed . ' (Number of played questions)',
                 'qcpercentage' => $record->qcpercentage . ' (Percentage of correctly answered questions)',
                 'timecreated' => transform::datetime($record->timecreated),
-                'timemodified' => transform::datetime($record->timemodified)
+                'timemodified' => transform::datetime($record->timemodified),
             ];
             $writer->export_data($subcontext, $data);
         }
@@ -553,7 +553,7 @@ class provider implements
             'modname'       => 'mooduell',
             'contextlevel'  => CONTEXT_MODULE,
             'userid'        => $user->id,
-            'userid2'       => $user->id
+            'userid2'       => $user->id,
         ];
         $params += $contextparams;
 
@@ -570,7 +570,7 @@ class provider implements
                 'identifier' => $record->identifier . ' (Device identifier)',
                 'model' => $record->model . ' (Device model)',
                 'pushtoken' => $record->pushtoken,
-                'numberofnotifications' => $record->numberofnotifications . ' (Number of notifications)'
+                'numberofnotifications' => $record->numberofnotifications . ' (Number of notifications)',
             ];
             $writer->export_data($subcontext, $data);
         }
@@ -607,7 +607,7 @@ class provider implements
             'modname' => 'mooduell',
             'contextlevel' => CONTEXT_MODULE,
             'playeraid' => $user->id,
-            'playerbid' => $user->id
+            'playerbid' => $user->id,
         ];
         $params += $contextparams;
 
@@ -650,7 +650,7 @@ class provider implements
                 'gameid' => $record->gameid,
                 'questionid' => $record->questionid . ' (Question: "' . strip_tags($record->questiontext) . '")',
                 'playeraanswered' => $record->playeraanswered,
-                'playerbanswered' => $record->playerbanswered
+                'playerbanswered' => $record->playerbanswered,
             ];
             $writer->export_data($subcontext, $data);
         }

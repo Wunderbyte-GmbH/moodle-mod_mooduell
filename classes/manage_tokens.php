@@ -110,7 +110,7 @@ class manage_tokens {
         $conditions = [
             'userid' => $userid,
             'externalserviceid' => $mooduellwebservice->id,
-            'tokentype' => EXTERNAL_TOKEN_PERMANENT
+            'tokentype' => EXTERNAL_TOKEN_PERMANENT,
         ];
         $tokens = $DB->get_records('external_tokens', $conditions, 'timecreated ASC');
 
@@ -176,8 +176,8 @@ class manage_tokens {
                 'objectid' => $eventtoken->id,
                 'relateduserid' => $userid,
                 'other' => [
-                    'auto' => true
-                ]
+                    'auto' => true,
+                ],
             ];
             $event = \core\event\webservice_token_created::create($params);
             $event->add_record_snapshot('external_tokens', $eventtoken);
