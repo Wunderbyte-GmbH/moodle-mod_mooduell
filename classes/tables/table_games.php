@@ -42,6 +42,11 @@ class table_games extends wunderbyte_table {
     public $action;
 
     /**
+     * @var int mooduellid
+     */
+    public $mooduellid;
+
+    /**
      * mooduell_table constructor
      *
      * @param string $action
@@ -144,6 +149,6 @@ class table_games extends wunderbyte_table {
         $mooduell = mooduell::get_instance($this->mooduellid);
         $action = new list_action($game->id, $game, $mooduell);
 
-        return $OUTPUT->render_from_template('mod_mooduell/list_action', $action);
+        return $OUTPUT->render_from_template('mod_mooduell/list_action', $action->export_for_template($OUTPUT));
     }
 }
