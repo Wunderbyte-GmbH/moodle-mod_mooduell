@@ -62,10 +62,11 @@ Feature: Check user interface
     And I should see "No records found"
 
   @javascript
-  Scenario: Show QR Code
+  Scenario: Mooduell: User show QR Code
     Given I am on the "mooduell1" Activity page logged in as user1
     When I press "Show QR Code"
-    Then I should see "QR Code Login"
+    And I wait until the page is ready
+    Then I should see "QR Code Login" in the ".modal-header" "css_element"
 
   @javascript
   Scenario: Players listed in open games when admin starts the games
