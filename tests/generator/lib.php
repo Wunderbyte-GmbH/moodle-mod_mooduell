@@ -50,14 +50,62 @@ class mod_mooduell_generator extends testing_module_generator {
 
     /**
      * To create a new instance.
-     * @param null $record
+     * @param array|null $record
      * @param array|null $options
      * @return stdClass
      * @throws coding_exception
      */
     public function create_instance($record = null, array $options = null) {
+        return parent::create_instance($record, (array) $options);
+    }
+
+    /**
+     * Import questions to the question bank from Moodle XML file.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function create_mooduell_questions(array $data) {
         global $CFG;
 
-        return parent::create_instance($record, (array)$options);
+        $filepath = "{$CFG->dirroot}/{$data['filepath']}";
+
+        if (!file_exists($filepath)) {
+            throw new coding_exception("File '{$filepath}' does not exist");
+        }
+
+        $course = get_course($data['courseid']);
+        $context = context_course::instance($course->id);
+
+        // Load data into class.
+        $qformat = new \qformat_xml();
+        $qformat->setCategory($data['category']);
+        $qformat->setContexts([$context]);
+        $qformat->setCourse($course);
+        $qformat->setFilename($filepath);
+        $qformat->setRealfilename($filepath);
+        $qformat->setCatfromfile(false);
+        $qformat->setContextfromfile(false);
+        $qformat->setStoponerror(true);
+        // Do anything before that we need to.
+        ob_start();
+        if (!$qformat->importpreprocess()) {
+            $output = ob_get_contents();
+            ob_end_clean();
+            throw new moodle_exception('Cannot import {$filepath} (preprocessing). Output: {$output}', 'mod_mooduell', '');
+        }
+        // Process the uploaded file.
+        if (!$qformat->importprocess()) {
+            $output = ob_get_contents();
+            ob_end_clean();
+            throw new moodle_exception('Cannot import {$filepath} (processing). Output: {$output}', 'mod_mooduell', '');
+        }
+        // In case anything needs to be done after.
+        if (!$qformat->importpostprocess()) {
+            $output = ob_get_contents();
+            ob_end_clean();
+            throw new moodle_exception('Cannot import {$filepath} (postprocessing). Output: {$output}', 'mod_mooduell', '');
+        }
+        ob_end_clean();
     }
 }
