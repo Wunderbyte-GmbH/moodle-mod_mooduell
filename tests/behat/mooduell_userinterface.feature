@@ -45,29 +45,25 @@ Feature: Check user interface
     Then I should see "Parsing questions from import file."
 
   @javascript
-  Scenario: Check tabs
-    Given I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I follow "Mooduell Test"
+  Scenario: Mooduell: User check tabs
+    Given I am on the "mooduell1" Activity page logged in as user1
     When I follow "Statistics"
     Then I should see "Opponents"
-    Then I should see "Open games"
-    Then I should see "Finished games"
-    Then I should see "Games won"
-    Then I should see "Correct answers"
-    Then I should see "Correctly answered"
-    When I follow "Open games"
-    Then I should see "Last time played"
-    When I follow "Finished games"
-    Then I should see "Last time played"
-    When I follow "Highscores"
-    Then I should see "Ranking"
+    And I should see "Open games"
+    And I should see "Finished games"
+    And I should see "Games won"
+    And I should see "Correct answers"
+    And I should see "Correctly answered"
+    And I follow "Open games"
+    And I should see "No records found"
+    And I follow "Finished games"
+    And I should see "No records found"
+    And I follow "Highscores"
+    And I should see "No records found"
 
   @javascript
   Scenario: Show QR Code
-    Given I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I follow "Mooduell Test"
+    Given I am on the "mooduell1" Activity page logged in as user1
     When I press "Show QR Code"
     Then I should see "QR Code Login"
 
