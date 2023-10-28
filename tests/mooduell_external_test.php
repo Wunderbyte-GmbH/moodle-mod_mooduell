@@ -28,17 +28,8 @@ namespace mod_mooduell;
 use advanced_testcase;
 use coding_exception;
 use context_course;
-use moodle_exception;
-use stdClass;
 use mod_mooduell_generator;
 use mod_mooduell_external;
-use mod_quiz\question\bank\qbank_helper;
-
-defined('MOODLE_INTERNAL') || die();
-global $CFG;
-
-require_once($CFG->dirroot . '/question/format/xml/format.php');
-require_once($CFG->libdir.'/questionlib.php');
 
 /**
  * Test class for mooduell external functions.
@@ -110,5 +101,8 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertEquals($user2->id, $attempt->playerbid);
         // Status: NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished!
         $this->assertEquals(1, $attempt->status);
+        $this->assertEquals(0, $attempt->winnerid);
+        $this->assertIsArray($attempt->questions);
+        $this->assertObjectNotHasAttribute('warnings', $attempt);
     }
 }
