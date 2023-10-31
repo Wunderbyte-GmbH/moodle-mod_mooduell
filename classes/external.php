@@ -299,6 +299,8 @@ class mod_mooduell_external extends external_api {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
+        $theme = get_config('mooduell', 'theme');
+        $themeimg = get_config('mooduell', 'companylogo');
 
         // Set minimum requirem App Version here.
         $versions = [
@@ -309,7 +311,9 @@ class mod_mooduell_external extends external_api {
             'url' => $url,
             'unlock' => $pay,
             'versions' => $versions,
-        ];
+            'theme' => $theme,
+            'themeimg' => $themeimg
+        );
 
         self::validate_parameters((self::get_mooduell_support_parameters()), []);
         return $support;
@@ -327,8 +331,10 @@ class mod_mooduell_external extends external_api {
                         [
                             "ios" => new external_value(PARAM_RAW, 'ios app version'),
                             "android" => new external_value(PARAM_RAW, 'android app version'),
-                        ]),
-                    ]);
+                        )),
+                        'theme' => new external_value(PARAM_TEXT, 'theme'),
+                        'themeimg' => new external_value(PARAM_TEXT, 'themeimg'),
+                    ));
     }
     /**
      * Defines support input parameters.
