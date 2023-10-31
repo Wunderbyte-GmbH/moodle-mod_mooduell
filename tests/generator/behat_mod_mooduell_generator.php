@@ -33,8 +33,8 @@ class behat_mod_mooduell_generator extends behat_generator_base {
         return [
             'questions' => [
                 'datagenerator' => 'mooduell_questions',
-                'required' => ['filepath', 'filename', 'course'],
-                'switchids' => ['course' => 'courseid'],
+                'required' => ['course', 'questioncategory', 'filepath', 'filename'],
+                'switchids' => ['course' => 'courseid', 'questioncategory' => 'questioncategoryid'],
             ],
         ];
     }

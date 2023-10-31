@@ -76,15 +76,20 @@ class mod_mooduell_generator extends testing_module_generator {
         $filepath = "{$CFG->dirroot}/{$data['filepath']}";
 
         if (!file_exists($filepath)) {
-            throw new coding_exception("File '{$filepath}' does not exist");
+            throw new coding_exception("File '{$filepath}' does not exist!");
         }
+
+        if (empty($data['questioncategoryid'])) {
+            throw new coding_exception("No question category provided!");
+        }
+        $questioncategory = $this->get_questioncategory($data['questioncategoryid']);
 
         $course = get_course($data['courseid']);
         $context = context_course::instance($course->id);
 
         // Load data into class.
         $qformat = new \qformat_xml();
-        $qformat->setCategory($data['category']);
+        $qformat->setCategory($questioncategory);
         $qformat->setContexts([$context]);
         $qformat->setCourse($course);
         $qformat->setFilename($filepath);
@@ -112,5 +117,16 @@ class mod_mooduell_generator extends testing_module_generator {
             throw new moodle_exception('Cannot import {$filepath} (postprocessing). Output: {$output}', 'mod_mooduell', '');
         }
         ob_end_clean();
+    }
+
+    /**
+     * Get the question category by given ID.
+     *
+     * @param int $id the question category id.
+     * @return stdClass the question category record.
+     */
+    protected function get_questioncategory($id) {
+        global $DB;
+        return $DB->get_record('question_categories', ['id' => $id], '*', MUST_EXIST);
     }
 }
