@@ -315,11 +315,13 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
     }
 
     // Make sure the filearea is one of those used by the plugin.
-    if ($filearea !== 'aliasavatar') {
-        return false;
-    }
+    // if ($filearea !== 'aliasavatar' && $filearea !== 'themepicture') {
+    //     return false;
+    // }
 
-    isloggedin();
+
+
+    // isloggedin();
 
     // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
     $itemid = array_shift($args); // The first item in the $args array.
