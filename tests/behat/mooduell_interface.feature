@@ -52,6 +52,7 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user1"
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
+    And I wait until the page is ready
     And I follow "Statistics"
     And I follow "Open games"
     And I should see "Username 1"

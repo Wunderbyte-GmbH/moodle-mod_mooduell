@@ -981,14 +981,14 @@ class mooduell {
 
         profile_load_custom_fields($user);
 
-        if (!$user->profile['mooduell_alias'] && strlen($user->alternatename) > 0) {
+        if (empty($user->profile['mooduell_alias']) && !empty($user->alternatename)) {
             $user->profile_field_mooduell_alias = $user->alternatename;
             profile_save_data($user);
         }
 
         $returnstring = '';
         if ($usefullnames != 1) {
-            if ($user->profile['mooduell_alias'] && strlen($user->profile['mooduell_alias']) > 0) {
+            if (!empty($user->profile['mooduell_alias'])) {
                 $returnstring = $user->profile['mooduell_alias'];
             } else {
                 $returnstring = get_string('userhasnonickname', 'mod_mooduell') . ', userid: ' . $user->id;

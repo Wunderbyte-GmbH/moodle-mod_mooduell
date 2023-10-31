@@ -77,7 +77,6 @@ class behat_mooduell extends behat_base {
                 $game->validate_question($questionid, [$answerids[0]]);
                 ++$questioncounter;
             }
-
             ++$counter;
         }
     }
@@ -94,9 +93,7 @@ class behat_mooduell extends behat_base {
         $data = mod_mooduell_external::get_games_by_courses([], 0);
 
         $numgames = 0;
-        $quizzes  = $data["quizzes"];
-        $numquizzes = count($quizzes);
-        if ($numquizzes == 0) {
+        if (empty($data["quizzes"])) {
             throw new moodle_exception("Testerror", "mod_mooduell", "", $numgames, "Anzahl der Spiele ist: " . $numgames);
         }
 
