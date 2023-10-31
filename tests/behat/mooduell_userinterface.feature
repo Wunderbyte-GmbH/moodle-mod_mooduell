@@ -82,7 +82,6 @@ Feature: Check user interface
     And I follow "Open games"
     Then I should see "Admin User"
     And I should see "Username 1"
-    Then I wait "6" seconds
 
   @javascript
   Scenario: Players listed in open games when user starts the games
@@ -92,13 +91,14 @@ Feature: Check user interface
     And I follow "Settings"
     And I press "Save and return to course"
     When I log in as "user1"
+    ## Above doas not working - no actual login happens in behat - $USER still contain "admin"
+    ## When I log in as "admin"
     And I am on "Course 1" course homepage
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
     And I follow "Open games"
     Then I should see "Admin User"
     And I should see "Username 2"
-    Then I wait "60" seconds
 
   @javascript
   Scenario: Finish games and list them in finished games
@@ -115,4 +115,3 @@ Feature: Check user interface
     When I log in as "teacher"
     And I am on "Course 1" course homepage
     And I play all open questions
-    Then I wait "6" seconds
