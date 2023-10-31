@@ -20,13 +20,14 @@ Feature: Check user interface
       | user1    | C1     | student        |
       | user2    | C1     | student        |
       | teacher  | C1     | editingteacher |
-      | teacher2  | C1     | editingteacher |
+      | teacher2 | C1     | editingteacher |
     And the following "activities" exist:
-      | activity   | name                | intro              | course | idnumber    | usefullnames |
-      | mooduell   | Mooduell Test       | Mooduell Test      | C1     | mooduell1   | 1 |
+      | activity   | name          | intro         | course | idnumber  | usefullnames |
+      | mooduell   | Mooduell Test | Mooduell Test | C1     | mooduell1 | 1            |
     And the following "question categories" exist:
-      | contextlevel | reference | name           |
-      | Course       | C1        | Test questions |
+      | contextlevel | reference | name             |
+      | Course       | C1        | Test questions   |
+      | Course       | C1        | Import questions |
     And the following "questions" exist:
       | questioncategory | qtype | name                              | questiontext         | answer 1 | answer 2 |
       | Test questions   | multichoice | Test question to be deleted | 1+1=                 | 2 | 7 |
@@ -38,11 +39,9 @@ Feature: Check user interface
       | Test questions   | multichoice | Test question to be deleted | 7+7=                 | 14 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 8+8=                 | 16 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 9+9=                 | 18 | 7 |
-    And I am on the "C1" "core_question > course question import" page logged in as "teacher"
-    And I set the field "id_format_xml" to "1"
-    And I upload "mod/mooduell/tests/fixtures/testquestions.xml" file to "Import" filemanager
-    And I press "id_submitbutton"
-    Then I should see "Parsing questions from import file."
+    And the following "mod_mooduell > questions" exist:
+      | course | questioncategory | filepath                                      | filename          |
+      | C1     | Import questions | mod/mooduell/tests/fixtures/testquestions.xml | testquestions.xml |
 
   @javascript
   Scenario: Mooduell: User check tabs
@@ -90,7 +89,7 @@ Feature: Check user interface
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I press "Save and return to course"
-    When I log in as "user1"
+    When I log in as "user2"
     ## Above doas not working - no actual login happens in behat - $USER still contain "admin"
     ## When I log in as "admin"
     And I am on "Course 1" course homepage

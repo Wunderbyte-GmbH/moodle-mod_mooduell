@@ -75,7 +75,11 @@ class mooduell_external_test extends advanced_testcase {
         $path = 'mod/mooduell/tests/fixtures/testquestions.xml';
         /** @var mod_mooduell_generator $plugingenerator */
         $plugingenerator = self::getDataGenerator()->get_plugin_generator('mod_mooduell');
-        $plugingenerator->create_mooduell_questions(['filepath' => $path, 'courseid' => $course->id, 'category' => $category]);
+        $plugingenerator->create_mooduell_questions([
+            'filepath' => $path,
+            'courseid' => $course->id,
+            'questioncategoryid' => $category->id,
+        ]);
 
         // Create mooduell instance.
         $ddata = [

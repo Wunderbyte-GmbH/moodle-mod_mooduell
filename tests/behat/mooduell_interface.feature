@@ -7,10 +7,10 @@ Feature: See user stats
   Background:
     Given the following "users" exist:
       | username | firstname | lastname | profile_field_mooduell_alias |
-      | user1    | Username  | 1        | Duell user1 |
-      | user2    | Username  | 2        | Duell user2 |
-      | teacher  | Teacher   | 3        | Duell teacher |
-      | manager  | Manager   | 4        | Duell manager |
+      | user1    | Username  | 1        | Duell user1                  |
+      | user2    | Username  | 2        | Duell user2                  |
+      | teacher  | Teacher   | 3        | Duell teacher                |
+      | manager  | Manager   | 4        | Duell manager                |
     And the following "courses" exist:
       | fullname | shortname |
       | Course 1 | C1        |
@@ -20,13 +20,14 @@ Feature: See user stats
       | user2    | C1     | student        |
       | teacher  | C1     | editingteacher |
     And the following "activities" exist:
-      | activity   | name                | intro              | course | idnumber    | usefullnames |
-      | mooduell   | Mooduell Test       | Mooduell Test      | C1     | mooduell1   | 1 |
+      | activity | name          | intro         | course | idnumber  | usefullnames |
+      | mooduell | Mooduell Test | Mooduell Test | C1     | mooduell1 | 1            |
     And the following "question categories" exist:
-      | contextlevel | reference | name           |
-      | Course       | C1        | Test questions |
+      | contextlevel | reference | name             |
+      | Course       | C1        | Test questions   |
+      | Course       | C1        | Import questions |
     And the following "questions" exist:
-      | questioncategory | qtype | name                              | questiontext         | answer 1 | answer 2 |
+      | questioncategory | qtype       | name                        | questiontext         | answer 1 | answer 2 |
       | Test questions   | multichoice | Test question to be deleted | 1+1=                 | 2 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 2+2=                 | 4 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 3+3=                 | 6 | 7 |
@@ -36,11 +37,9 @@ Feature: See user stats
       | Test questions   | multichoice | Test question to be deleted | 7+7=                 | 14 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 8+8=                 | 16 | 7 |
       | Test questions   | multichoice | Test question to be deleted | 9+9=                 | 18 | 7 |
-    And I am on the "C1" "core_question > course question import" page logged in as "teacher"
-    And I set the field "id_format_xml" to "1"
-    And I upload "mod/mooduell/tests/fixtures/testquestions.xml" file to "Import" filemanager
-    And I press "id_submitbutton"
-    Then I should see "Parsing questions from import file."
+    And the following "mod_mooduell > questions" exist:
+      | course | questioncategory | filepath                                      | filename          |
+      | C1     | Import questions | mod/mooduell/tests/fixtures/testquestions.xml | testquestions.xml |
 
   @javascript
   Scenario: Load questions and select category in mooduell
