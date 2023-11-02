@@ -68,7 +68,7 @@ Feature: Check user interface
     Then I should see "QR Code Login" in the ".modal-header" "css_element"
 
   @javascript
-  Scenario: Players listed in open games when admin starts the games
+  Scenario: Mooduel: Players listed in open games when admin starts the games
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
@@ -79,19 +79,19 @@ Feature: Check user interface
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Open games"
-    Then I should see "Admin User"
+    Then I should see "10 of 10 records found"
+    And I should see "Admin User"
     And I should see "Username 1"
 
   @javascript
-  Scenario: Players listed in open games when user starts the games
+  Scenario: Mooduel: Players listed in open games when user starts the games
     Given I log in as "teacher"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I press "Save and return to course"
     When I log in as "user2"
-    ## Above doas not working - no actual login happens in behat - $USER still contain "admin"
-    ## When I log in as "admin"
+    ## Above does nothing - no actual login happens in behat - $USER still contain "admin"
     And I am on "Course 1" course homepage
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
@@ -100,17 +100,29 @@ Feature: Check user interface
     And I should see "Username 2"
 
   @javascript
-  Scenario: Finish games and list them in finished games
-    Given I log in as "teacher"
+  Scenario: Mooduel: Finish games and list them in finished games
+    Given the following "course enrolments" exist:
+      | user     | course | role           |
+      | user1    | C1     | student        |
+      | user2    | C1     | student        |
+      | teacher  | C1     | editingteacher |
+      | teacher2 | C1     | editingteacher |
+      | admin    | C1     | editingteacher |
+    And I log in as "teacher"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
     And I follow "Settings"
     And I press "Save and return to course"
-    Given I start games in "Mooduell Test" against "user1"
-    When I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I play all open questions
-    Then I wait "6" seconds
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I play all open questions
+    ## Start 10 games as admin against "user1" and answer 3 questions immendiately
+    When I start games in "Mooduell Test" against "user1"
+    And I follow "Mooduell Test"
+    ## Play all questions in butches "3+3"
+    And I play all open questions as "user1"
+    And I play all open questions as "admin"
+    And I play all open questions as "user1"
+    And I follow "Open games"
+    And I should see "No records found"
+    And I follow "Finished games"
+    Then I should see "10 of 10 records found"
+    And I should see "Admin User"
+    And I should see "Username 1"
