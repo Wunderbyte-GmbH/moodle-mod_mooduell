@@ -82,27 +82,33 @@ class behat_mooduell extends behat_base {
     }
 
     /**
-     * Plays all open questions of the active player
-     * @Given /^I play all open questions$/
+     * Plays all open questions in behalf of specified player
+     * @Given /^I play all open questions as "(?P<playerbname_string>(?:[^"]|\\")*)"$/
+     * @param string $playername
      * @return void
      */
-    public static function i_play_all_open_questions() {
+    public function i_play_all_open_questions_as(string $playername) {
 
         global $USER;
+
+        // MANDATORY STEP: force $USER explicitly to $playername. Otherwise 'admin' is always current user in Behat!
+        advanced_testcase::setUser($this->get_user_by_name($playername));
 
         $data = mod_mooduell_external::get_games_by_courses([], 0);
 
         $numgames = 0;
         if (empty($data["quizzes"])) {
-            throw new moodle_exception("Testerror", "mod_mooduell", "", $numgames, "Anzahl der Spiele ist: " . $numgames);
+            // MANDATORY STEP: restore 'admin' as current user for rest of Behat steps!
+            advanced_testcase::setAdminUser();
+            throw new moodle_exception("Testerror: no qames", "mod_mooduell", "", $numgames, "Anzahl der Spiele ist: " . $numgames);
         }
 
         foreach ($data["quizzes"] as $quiz) {
             $games = $quiz['games'];
             $courseid = $quiz['courseid'];
             $quizid = $quiz['quizid'];
-            $mooduell = mooduell::get_mooduell_by_instance($quizid);
-            throw new moodle_exception("Testerror", "mod_mooduell", "", "Anzahl der Spiele ist: " . $numgames);
+
+            $mooduell = mooduell::get_mooduell_by_cmid($quizid);
 
             foreach ($games as $game) {
                 ++$numgames;
@@ -118,14 +124,14 @@ class behat_mooduell extends behat_base {
 
                 $gamedata = mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
                 $questions = $gamedata->questions;
-
-                if (!$questioncounter = self::return_question_counter($questions, $isplayera)) {
+                $questioncounter = self::return_question_counter($questions, $isplayera);
+                if ($questioncounter >= 9) {
+                    // Duel games limited to 9 questions.
                     continue;
                 }
 
                 $gamedata = (object)mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
                 $game = new game_control($mooduell, $gameid, $gamedata);
-
                 while ($questioncounter < 9) {
                     try {
                         $questionid = $questions[$questioncounter]->questionid;
@@ -138,10 +144,11 @@ class behat_mooduell extends behat_base {
                 }
             }
         }
-
+        // MANDATORY STEP: restore 'admin' as current user for rest of Behat steps!
+        advanced_testcase::setAdminUser();
     }
 
-    /**""
+    /**
      * Returns questioncounter for active player
      * @param array $questions
      * @param bool $isplayera
