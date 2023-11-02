@@ -170,6 +170,19 @@ class mooduell {
     }
 
     /**
+     * Get MooDuell object by cmid (id of course module table)
+     * @param int $cmid
+     * @return mooduell
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public static function get_mooduell_by_cmid(int $cmid) {
+        $cm = get_coursemodule_from_id('mooduell', $cmid);
+        return new mooduell($cm->id);
+    }
+
+    /**
      * Function to display page.
      * @param bool|null $inline
      * @param string|null $pagename
