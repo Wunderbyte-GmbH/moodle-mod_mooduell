@@ -133,13 +133,27 @@ class mooduell_external_test extends advanced_testcase {
         list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
 
         // Game will be started in behalf of user1.
-        //$this->setUser($user1);
+        $this->setUser($user1);
+        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
 
-        //$attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
-
+        // Get games data.
         $games = mod_mooduell_external::get_games_by_courses([$course->id], -1);
-        var_dump($duel1);
-        var_dump($games);
-        // Check attempt.
+
+        // Check games.
+        $this->assertIsArray($games["quizzes"][0]);
+        $this->assertEquals(1, count($games["quizzes"]));
+        $this->assertEquals($course->id, $games["quizzes"][0]["courseid"]);
+        $this->assertEquals($cmd1->id, $games["quizzes"][0]["coursemodule"]);
+        $this->assertEquals($duel1->course, $games["quizzes"][0]["courseid"]);
+        $this->assertEquals($duel1->cmid, $games["quizzes"][0]["coursemodule"]);
+        $this->assertIsArray($games["quizzes"][0]["games"]);
+        $this->assertEquals(1, count($games["quizzes"][0]["games"]));
+        // Check game attempt.
+        $this->assertEquals($user1->id, $games["quizzes"][0]["games"][0]["playeraid"]);
+        $this->assertEquals($user2->id, $games["quizzes"][0]["games"][0]["playerbid"]);
+        // Status: NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished!
+        $this->assertEquals(1, $games["quizzes"][0]["games"][0]["status"]);
+        $this->assertEquals(0, $games["quizzes"][0]["games"][0]["winnerid"]);
+        $this->assertEmpty($games["warnings"]);
     }
 }
