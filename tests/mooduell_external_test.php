@@ -49,14 +49,11 @@ class mooduell_external_test extends advanced_testcase {
     }
 
     /**
-     * Test start game attempt.
-     * @runInSeparateProcess
-     * @covers ::start_attempt
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * Summary of returntestdata
+     * @return array
      */
-    public function test_start_game_attempt() {
-        global $DB, $CFG;
+    private function returntestdata() {
+        global $CFG;
 
         $CFG->enablecompletion = 1;
 
@@ -96,6 +93,20 @@ class mooduell_external_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($user1->id, $course->id);
         $this->getDataGenerator()->enrol_user($user2->id, $course->id);
 
+        return [$duel1, $user1, $user2, $cmd1, $course];
+    }
+
+    /**
+     * Test start game attempt.
+     * @runInSeparateProcess
+     * @covers ::start_attempt
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_start_game_attempt() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+
         // Game will be started in behalf of user1.
         $this->setUser($user1);
         $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
@@ -108,5 +119,27 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertEquals(0, $attempt->winnerid);
         $this->assertIsArray($attempt->questions);
         $this->assertObjectNotHasAttribute('warnings', $attempt);
+    }
+
+    /**
+     * Test get game data.
+     * @runInSeparateProcess
+     * @covers ::get_game_data
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_get_game_data() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+
+        // Game will be started in behalf of user1.
+        //$this->setUser($user1);
+
+        //$attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+
+        $games = mod_mooduell_external::get_games_by_courses([$course->id], -1);
+        var_dump($duel1);
+        var_dump($games);
+        // Check attempt.
     }
 }
