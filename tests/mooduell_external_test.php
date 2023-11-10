@@ -156,4 +156,38 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertEquals(0, $games["quizzes"][0]["games"][0]["winnerid"]);
         $this->assertEmpty($games["warnings"]);
     }
+
+    /**
+     * Test get game data.
+     * @runInSeparateProcess
+     * @covers ::get_quiz_users
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_get_quiz_users() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+
+        $users = mod_mooduell_external::get_quiz_users($course->id, $cmd1->id);
+
+        // Check users.
+        $this->assertIsArray($users);
+        $this->assertEquals(2, count($users));
+        // TODO: no built-in methods to compare stdClass instances.
+        $ids = array_map(function($item) {
+            return $item->id;
+        }, $users);
+        $emails = array_map(function($item) {
+            return $item->email;
+        }, $users);
+        $usernames = array_map(function($item) {
+            return $item->username;
+        }, $users);
+        $this->assertEquals(true, in_array($user1->id, $ids));
+        $this->assertEquals(true, in_array($user2->id, $ids));
+        $this->assertEquals(true, in_array($user1->email, $emails));
+        $this->assertEquals(true, in_array($user2->email, $emails));
+        $this->assertEquals(true, in_array($user1->username, $usernames));
+        $this->assertEquals(true, in_array($user2->username, $usernames));
+    }
 }
