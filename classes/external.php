@@ -313,7 +313,7 @@ class mod_mooduell_external extends external_api {
             'versions' => $versions,
             'theme' => $theme,
             'themeimg' => $themeimg
-        );
+        ];
 
         self::validate_parameters((self::get_mooduell_support_parameters()), []);
         return $support;
