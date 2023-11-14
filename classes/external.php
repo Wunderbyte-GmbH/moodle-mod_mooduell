@@ -330,11 +330,10 @@ class mod_mooduell_external extends external_api {
                         'versions' => new external_single_structure(
                         [
                             "ios" => new external_value(PARAM_RAW, 'ios app version'),
-                            "android" => new external_value(PARAM_RAW, 'android app version'),
-                        )),
+                        ]),
                         'theme' => new external_value(PARAM_TEXT, 'theme'),
                         'themeimg' => new external_value(PARAM_TEXT, 'themeimg'),
-                    ));
+                    ]);
     }
     /**
      * Defines support input parameters.
