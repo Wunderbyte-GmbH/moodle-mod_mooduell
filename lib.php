@@ -314,11 +314,6 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         return false;
     }
 
-    // Make sure the filearea is one of those used by the plugin.
-    // if ($filearea !== 'aliasavatar' && $filearea !== 'themepicture') {
-    // return false;
-    // }
-
     if ($filearea === 'themefile') {
         $fs = get_file_storage();
         $fs = $fs->get_area_files($context->id, 'mod_mooduell', 'themefile');
