@@ -159,14 +159,6 @@ if ($ADMIN->fulltree) {
                 0
         ));
 
-        // $settings->add(new admin_setting_configtextarea(
-        //         'mooduell/theme',
-        //         'Theme',
-        //         'Theme in Json format',
-        //         '',
-        //         PARAM_TEXT
-        // ));
-
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/themejson',
                 'Theme File',

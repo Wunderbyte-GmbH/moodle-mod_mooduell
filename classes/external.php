@@ -312,7 +312,7 @@ class mod_mooduell_external extends external_api {
             'unlock' => $pay,
             'versions' => $versions,
             'theme' => $theme,
-            'themeimg' => $themeimg
+            'themeimg' => $themeimg,
         ];
 
         self::validate_parameters((self::get_mooduell_support_parameters()), []);

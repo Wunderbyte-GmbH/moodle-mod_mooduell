@@ -329,7 +329,6 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
         send_stored_file($file, 86400, 0, $forcedownload, $options);
     } else {
-            // isloggedin();
 
             // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
             $itemid = array_shift($args); // The first item in the $args array.
