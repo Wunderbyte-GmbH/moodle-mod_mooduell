@@ -299,7 +299,6 @@ class mod_mooduell_external extends external_api {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
-        $theme = get_config('mooduell', 'theme');
         $themeimg = get_config('mooduell', 'companylogo');
 
         // Set minimum requirem App Version here.
@@ -311,7 +310,6 @@ class mod_mooduell_external extends external_api {
             'url' => $url,
             'unlock' => $pay,
             'versions' => $versions,
-            'theme' => $theme,
             'themeimg' => $themeimg,
         ];
 
@@ -330,8 +328,8 @@ class mod_mooduell_external extends external_api {
                         'versions' => new external_single_structure(
                         [
                             "ios" => new external_value(PARAM_RAW, 'ios app version'),
+                            "android" => new external_value(PARAM_RAW, 'android app version'),
                         ]),
-                        'theme' => new external_value(PARAM_TEXT, 'theme'),
                         'themeimg' => new external_value(PARAM_TEXT, 'themeimg'),
                     ]);
     }
