@@ -299,7 +299,7 @@ class mod_mooduell_external extends external_api {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
-        $themeimg = get_config('mooduell', 'companylogo');
+        $themeimg = get_config('mod_mooduell', 'companylogo');
 
         // Set minimum requirem App Version here.
         $versions = [
