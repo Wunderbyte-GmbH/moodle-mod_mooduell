@@ -89,6 +89,10 @@ class question_control {
     /** @var array */
     public $warnings = [];
 
+    /** @var mixed */
+    public $combinedfeedback;
+
+
     /**
      * question_control constructor.
      * @param null $data
