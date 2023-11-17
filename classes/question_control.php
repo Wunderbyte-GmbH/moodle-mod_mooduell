@@ -188,12 +188,12 @@ class question_control {
             'questionid' => $this->questionid,
         ];
 
-        if (!$listofanswers || count($listofanswers) === 0) {
+        if (empty($listofanswers)) {
             $listofanswers = $DB->get_records_sql($sql, $params);
         }
 
         $answers = [];
-        if ($listofanswers && count($listofanswers) > 0) {
+        if (!empty($listofanswers)) {
             foreach ($listofanswers as $k => $val) {
                 if ($val->question == $this->questionid) {
                     $answer = new answer_control($val);
