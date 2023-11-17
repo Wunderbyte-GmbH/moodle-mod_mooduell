@@ -98,7 +98,7 @@ class manage_tokens {
      */
     public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0) {
 
-        global $DB, $USER;
+        global $DB, $USER, $CFG;
 
         $mooduellwebservice = $DB->get_record('external_services', ['shortname' => $servicename, 'enabled' => 1]);
         if (empty($mooduellwebservice)) {
@@ -172,6 +172,12 @@ class manage_tokens {
 
             $eventtoken = clone $token;
             $eventtoken->privatetoken = null;
+
+            // Moodle 4.3 require token name.
+            if ($CFG->version >= 2023100900) {
+                $eventtoken->name = $servicename;
+            }
+
             $params = [
                 'objectid' => $eventtoken->id,
                 'relateduserid' => $userid,
