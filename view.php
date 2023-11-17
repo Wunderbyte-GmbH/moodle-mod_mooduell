@@ -105,7 +105,18 @@ if (!$inline && $CFG->version >= 2021051700) {
     $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
     $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id); // Fetch activity dates.
     $out .= $OUTPUT->heading(format_string($mooduell->cm->name), 2, null);
-    $out .= $OUTPUT->activity_information($cminfo, $completiondetails, $activitydates);
+    if ($CFG->version < 2023100900) {
+        $out .= $OUTPUT->activity_information($cminfo, $completiondetails, $activitydates);
+    } else {
+        // Moodle 4.3 refactored "activity_information" this way.
+        $activitycompletion = new \core_course\output\activity_completion($cminfo, $completiondetails);
+        $activitycompletiondata = (array) $activitycompletion->export_for_template($output);
+        $activitydates = new \core_course\output\activity_dates($activitydates);
+        $activitydatesdata = (array) $activitydates->export_for_template($output);
+        $data = array_merge($activitycompletiondata, $activitydatesdata);
+
+        $out .= $output->render_from_template('core_course/activity_info', $data);
+    }
 }
 
 if (!has_capability('mod/mooduell:viewstatistics', $context)) {
