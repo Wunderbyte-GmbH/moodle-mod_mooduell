@@ -91,14 +91,18 @@ Feature: See user stats
     And I should see "No image"
     And I should see "OK"
     And I click on "td.columnclass.id a" "css_element"
+    And I wait until the page is ready
     And I press "Cancel"
     And I click on "td.columnclass.id a" "css_element"
+    And I wait until the page is ready
     Then I should see "Version 1"
     When I press "Save changes and continue editing"
-    And I wait "6" seconds
+    And I wait until the page is ready
+    ##And I wait "6" seconds
     Then I should see "Version 2"
     When I press "submitbutton"
     And I click on "td.columnclass.id a" "css_element"
+    And I wait until the page is ready
     Then I should see "Version 1"
 
   @javascript
