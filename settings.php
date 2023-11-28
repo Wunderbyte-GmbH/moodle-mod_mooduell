@@ -160,7 +160,7 @@ if ($ADMIN->fulltree) {
         ));
 
         $settings->add(new admin_setting_configtextarea(
-                'mooduell/themejson',
+                'mod_mooduell/themejson',
                 'Theme',
                 'Theme in Json format',
                 '',
