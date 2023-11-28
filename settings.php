@@ -159,14 +159,13 @@ if ($ADMIN->fulltree) {
                 0
         ));
 
-        $settings->add(new admin_setting_configstoredfile(
-                'mod_mooduell/themejson',
-                'Theme File',
-                'Pick ThemeFile',
-                'themefile',
-                0
+        $settings->add(new admin_setting_configtextarea(
+                'mooduell/themejson',
+                'Theme',
+                'Theme in Json format',
+                '',
+                PARAM_TEXT
         ));
-
 
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogo',

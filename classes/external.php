@@ -300,6 +300,7 @@ class mod_mooduell_external extends external_api {
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
         $themeimg = get_config('mod_mooduell', 'companylogo');
+        $themejson = get_config('mod_mooduell', 'themejson');
 
         // Set minimum requirem App Version here.
         $versions = [
@@ -311,6 +312,7 @@ class mod_mooduell_external extends external_api {
             'unlock' => $pay,
             'versions' => $versions,
             'themeimg' => $themeimg,
+            'themejson' => $themejson,
         ];
 
         self::validate_parameters((self::get_mooduell_support_parameters()), []);
@@ -331,6 +333,7 @@ class mod_mooduell_external extends external_api {
                             "android" => new external_value(PARAM_RAW, 'android app version'),
                         ]),
                         'themeimg' => new external_value(PARAM_TEXT, 'themeimg'),
+                        'themejson' => new external_value(PARAM_RAW, 'themejson'),
                     ]);
     }
     /**
