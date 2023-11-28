@@ -170,8 +170,16 @@ if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogo',
                 'Companylogo',
-                'Pick Logo for LoginScreen',
+                'Pick Logo for Header',
                 'themepicture',
+                0
+        ));
+
+        $settings->add(new admin_setting_configstoredfile(
+                'mod_mooduell/companylogoalternative',
+                'CompanylogoAlternative',
+                'Pick Logo for Menu',
+                'themepicturealternative',
                 0
         ));
 }
