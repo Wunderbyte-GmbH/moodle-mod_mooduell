@@ -37,18 +37,11 @@ use templatable;
 class viewpage implements renderable, templatable {
 
     /**
-     * An array of headings
+     * An array of data
      *
      * @var array
      */
-    protected $headings;
-
-    /**
-     * An array of rows
-     *
-     * @var array
-     */
-    protected $rows;
+    protected $data;
 
     /**
      * Constructor.

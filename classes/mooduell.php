@@ -100,7 +100,7 @@ class mooduell {
     public $cm = null;
 
     /**
-     * @var stdClass|null context
+     * @var context|null context
      */
     public $context = null;
 
