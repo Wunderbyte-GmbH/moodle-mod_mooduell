@@ -1,10 +1,13 @@
+## Version 2.1.2 (2023120500)
+* Feature: Possibility to load theme via server.
+
 ## Version 2.1.1 (2023091300)
 * Supports Moodle 4.2
 * Feature: QR Code can now be shared to App
 
 ## Version 2.1.0 (2023030900)
 * New Feature: Avatars
-* Bugix: Highscores last changed fixed. 
+* Bugix: Highscores last changed fixed.
 * Bugix: Download table re-added.
 * Bugix: Multiple minor bugfixes.
 
