@@ -158,7 +158,7 @@ class mooduell_external_test extends advanced_testcase {
     }
 
     /**
-     * Test get game data.
+     * Test get quiz users.
      * @runInSeparateProcess
      * @covers ::get_quiz_users
      * @throws \coding_exception
@@ -189,5 +189,31 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertEquals(true, in_array($user2->email, $emails));
         $this->assertEquals(true, in_array($user1->username, $usernames));
         $this->assertEquals(true, in_array($user2->username, $usernames));
+    }
+
+    /**
+     * Test get quizzes by courses.
+     * @runInSeparateProcess
+     * @covers ::get_quizzes_by_courses
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_get_quizzes_by_courses() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+
+        $duels = mod_mooduell_external::get_quizzes_by_courses([$course->id], -1);
+
+        // Check no warnings.
+        $this->assertEmpty($duels['warnings']);
+        // Check moduel.
+        $this->assertIsArray($duels['quizzes']);
+        $this->assertEquals(1, count($duels['quizzes']));
+        $this->assertEquals($course->id, $duels["quizzes"][0]["courseid"]);
+        $this->assertEquals($cmd1->id, $duels["quizzes"][0]["coursemodule"]);
+        $this->assertEquals($duel1->course, $duels["quizzes"][0]["courseid"]);
+        $this->assertEquals($duel1->cmid, $duels["quizzes"][0]["coursemodule"]);
+        $this->assertEquals($duel1->name, $duels["quizzes"][0]["quizname"]);
+        $this->assertEquals($duel1->usefullnames, $duels["quizzes"][0]["usefullnames"]);
     }
 }
