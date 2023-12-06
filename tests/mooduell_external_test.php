@@ -103,7 +103,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_start_game_attempt() {
+    public function test_start_attempt() {
 
         list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
 
@@ -122,13 +122,13 @@ class mooduell_external_test extends advanced_testcase {
     }
 
     /**
-     * Test get game data.
+     * Test get games by courses.
      * @runInSeparateProcess
-     * @covers ::get_game_data
+     * @covers ::get_games_by_courses
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_game_data() {
+    public function test_get_games_by_courses() {
 
         list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
 
