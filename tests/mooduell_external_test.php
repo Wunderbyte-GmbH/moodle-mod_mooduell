@@ -280,4 +280,97 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertEquals(0, $game->winnerid);
         $this->assertEquals(1, $game->status);
     }
+
+    /**
+     * Test get highscores for givenup game.
+     * @runInSeparateProcess
+     * @covers ::get_highscores
+     * @covers ::giveup_game
+     * @covers ::get_user_stats
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_get_highscores() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+
+        // Game will be started in behalf of user1.
+        $this->setUser($user1);
+        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+
+        // Player A question 0 - submit correct answer.
+        $questionid = (int) $attempt->questions[0]->questionid;
+        $answerid = array_search(true, array_column($attempt->questions[0]->answers, 'correct', 'id'));
+        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+
+        // Player A question 1 - submit incorrect answer.
+        $questionid = (int) $attempt->questions[1]->questionid;
+        $answerid = array_search(false, array_column($attempt->questions[1]->answers, 'correct', 'id'));
+        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+
+        // Player A question 2 - submit correct answer.
+        $questionid = (int) $attempt->questions[2]->questionid;
+        $answerid = array_search(true, array_column($attempt->questions[2]->answers, 'correct', 'id'));
+        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+
+        // Switch to user2.
+        $this->setUser($user2);
+        // Player B question 0 - submit incorrect answer.
+        $questionid = (int) $attempt->questions[0]->questionid;
+        $answerid = array_search(false, array_column($attempt->questions[0]->answers, 'correct', 'id'));
+        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        // User2 giveup game.
+        $res = mod_mooduell_external::giveup_game($attempt->gameid);
+        $this->assertEquals(1, $res['status']);
+
+        // Evaluate highscores and games data.
+        $this->setAdminUser();
+        $hs = mod_mooduell_external::get_highscores($cmd1->id);
+        // Check highscores data.
+        $user1expected = [
+            "quizid" => $cmd1->id,
+            "userid" => $user1->id,
+            "score" => 3,
+            "won" => 1,
+            "lost" => 0,
+            "played" => 1,
+            "correct" => "2",
+            "correctpercentage" => "66.7",
+            "qplayed" => "3",
+            "rank" => 1,
+        ];
+        $user2expected = [
+            "quizid" => $cmd1->id,
+            "userid" => $user2->id,
+            "score" => 0,
+            "won" => 0,
+            "lost" => 1,
+            "played" => 1,
+            "correct" => "0",
+            "correctpercentage" => "0.0",
+            "qplayed" => "9",
+            "rank" => 2,
+        ];
+        $this->assertEquals($user1expected, $hs[0]);
+        $this->assertEquals($user2expected, $hs[1]);
+        // Check users stats.
+        $user1stats = mod_mooduell_external::get_user_stats($user1->id);
+        $user2stats = mod_mooduell_external::get_user_stats($user2->id);
+        $user1statsexpected = [
+            "playedgames" => 1,
+            "wongames" => 1,
+            "lostgames" => 0,
+            "correctlyanswered" => 2,
+            "playedquestions" => 3,
+        ];
+        $user2statsexpected = [
+            "playedgames" => 1,
+            "wongames" => 0,
+            "lostgames" => 1,
+            "correctlyanswered" => 0,
+            "playedquestions" => 9,
+        ];
+        $this->assertEquals($user1statsexpected, $user1stats);
+        $this->assertEquals($user2statsexpected, $user2stats);
+    }
 }
