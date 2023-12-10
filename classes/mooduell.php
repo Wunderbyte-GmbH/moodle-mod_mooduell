@@ -669,7 +669,7 @@ class mooduell {
      */
     public static function build_sorter(string $key) {
         return function ($a, $b) use ($key) {
-            return $a[$key] < $b[$key];
+            return $b[$key] <=> $a[$key];
         };
     }
 
