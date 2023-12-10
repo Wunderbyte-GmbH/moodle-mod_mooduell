@@ -106,7 +106,7 @@ class mod_mooduell_external extends external_api {
      * Deletes a single purchase with an id as input
      *
      * @param int $itemid
-     * @return void
+     * @return array
      */
     public static function delete_iapurchases(int $itemid) {
         global $DB, $USER;
@@ -122,7 +122,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Define return of iapurchases
      *
-     * @return void
+     * @return external_single_structure
      */
     public static function delete_iapurchases_returns() {
         return new external_single_structure([
@@ -133,7 +133,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Defines paramters for deleting iapurchases
      *
-     * @return void
+     * @return external_function_parameters
      */
     public static function delete_iapurchases_parameters() {
         return new external_function_parameters(['itemid' => new external_value(PARAM_INT, 'itemid')]);
@@ -350,7 +350,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Gets purchases from Database.
      *
-     * @return void
+     * @return array
      */
     public static function get_mooduell_purchases() {
         global $COURSE, $USER;
@@ -365,7 +365,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Defines return Parameters for get_mooduell_purchases.
      *
-     * @return void
+     * @return external_single_structure
      */
     public static function get_mooduell_purchases_returns() {
         return new external_single_structure([
@@ -409,7 +409,7 @@ class mod_mooduell_external extends external_api {
      * @param  int $courseid
      * @param  string $store
      * @param  int $ispublic
-     * @return void
+     * @return array
      */
     public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
      string $signature = null, string $orderid = null, string $free = null, int $mooduellid,
@@ -442,7 +442,7 @@ class mod_mooduell_external extends external_api {
     /**
      * Return params for iapurchases.
      *
-     * @return external_single_sctructure
+     * @return external_single_structure
      */
     public static function update_iapurchases_returns() {
         return new external_single_structure([
@@ -471,8 +471,6 @@ class mod_mooduell_external extends external_api {
         ]);
 
     }
-
-
 
     /**
      * We answer a question with the array of ids of the answers. Depending on the internal setting of the MooDuell Instance...
@@ -1051,7 +1049,7 @@ class mod_mooduell_external extends external_api {
      * Actually, this doesn't save to alternatename but to the user profile filed "mooduell_alias".
      * @param int $userid
      * @param string $alternatename
-     * @return bool
+     * @return array
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
