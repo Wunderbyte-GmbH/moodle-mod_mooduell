@@ -30,6 +30,7 @@ use coding_exception;
 use context_course;
 use mod_mooduell_generator;
 use mod_mooduell_external;
+use core_user;
 
 /**
  * Test class for mooduell external functions.
@@ -372,5 +373,28 @@ class mooduell_external_test extends advanced_testcase {
         ];
         $this->assertEquals($user1statsexpected, $user1stats);
         $this->assertEquals($user2statsexpected, $user2stats);
+    }
+
+    /**
+     * Test user functions.
+     * @runInSeparateProcess
+     * @covers ::get_usertoken
+     * @covers ::set_alternatename
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_user_functions() {
+
+        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        $this->setUser($user1);
+        // Get user token.
+        $res = mod_mooduell_external::get_usertoken();
+        $this->assertIsString($res['token']);
+        // Set alternate name and verify it.
+        $res = mod_mooduell_external::set_alternatename($user1->id, 'u1');
+        $this->assertEquals(1, $res['status']);
+        $res = core_user::get_user($user1->id);
+        profile_load_custom_fields($res);
+        $this->assertEquals('u1', $res->profile['mooduell_alias']);
     }
 }
