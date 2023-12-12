@@ -535,6 +535,27 @@ class question_control {
                     'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
+        } else if ($this->questiontype == 'ddwtos') {
+
+            // Parse all the answers of this type to make sure they are not too long.
+            foreach ($this->answers as $answer) {
+
+                // We have a reduced max length for dragndrop.
+                if (strlen($this->questiontext) > MAXLENGTH / 2) {
+                    $this->warnings[] = [
+                            'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
+                    ];
+                    $this->status = get_string('notok', 'mod_mooduell');
+                }
+
+                if (strlen($answer->answertext) > MAXLENGTH_ANSWER) {
+                    $this->warnings[] = [
+                        'message' => get_string('answertexttoolong', 'mod_mooduell', $this->questionid),
+                    ];
+                    $this->status = get_string('notok', 'mod_mooduell');
+                }
+
+            }
         }
     }
 

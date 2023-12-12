@@ -57,6 +57,13 @@ const MAXLENGTH = 400;
  * @var int MINLENGTH of question text
  */
 const MINLENGTH = 0;
+
+// Question Health constants.
+/**
+ * @var int MAXLENGTH of question text
+ */
+const MAXLENGTH_ANSWER = 80;
+
 /**
  * @var bool NEEDIMAGE question needs image
  */

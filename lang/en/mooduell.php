@@ -167,6 +167,7 @@ $string['notenoughquestions'] = 'There are not enough questions in the chosen ca
 $string['nowarnings'] = 'Your game seems fine, there are currently no warnings';
 $string['questiontexttooshort'] = 'ID {$a}: Questiontext is too short';
 $string['questiontexttoolong'] = 'ID {$a}: Questiontext is too long';
+$string['answertexttoolong'] = 'ID: {$a}: Answertext is too long';
 $string['wrongquestiontype'] = 'ID {$a}: Question has the wrong type';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Question has no correct answers';
 
