@@ -107,7 +107,7 @@ class question_control {
             $this->questionid = $data->id;
             $this->name = $data->name;
             if ($data->qtype == 'ddwtos') {
-                $this->questiontext = strip_tags($data->questiontext);
+                $this->questiontext = trim(strip_tags(html_entity_decode($data->questiontext)));
             } else {
                 $this->questiontext = $data->questiontext;
             }
