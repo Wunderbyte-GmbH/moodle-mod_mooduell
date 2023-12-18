@@ -299,7 +299,7 @@ class mod_mooduell_external extends external_api {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
-        $badges = get_config('mooduell', 'unlockbadges');
+        $badges = get_config('mooduell', 'disablebadges');
         $themeimg = get_config('mod_mooduell', 'companylogo');
         $themeimgalt = get_config('mod_mooduell', 'companylogoalternative');
         $themejson = get_config('mod_mooduell', 'themejsonarea');

@@ -25,14 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['disablesbadges'] = 'Auszeichnungen deaktivieren';
+$string['disablesbadges'] = 'Disble Badges';
 $string['theme'] = 'Theme';
-$string['themedesc'] = 'Theme in JSON format';
-$string['companylogo'] = 'Companylogo';
-$string['companylogodesc'] = 'Companylogo Header Bar';
-$string['alternativelogo'] = 'Alternative Companylogo';
-$string['alternativelogodesc'] = 'Companylogo Menu';
-
+$string['themedesc'] = 'Theme für die App im JSON Format';
+$string['companylogo'] = 'Firmenlogo';
+$string['companylogodesc'] = 'Firmenlogo Kopfleiste';
+$string['alternativelogo'] = 'Firmenlogo alternative';
+$string['alternativelogodesc'] = 'Firmenlogo Menu';
+$string['questionselect'] = 'Fragenkatalog auswählen';
 
 $string['messageprovider:status'] = 'Spiel Status Änderung';
 $string['mooduell:managemooduellsettings'] = 'Bearbeite die Einstellungen eines MooDuell Spiels';
@@ -79,7 +79,7 @@ $string['waitfornextquestion_help'] = 'Wie lange sollen die richtigen Antworten 
 $string['clicktomoveon'] = 'Warte bis zum nächsten Klick';
 
 $string['pluginadministration'] = 'Plugin Administration';
-$string['questionscategory'] = 'Kategorie für Zufallsfragen';
+$string['questionscategory'] = 'Fragenkategorie auswählen';
 $string['categoryweight'] = 'Gewichtung der Kategorie (0 bis 100)';
 $string['categoriesexplanation'] = 'Wenn du mehr als eine Kategorie auswählst, gib bitte auch eine Gewichtung an. Gewichtungen müssen NICHT zusammen 100 ergeben.';
 $string['addanothercategory'] = 'Eine weitere Kategorie hinzufügen';

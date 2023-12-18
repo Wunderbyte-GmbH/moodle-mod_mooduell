@@ -25,13 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['disablesbadges'] = 'Disble Badges';
+$string['disablesbadges'] = 'Auszeichnungen deaktivieren';
 $string['theme'] = 'Theme';
-$string['themedesc'] = 'Theme für die App im JSON Format';
-$string['companylogo'] = 'Firmenlogo';
-$string['companylogodesc'] = 'Firmenlogo Kopfleiste';
-$string['alternativelogo'] = 'Firmenlogo alternative';
-$string['alternativelogodesc'] = 'Firmenlogo Menu';
+$string['themedesc'] = 'Theme in JSON format';
+$string['companylogo'] = 'Companylogo';
+$string['companylogodesc'] = 'Companylogo Header Bar';
+$string['alternativelogo'] = 'Alternative Companylogo';
+$string['alternativelogodesc'] = 'Companylogo Menu';
+$string['questionselect'] = 'Select Questions';
 
 $string['messageprovider:status'] = 'Game status changes';
 $string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell Game';
@@ -81,7 +82,7 @@ $string['questionscategory'] = 'Category for random question';
 $string['categoryweight'] = 'Weight of the category';
 $string['categoriesexplanation'] = 'If you choose more than one category, please add a weight. Weight DOES NOT have to sum up to 100';
 $string['addanothercategory'] = 'Add another category';
-$string['questionscategorygroup'] = 'Categories for random questions';
+$string['questionscategorygroup'] = 'Select question categories';
 $string['nocategories'] = 'There are not categories added yet';
 $string['important'] = 'Important!';
 $string['nomessage'] = 'There is nothing to say';

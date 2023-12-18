@@ -51,6 +51,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
+        // Add Question Selection.
+        $this->mooduell_questions();
+
+        // Add mooduell elements.
+        $this->mooduell_elements();
+
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -72,9 +78,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Adding the standard "intro" and "introformat" fields.
         $this->standard_intro_elements();
 
-        // Add mooduell elements.
-        $this->mooduell_elements();
-
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
@@ -82,12 +85,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-
     /**
-     * Add Mooduell setting elements.
-     * @throws coding_exception
+     * Defines questions pickers
+     *
+     * @return void
      */
-    private function mooduell_elements() {
+    private function mooduell_questions() {
 
         global $COURSE, $DB, $CFG;
 
@@ -98,47 +101,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
-        $mform->addElement('header', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
+        $mform->addElement('header', 'mooduellsettings', get_string('questionselect', 'mod_mooduell'));
         $mform->setExpanded('mooduellsettings');
-
-        $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
-        $mform->setDefault('usefullnames', $config->usefullnames);
-        $mform->addHelpButton('usefullnames', 'usefullnames', 'mod_mooduell');
-
-        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
-        $mform->setDefault('showcontinuebutton', $config->showcontinuebutton);
-        $mform->addHelpButton('showcontinuebutton', 'showcontinuebutton', 'mod_mooduell');
-
-        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
-        $mform->setDefault('showcorrectanswer', $config->showcorrectanswer);
-        $mform->addHelpButton('showcorrectanswer', 'showcorrectanswer', 'mod_mooduell');
-
-        $mform->addElement('checkbox', 'showgeneralfeedback', get_string('showgeneralfeedback', 'mod_mooduell'));
-        $mform->setDefault('showgeneralfeedback', $config->showgeneralfeedback);
-        $mform->addHelpButton('showgeneralfeedback', 'showgeneralfeedback', 'mod_mooduell');
-
-        $mform->addElement('checkbox', 'showanswersfeedback', get_string('showanswersfeedback', 'mod_mooduell'));
-        $mform->setDefault('showanswersfeedback', $config->showanswersfeedback);
-        $mform->addHelpButton('showanswersfeedback', 'showanswersfeedback', 'mod_mooduell');
-
-        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
-        if (isset($config->countdown)) {
-            $mform->setDefault('countdown', $config->countdown);
-        }
-        $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
-
-        $mform->addElement(
-            'select',
-            'waitfornextquestion',
-            get_string('waitfornextquestion', 'mod_mooduell'),
-            $this->return_move_on_options()
-        );
-        if (isset($config->waitfornextquestion)) {
-            $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
-        }
-        $mform->addHelpButton('waitfornextquestion', 'waitfornextquestion', 'mod_mooduell');
-        $this->apply_admin_defaults();
 
         // First, create an array of contexts (containing course context only).
         $arrayofcontexts[] = \context_course::instance($COURSE->id);
@@ -212,6 +176,65 @@ class mod_mooduell_mod_form extends moodleform_mod {
     }
 
     /**
+     * Add Mooduell setting elements.
+     * @throws coding_exception
+     */
+    private function mooduell_elements() {
+
+        global $COURSE, $DB, $CFG;
+
+        // Get MooDuell id.
+        $mooduellid = $this->get_mooduell_id();
+
+        $config = get_config('mooduell');
+
+        $mform = $this->_form;
+
+        // Adding the rest of mod_mooduell settings, spreading all them into this fieldset.
+        $mform->addElement('header', 'mooduellsettings', get_string('mooduellsettings', 'mod_mooduell'));
+        $mform->setExpanded('mooduellsettings');
+
+        $mform->addElement('checkbox', 'usefullnames', get_string('usefullnames', 'mod_mooduell'));
+        $mform->setDefault('usefullnames', $config->usefullnames);
+        $mform->addHelpButton('usefullnames', 'usefullnames', 'mod_mooduell');
+
+        $mform->addElement('checkbox', 'showcontinuebutton', get_string('showcontinuebutton', 'mod_mooduell'));
+        $mform->setDefault('showcontinuebutton', $config->showcontinuebutton);
+        $mform->addHelpButton('showcontinuebutton', 'showcontinuebutton', 'mod_mooduell');
+
+        $mform->addElement('checkbox', 'showcorrectanswer', get_string('showcorrectanswer', 'mod_mooduell'));
+        $mform->setDefault('showcorrectanswer', $config->showcorrectanswer);
+        $mform->addHelpButton('showcorrectanswer', 'showcorrectanswer', 'mod_mooduell');
+
+        $mform->addElement('checkbox', 'showgeneralfeedback', get_string('showgeneralfeedback', 'mod_mooduell'));
+        $mform->setDefault('showgeneralfeedback', $config->showgeneralfeedback);
+        $mform->addHelpButton('showgeneralfeedback', 'showgeneralfeedback', 'mod_mooduell');
+
+        $mform->addElement('checkbox', 'showanswersfeedback', get_string('showanswersfeedback', 'mod_mooduell'));
+        $mform->setDefault('showanswersfeedback', $config->showanswersfeedback);
+        $mform->addHelpButton('showanswersfeedback', 'showanswersfeedback', 'mod_mooduell');
+
+        $mform->addElement('select', 'countdown', get_string('countdown', 'mod_mooduell'), $this->return_countdown_options());
+        if (isset($config->countdown)) {
+            $mform->setDefault('countdown', $config->countdown);
+        }
+        $mform->addHelpButton('countdown', 'countdown', 'mod_mooduell');
+
+        $mform->addElement(
+            'select',
+            'waitfornextquestion',
+            get_string('waitfornextquestion', 'mod_mooduell'),
+            $this->return_move_on_options()
+        );
+        if (isset($config->waitfornextquestion)) {
+            $mform->setDefault('waitfornextquestion', $config->waitfornextquestion);
+        }
+        $mform->addHelpButton('waitfornextquestion', 'waitfornextquestion', 'mod_mooduell');
+        $this->apply_admin_defaults();
+
+    }
+
+    /**
      * create array for countdown select.
      * @return array
      * @throws coding_exception
@@ -237,6 +260,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
     private function return_move_on_options() {
         return [
             "0" => get_string('clicktomoveon', 'mod_mooduell'),
+            "1" => get_string('xseconds', 'mod_mooduell', 1),
             "2" => get_string('xseconds', 'mod_mooduell', 2),
             "5" => get_string('xseconds', 'mod_mooduell', 5),
             "10" => get_string('xseconds', 'mod_mooduell', 10),
