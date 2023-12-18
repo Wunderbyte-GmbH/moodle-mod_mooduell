@@ -25,6 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['disablesbadges'] = 'Disble Badges';
+$string['theme'] = 'Theme';
+$string['themedesc'] = 'Theme für die App im JSON Format';
+$string['companylogo'] = 'Firmenlogo';
+$string['companylogodesc'] = 'Firmenlogo Kopfleiste';
+$string['alternativelogo'] = 'Firmenlogo alternative';
+$string['alternativelogodesc'] = 'Firmenlogo Menu';
+
 $string['messageprovider:status'] = 'Game status changes';
 $string['mooduell:managemooduellsettings'] = 'Manage the settings of a MooDuell Game';
 $string['mooduell:viewstatistics'] = 'View game statistics';

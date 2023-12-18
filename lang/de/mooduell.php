@@ -25,6 +25,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['disablesbadges'] = 'Auszeichnungen deaktivieren';
+$string['theme'] = 'Theme';
+$string['themedesc'] = 'Theme in JSON format';
+$string['companylogo'] = 'Companylogo';
+$string['companylogodesc'] = 'Companylogo Header Bar';
+$string['alternativelogo'] = 'Alternative Companylogo';
+$string['alternativelogodesc'] = 'Companylogo Menu';
+
+
 $string['messageprovider:status'] = 'Spiel Status Änderung';
 $string['mooduell:managemooduellsettings'] = 'Bearbeite die Einstellungen eines MooDuell Spiels';
 $string['mooduell:viewstatistics'] = 'Siehe Spiel Statistik';

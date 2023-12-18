@@ -159,26 +159,33 @@ if ($ADMIN->fulltree) {
                 0
         ));
 
+        $settings->add(new admin_setting_configcheckbox(
+                'mooduell/disablebadges',
+                get_string('disablesbadges', 'mod_mooduell'),
+                "",
+                0
+        ));
+
         $settings->add(new admin_setting_configtextarea(
                 'mod_mooduell/themejsonarea',
-                'Theme',
-                'Theme in Json format',
+                get_string('theme', 'mod_mooduell'),
+                get_string('themedesc', 'mod_mooduell'),
                 '',
                 PARAM_TEXT
         ));
 
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogo',
-                'Companylogo',
-                'Pick Logo for Header',
+                get_string('companylogo', 'mod_mooduell'),
+                get_string('companylogodesc', 'mod_mooduell'),
                 'themepicture',
                 0
         ));
 
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogoalternative',
-                'CompanylogoAlternative',
-                'Pick Logo for Menu',
+                 get_string('alternativelogo', 'mod_mooduell'),
+                 get_string('alternativelogodesc', 'mod_mooduell'),
                 'themepicturealternative',
                 0
         ));

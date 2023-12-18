@@ -299,6 +299,7 @@ class mod_mooduell_external extends external_api {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
         $pay = get_config('mooduell', 'unlockplatform');
+        $badges = get_config('mooduell', 'unlockbadges');
         $themeimg = get_config('mod_mooduell', 'companylogo');
         $themeimgalt = get_config('mod_mooduell', 'companylogoalternative');
         $themejson = get_config('mod_mooduell', 'themejsonarea');
@@ -310,6 +311,7 @@ class mod_mooduell_external extends external_api {
         ];
         $support = [
             'url' => $url,
+            'badges' => $badges,
             'unlock' => $pay,
             'versions' => $versions,
             'themeimg' => $themeimg,
@@ -328,6 +330,7 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_support_returns() {
            return new external_single_structure([
                         'url' => new external_value(PARAM_TEXT, 'url'),
+                        'badges' => new external_value(PARAM_BOOL, 'badges'),
                         'unlock' => new external_value(PARAM_BOOL, 'unlock'),
                         'versions' => new external_single_structure(
                         [

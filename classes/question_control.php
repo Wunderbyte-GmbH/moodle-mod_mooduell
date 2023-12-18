@@ -548,7 +548,7 @@ class question_control {
                     $this->status = get_string('notok', 'mod_mooduell');
                 }
 
-                if (strlen($answer->answertext) > MAXLENGTH_ANSWER) {
+                if (strlen($answer->answertext) > MAXLENGTH_ANSWER / 3) {
                     $this->warnings[] = [
                         'message' => get_string('answertexttoolong', 'mod_mooduell', $this->questionid),
                     ];
