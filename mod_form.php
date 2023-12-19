@@ -51,12 +51,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        // Add Question Selection.
-        $this->mooduell_questions();
-
-        // Add mooduell elements.
-        $this->mooduell_elements();
-
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -78,11 +72,20 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Adding the standard "intro" and "introformat" fields.
         $this->standard_intro_elements();
 
+        // Add Question Selection.
+        $this->mooduell_questions();
+
+        // Add mooduell elements.
+        $this->mooduell_elements();
+
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
         // Add standard buttons.
         $this->add_action_buttons();
+
+        // Add mooduell elements.
+        $this->mooduell_elements();
     }
 
     /**
@@ -101,8 +104,8 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        $mform->addElement('header', 'mooduellsettings', get_string('questionselect', 'mod_mooduell'));
-        $mform->setExpanded('mooduellsettings');
+        $mform->addElement('header', 'questionsettings', get_string('questionselect', 'mod_mooduell'));
+        $mform->setExpanded('questionsettings');
 
         // First, create an array of contexts (containing course context only).
         $arrayofcontexts[] = \context_course::instance($COURSE->id);
