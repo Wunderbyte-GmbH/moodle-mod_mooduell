@@ -79,11 +79,11 @@ $string['waitfornextquestion_help'] = 'Wie lange sollen die richtigen Antworten 
 $string['clicktomoveon'] = 'Warte bis zum nächsten Klick';
 
 $string['pluginadministration'] = 'Plugin Administration';
-$string['questionscategory'] = 'Fragenkategorie auswählen';
+$string['questionscategory'] = 'Kategorie für Zufallsfragen';
 $string['categoryweight'] = 'Gewichtung der Kategorie (0 bis 100)';
 $string['categoriesexplanation'] = 'Wenn du mehr als eine Kategorie auswählst, gib bitte auch eine Gewichtung an. Gewichtungen müssen NICHT zusammen 100 ergeben.';
 $string['addanothercategory'] = 'Eine weitere Kategorie hinzufügen';
-$string['questionscategorygroup'] = 'Kategorien für Zufallsfragen';
+$string['questionscategorygroup'] = 'Kategorien auswählen';
 $string['nocategories'] = 'Es gibt noch keine Kategorien';
 $string['important'] = 'Wichtig!';
 $string['nomessage'] = 'Es gibt keine Nachrichten.';

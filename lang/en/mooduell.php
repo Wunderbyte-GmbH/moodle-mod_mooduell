@@ -78,7 +78,7 @@ $string['waitfornextquestion_help'] = 'How long should the right answer should b
 $string['clicktomoveon'] = 'Click to move on';
 
 $string['pluginadministration'] = 'Plugin Administration';
-$string['questionscategory'] = 'Category for random question';
+$string['questionscategory'] = 'Question category';
 $string['categoryweight'] = 'Weight of the category';
 $string['categoriesexplanation'] = 'If you choose more than one category, please add a weight. Weight DOES NOT have to sum up to 100';
 $string['addanothercategory'] = 'Add another category';
