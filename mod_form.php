@@ -83,9 +83,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
 
         // Add standard buttons.
         $this->add_action_buttons();
-
-        // Add mooduell elements.
-        $this->mooduell_elements();
     }
 
     /**
