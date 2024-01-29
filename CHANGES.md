@@ -1,3 +1,7 @@
+## Version 2.1.4 (2024012900)
+* Feature: Theme Support
+* MooDuell Plugin Settings revised
+
 ## Version 2.1.2 (2023120500)
 * Feature: Possibility to load theme via server.
 
