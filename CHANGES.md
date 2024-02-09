@@ -1,3 +1,6 @@
+## Version 2.1.5 (2024020900)
+* Increased Answerlength for Drag & Drop
+
 ## Version 2.1.4 (2024012900)
 * Feature: Theme Support
 * MooDuell Plugin Settings revised
