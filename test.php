@@ -25,11 +25,12 @@ require_once('../../config.php');
 
 use mod_mooduell\mooduell;
 
-
+require_login();
 $cmid = required_param('cmid', PARAM_RAW);
 // $context = \context_system::instance();
+$context = \context_module::instance($cmid);
 $PAGE->set_context($context);
-require_login();
+
 
 $PAGE->set_pagelayout('standard');
 $title = "MooDuell Testpage";
@@ -38,7 +39,6 @@ $PAGE->set_url('/test.php');
 $PAGE->set_heading($title);
 
 echo $OUTPUT->header();
-$context = \context_module::instance($cmid);
 
      // Create mooduell instance.
 $mooduell = new mooduell($context->cm->instanceid);
