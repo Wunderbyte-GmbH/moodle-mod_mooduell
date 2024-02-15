@@ -375,11 +375,11 @@ class mod_mooduell_external extends external_api {
             'purchases' => new external_multiple_structure(new external_single_structure(
                 [
                     'id' => new external_value(PARAM_INT, 'id'),
-                    'productid' => new external_value(PARAM_INT, 'productid'),
+                    'productid' => new external_value(PARAM_TEXT, 'productid'),
                     'purchasetoken' => new external_value(PARAM_TEXT, 'purchasetoken'),
                     'receipt' => new external_value(PARAM_TEXT, 'receipt', VALUE_OPTIONAL, ''),
                     'signature' => new external_value(PARAM_TEXT, 'signature', VALUE_OPTIONAL, ''),
-                    'orderid' => new external_value(PARAM_INT, 'orderid', VALUE_OPTIONAL, ''),
+                    'orderid' => new external_value(PARAM_TEXT, 'orderid', VALUE_OPTIONAL, ''),
                     'free' => new external_value(PARAM_INT, 'free', VALUE_OPTIONAL, 0),
                     'userid' => new external_value(PARAM_INT, 'userid'),
                     'mooduellid' => new external_value(PARAM_INT, 'mooduellid', VALUE_OPTIONAL, 0),
