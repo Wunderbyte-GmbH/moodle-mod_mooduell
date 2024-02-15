@@ -25,6 +25,8 @@ require_once('../../config.php');
 
 use mod_mooduell\mooduell;
 
+
+$mooduellid = required_param('mooduellid', PARAM_RAW);
 $context = \context_system::instance();
 $PAGE->set_context($context);
 require_login();
@@ -36,8 +38,8 @@ $PAGE->set_url('/test.php');
 $PAGE->set_heading($title);
 
 echo $OUTPUT->header();
-
-$mooduell = new mooduell(2);
+     // Create mooduell instance.
+$mooduell = new mooduell($mooduellid);
 
 $mooduell->update_all_subscriptions();
 
