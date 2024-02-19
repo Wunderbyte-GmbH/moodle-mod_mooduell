@@ -419,6 +419,11 @@ class mooduell {
         return $listofquestions;
     }
 
+    /**
+     * Updates the platform subscription.
+     *
+     *
+     */
     public static function update_all_subscriptions() {
 
         global $DB, $CFG;
@@ -462,20 +467,25 @@ class mooduell {
         }
     }
 
+    /**
+     * verifies a single
+     *
+     * @param  mixed $purchase
+     * @return object
+     */
     public static function verify_purchase($purchase) {
         if ($purchase->store === 'ios') {
-            $payload = array(
+            $payload = [
                 'id' => 'at.wunderbyte.mooduellapp',
                 'type' => 'application',
-                'transaction' => array(
+                'transaction' => [
                     'id' => 'at.wunderbyte.mooduellapp',
                     'type' => 'ios-appstore',
-                    'appStoreReceipt' => $purchase->purchasetoken
-                )
-            );
+                    'appStoreReceipt' => $purchase->purchasetoken,
+                ],
+            ];
         } else {
-            $payload = array(
-            );
+            $payload = [];
         }
 
         $url = "https://validator.iaptic.com/v1/validate";
@@ -483,12 +493,11 @@ class mooduell {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
         curl_setopt($ch, CURLOPT_HTTPHEADER,
-            array(
+            [
               "Authorization: Basic " . base64_encode('at.wunderbyte.mooduellapp:4575a924-9af6-4a88-95d1-9c80aa1444b1'),
-              "Content-Type: application/json"
-            ));
+              "Content-Type: application/json",
+            ]);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responsedata = curl_exec($ch);
         if (curl_errno($ch)) {

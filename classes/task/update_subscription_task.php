@@ -25,12 +25,25 @@
 namespace mod_mooduell\task;
 use mod_mooduell\mooduell;
 
+/**
+ * update_subscription_task
+ */
 class update_subscription_task extends \core\task\scheduled_task {
 
+    /**
+     * Returns the taskname.
+     *
+     * @return string
+     */
     public function get_name() {
         return get_string('updatesubscription', 'mod_mooduell');
     }
 
+    /**
+     * Executes the task and checks the subscription.
+     *
+     * @return void
+     */
     public function execute() {
         global $DB;
 
