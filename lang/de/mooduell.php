@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['updatesubscription'] = "Subscription status prüfen";
+
 $string['disablesbadges'] = 'Disble Badges';
 $string['theme'] = 'Theme';
 $string['themedesc'] = 'Theme für die App im JSON Format';

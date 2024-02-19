@@ -15,37 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Mooduell module scheduled tasks definition
+ *
  * @package    mod_mooduell
- * @copyright  2024 Wunderbyte GmbH
- * @author     Chrsitian Badusch
+ * @copyright  2024 Christian Badusch
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
+defined('MOODLE_INTERNAL') || die();
 
-use mod_mooduell\mooduell;
-
-require_login();
-
-$context = \context_system::instance();
-$PAGE->set_context($context);
-
-$mooduell = $DB->get_record('modules', ['name' => 'mooduell']);
-if ($mooduell) {
-    $mooduellid = $DB->get_record('course_modules', ['module' => $mooduell->id]);
-    if ($mooduellid) {
-        $mooduellinstance = new mooduell($mooduellid->id);
-        $mooduellinstance->update_all_subscriptions();
-    }
-
-}
-
-$PAGE->set_pagelayout('standard');
-$title = "MooDuell Testpage";
-$PAGE->set_title($title);
-$PAGE->set_url('/test.php');
-$PAGE->set_heading($title);
-
-echo $OUTPUT->header();
-
-echo $OUTPUT->footer();
+$tasks = [
+    ['classname' => 'mod_mooduell\task\update_subscription_task',
+        'blocking' => 0,
+        'minute' => '30',
+        'hour' => '7',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*',
+    ],
+];

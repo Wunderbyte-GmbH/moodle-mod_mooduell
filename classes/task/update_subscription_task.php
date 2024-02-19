@@ -15,37 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * update subscription task for mooduell
+ *
  * @package    mod_mooduell
- * @copyright  2024 Wunderbyte GmbH
- * @author     Chrsitian Badusch
+ * @copyright  2024 Christian Badusch
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-
+namespace mod_mooduell\task;
 use mod_mooduell\mooduell;
 
-require_login();
+class update_subscription_task extends \core\task\scheduled_task {
 
-$context = \context_system::instance();
-$PAGE->set_context($context);
-
-$mooduell = $DB->get_record('modules', ['name' => 'mooduell']);
-if ($mooduell) {
-    $mooduellid = $DB->get_record('course_modules', ['module' => $mooduell->id]);
-    if ($mooduellid) {
-        $mooduellinstance = new mooduell($mooduellid->id);
-        $mooduellinstance->update_all_subscriptions();
+    public function get_name() {
+        return get_string('updatesubscription', 'mod_mooduell');
     }
 
+    public function execute() {
+        global $DB;
+
+        $mooduell = $DB->get_record('modules', ['name' => 'mooduell']);
+        if ($mooduell) {
+            $mooduellid = $DB->get_record('course_modules', ['module' => $mooduell->id]);
+            if ($mooduellid) {
+                $mooduellinstance = new mooduell($mooduellid->id);
+                $mooduellinstance->update_all_subscriptions();
+            }
+
+        }
+    }
 }
-
-$PAGE->set_pagelayout('standard');
-$title = "MooDuell Testpage";
-$PAGE->set_title($title);
-$PAGE->set_url('/test.php');
-$PAGE->set_heading($title);
-
-echo $OUTPUT->header();
-
-echo $OUTPUT->footer();
