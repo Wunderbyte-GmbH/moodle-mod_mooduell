@@ -468,12 +468,13 @@ class mooduell {
     }
 
     /**
-     * verifies a single
+     * Verifies a single purchase.
      *
      * @param  mixed $purchase
      * @return object
      */
     public static function verify_purchase($purchase) {
+        // If sub has been purchases on ios.
         if ($purchase->store === 'ios') {
             $payload = [
                 'id' => 'at.wunderbyte.mooduellapp',
@@ -541,10 +542,10 @@ class mooduell {
         $params = array_merge($inparams, $inparams2, $inparams3);
 
         $sql = "SELECT * FROM {mooduell_purchase}
-        WHERE userid = {$userid}
+        WHERE userid = {$userid} AND NOT productid = 'notvalid'
         OR courseid $insqlcourses
         OR mooduellid $insqlquizzes AND ispublic = 1
-        OR platformid $insqlplatform";
+        OR platformid $insqlplatform AND NOT productid = 'notvalid'";
 
         $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;

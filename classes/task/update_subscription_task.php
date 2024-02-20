@@ -54,7 +54,6 @@ class update_subscription_task extends \core\task\scheduled_task {
                 $mooduellinstance = new mooduell($mooduellid->id);
                 $mooduellinstance->update_all_subscriptions();
             }
-
         }
     }
 }
