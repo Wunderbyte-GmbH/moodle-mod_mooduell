@@ -462,6 +462,12 @@ class mooduell {
                 }
             } else {
                 // Failed verification.
+                // Android expired.
+                if ($result->code === 6778003) {
+                    $udpatedentry = $returnitem;
+                    $udpatedentry->productid = 'notvalid';
+                    $DB->update_record('mooduell_purchase', $udpatedentry);
+                }
                 return;
             }
         }
