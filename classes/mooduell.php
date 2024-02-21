@@ -492,7 +492,17 @@ class mooduell {
                 ],
             ];
         } else {
-            $payload = [];
+            $payload = [
+                'id' => $purchase->productid,
+                'type' => $purchase->productid === 'unlockplatformsubscription' ? 'paid subscription' : 'consumeable',
+                'transaction' => [
+                    'type' => 'android-playstore',
+                    'id' => $purchase->orderid,
+                    'purchaseToken' => $purchase->purchasetoken,
+                    'signature' => $purchase->signature,
+                    'receipt' => $purchase->receipt,
+                ],
+            ];
         }
 
         $url = "https://validator.iaptic.com/v1/validate";
