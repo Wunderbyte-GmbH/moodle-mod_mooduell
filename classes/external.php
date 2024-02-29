@@ -27,6 +27,7 @@ use mod_mooduell\game_control;
 use mod_mooduell\manage_tokens;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\completion_utils;
+use mod_mooduell\utils\wb_payment;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -298,7 +299,7 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_support() {
         global $DB;
         $url = get_config('mooduell', 'supporturl');
-        $pay = get_config('mooduell', 'unlockplatform');
+        $pay = wb_payment::pro_version_is_activated();
         $badges = get_config('mooduell', 'disablebadges');
         $themeimg = get_config('mod_mooduell', 'companylogo');
         $themeimgalt = get_config('mod_mooduell', 'companylogoalternative');

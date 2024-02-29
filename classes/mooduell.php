@@ -580,8 +580,9 @@ class mooduell {
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
+                    $purchasetokenformatted = str_replace('~', '+', $purchase['purchasetoken']);
                     $existingsub = $DB->get_records('mooduell_purchase', [
-                        'productid' => $purchase['productid'],
+                        'purchasetoken' => $purchasetokenformatted,
                         'store' => 'ios',
                     ]);
                 } else {
