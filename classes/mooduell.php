@@ -555,7 +555,7 @@ class mooduell {
         }
         $leeway = time() - (60 * 60 * 24 * 4);
         list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
-        $params[] = $inparams1;
+        $params = $inparams1;
         $params[] = $leeway;
         $sql = "SELECT * FROM {mooduell_purchase}
         WHERE platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
