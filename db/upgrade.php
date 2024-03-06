@@ -275,5 +275,20 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022033101, 'mooduell');
     }
 
+    if ($oldversion < 2024030600) {
+
+        // Define field validuntil to be added to mooduell_purchase.
+        $table = new xmldb_table('mooduell_purchase');
+        $field = new xmldb_field('validuntil', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'ispublic');
+
+        // Conditionally launch add field validuntil.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2024030600, 'mooduell');
+    }
+
     return true;
 }

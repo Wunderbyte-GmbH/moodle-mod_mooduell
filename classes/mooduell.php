@@ -450,7 +450,10 @@ class mooduell {
                     if ($singleproduct->id === 'unlockplatformsubscription') {
                         // Subscription item.
                         if ($singleproduct->isExpired === false) {
-                            // Extend validity.
+                            // Extend validity for a day.
+                            $udpatedentry = $returnitem;
+                            $udpatedentry->validuntil = $returnitem->validuntil + (60 * 60 * 24);
+                            $DB->update_record('mooduell_purchase', $udpatedentry);
                             return;
                         } else if ($singleproduct->isExpired === true) {
                             // Delete Cancel etc.
@@ -554,14 +557,16 @@ class mooduell {
         list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
         list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
         list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
+        // Give 4 days leeway in case task hasnt run.
+        $leeway = time() - (60 * 60 * 24 * 4);
 
         $params = array_merge($inparams, $inparams2, $inparams3);
-
+        $params[] = $leeway;
         $sql = "SELECT * FROM {mooduell_purchase}
         WHERE userid = {$userid} AND NOT productid = 'notvalid'
         OR courseid $insqlcourses
         OR mooduellid $insqlquizzes AND ispublic = 1
-        OR platformid $insqlplatform AND NOT productid = 'notvalid'";
+        OR platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
 
         $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;
@@ -622,6 +627,8 @@ class mooduell {
         }
         $newdata = $purchase;
         $newdata['timecreated'] = time();
+        // We check subscription every day.
+        $newdata['validuntil'] = time() + (60 * 60 * 24);
         $manipulatedstring = $newdata['purchasetoken'];
         if ($newdata['signature']) {
             $manipulatedsignature = $newdata['signature'];
