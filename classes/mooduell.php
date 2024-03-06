@@ -553,20 +553,26 @@ class mooduell {
             $returnitems = ['purchases' => []];
             return $returnitems;
         }
-
-        list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
-        list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
-        list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
-        // Give 4 days leeway in case task hasnt run.
         $leeway = time() - (60 * 60 * 24 * 4);
-
-        $params = array_merge($inparams, $inparams2, $inparams3);
+        list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
+        $params[] = $inparams1;
         $params[] = $leeway;
         $sql = "SELECT * FROM {mooduell_purchase}
-        WHERE userid = {$userid} AND NOT productid = 'notvalid'
-        OR courseid $insqlcourses
-        OR mooduellid $insqlquizzes AND ispublic = 1
-        OR platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
+        WHERE platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
+        // Logic for more than subs.
+        // list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
+        // list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
+        // list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
+        // // Give 4 days leeway in case task hasnt run.
+        // $leeway = time() - (60 * 60 * 24 * 4);
+
+        // $params = array_merge($inparams, $inparams2, $inparams3);
+        // $params[] = $leeway;
+        // $sql = "SELECT * FROM {mooduell_purchase}
+        // WHERE userid = {$userid} AND NOT productid = 'notvalid'
+        // OR courseid $insqlcourses
+        // OR mooduellid $insqlquizzes AND ispublic = 1
+        // OR platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
 
         $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;
