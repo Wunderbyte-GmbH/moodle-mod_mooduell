@@ -452,7 +452,7 @@ class mooduell {
                         if ($singleproduct->isExpired === false) {
                             // Extend validity for a day.
                             $udpatedentry = $returnitem;
-                            $udpatedentry->validuntil = $returnitem->validuntil + (60 * 60 * 24);
+                            $udpatedentry->validuntil = time() + (60 * 60 * 24);
                             $DB->update_record('mooduell_purchase', $udpatedentry);
                             return;
                         } else if ($singleproduct->isExpired === true) {
