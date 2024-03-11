@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Testing some functions.
+ *
  * @package    mod_mooduell
  * @copyright  2024 Wunderbyte GmbH
  * @author     Chrsitian Badusch
