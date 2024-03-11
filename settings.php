@@ -39,7 +39,6 @@ if ($ADMIN->fulltree) {
         new admin_setting_heading('licensekeycfgheading',
             get_string('licensekeycfg', 'mod_mooduell'),
             get_string('licensekeycfgdesc', 'mod_mooduell')));
-
     // Dynamically change the license info text.
     $licensekeydesc = get_string('licensekeydesc', 'mod_mooduell');
 
@@ -63,14 +62,14 @@ if ($ADMIN->fulltree) {
 
     $settings->add(
         new admin_setting_configtext('mooduell/licensekey',
-            get_string('licensekey', 'mod_mooduell'),
-            $licensekeydesc, ''));
+                get_string('licensekey', 'mod_mooduell'),
+                $licensekeydesc, ''));
 
         $setting = new admin_setting_configcheckbox(
                 'mooduell/usefullnames',
                 get_string('usefullnames', 'mod_mooduell'),
                 "",
-                0
+            0
         );
         $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
         $settings->add($setting);
@@ -188,13 +187,6 @@ if ($ADMIN->fulltree) {
                 0
         ));
 
-        // $settings->add(new admin_setting_configcheckbox(
-        //         'mooduell/unlockplatform',
-        //         get_string('unlockplatform', 'mod_mooduell'),
-        //         "",
-        //         0
-        // ));
-
         $settings->add(new admin_setting_configcheckbox(
                 'mooduell/disablebadges',
                 get_string('disablesbadges', 'mod_mooduell'),
@@ -217,7 +209,6 @@ if ($ADMIN->fulltree) {
                 'themepicture',
                 0
         ));
-
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogoalternative',
                  get_string('alternativelogo', 'mod_mooduell'),

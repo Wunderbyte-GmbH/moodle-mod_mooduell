@@ -124,7 +124,7 @@ class completion_utils {
                 // Date until the challenge needs to be done.
                 $challenge->targetdate = $mooduellinstance->cm->completionexpected ?? null;
 
-                // TODO: Calculate a user's rank within a challenge. - Will be done in a future release.
+                // Calculate a user's rank within a challenge. - Will be done in a future release.
                 $challenge->challengerank = null;
 
                 // Add an array of objects containing localized language strings needed by the app.

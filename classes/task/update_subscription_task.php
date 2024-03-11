@@ -29,7 +29,6 @@ use mod_mooduell\mooduell;
  * update_subscription_task
  */
 class update_subscription_task extends \core\task\scheduled_task {
-
     /**
      * Returns the taskname.
      *

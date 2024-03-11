@@ -107,7 +107,7 @@ class question_control {
             $this->questionid = $data->id;
             $this->name = $data->name;
             if ($data->qtype == 'ddwtos') {
-                $this->questiontext = trim(strip_tags(html_entity_decode($data->questiontext)));
+                $this->questiontext = trim(strip_tags(html_entity_decode($data->questiontext, ENT_QUOTES)));
             } else {
                 $this->questiontext = $data->questiontext;
             }
@@ -143,17 +143,17 @@ class question_control {
                     // Remove HTML and decode HTML entities like "&nbsp;".
                     if (!empty($combinedfeedback->correctfeedback)) {
                         $combinedfeedback->correctfeedback =
-                            trim(strip_tags(html_entity_decode($combinedfeedback->correctfeedback)));
+                            trim(strip_tags(html_entity_decode($combinedfeedback->correctfeedback, ENT_QUOTES)));
                     }
 
                     if (!empty($combinedfeedback->partiallycorrectfeedback)) {
                         $combinedfeedback->partiallycorrectfeedback =
-                            trim(strip_tags(html_entity_decode($combinedfeedback->partiallycorrectfeedback)));
+                            trim(strip_tags(html_entity_decode($combinedfeedback->partiallycorrectfeedback, ENT_QUOTES)));
                     }
 
                     if (!empty($combinedfeedback->incorrectfeedback)) {
                         $combinedfeedback->incorrectfeedback =
-                            trim(strip_tags(html_entity_decode($combinedfeedback->incorrectfeedback)));
+                            trim(strip_tags(html_entity_decode($combinedfeedback->incorrectfeedback, ENT_QUOTES)));
                     }
                 }
             } else {

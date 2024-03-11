@@ -91,7 +91,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_open_games_table(mooduell $mooduell):string {
+    private function render_open_games_table(mooduell $mooduell): string {
         return $this->render_games_table($mooduell, 'opengames');
     }
 
@@ -101,7 +101,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_finished_games_table(mooduell $mooduell):string {
+    private function render_finished_games_table(mooduell $mooduell): string {
         return $this->render_games_table($mooduell, 'finishedgames');
     }
 
@@ -112,7 +112,7 @@ class overview_teacher implements renderable, templatable {
      * @param string $action
      * @return string
      */
-    private function render_games_table(mooduell $mooduell, $action):string {
+    private function render_games_table(mooduell $mooduell, $action): string {
 
         $tablename = bin2hex(random_bytes(12));
 
@@ -152,7 +152,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_highscores_table(mooduell $mooduell):string {
+    private function render_highscores_table(mooduell $mooduell): string {
 
         $tablename = bin2hex(random_bytes(12));
         $highscorestable = new table_highscores($tablename, $mooduell->cm->id);
@@ -191,7 +191,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_questions_table(mooduell $mooduell):string {
+    private function render_questions_table(mooduell $mooduell): string {
 
         $tablename = bin2hex(random_bytes(12));
 
