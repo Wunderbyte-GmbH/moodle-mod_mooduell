@@ -1222,10 +1222,17 @@ class mod_mooduell_external extends external_api {
         $activeuserid = $USER->id;
 
         // We only allow to set a pushToken for another user, if there is an active game going on.
-        $data = $DB->get_records_sql('SELECT * FROM {mooduell_games}
-                                      WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
-                                      AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
-                                      AND status != 3');
+        $paramsarray = [ 'userid' => $userid,
+                    'activeuserid' => $activeuserid,
+         ];
+        $sql = "SELECT *
+                FROM {mooduell_games}
+                WHERE (playeraid = ' . :userid . '
+                    OR playerbid =' . :userid . ')
+                    AND (playeraid = ' . :activeuserid . '
+                    OR playerbid =' . :activeuserid . ')
+                    AND status != 3";
+        $data = $DB->get_records_sql($sql, $paramsarray);
 
         if (!$data || count($data) == 0) {
             throw new moodle_exception('cantgetpushtoken', 'mooduell', null, null,
@@ -1292,10 +1299,17 @@ class mod_mooduell_external extends external_api {
 
         if ($activeuserid != $params['userid']) {
             // We only allow to set a pushToken for another user, if there is an active game going on.
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games}
-                                          WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')
-                                          AND (playeraid = ' . $activeuserid . ' OR playerbid =' . $activeuserid . ')
-                                          AND status != 3');
+            $paramsarray = [ 'userid' => $userid,
+            'activeuserid' => $activeuserid,
+            ];
+            $sql = "SELECT *
+                    FROM {mooduell_games}
+                    WHERE (playeraid = ' . :userid . '
+                        OR playerbid =' . :userid . ')
+                        AND (playeraid = ' . :activeuserid . '
+                        OR playerbid =' . :activeuserid . ')
+                        AND status != 3";
+            $data = $DB->get_records_sql($sql, $paramsarray);
 
             if (!$data || count($data) == 0) {
                 throw new moodle_exception('cantsetpushtoken', 'mooduell', null, null,

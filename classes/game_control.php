@@ -253,9 +253,12 @@ class game_control {
         $returnarray = [];
         try {
             // Get all the games where player was either Player A or Player B AND game is finished.
-            $data = $DB->get_records_sql('SELECT *
-                                          FROM {mooduell_games}
-                                          WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')');
+            $params = ['userid' => $userid];
+            $sql = "SELECT *
+                    FROM {mooduell_games}
+                    WHERE (playeraid = ' . :userid . '
+                        OR playerbid =' . :userid . ')";
+            $data = $DB->get_records_sql($sql, $params);
 
             $wongames = 0;
             $lostgames = 0;
@@ -523,7 +526,7 @@ class game_control {
         list($inorequal, $params) = $DB->get_in_or_equal($searcharray, SQL_PARAMS_NAMED);
 
         if ($CFG->version >= 2022041900) {
-            $sql = "SELECT q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category
+            $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid AS category
 
                     FROM {question} q
                     JOIN {question_versions} qv ON q.id=qv.questionid
