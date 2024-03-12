@@ -140,11 +140,14 @@ class provider implements
         // Look up all mooduell games of a specific user.
         $sql = "SELECT c.id
                   FROM {context} c
-                  INNER JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  INNER JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  INNER JOIN {mooduell} md ON md.id = cm.instance
-                  INNER JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id
-                  WHERE mdg.playeraid = :userida OR mdg.playerbid = :useridb";
+             INNER JOIN {course_modules} cm ON cm.id = c.instanceid
+                       AND c.contextlevel = :contextlevel
+             INNER JOIN {modules} m ON m.id = cm.module
+                       AND m.name = :modname
+             INNER JOIN {mooduell} md ON md.id = cm.instance
+             INNER JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id
+                  WHERE mdg.playeraid = :userida
+                       OR mdg.playerbid = :useridb";
 
         $params = [
             'modname'      => 'mooduell',
@@ -157,10 +160,12 @@ class provider implements
         // Look up all mooduell highscores of a specific user.
         $sql = "SELECT c.id
                   FROM {context} c
-                  INNER JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  INNER JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  INNER JOIN {mooduell} md ON md.id = cm.instance
-                  INNER JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id
+             INNER JOIN {course_modules} cm ON cm.id = c.instanceid
+                       AND c.contextlevel = :contextlevel
+             INNER JOIN {modules} m ON m.id = cm.module
+                       AND m.name = :modname
+             INNER JOIN {mooduell} md ON md.id = cm.instance
+             INNER JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id
                   WHERE mdh.userid = :userid";
 
         $params = [
@@ -234,16 +239,16 @@ class provider implements
 
             // To delete the pushtokens, we must first find out all users (game players).
             $getallplayerssql = 'SELECT DISTINCT userid
-            FROM (
-                SELECT playeraid AS userid
-                FROM {mooduell_games}
-                WHERE mooduellid = :cminstance
-                UNION
-                SELECT playerbid AS userid
-                FROM {mooduell_games}
-                WHERE mooduellid = :cminstance
-            ) s
-            ORDER BY userid ASC
+                                          FROM (
+                                               SELECT playeraid AS userid
+                                                 FROM {mooduell_games}
+                                                WHERE mooduellid = :cminstance
+                                                UNION
+                                               SELECT playerbid AS userid
+                                                 FROM {mooduell_games}
+                                                WHERE mooduellid = :cminstance
+                                                ) s
+                                       ORDER BY userid ASC
             ';
 
             $records = $DB->get_records_sql($getallplayerssql, ['cminstance' => $cm->instance]);
@@ -279,8 +284,10 @@ class provider implements
             }
 
             // Before deleting mooduell_games we have to delete the associated mooduell_questions data.
-            $where = 'gameid in (SELECT id FROM {mooduell_games} WHERE mooduellid = :mooduellid AND ' .
-                '(playeraid = :playeraid OR playerbid = :playerbid))';
+            $where = 'gameid in (SELECT id
+                                   FROM {mooduell_games}
+                                  WHERE mooduellid = :mooduellid
+                                    AND ' . '(playeraid = :playeraid OR playerbid = :playerbid))';
             $DB->delete_records_select('mooduell_questions', $where, [
                 'mooduellid' => $instanceid,
                 'playeraid' => $userid,
@@ -311,7 +318,8 @@ class provider implements
         // Add all games where user is playera.
         $sql = "SELECT mdg.playeraid
                   FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
+                  JOIN {modules} m ON m.id = cm.module
+                       AND m.name = :modname
                   JOIN {mooduell} md ON md.id = cm.instance
                   JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id
                   WHERE cm.id = :cmid";
@@ -326,7 +334,8 @@ class provider implements
         // Add all games where user is playerb.
         $sql = "SELECT mdg.playerbid
                   FROM {course_modules} cm
-                  JOIN {modules} m ON m.id = cm.module AND m.name = :modname
+                  JOIN {modules} m ON m.id = cm.module
+                       AND m.name = :modname
                   JOIN {mooduell} md ON md.id = cm.instance
                   JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id
                   WHERE cm.id = :cmid";
@@ -388,13 +397,17 @@ class provider implements
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdg.*, cm.id AS cmid, md.name AS mooduellname, u.firstname, u.lastname
-            FROM {course_modules} cm
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
-            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-            JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id AND mdg.playeraid = :userida OR  mdg.playerbid = :useridb
-            LEFT JOIN {user} u ON u.id = :userid
-            WHERE c.id {$contextsql}";
+                 FROM {course_modules} cm
+                 JOIN {modules} m ON cm.module = m.id
+                      AND m.name = :modname
+                 JOIN {context} c ON cm.id = c.instanceid
+                      AND c.contextlevel = :contextlevel
+                 JOIN {mooduell} md ON cm.instance = md.id
+                 JOIN {mooduell_games} mdg ON mdg.mooduellid = md.id
+                      AND mdg.playeraid = :userida
+                      OR  mdg.playerbid = :useridb
+             LEFT JOIN {user} u ON u.id = :userid
+                 WHERE c.id {$contextsql}";
 
         $params = [
             'modname'       => 'mooduell',
@@ -484,13 +497,16 @@ class provider implements
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdh.*, cm.id AS cmid, u.firstname, u.lastname, md.name AS mooduellname
-            FROM {course_modules} cm
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
-            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-            JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id AND mdh.userid = :userid
-            LEFT JOIN {user} u ON u.id = :userid2
-            WHERE c.id {$contextsql}";
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id
+                       AND m.name = :modname
+                  JOIN {context} c ON cm.id = c.instanceid
+                       AND c.contextlevel = :contextlevel
+                  JOIN {mooduell} md ON cm.instance = md.id
+                  JOIN {mooduell_highscores} mdh ON mdh.mooduellid = md.id
+                       AND mdh.userid = :userid
+              LEFT JOIN {user} u ON u.id = :userid2
+                  WHERE c.id {$contextsql}";
 
         $params = [
             'modname'       => 'mooduell',
@@ -544,13 +560,15 @@ class provider implements
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdp.*, cm.id AS cmid, u.firstname, u.lastname
-            FROM {course_modules} cm
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
-            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-            JOIN {mooduell} md ON cm.instance = md.id
-            JOIN {mooduell_pushtokens} mdp ON mdp.userid = :userid
-            LEFT JOIN {user} u ON u.id = :userid2
-            WHERE c.id {$contextsql}";
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id
+                       AND m.name = :modname
+                  JOIN {context} c ON cm.id = c.instanceid
+                       AND c.contextlevel = :contextlevel
+                  JOIN {mooduell} md ON cm.instance = md.id
+                  JOIN {mooduell_pushtokens} mdp ON mdp.userid = :userid
+              LEFT JOIN {user} u ON u.id = :userid2
+                  WHERE c.id {$contextsql}";
 
         $params = [
             'modname'       => 'mooduell',
@@ -594,17 +612,22 @@ class provider implements
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdq.*, cm.id AS cmid, q.questiontext, md.name as mooduellname
-            FROM {course_modules} cm
-            JOIN {modules} m ON cm.module = m.id AND m.name = :modname
-            JOIN {context} c ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-            JOIN {mooduell} md ON cm.instance = md.id
-            JOIN (SELECT mq.*, mg.playeraid, mg.playerbid
-                    FROM {mooduell_questions} mq
-                    JOIN {mooduell_games} mg
-                    ON mq.mooduellid = mg.mooduellid AND mq.gameid = mg.id) mdq
-                ON mdq.mooduellid = md.id AND (mdq.playeraid = :playeraid OR mdq.playerbid = :playerbid)
-            LEFT JOIN {question} q ON q.id = mdq.questionid
-            WHERE c.id {$contextsql}";
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id
+                       AND m.name = :modname
+                  JOIN {context} c ON cm.id = c.instanceid
+                       AND c.contextlevel = :contextlevel
+                  JOIN {mooduell} md ON cm.instance = md.id
+                  JOIN (SELECT mq.*, mg.playeraid, mg.playerbid
+                         FROM {mooduell_questions} mq
+                         JOIN {mooduell_games} mg
+                          ON mq.mooduellid = mg.mooduellid
+                             AND mq.gameid = mg.id) mdq
+                    ON mdq.mooduellid = md.id
+                       AND (mdq.playeraid = :playeraid
+                       OR mdq.playerbid = :playerbid)
+              LEFT JOIN {question} q ON q.id = mdq.questionid
+                  WHERE c.id {$contextsql}";
 
         $params = [
             'modname' => 'mooduell',

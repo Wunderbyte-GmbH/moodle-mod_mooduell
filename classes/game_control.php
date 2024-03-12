@@ -255,9 +255,9 @@ class game_control {
             // Get all the games where player was either Player A or Player B AND game is finished.
             $params = ['userid' => $userid];
             $sql = "SELECT *
-                    FROM {mooduell_games}
-                    WHERE (playeraid = ' . :userid . '
-                        OR playerbid =' . :userid . ')";
+                      FROM {mooduell_games}
+                     WHERE (playeraid = ' . :userid . '
+                           OR playerbid =' . :userid . ')";
             $data = $DB->get_records_sql($sql, $params);
 
             $wongames = 0;
@@ -527,17 +527,15 @@ class game_control {
 
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid AS category
-
-                    FROM {question} q
-                    JOIN {question_versions} qv ON q.id=qv.questionid
-                    JOIN {question_bank_entries} qbe ON qbe.id=qv.questionbankentryid
-                    JOIN {question_categories} qc ON qbe.questioncategoryid=qc.id
-
-                    WHERE q.id $inorequal";
+                      FROM {question} q
+                      JOIN {question_versions} qv ON q.id=qv.questionid
+                      JOIN {question_bank_entries} qbe ON qbe.id=qv.questionbankentryid
+                      JOIN {question_categories} qc ON qbe.questioncategoryid=qc.id
+                     WHERE q.id $inorequal";
         } else {
             $sql = "SELECT *
-                    FROM {question} q
-                    WHERE q.id $inorequal";
+                      FROM {question} q
+                     WHERE q.id $inorequal";
         }
         if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,

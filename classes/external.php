@@ -1226,12 +1226,12 @@ class mod_mooduell_external extends external_api {
                     'activeuserid' => $activeuserid,
          ];
         $sql = "SELECT *
-                FROM {mooduell_games}
-                WHERE (playeraid = ' . :userid . '
-                    OR playerbid =' . :userid . ')
-                    AND (playeraid = ' . :activeuserid . '
-                    OR playerbid =' . :activeuserid . ')
-                    AND status != 3";
+                  FROM {mooduell_games}
+                 WHERE (playeraid = ' . :userid . '
+                      OR playerbid =' . :userid . ')
+                      AND (playeraid = ' . :activeuserid . '
+                      OR playerbid =' . :activeuserid . ')
+                      AND status != 3";
         $data = $DB->get_records_sql($sql, $paramsarray);
 
         if (!$data || count($data) == 0) {
@@ -1303,12 +1303,12 @@ class mod_mooduell_external extends external_api {
             'activeuserid' => $activeuserid,
             ];
             $sql = "SELECT *
-                    FROM {mooduell_games}
-                    WHERE (playeraid = ' . :userid . '
-                        OR playerbid =' . :userid . ')
-                        AND (playeraid = ' . :activeuserid . '
-                        OR playerbid =' . :activeuserid . ')
-                        AND status != 3";
+                      FROM {mooduell_games}
+                     WHERE (playeraid = ' . :userid . '
+                          OR playerbid =' . :userid . ')
+                          AND (playeraid = ' . :activeuserid . '
+                          OR playerbid =' . :activeuserid . ')
+                          AND status != 3";
             $data = $DB->get_records_sql($sql, $paramsarray);
 
             if (!$data || count($data) == 0) {
