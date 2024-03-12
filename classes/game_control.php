@@ -253,11 +253,16 @@ class game_control {
         $returnarray = [];
         try {
             // Get all the games where player was either Player A or Player B AND game is finished.
-            $params = ['userid' => $userid];
             $sql = "SELECT *
                       FROM {mooduell_games}
-                     WHERE (playeraid = ' . :userid . '
-                           OR playerbid =' . :userid . ')";
+                     WHERE (playeraid = :userid1
+                           OR playerbid = :userid2)";
+
+            $params = [
+                'userid1' => $userid,
+                'userid2' => $userid,
+            ];
+
             $data = $DB->get_records_sql($sql, $params);
 
             $wongames = 0;
