@@ -253,9 +253,9 @@ class game_control {
         $returnarray = [];
         try {
             // Get all the games where player was either Player A or Player B AND game is finished.
-            $data = $DB->get_records_sql('SELECT * FROM {mooduell_games} WHERE (playeraid = ' .
-                    $userid . ' OR playerbid =' . $userid .
-                    ')');
+            $data = $DB->get_records_sql('SELECT *
+                                          FROM {mooduell_games}
+                                          WHERE (playeraid = ' . $userid . ' OR playerbid =' . $userid . ')');
 
             $wongames = 0;
             $lostgames = 0;
@@ -533,8 +533,8 @@ class game_control {
                     WHERE q.id $inorequal";
         } else {
             $sql = "SELECT *
-            FROM {question} q
-            WHERE q.id $inorequal";
+                    FROM {question} q
+                    WHERE q.id $inorequal";
         }
         if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
             throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,

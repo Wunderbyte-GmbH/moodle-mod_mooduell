@@ -432,9 +432,10 @@ class mooduell {
 
         $params = array_merge($inparams1, $inparams2);
 
-        $sql = "SELECT * FROM {mooduell_purchase}
-        WHERE platformid $insqlplatform
-        AND productid $insqlproduct";
+        $sql = "SELECT *
+                FROM {mooduell_purchase}
+                WHERE platformid $insqlplatform
+                    AND productid $insqlproduct";
 
         $allpurchases = $DB->get_records_sql($sql, $params);
         foreach ($allpurchases as $returnitem) {
@@ -555,8 +556,10 @@ class mooduell {
         list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
         $params = $inparams1;
         $params[] = $leeway;
-        $sql = "SELECT * FROM {mooduell_purchase}
-        WHERE platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
+        $sql = "SELECT *
+                FROM {mooduell_purchase}
+                WHERE platformid $insqlplatform AND validuntil > ?
+                    AND NOT productid = 'notvalid'";
 
         $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;
@@ -801,7 +804,9 @@ class mooduell {
 
         $instanceid = $this->cm->instance;
 
-        $sql = "SELECT * FROM {mooduell_games} WHERE mooduellid = $instanceid";
+        $sql = "SELECT *
+                FROM {mooduell_games}
+                WHERE mooduellid = $instanceid";
 
         if ($studentview) {
             $sql .= " AND (playeraid = $USER->id OR playerbid = $USER->id)";
@@ -1270,44 +1275,62 @@ class mooduell {
         }
 
         // Number of distinct users who have played a MooDuell game.
-        $sql = "select count(*) active_users from (
-                    select playeraid playerid from {mooduell_games}
-                    where mooduellid = $mooduellid
-                    union
-                    select playerbid playerid from {mooduell_games}
-                    where mooduellid = $mooduellid
+        $sql = "SELECT count(*) active_users
+                FROM(
+                    SELECT playeraid playerid
+                    FROM {mooduell_games}
+                    WHERE mooduellid = $mooduellid
+                    UNION
+                    SELECT playerbid playerid
+                    FROM {mooduell_games}
+                    WHERE mooduellid = $mooduellid
                 ) s"; // Info: union selects only distinct records.
         $numberofactiveusers = $DB->get_record_sql($sql)->active_users;
         $listofstatistics['number_of_active_users'] = $numberofactiveusers;
 
         // Number of MooDuell games started.
-        $sql = "select count(*) games_played from {mooduell_games} where mooduellid = $mooduellid";
+        $sql = "SELECT count(*) games_played
+                FROM {mooduell_games}
+                WHERE mooduellid = $mooduellid";
         $numberofgamesstarted = $DB->get_record_sql($sql)->games_played;
         $listofstatistics['number_of_games_started'] = $numberofgamesstarted;
 
         // Number of MooDuell games played.
-        $sql = "select count(*) games_finished from {mooduell_games} where mooduellid = $mooduellid and status = 3";
+        $sql = "SELECT count(*) games_finished
+                FROM {mooduell_games}
+                WHERE mooduellid = $mooduellid
+                     AND status = 3";
         $numberofgamesfinished = $DB->get_record_sql($sql)->games_finished;
         $listofstatistics['number_of_games_finished'] = $numberofgamesfinished;
 
         // Number of answers returned to MooDuell questions.
-        $sql = "select sum(s.answers) answers from
-                (select count(playeraanswered) answers from {mooduell_questions}
-                where playeraanswered is not null and mooduellid = $mooduellid
-                union all
-                select count(playerbanswered) answers from {mooduell_questions}
-                where playerbanswered is not null and mooduellid = $mooduellid) s";
+        $sql = "SELECT sum(s.answers) answers
+                FROM
+                    (SELECT count(playeraanswered) answers
+                     FROM {mooduell_questions}
+                     WHERE playeraanswered IS NOT NULL
+                          AND mooduellid = $mooduellid
+                UNION ALL
+                    SELECT count(playerbanswered) answers
+                    FROM {mooduell_questions}
+                    WHERE playerbanswered IS NOT NULL
+                          AND mooduellid = $mooduellid) s";
         $numberofanswers = $DB->get_record_sql($sql)->answers;
         $listofstatistics['number_of_answers'] = $numberofanswers;
 
         // Percentage of correctly answered questions.
         // Step 1: find out the number of correct answers returned to MooDuell questions.
-        $sql = "select sum(s.correct_answers) correct_answers from
-                (select count(playeraanswered) correct_answers from {mooduell_questions}
-                where playeraanswered = 2 and mooduellid = $mooduellid
+        $sql = "SELECT sum(s.correct_answers) correct_answers
+                FROM
+                    (SELECT count(playeraanswered) correct_answers
+                    FROM {mooduell_questions}
+                    WHERE playeraanswered = 2
+                        AND mooduellid = $mooduellid
                 union all
-                select count(playerbanswered) correct_answers from {mooduell_questions}
-                where playerbanswered = 2 and mooduellid = $mooduellid) s";
+                    select count(playerbanswered) correct_answers
+                    FROM {mooduell_questions}
+                    where playerbanswered = 2
+                        AND mooduellid = $mooduellid) s";
         $numberofcorrectanswers = $DB->get_record_sql($sql)->correct_answers;
 
         if (!empty($numberofcorrectanswers)) {
@@ -1319,15 +1342,22 @@ class mooduell {
         }
 
         // Easiest question = question which has been answered correctly most often.
-        $sql = "select s.questionid, q.questiontext questionname, count(*) correct_count from
-                (select * from {mooduell_questions} where playeraanswered = 2 and mooduellid = $mooduellid
-                union all
-                select * from {mooduell_questions} where playerbanswered = 2 and mooduellid = $mooduellid) s
-                inner join {question} q
-                on q.id = s.questionid
-                group by s.questionid, q.name, q.questiontext
-                order by correct_count desc
-                limit 1";
+        $sql = "SELECT s.questionid, q.questiontext questionname, count(*) correct_count
+                FROM
+                    (SELECT *
+                    FROM {mooduell_questions}
+                    WHERE playeraanswered = 2
+                        AND mooduellid = $mooduellid
+                UNION ALL
+                SELECT *
+                FROM {mooduell_questions}
+                WHERE playerbanswered = 2
+                    AND mooduellid = $mooduellid) s
+                INNER JOIN {question} q
+                ON q.id = s.questionid
+                GROUP BY s.questionid, q.name, q.questiontext
+                ORDER BY correct_count DESC
+                LIMIT 1";
 
         $listofstatistics['eq_id'] = false;
         $listofstatistics['eq_name'] = "";
@@ -1346,15 +1376,22 @@ class mooduell {
         }
 
         // Hardest question = question which has been answered incorrectly most often.
-        $sql = "select s.questionid, q.questiontext questionname, count(*) incorrect_count from
-                (select * from {mooduell_questions} where playeraanswered = 1 and mooduellid = $mooduellid
-                union all
-                select * from {mooduell_questions} where playerbanswered = 1 and mooduellid = $mooduellid) s
-                inner join {question} q
-                on q.id = s.questionid
-                group by s.questionid, q.name, q.questiontext
-                order by incorrect_count desc
-                limit 1";
+        $sql = "SELECT s.questionid, q.questiontext questionname, count(*) incorrect_count
+                FROM
+                    (SELECT *
+                    FROM {mooduell_questions}
+                    WHERE playeraanswered = 1
+                        AND mooduellid = $mooduellid
+                UNION ALL
+                SELECT *
+                FROM {mooduell_questions}
+                WHERE playerbanswered = 1
+                    AND mooduellid = $mooduellid) s
+                INNER JOIN {question} q
+                ON q.id = s.questionid
+                GROUP BY s.questionid, q.name, q.questiontext
+                ORDER BY incorrect_count DESC
+                LIMIT 1";
 
         $listofstatistics['hq_id'] = false;
         $listofstatistics['hq_name'] = "";
@@ -1399,15 +1436,16 @@ class mooduell {
 
         // Number of distinct opponents who have played a MooDuell game...
         // ...against the current user.
-        $sql = "select count(*)-1 opponents
-                from (
-                  select playeraid playerid from {mooduell_games}
-                  where mooduellid = $mooduellid
-                  and (playeraid = $userid or playerbid = $userid)
-                  union
-                  select playerbid playerid from {mooduell_games}
-                  where mooduellid = $mooduellid
-                  and (playeraid = $userid or playerbid = $userid)
+        $sql = "SELECT count(*)-1 opponents
+                FROM (
+                  SELECT playeraid playerid
+                  FROM {mooduell_games}
+                  WHERE mooduellid = $mooduellid
+                    AND (playeraid = $userid OR playerbid = $userid)
+                  UNION
+                  SELECt playerbid playerid FROM {mooduell_games}
+                  WHERE mooduellid = $mooduellid
+                    AND (playeraid = $userid OR playerbid = $userid)
                 ) s"; // Info: union selects only distinct records.
         $numberofopponents = $DB->get_record_sql($sql)->opponents;
         // No game played yet.
@@ -1421,10 +1459,11 @@ class mooduell {
         $listofstatistics['number_of_opponents'] = $numberofopponents;
 
         // Number of unfinished (open) MooDuell games having the current user involved.
-        $sql = "select count(*) open_games from {mooduell_games}
-                where mooduellid = $mooduellid
-                and (playeraid = $userid or playerbid = $userid)
-                and status <> 3";
+        $sql = "SELECT count(*) open_games
+                FROM {mooduell_games}
+                WHERE mooduellid = $mooduellid
+                    AND (playeraid = $userid OR playerbid = $userid)
+                    AND status <> 3";
 
         if ($data = $DB->get_record_sql($sql)) {
             $numberofopengames = $data->open_games;
@@ -1707,7 +1746,7 @@ class mooduell {
                 LEFT JOIN (SELECT ud.data, ud.userid
                     FROM {user_info_data} ud
                     LEFT JOIN {user_info_field} uif ON ud.fieldid=uif.id
-                    WHERE uif.shortname='mooduell_alias') as s1
+                    WHERE uif.shortname='mooduell_alias') AS s1
                 ON s1.userid=u.id
                 WHERE u.deleted = 0";
 

@@ -62,7 +62,7 @@ $string['addInstance'] = 'Ein neues Spiel hinzufügen';
 $string['mooduell:addinstance'] = 'Ein neues Spiel hinzufügen';
 
 $string['enablepush'] = 'Push Nachrichten aktivieren';
-$string['pushtoken'] = 'Push API Access Key';
+$string['pushtoken'] = 'Push API access key';
 $string['countdown'] = 'Countdown';
 $string['countdown_help'] = 'Wie lange sollen die SpielerInnen Zeit haben, um die Fragen zu beantworten?';
 $string['nocountdown'] = 'Kein Countdown';
