@@ -160,6 +160,7 @@
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of when the record was created."/>
         <FIELD NAME="store" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Which Store was this item purchased on -&gt; iOS /Android"/>
         <FIELD NAME="ispublic" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Is public purchase."/>
+        <FIELD NAME="validuntil" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Valid until timestamp"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

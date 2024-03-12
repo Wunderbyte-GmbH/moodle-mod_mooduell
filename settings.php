@@ -24,17 +24,52 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_mooduell\utils\wb_payment;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $ADMIN;
 
 if ($ADMIN->fulltree) {
 
+        // Has PRO version been activated?
+    $proversion = wb_payment::pro_version_is_activated();
+
+    $settings->add(
+        new admin_setting_heading('licensekeycfgheading',
+            get_string('licensekeycfg', 'mod_mooduell'),
+            get_string('licensekeycfgdesc', 'mod_mooduell')));
+    // Dynamically change the license info text.
+    $licensekeydesc = get_string('licensekeydesc', 'mod_mooduell');
+
+    // Get license key which has been set in text field.
+    $pluginconfig = get_config('mooduell');
+    if (!empty($pluginconfig->licensekey)) {
+        $licensekey = $pluginconfig->licensekey;
+
+        $expirationdate = wb_payment::decryptlicensekey($licensekey);
+        if (!empty($expirationdate)) {
+            $licensekeydesc = "<p style='color: green; font-weight: bold'>"
+                .get_string('license_activated', 'mod_mooduell')
+                .$expirationdate
+                .")</p>";
+        } else {
+            $licensekeydesc = "<p style='color: red; font-weight: bold'>"
+                .get_string('license_invalid', 'mod_mooduell')
+                ."</p>";
+        }
+    }
+
+    $settings->add(
+        new admin_setting_configtext('mooduell/licensekey',
+                get_string('licensekey', 'mod_mooduell'),
+                $licensekeydesc, ''));
+
         $setting = new admin_setting_configcheckbox(
                 'mooduell/usefullnames',
                 get_string('usefullnames', 'mod_mooduell'),
                 "",
-                0
+            0
         );
         $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
         $settings->add($setting);
@@ -153,13 +188,6 @@ if ($ADMIN->fulltree) {
         ));
 
         $settings->add(new admin_setting_configcheckbox(
-                'mooduell/unlockplatform',
-                get_string('unlockplatform', 'mod_mooduell'),
-                "",
-                0
-        ));
-
-        $settings->add(new admin_setting_configcheckbox(
                 'mooduell/disablebadges',
                 get_string('disablesbadges', 'mod_mooduell'),
                 "",
@@ -181,7 +209,6 @@ if ($ADMIN->fulltree) {
                 'themepicture',
                 0
         ));
-
         $settings->add(new admin_setting_configstoredfile(
                 'mod_mooduell/companylogoalternative',
                  get_string('alternativelogo', 'mod_mooduell'),

@@ -45,7 +45,7 @@ class mooduell_external_test extends advanced_testcase {
     /**
      * Tests set up.
      */
-    public function setUp():void {
+    public function setUp(): void {
         $this->resetAfterTest();
     }
 
@@ -174,7 +174,7 @@ class mooduell_external_test extends advanced_testcase {
         // Check users.
         $this->assertIsArray($users);
         $this->assertEquals(2, count($users));
-        // TODO: no built-in methods to compare stdClass instances.
+        // No built-in methods to compare stdClass instances.
         $ids = array_map(function($item) {
             return $item->id;
         }, $users);

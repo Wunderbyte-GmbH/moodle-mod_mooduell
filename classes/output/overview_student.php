@@ -97,7 +97,7 @@ class overview_student implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_open_games_table(mooduell $mooduell):string {
+    private function render_open_games_table(mooduell $mooduell): string {
         return $this->render_games_table($mooduell, 'opengames');
     }
 
@@ -107,7 +107,7 @@ class overview_student implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_finished_games_table(mooduell $mooduell):string {
+    private function render_finished_games_table(mooduell $mooduell): string {
         return $this->render_games_table($mooduell, 'finishedgames');
     }
 
@@ -118,7 +118,7 @@ class overview_student implements renderable, templatable {
      * @param string $action
      * @return string
      */
-    private function render_games_table(mooduell $mooduell, string $action):string {
+    private function render_games_table(mooduell $mooduell, string $action): string {
         $gamestable = new table_games($action, $mooduell->cm->id);
 
         $finishedgames = $action == 'finishedgames' ? true : false;
@@ -150,7 +150,7 @@ class overview_student implements renderable, templatable {
      * @param mooduell $mooduell
      * @return string
      */
-    private function render_highscores_table(mooduell $mooduell):string {
+    private function render_highscores_table(mooduell $mooduell): string {
 
         $highscorestable = new table_highscores('highscores', $mooduell->cm->id);
         // Sort the table by descending score by default.

@@ -25,6 +25,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['licensekeycfg'] = 'Activate PRO version';
+$string['licensekeycfgdesc'] = 'With a PRO license you can create as many booking templates as you like and use PRO features such as global mail templates, waiting list info texts or teacher notifications.';
+$string['licensekey'] = 'PRO license key';
+$string['licensekeydesc'] = 'Upload a valid license key to activate the PRO version.';
+$string['license_activated'] = 'PRO version activated successfully.<br>(Expires: ';
+$string['license_invalid'] = 'Invalid license key';
+
+$string['updatesubscription'] = "Check subscription status";
+
 $string['disablesbadges'] = 'Auszeichnungen deaktivieren';
 $string['theme'] = 'Theme';
 $string['themedesc'] = 'Theme in JSON format';

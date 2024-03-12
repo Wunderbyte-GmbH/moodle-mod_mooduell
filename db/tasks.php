@@ -15,20 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Mooduell module scheduled tasks definition
  *
- * @package     mod_mooduell
- * @copyright   2020 Wunderbyte GmbH <info@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_mooduell
+ * @copyright  2024 Christian Badusch
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_mooduell';
-$plugin->release = 'v2.1.5';
-$plugin->version = 2024030600;
-$plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [
-    'local_wunderbyte_table' => 2022091900,
+$tasks = [
+    ['classname' => 'mod_mooduell\task\update_subscription_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*',
+    ],
 ];

@@ -326,7 +326,6 @@ class mooduell {
         $cachetime = get_config('mooduell', 'cachetime');
 
         if ($cachetime > 0) {
-
             // Next we take a look in the cache.
             $cache = cache::make('mod_mooduell', 'questionscache');
 
@@ -336,7 +335,6 @@ class mooduell {
                 $this->questions = $questions;
                 return $questions;
             }
-
         }
 
         $questions = [];
@@ -347,7 +345,7 @@ class mooduell {
             $newquestion = new question_control($entry, $listofanswers);
 
             // Add empty combined feedback (for ddwtos questions) to prevent webservice errors.
-            $combinedfeedback = new stdClass;
+            $combinedfeedback = new stdClass();
             $combinedfeedback->correctfeedback = null;
             $combinedfeedback->partiallycorrectfeedback = null;
             $combinedfeedback->incorrectfeedback = null;
@@ -418,6 +416,117 @@ class mooduell {
         }
         return $listofquestions;
     }
+
+    /**
+     * Updates the platform subscription.
+     *
+     *
+     */
+    public static function update_all_subscriptions() {
+
+        global $DB, $CFG;
+
+        // Get Subscriptions.
+        list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
+        list($insqlproduct, $inparams2) = $DB->get_in_or_equal('unlockplatformsubscription');
+
+        $params = array_merge($inparams1, $inparams2);
+
+        $sql = "SELECT * FROM {mooduell_purchase}
+        WHERE platformid $insqlplatform
+        AND productid $insqlproduct";
+
+        $allpurchases = $DB->get_records_sql($sql, $params);
+        foreach ($allpurchases as $returnitem) {
+            $result = self::verify_purchase($returnitem);
+
+            // Logic to determine if subscription is okay or not
+            // Request was ok.
+            if ($result->ok === true) {
+                $allproductsinreceipt = $result->data->collection;
+                foreach ($allproductsinreceipt as $singleproduct) {
+                    if ($singleproduct->id === 'unlockplatformsubscription') {
+                        // Subscription item.
+                        if ($singleproduct->isExpired === false) {
+                            // Extend validity for a day.
+                            $udpatedentry = $returnitem;
+                            $udpatedentry->validuntil = time() + (60 * 60 * 24);
+                            $DB->update_record('mooduell_purchase', $udpatedentry);
+                            return;
+                        } else if ($singleproduct->isExpired === true) {
+                            // Delete Cancel etc.
+                            $udpatedentry = $returnitem;
+                            $udpatedentry->productid = 'notvalid';
+                            $DB->update_record('mooduell_purchase', $udpatedentry);
+                        }
+                    }
+                }
+            } else {
+                // Failed verification.
+                // Android expired.
+                if ($result->code === 6778003) {
+                    $udpatedentry = $returnitem;
+                    $udpatedentry->productid = 'notvalid';
+                    $DB->update_record('mooduell_purchase', $udpatedentry);
+                }
+                return;
+            }
+        }
+    }
+
+    /**
+     * Verifies a single purchase.
+     *
+     * @param  mixed $purchase
+     * @return object
+     */
+    public static function verify_purchase($purchase) {
+        // If sub has been purchases on ios.
+        if ($purchase->store === 'ios') {
+            $payload = [
+                'id' => 'at.wunderbyte.mooduellapp',
+                'type' => 'application',
+                'transaction' => [
+                    'id' => 'at.wunderbyte.mooduellapp',
+                    'type' => 'ios-appstore',
+                    'appStoreReceipt' => $purchase->purchasetoken,
+                ],
+            ];
+        } else {
+            $payload = [
+                'id' => $purchase->productid,
+                'type' => $purchase->productid === 'unlockplatformsubscription' ? 'paid subscription' : 'consumeable',
+                'transaction' => [
+                    'type' => 'android-playstore',
+                    'id' => $purchase->orderid,
+                    'purchaseToken' => $purchase->purchasetoken,
+                    'signature' => $purchase->signature,
+                    'receipt' => $purchase->receipt,
+                ],
+            ];
+        }
+
+        $url = "https://validator.iaptic.com/v1/validate";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            [
+              "Authorization: Basic " . base64_encode('at.wunderbyte.mooduellapp:4575a924-9af6-4a88-95d1-9c80aa1444b1'),
+              "Content-Type: application/json",
+            ]);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responsedata = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($responsedata);
+    }
+
+
+
     /**
      * Returns List of relevant Purchases
      *
@@ -442,17 +551,12 @@ class mooduell {
             $returnitems = ['purchases' => []];
             return $returnitems;
         }
-        list($insqlcourses, $inparams) = $DB->get_in_or_equal($courseids);
-        list($insqlquizzes, $inparams2) = $DB->get_in_or_equal($quizids);
-        list($insqlplatform, $inparams3) = $DB->get_in_or_equal($CFG->wwwroot);
-
-        $params = array_merge($inparams, $inparams2, $inparams3);
-
+        $leeway = time() - (60 * 60 * 24 * 4);
+        list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
+        $params = $inparams1;
+        $params[] = $leeway;
         $sql = "SELECT * FROM {mooduell_purchase}
-        WHERE userid = {$userid}
-        OR courseid $insqlcourses
-        OR mooduellid $insqlquizzes AND ispublic = 1
-        OR platformid $insqlplatform";
+        WHERE platformid $insqlplatform AND validuntil > ? AND NOT productid = 'notvalid'";
 
         $returnitems = ['purchases' => $DB->get_records_sql($sql, $params)];
         return $returnitems;
@@ -471,8 +575,9 @@ class mooduell {
             case 'unlockplatformsubscription':
                 if ($purchase['store'] == 'ios') {
                     // Ios.
+                    $purchasetokenformatted = str_replace('~', '+', $purchase['purchasetoken']);
                     $existingsub = $DB->get_records('mooduell_purchase', [
-                        'productid' => $purchase['productid'],
+                        'purchasetoken' => $purchasetokenformatted,
                         'store' => 'ios',
                     ]);
                 } else {
@@ -512,6 +617,8 @@ class mooduell {
         }
         $newdata = $purchase;
         $newdata['timecreated'] = time();
+        // We check subscription every day.
+        $newdata['validuntil'] = time() + (60 * 60 * 24);
         $manipulatedstring = $newdata['purchasetoken'];
         if ($newdata['signature']) {
             $manipulatedsignature = $newdata['signature'];

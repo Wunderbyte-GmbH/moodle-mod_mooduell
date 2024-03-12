@@ -69,11 +69,11 @@ class game_finished {
                 'gamesplayed' => $entry->played,
                 'gameswon' => $entry->won,
                 'gameslost' => $entry->lost,
-                'gamesstarted' => 0, // TODO: this will be added later.
-                'gamesfinished' => 0, // TODO: this will be added later.
+                'gamesstarted' => 0,
+                'gamesfinished' => 0,
                 'score' => $entry->score,
                 'qcorrect' => $entry->correct,
-                'qplayed'  => $entry->qplayed,
+                'qplayed' => $entry->qplayed,
                 'qcpercentage' => $entry->correctpercentage,
                 'timecreated' => time(),
                 'timemodified' => time(),
@@ -87,8 +87,8 @@ class game_finished {
             $entry = (object) $entry;
 
             // Let's have a look if the entry already exists in the DB.
-            $sql = 'select * from {mooduell_highscores} where mooduellid = '.
-                    $entry->mooduellid.' and userid = '.$entry->userid;
+            $sql = 'select * from {mooduell_highscores} where mooduellid = ' .
+                $entry->mooduellid . ' and userid = ' . $entry->userid;
             $data = $DB->get_record_sql($sql);
 
             // If the entry could be found in the database.
