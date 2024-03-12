@@ -98,31 +98,9 @@ class table_games extends wunderbyte_table {
      */
     public function col_timemodified($game) {
         if ($game->timemodified) {
-            if (current_language() === 'de') {
-                $monthnamesde = [
-                    1 => "Januar",
-                    2 => "Februar",
-                    3 => "März",
-                    4 => "April",
-                    5 => "Mai",
-                    6 => "Juni",
-                    7 => "Juli",
-                    8 => "August",
-                    9 => "September",
-                    10 => "Oktober",
-                    11 => "November",
-                    12 => "Dezember",
-                ];
-                // Now build the German date string.
-                $name = date("d. ", $game->timemodified);
-                $name .= $monthnamesde[date("n", $game->timemodified)];
-                $name .= date(" Y, H:i:s", $game->timemodified);
-            } else {
-                $name = date("F j, Y, g:i:s a", $game->timemodified);
-            }
-
-            return $name;
+            return userdate($game->timemodified, get_string('strftimedatetime', 'core_langconfig'));
         }
+        return '';
     }
 
     /**
