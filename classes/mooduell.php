@@ -408,8 +408,8 @@ class mooduell {
         $sqldata = $this->return_sql_for_all_questions_of_quiz();
 
         $sql = "SELECT DISTINCT " . $sqldata['select'] .
-            " FROM " . $sqldata['from'] .
-            " WHERE " . $sqldata['where'];
+                         " FROM " . $sqldata['from'] .
+                        " WHERE " . $sqldata['where'];
 
         if (!$listofquestions = $DB->get_records_sql($sql, $sqldata['params'])) {
             return [];
@@ -652,34 +652,34 @@ class mooduell {
         if ($CFG->version >= 2022041900) {
             $sqldata['select'] = "q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category";
             $sqldata['from'] = "{mooduell_categories} mc
-                                JOIN {question_categories} qc
-                                ON qc.id = mc.category
-                                LEFT JOIN {question_bank_entries} qbe
-                                ON qbe.questioncategoryid = qc.id
-                                JOIN (
+                           JOIN {question_categories} qc
+                             ON qc.id = mc.category
+                      LEFT JOIN {question_bank_entries} qbe
+                             ON qbe.questioncategoryid = qc.id
+                           JOIN (
                                     SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
-                                    FROM {question_versions} qv1
-                                    JOIN (
-                                        SELECT questionbankentryid, max(version) maxversion
-                                        FROM {question_versions}
-                                        GROUP BY questionbankentryid
-                                    ) qv2
-                                    ON qv1.questionbankentryid = qv2.questionbankentryid
-                                    AND qv1.version = qv2.maxversion
+                                      FROM {question_versions} qv1
+                                      JOIN (
+                                            SELECT questionbankentryid, max(version) maxversion
+                                              FROM {question_versions}
+                                          GROUP BY questionbankentryid
+                                            ) qv2
+                                         ON qv1.questionbankentryid = qv2.questionbankentryid
+                                        AND qv1.version = qv2.maxversion
                                 ) qv
-                                ON qbe.id = qv.questionbankentryid
-                                JOIN {question} q
-                                ON q.id = qv.questionid";
+                             ON qbe.id = qv.questionbankentryid
+                           JOIN {question} q
+                             ON q.id = qv.questionid";
             $sqldata['where'] = "mc.mooduellid = :mooduellid";
             $sqldata['params'] = ['mooduellid' => $mooduellid];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
             $sqldata['from'] = "{mooduell_categories} mc
-                                JOIN {question_categories} qc
-                                ON qc.id=mc.category
-                                RIGHT JOIN {question} q
-                                ON qc.id=q.category";
+                           JOIN {question_categories} qc
+                             ON qc.id=mc.category
+                     RIGHT JOIN {question} q
+                             ON qc.id=q.category";
             $sqldata['where'] = "mc.mooduellid = :mooduellid";
             $sqldata['params'] = ['mooduellid' => $mooduellid];
         }
@@ -702,22 +702,22 @@ class mooduell {
         if ($CFG->version >= 2022041900) {
             $sqldata['select'] = "q.*, mq.id as mqid, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid as category";
             $sqldata['from'] = "{mooduell_questions} mq
-                                LEFT JOIN {question} q
-                                ON mq.questionid=q.id
-                                LEFT JOIN {question_bank_entries} qbe
-                                ON   q.id=qbe.id
-                                LEFT JOIN {question_categories} qc
-                                ON qbe.questioncategoryid=qc.id";
+                      LEFT JOIN {question} q
+                             ON mq.questionid=q.id
+                      LEFT JOIN {question_bank_entries} qbe
+                           ON   q.id=qbe.id
+                      LEFT JOIN {question_categories} qc
+                             ON qbe.questioncategoryid=qc.id";
             $sqldata['where'] = "mq.gameid=:gameid";
             $sqldata['params'] = ['gameid' => $game->id];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
             $sqldata['from'] = "{mooduell_questions} mq
-                                LEFT JOIN {question} q
-                                ON mq.questionid=q.id
-                                LEFT JOIN {question_categories} qc
-                                ON q.category=qc.id";
+                      LEFT JOIN {question} q
+                             ON mq.questionid=q.id
+                      LEFT JOIN {question_categories} qc
+                             ON q.category=qc.id";
             $sqldata['where'] = "mq.gameid=:gameid
                                 ORDER BY mq.id ASC";
             $sqldata['params'] = ['gameid' => $game->id];
@@ -739,39 +739,39 @@ class mooduell {
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT DISTINCT qa.*
-                    FROM {mooduell_categories} mc
-                    JOIN {question_categories} qc
-                    ON qc.id = mc.category
-                    LEFT JOIN {question_bank_entries} qbe
-                    ON qbe.questioncategoryid = qc.id
-                    JOIN (
-                        SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
-                        FROM {question_versions} qv1
-                        JOIN (
-                            SELECT questionbankentryid, max(version) maxversion
-                            FROM {question_versions}
-                            GROUP BY questionbankentryid
-                        ) qv2
-                        ON qv1.questionbankentryid = qv2.questionbankentryid
-                        AND qv1.version = qv2.maxversion
-                    ) qv
-                    ON qbe.id = qv.questionbankentryid
-                    JOIN {question} q
-                    ON q.id = qv.questionid
-                    JOIN {question_answers} qa
-                    ON qa.question = q.id
-                    WHERE mc.mooduellid = :mooduellid";
+                               FROM {mooduell_categories} mc
+                               JOIN {question_categories} qc
+                                 ON qc.id = mc.category
+                          LEFT JOIN {question_bank_entries} qbe
+                                 ON qbe.questioncategoryid = qc.id
+                            JOIN (
+                                SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
+                                  FROM {question_versions} qv1
+                                  JOIN (
+                                    SELECT questionbankentryid, max(version) maxversion
+                                     FROM {question_versions}
+                                 GROUP BY questionbankentryid
+                                       ) qv2
+                                    ON qv1.questionbankentryid = qv2.questionbankentryid
+                                  AND qv1.version = qv2.maxversion
+                                  ) qv
+                               ON qbe.id = qv.questionbankentryid
+                             JOIN {question} q
+                               ON q.id = qv.questionid
+                             JOIN {question_answers} qa
+                               ON qa.question = q.id
+                            WHERE mc.mooduellid = :mooduellid";
         } else {
             // Code for Moodle < 4.0 .
             $sql = "SELECT DISTINCT qa.*
-                    FROM {mooduell_categories} mc
-                    JOIN {question_categories} qc
-                    ON mc.category = qc.id
-                    JOIN {question} q
-                    ON q.category = qc.id
-                    JOIN {question_answers} qa
-                    ON qa.question = q.id
-                    WHERE mc.mooduellid = :mooduellid";
+                               FROM {mooduell_categories} mc
+                               JOIN {question_categories} qc
+                                 ON mc.category = qc.id
+                               JOIN {question} q
+                                 ON q.category = qc.id
+                               JOIN {question_answers} qa
+                                 ON qa.question = q.id
+                              WHERE mc.mooduellid = :mooduellid";
         }
         $params = ['mooduellid' => $mooduellid];
         if (!$listofanswers = $DB->get_records_sql($sql, $params)) {
@@ -806,8 +806,8 @@ class mooduell {
         $instanceid = $this->cm->instance;
 
         $sql = "SELECT *
-                FROM {mooduell_games}
-                WHERE mooduellid = :instanceid";
+                  FROM {mooduell_games}
+                 WHERE mooduellid = :instanceid";
 
         if ($studentview) {
             $sql .= " AND (playeraid = :userid1 OR playerbid = :userid2)";
@@ -1283,15 +1283,15 @@ class mooduell {
 
         // Number of distinct users who have played a MooDuell game.
         $sql = "SELECT count(*) active_users
-                FROM(
-                    SELECT playeraid playerid
-                    FROM {mooduell_games}
-                    WHERE mooduellid = :mooduellid1
-                    UNION
-                    SELECT playerbid playerid
-                    FROM {mooduell_games}
-                    WHERE mooduellid = :mooduellid2
-                ) s"; // Info: union selects only distinct records.
+                            FROM(
+                                SELECT playeraid playerid
+                                  FROM {mooduell_games}
+                                  WHERE mooduellid = :mooduellid1
+                                  UNION
+                                 SELECT playerbid playerid
+                                   FROM {mooduell_games}
+                                  WHERE mooduellid = :mooduellid2
+                                 ) s"; // Info: union selects only distinct records.
 
         $params = [
             'mooduellid1' => $mooduellid,
@@ -1302,8 +1302,8 @@ class mooduell {
 
         // Number of MooDuell games started.
         $sql = "SELECT count(*) games_played
-                FROM {mooduell_games}
-                WHERE mooduellid = :mooduellid";
+                           FROM {mooduell_games}
+                          WHERE mooduellid = :mooduellid";
         $params = [
             'mooduellid' => $mooduellid,
         ];
@@ -1312,8 +1312,8 @@ class mooduell {
 
         // Number of MooDuell games played.
         $sql = "SELECT count(*) games_finished
-                FROM {mooduell_games}
-                WHERE mooduellid = :mooduellid
+                           FROM {mooduell_games}
+                          WHERE mooduellid = :mooduellid
                      AND status = 3";
         $params = [
             'mooduellid' => $mooduellid,
@@ -1324,16 +1324,16 @@ class mooduell {
 
         // Number of answers returned to MooDuell questions.
         $sql = "SELECT sum(s.answers) answers
-                FROM
+                    FROM
                     (SELECT count(playeraanswered) answers
-                     FROM {mooduell_questions}
-                     WHERE playeraanswered IS NOT NULL
-                          AND mooduellid = :mooduellid1
-                UNION ALL
-                    SELECT count(playerbanswered) answers
-                    FROM {mooduell_questions}
-                    WHERE playerbanswered IS NOT NULL
-                          AND mooduellid = :mooduellid2) s";
+                            FROM {mooduell_questions}
+                           WHERE playeraanswered IS NOT NULL
+                             AND mooduellid = :mooduellid1
+                    UNION ALL
+                     SELECT count(playerbanswered) answers
+                            FROM {mooduell_questions}
+                           WHERE playerbanswered IS NOT NULL
+                             AND mooduellid = :mooduellid2) s";
 
         $params = [
             'mooduellid1' => $mooduellid,
@@ -1347,15 +1347,15 @@ class mooduell {
         // Step 1: find out the number of correct answers returned to MooDuell questions.
         $sql = "SELECT sum(s.correct_answers) correct_answers
                 FROM
-                    (SELECT count(playeraanswered) correct_answers
-                    FROM {mooduell_questions}
-                    WHERE playeraanswered = 2
-                        AND mooduellid = :mooduellid1
-                union all
-                    select count(playerbanswered) correct_answers
-                    FROM {mooduell_questions}
-                    where playerbanswered = 2
-                        AND mooduellid = :mooduellid2) s";
+                          (SELECT count(playeraanswered) correct_answers
+                         FROM {mooduell_questions}
+                        WHERE playeraanswered = 2
+                          AND mooduellid = :mooduellid1
+                    union all
+                  select count(playerbanswered) correct_answers
+                         FROM {mooduell_questions}
+                        where playerbanswered = 2
+                          AND mooduellid = :mooduellid2) s";
 
         $params = [
             'mooduellid1' => $mooduellid,
@@ -1375,20 +1375,20 @@ class mooduell {
         // Easiest question = question which has been answered correctly most often.
         $sql = "SELECT s.questionid, q.questiontext questionname, count(*) correct_count
                 FROM
-                    (SELECT *
-                    FROM {mooduell_questions}
-                    WHERE playeraanswered = 2
-                        AND mooduellid = :mooduellid1
-                UNION ALL
-                SELECT *
-                FROM {mooduell_questions}
-                WHERE playerbanswered = 2
-                    AND mooduellid = :mooduellid2) s
-                INNER JOIN {question} q
-                ON q.id = s.questionid
-                GROUP BY s.questionid, q.name, q.questiontext
-                ORDER BY correct_count DESC
-                LIMIT 1";
+                       (SELECT *
+                        FROM {mooduell_questions}
+                       WHERE playeraanswered = 2
+                         AND mooduellid = :mooduellid1
+                    UNION ALL
+                        SELECT *
+                        FROM {mooduell_questions}
+                       WHERE playerbanswered = 2
+                         AND mooduellid = :mooduellid2) s
+            INNER JOIN {question} q
+                    ON q.id = s.questionid
+              GROUP BY s.questionid, q.name, q.questiontext
+              ORDER BY correct_count DESC
+                 LIMIT 1";
 
         $listofstatistics['eq_id'] = false;
         $listofstatistics['eq_name'] = "";
@@ -1413,21 +1413,21 @@ class mooduell {
 
         // Hardest question = question which has been answered incorrectly most often.
         $sql = "SELECT s.questionid, q.questiontext questionname, count(*) incorrect_count
-                FROM
-                    (SELECT *
-                    FROM {mooduell_questions}
-                    WHERE playeraanswered = 1
-                        AND mooduellid = :mooduellid1
-                UNION ALL
-                SELECT *
-                FROM {mooduell_questions}
-                WHERE playerbanswered = 1
-                    AND mooduellid = :mooduellid2) s
-                INNER JOIN {question} q
-                ON q.id = s.questionid
-                GROUP BY s.questionid, q.name, q.questiontext
-                ORDER BY incorrect_count DESC
-                LIMIT 1";
+                    FROM
+                       (SELECT *
+                        FROM {mooduell_questions}
+                       WHERE playeraanswered = 1
+                         AND mooduellid = :mooduellid1
+                    UNION ALL
+                        SELECT *
+                        FROM {mooduell_questions}
+                       WHERE playerbanswered = 1
+                         AND mooduellid = :mooduellid2) s
+            INNER JOIN {question} q
+                    ON q.id = s.questionid
+              GROUP BY s.questionid, q.name, q.questiontext
+              ORDER BY incorrect_count DESC
+                 LIMIT 1";
 
         $listofstatistics['hq_id'] = false;
         $listofstatistics['hq_name'] = "";
@@ -1478,16 +1478,16 @@ class mooduell {
         // Number of distinct opponents who have played a MooDuell game...
         // ...against the current user.
         $sql = "SELECT count(*)-1 opponents
-                FROM (
-                  SELECT playeraid playerid
-                  FROM {mooduell_games}
-                  WHERE mooduellid = :mooduellid1
-                    AND (playeraid = :userid1 OR playerbid = :userid2)
-                  UNION
-                  SELECt playerbid playerid FROM {mooduell_games}
-                  WHERE mooduellid = :mooduellid2
-                    AND (playeraid = :userid3 OR playerbid = :userid4)
-                ) s"; // Info: union selects only distinct records.
+                             FROM (
+                                SELECT playeraid playerid
+                                  FROM {mooduell_games}
+                                 WHERE mooduellid = :mooduellid1
+                                   AND (playeraid = :userid1 OR playerbid = :userid2)
+                             UNION
+                                SELECT playerbid playerid FROM {mooduell_games}
+                                 WHERE mooduellid = :mooduellid2
+                                  AND (playeraid = :userid3 OR playerbid = :userid4)
+                                  ) s"; // Info: union selects only distinct records.
 
         $params = [
             'mooduellid1' => $mooduellid,
@@ -1511,10 +1511,10 @@ class mooduell {
 
         // Number of unfinished (open) MooDuell games having the current user involved.
         $sql = "SELECT count(*) open_games
-                FROM {mooduell_games}
-                WHERE mooduellid = :mooduellid
-                    AND (playeraid = :userid1 OR playerbid = :userid2)
-                    AND status <> 3";
+                           FROM {mooduell_games}
+                          WHERE mooduellid = :mooduellid
+                            AND (playeraid = :userid1 OR playerbid = :userid2)
+                            AND status <> 3";
 
         $params = [
             'mooduellid' => $mooduellid,
@@ -1798,14 +1798,15 @@ class mooduell {
 
         list($esql, $params) = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);
         $sql = "SELECT $userfields, s1.data
-                FROM {user} u
-                JOIN ($esql) je ON je.id = u.id
-                LEFT JOIN (SELECT ud.data, ud.userid
-                    FROM {user_info_data} ud
-                    LEFT JOIN {user_info_field} uif ON ud.fieldid=uif.id
-                    WHERE uif.shortname='mooduell_alias') AS s1
-                ON s1.userid=u.id
-                WHERE u.deleted = 0";
+                  FROM {user} u
+                  JOIN ($esql) je ON je.id = u.id
+             LEFT JOIN (SELECT ud.data, ud.userid
+                        FROM {user_info_data} ud
+                   LEFT JOIN {user_info_field} uif ON ud.fieldid=uif.id
+                       WHERE uif.shortname='mooduell_alias'
+                       ) AS s1
+                    ON s1.userid=u.id
+                 WHERE u.deleted = 0";
 
         if ($orderby) {
             $sql = "$sql ORDER BY $orderby";
