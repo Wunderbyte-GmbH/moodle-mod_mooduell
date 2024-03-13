@@ -53,13 +53,12 @@ class manage_tokens {
         // Currently, ALL users enrolled in the course to which a MooDuell instance has been added, will be selected.
         $sql =
         'SELECT DISTINCT ue.userid
-        FROM {user_enrolments} ue
-        LEFT JOIN {enrol} e
-        ON e.id = ue.enrolid
-        WHERE e.courseid IN (
-            SELECT cm.course
-            FROM {course_modules} cm
-            WHERE cm.id = :cmid
+                  FROM {user_enrolments} ue
+              LEFT JOIN {enrol} e ON e.id = ue.enrolid
+                  WHERE e.courseid IN (
+                 SELECT cm.course
+                   FROM {course_modules} cm
+                  WHERE cm.id = :cmid
         )';
 
         if ($records = $DB->get_records_sql($sql, ['cmid' => $cmid])) {

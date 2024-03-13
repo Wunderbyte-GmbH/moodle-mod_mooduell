@@ -87,8 +87,9 @@ class game_finished {
             $entry = (object) $entry;
 
             // Let's have a look if the entry already exists in the DB.
-            $sql = 'select * from {mooduell_highscores} where mooduellid = ' .
-                $entry->mooduellid . ' and userid = ' . $entry->userid;
+            $sql = 'SELECT *
+                    FROM {mooduell_highscores}
+                    WHERE mooduellid = ' . $entry->mooduellid . ' and userid = ' . $entry->userid;
             $data = $DB->get_record_sql($sql);
 
             // If the entry could be found in the database.

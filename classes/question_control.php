@@ -183,7 +183,9 @@ class question_control {
 
         // For drag and drop with text (ddwtos) questions, the order is important.
         // So use ORDER BY in an SQL statement instead of get_records.
-        $sql = "SELECT * FROM {question_answers} WHERE question = :questionid ORDER BY id ASC";
+        $sql = "SELECT *
+                  FROM {question_answers}
+                 WHERE question = :questionid ORDER BY id ASC";
         $params = [
             'questionid' => $this->questionid,
         ];

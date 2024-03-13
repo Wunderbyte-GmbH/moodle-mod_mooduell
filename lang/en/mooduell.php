@@ -63,7 +63,7 @@ $string['addInstance'] = 'Add instance';
 $string['mooduell:addinstance'] = 'Add instance';
 
 $string['enablepush'] = 'enable push';
-$string['pushtoken'] = 'Push API Access Key';
+$string['pushtoken'] = 'Push API access key';
 $string['countdown'] = 'Countdown';
 $string['countdown_help'] = 'How much time will players have to answer a question';
 $string['nocountdown'] = 'No Countdown';
