@@ -453,7 +453,6 @@ class mooduell {
                             $udpatedentry = $returnitem;
                             $udpatedentry->validuntil = time() + (60 * 60 * 24);
                             $DB->update_record('mooduell_purchase', $udpatedentry);
-                            return;
                         } else if ($singleproduct->isExpired === true) {
                             // Delete Cancel etc.
                             $udpatedentry = $returnitem;
@@ -469,8 +468,11 @@ class mooduell {
                     $udpatedentry = $returnitem;
                     $udpatedentry->productid = 'notvalid';
                     $DB->update_record('mooduell_purchase', $udpatedentry);
+                } else {
+                    $udpatedentry = $returnitem;
+                    $udpatedentry->validuntil = time() + (60 * 60 * 24);
+                    $DB->update_record('mooduell_purchase', $udpatedentry);
                 }
-                return;
             }
         }
     }
