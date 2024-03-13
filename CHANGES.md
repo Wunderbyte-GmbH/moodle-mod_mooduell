@@ -1,3 +1,8 @@
+## Version 2.1.6 (2024031300)
+* Feature: Subscription logic
+* Changes: License Key
+* Improvements: Code quality
+
 ## Version 2.1.5 (2024020900)
 * Increased Answerlength for Drag & Drop
 
