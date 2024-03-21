@@ -34,7 +34,7 @@ $string['license_invalid'] = 'Invalid license key';
 
 $string['updatesubscription'] = "Check subscription status";
 
-$string['disablesbadges'] = 'Auszeichnungen deaktivieren';
+$string['disablesbadges'] = 'Disable awards';
 $string['theme'] = 'Theme';
 $string['themedesc'] = 'Theme in JSON format';
 $string['companylogo'] = 'Companylogo';
