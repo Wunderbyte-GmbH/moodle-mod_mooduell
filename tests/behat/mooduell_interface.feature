@@ -58,7 +58,7 @@ Feature: See user stats
     And I should see "Username 2"
     And I click on "td.columnclass.action a" "css_element"
     And I should see "No image"
-    And I click on "div.modal-footer button" "css_element"
+    And I click on ".wunderbyte-table-table div.modal-footer button" "css_element"
     And I follow "Finished games"
     And I follow "Highscores"
 

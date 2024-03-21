@@ -213,6 +213,9 @@ class mooduell {
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
+                $qrcode = new qr_code();
+                $qrcodeimage = $qrcode->generate_qr_code();
+                $data['qrimage'] = $qrcodeimage;
                 $data['opengames'] = [];
                 $data['finishedgames'] = [];
                 $data['warnings'] = $this->check_quiz();
@@ -453,7 +456,6 @@ class mooduell {
                             $udpatedentry = $returnitem;
                             $udpatedentry->validuntil = time() + (60 * 60 * 24);
                             $DB->update_record('mooduell_purchase', $udpatedentry);
-                            return;
                         } else if ($singleproduct->isExpired === true) {
                             // Delete Cancel etc.
                             $udpatedentry = $returnitem;
@@ -469,8 +471,11 @@ class mooduell {
                     $udpatedentry = $returnitem;
                     $udpatedentry->productid = 'notvalid';
                     $DB->update_record('mooduell_purchase', $udpatedentry);
+                } else {
+                    $udpatedentry = $returnitem;
+                    $udpatedentry->validuntil = time() + (60 * 60 * 24);
+                    $DB->update_record('mooduell_purchase', $udpatedentry);
                 }
-                return;
             }
         }
     }
