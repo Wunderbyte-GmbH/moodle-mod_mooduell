@@ -1,3 +1,6 @@
+## Version 2.1.7 (2024032100)
+* Changes: Applinks updated
+
 ## Version 2.1.6 (2024031300)
 * Feature: Subscription logic
 * Changes: License Key
