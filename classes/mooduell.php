@@ -213,6 +213,9 @@ class mooduell {
         switch ($pagename) {
             case null:
                 // Create the list of open games we can pass on to the renderer.
+                $qrcode = new qr_code();
+                $qrcodeimage = $qrcode->generate_qr_code();
+                $data['qrimage'] = $qrcodeimage;
                 $data['opengames'] = [];
                 $data['finishedgames'] = [];
                 $data['warnings'] = $this->check_quiz();

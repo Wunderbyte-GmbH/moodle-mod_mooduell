@@ -26,6 +26,7 @@
 namespace mod_mooduell\output;
 
 use mod_mooduell\mooduell;
+use mod_mooduell\qr_code;
 use mod_mooduell\tables\table_games;
 use mod_mooduell\tables\table_highscores;
 use mod_mooduell\tables\table_questions;
@@ -56,6 +57,13 @@ class overview_teacher implements renderable, templatable {
     public function __construct(mooduell $mooduell = null) {
 
         $data = [];
+        $qrcode = new qr_code();
+        $qrcodeimage = $qrcode->generate_qr_code();
+        // Create the list of open games we can pass on to the renderer.
+        $data['qrimage'] = $qrcodeimage;
+
+        $data['appstorelink'] = get_config('mooduell', 'appstoreurl');
+        $data['playstorelink'] = get_config('mooduell', 'playstoreurl');
 
         $data['opengames'] = $this->render_open_games_table($mooduell);
         $data['finishedgames'] = $this->render_finished_games_table($mooduell);

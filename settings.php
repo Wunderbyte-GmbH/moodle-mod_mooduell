@@ -168,7 +168,7 @@ if ($ADMIN->fulltree) {
                 'mooduell/appstoreurl',
                 get_string('appstoreurl', 'mod_mooduell'),
                 '',
-                'https://apps.apple.com/kw/app/u-mooduell/id1596475094',
+                'https://apps.apple.com/at/app/mooduell/id1598911543',
                 PARAM_URL
         ));
 
@@ -176,7 +176,7 @@ if ($ADMIN->fulltree) {
                 'mooduell/playstoreurl',
                 get_string('playstoreurl', 'mod_mooduell'),
                 '',
-                'https://play.google.com/store/apps/details?id=at.ac.univie.uwmooduell',
+                'https://play.google.com/store/apps/details?id=at.wunderbyte.mooduellapp',
                 PARAM_URL
         ));
 
