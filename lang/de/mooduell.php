@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['licensekeycfg'] = 'PRO-Version aktivieren';
-$string['licensekeycfgdesc'] = 'Mit einer PRO-Lizenz können Sie so viele Buchungsvorlagen erstellen wie Sie wollen und PRO-Features wie z.B. globale Mailvorlagen, Info-Texte für Wartelistenplätze und Benachrichtigungen für Trainer:innen nutzen.';
+$string['licensekeycfgdesc'] = 'Mit einer PRO-Lizenz können Sie eine beliebige Anzahl von MooDuell Quizzes erstellen. Ausserdem ist es möglich die Anwendung mittels Theme an Ihr gewünschtes Design anzupassen.';
 $string['licensekey'] = 'PRO-Lizenz-Schlüssel';
 $string['licensekeydesc'] = 'Laden Sie hier einen gültigen Schlüssel hoch, um die PRO-Version zu aktivieren.';
 $string['license_activated'] = 'PRO-Version wurde erfolgreich aktiviert.<br>(Läuft ab am: ';

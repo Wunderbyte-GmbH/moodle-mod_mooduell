@@ -32,7 +32,7 @@ global $ADMIN;
 
 if ($ADMIN->fulltree) {
 
-        // Has PRO version been activated?
+    // Has PRO version been activated?
     $proversion = wb_payment::pro_version_is_activated();
 
     $settings->add(
@@ -194,26 +194,28 @@ if ($ADMIN->fulltree) {
                 0
         ));
 
-        $settings->add(new admin_setting_configtextarea(
-                'mod_mooduell/themejsonarea',
-                get_string('theme', 'mod_mooduell'),
-                get_string('themedesc', 'mod_mooduell'),
-                '',
-                PARAM_TEXT
-        ));
+    if ($proversion) {
+                $settings->add(new admin_setting_configtextarea(
+                        'mod_mooduell/themejsonarea',
+                        get_string('theme', 'mod_mooduell'),
+                        get_string('themedesc', 'mod_mooduell'),
+                        '',
+                        PARAM_TEXT
+                ));
 
-        $settings->add(new admin_setting_configstoredfile(
-                'mod_mooduell/companylogo',
-                get_string('companylogo', 'mod_mooduell'),
-                get_string('companylogodesc', 'mod_mooduell'),
-                'themepicture',
-                0
-        ));
-        $settings->add(new admin_setting_configstoredfile(
-                'mod_mooduell/companylogoalternative',
-                 get_string('alternativelogo', 'mod_mooduell'),
-                 get_string('alternativelogodesc', 'mod_mooduell'),
-                'themepicturealternative',
-                0
-        ));
+                $settings->add(new admin_setting_configstoredfile(
+                        'mod_mooduell/companylogo',
+                        get_string('companylogo', 'mod_mooduell'),
+                        get_string('companylogodesc', 'mod_mooduell'),
+                        'themepicture',
+                        0
+                ));
+                $settings->add(new admin_setting_configstoredfile(
+                        'mod_mooduell/companylogoalternative',
+                         get_string('alternativelogo', 'mod_mooduell'),
+                         get_string('alternativelogodesc', 'mod_mooduell'),
+                        'themepicturealternative',
+                        0
+                ));
+    }
 }
