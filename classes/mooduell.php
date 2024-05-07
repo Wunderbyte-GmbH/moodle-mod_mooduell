@@ -1802,7 +1802,7 @@ class mooduell {
         global $DB;
 
         list($esql, $params) = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);
-        $sql = "SELECT $userfields, s1.data
+        $sql = "SELECT $userfields, s1.data AS mooduellalias
                   FROM {user} u
                   JOIN ($esql) je ON je.id = u.id
              LEFT JOIN (SELECT ud.data, ud.userid
