@@ -1,3 +1,7 @@
+## Version 2.1.8 (2024051400)
+* Bugfixes: Nicknames Bug fixed
+* Improvements: Updated lang-strings
+
 ## Version 2.1.7 (2024032100)
 * Changes: Applinks updated
 
