@@ -1,3 +1,6 @@
+## Version 2.1.9 (2024052400)
+* Improvements: Add auto release to moodle.org
+
 ## Version 2.1.8 (2024051400)
 * Bugfixes: Nicknames Bug fixed
 * Improvements: Updated lang-strings
