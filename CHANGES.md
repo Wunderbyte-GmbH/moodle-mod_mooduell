@@ -1,3 +1,6 @@
+## Version 2.1.10 (2024071800)
+* Bugfix: Don't skip image extraction because of different img tag syntax, closes #86
+
 ## Version 2.1.9 (2024052400)
 * Improvements: Add auto release to moodle.org
 
