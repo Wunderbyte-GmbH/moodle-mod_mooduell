@@ -415,9 +415,18 @@ class mod_mooduell_external extends external_api {
      * @param  int $ispublic
      * @return array
      */
-    public static function update_iapurchases(string $productid, string $purchasetoken, string $receipt = null,
-     string $signature = null, string $orderid = null, string $free = null, int $mooduellid,
-     int $courseid = null, string $store, int $ispublic ) {
+    public static function update_iapurchases(
+        string $productid,
+        string $purchasetoken,
+        string $receipt = null,
+        string $signature = null,
+        string $orderid = null,
+        string $free = null,
+        int $mooduellid,
+        int $courseid = null,
+        string $store,
+        int $ispublic
+    ) {
         global $USER, $CFG;
 
         $params = [
