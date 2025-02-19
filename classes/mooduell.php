@@ -1600,9 +1600,17 @@ class mooduell {
      * @return array
      */
     public function return_sql_for_highscores(string $view): array {
+
+        switch ($view) {
+            case "teacher":
+                $where = "mooduellid = :mooduellid1";
+                break;
+            default:
+                $where = "mooduellid = :mooduellid1 AND 1 = 1";
+                break;
+        }
         $fields = "*";
         $from = "{mooduell_highscores}";
-        $where = "mooduellid = :mooduellid1";
         $params = ['mooduellid1' => $this->cm->instance];
 
         return [$fields, $from, $where, $params];
