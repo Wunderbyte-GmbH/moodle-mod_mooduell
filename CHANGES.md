@@ -1,3 +1,6 @@
+## Version 2.1.11 (2025021900)
+* Bugfix: Make sure highscore table is diffent for student and teacher
+
 ## Version 2.1.10 (2024071800)
 * Bugfix: Don't skip image extraction because of different img tag syntax, closes #86
 
