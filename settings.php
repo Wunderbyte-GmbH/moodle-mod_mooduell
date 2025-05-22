@@ -46,8 +46,8 @@ if ($ADMIN->fulltree) {
     if (!empty($pluginconfig->licensekey)) {
         $licensekey = $pluginconfig->licensekey;
 
-        $expirationdate = wb_payment::decryptlicensekey($licensekey);
-        if (!empty($expirationdate)) {
+        $expirationdate = wb_payment::decryptlicensekey($licensekey)['exptime'];
+        if (wb_payment::pro_version_is_activated()) {
             $licensekeydesc = "<p style='color: green; font-weight: bold'>"
                 .get_string('license_activated', 'mod_mooduell')
                 .$expirationdate

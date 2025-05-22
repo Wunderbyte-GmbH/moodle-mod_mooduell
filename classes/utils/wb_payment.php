@@ -60,7 +60,7 @@ pwIDAQAB
      * @param string $encryptedlicensekey an object containing licensekey and signature
      * @return string the expiration date of the license key formatted as Y-m-d
      */
-    public static function decryptlicensekey(string $encryptedlicensekey): string {
+    public static function decryptlicensekey(string $encryptedlicensekey): array {
         global $CFG;
         // Step 1: Do base64 decoding.
         $encryptedlicensekey = base64_decode($encryptedlicensekey);
@@ -81,8 +81,12 @@ pwIDAQAB
         $sha2len = 32;
         $ciphertextraw = substr($c, $ivlen + $sha2len);
         $decryptedcontent = openssl_decrypt($ciphertextraw, $cipher, $CFG->wwwroot, $options = OPENSSL_RAW_DATA, $iv);
-
-        return $decryptedcontent;
+        $parts = explode(';', $decryptedcontent);
+        $result = [
+            'exptime' => $parts[0] ?? '',      // Default to an empty string if not set
+            'product' => $parts[1] ?? '',      // Default to an empty string if not set
+        ];
+        return $result;
     }
 
     /**
@@ -98,9 +102,9 @@ pwIDAQAB
             $licensekeyfromsettings = $pluginconfig->licensekey;
             // DEBUG: echo "License key from plugin config: $licensekey_from_settings<br>"; END.
 
-            $expirationtimestamp = strtotime(self::decryptlicensekey($licensekeyfromsettings));
+            $data = self::decryptlicensekey($licensekeyfromsettings);
             // Return true if the current timestamp has not yet reached the expiration date.
-            if (time() < $expirationtimestamp) {
+            if (time() < strtotime($data['exptime']) && isset($data['product']) && $data['product'] == 'mooduell') {
                 return true;
             }
         }
