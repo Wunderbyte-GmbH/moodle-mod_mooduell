@@ -53,25 +53,22 @@ class fcm_client {
      * @param string $messagetype The type of message to be sent.
      * @return mixed Response from FCM or null on failure.
      */
-    public function send_push_notification(string $messagetype) {
+    public function send_push_notification(string $messagetype, array $fields) {
         $pushenabled = get_config('mooduell', 'enablepush');
         if ($pushenabled) {
-            // $gc = new game_control()
-            // $fields = $this->gather_notifcation_data($messagetype);
-
-            // if (!$fields) {
-            //     return null;
-            // }
+            if (!$fields) {
+                return null;
+            }
 
             $accesstoken = $this->get_access_token();
             if (!$accesstoken) {
-                error_log('Error obtaining access token');
+                debugging('Error obtaining access token');
                 return null;
             }
 
             $message = [
                 'message' => [
-                    'token' => '',  // Set the recipient's device token here
+                    'token' => $fields['registration_ids'],
                     'notification' => [
                         'title' => $fields['notification']['title'],
                         'body'  => $fields['notification']['body'],
@@ -86,9 +83,9 @@ class fcm_client {
                     'Authorization: Bearer ' . $accesstoken,
                     'Content-Type: application/json',
                 ],
-            ]);        
-            if ($response === FALSE) {
-                error_log('Curl failed: ' . $curl->error);
+            ]);
+            if ($response === false) {
+                debugging('Curl failed: ' . $curl->error);
             }
             return $response;
         }
@@ -132,7 +129,7 @@ class fcm_client {
         $curl = new curl();
         $response = $curl->post('https://oauth2.googleapis.com/token', http_build_query([
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion' => $jwt
+            'assertion' => $jwt,
         ]), [
             'CURLOPT_HTTPHEADER' => ['Content-Type: application/x-www-form-urlencoded']
         ]);
@@ -142,7 +139,7 @@ class fcm_client {
             // Cache the token
             $this->cache->set('fcmtoken', json_encode([
                 'token' => $result['access_token'],
-                'expiry' => $now + 3600
+                'expiry' => $now + 3600,
             ]));
 
             return $result['access_token'];
@@ -163,7 +160,7 @@ class fcm_client {
 
         $segments = [
             $this->base64url_encode(json_encode($header)),
-            $this->base64url_encode(json_encode($payload))
+            $this->base64url_encode(json_encode($payload)),
         ];
 
         openssl_sign(implode('.', $segments), $signature, $privatekey, 'sha256');

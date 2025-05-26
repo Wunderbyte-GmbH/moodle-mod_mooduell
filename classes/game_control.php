@@ -792,7 +792,7 @@ class game_control {
      * @throws \coding_exception
      * @throws dml_exception
      */
-    private function gather_notifcation_data(string $messagetype) {
+    public function gather_notifcation_data(string $messagetype) {
 
         $users = self::return_users_for_game($this->mooduell, false);
 
