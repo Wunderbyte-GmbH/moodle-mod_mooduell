@@ -20,6 +20,7 @@ use mod_mooduell\completion\completion_utils;
 use coding_exception;
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
+use mod_mooduell\fcm_client;
 use stdClass;
 
 /**
@@ -44,7 +45,10 @@ class send_push_notification_task extends \core\task\adhoc_task {
             $mooduell = new mooduell($taskdata->cm->id);
             $gamecontroller = new game_control($mooduell, $taskdata->gameid);
 
-            $gamecontroller->send_push_notification($taskdata->message);
+            // $gamecontroller->send_push_notification($taskdata->message);
+            $fcmclient = new fcm_client();
+            $fcmclient->send_push_notification($taskdata);
+
         }
 
     }
