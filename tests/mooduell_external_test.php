@@ -40,11 +40,12 @@ use core_user;
  * @copyright 2023 Andrii Semenets
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mooduell_external_test extends advanced_testcase {
+final class mooduell_external_test extends advanced_testcase {
     /**
      * Tests set up.
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
     }
 
@@ -103,7 +104,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_start_attempt() {
+    public function test_start_attempt(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -128,7 +129,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_games_by_courses() {
+    public function test_get_games_by_courses(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -164,7 +165,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_quiz_users() {
+    public function test_get_quiz_users(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -198,7 +199,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_quizzes_by_courses() {
+    public function test_get_quizzes_by_courses(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -224,7 +225,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_answer_question() {
+    public function test_answer_question(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -250,7 +251,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_game_data() {
+    public function test_get_game_data(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -290,7 +291,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_get_highscores() {
+    public function test_get_highscores(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
@@ -382,7 +383,7 @@ class mooduell_external_test extends advanced_testcase {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function test_user_functions() {
+    public function test_user_functions(): void {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
         $this->setUser($user1);
