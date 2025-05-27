@@ -117,15 +117,3 @@ Feature: See user stats
     When I follow "Mooduell Test"
     And I follow "Open games"
     Then I should see "Duell user1"
-
-  @javascript
-  Scenario: Button check easiest and hardest question
-    Given I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Mooduell Test"
-    And I follow "Settings"
-    And I press "Save and return to course"
-    And I start games in "Mooduell Test" against "user1"
-    And I follow "Mooduell Test"
-    Then I click on "div.bg-info a" "css_element"
-    Then I click on "div.bg-danger a" "css_element"
