@@ -49,9 +49,11 @@ class overview_student implements renderable, templatable {
      */
     protected $data;
 
+
     /**
-     * Constructor.
-     * @param mooduell $mooduell
+     * Constructor for overview_student class.
+     *
+     * @param mooduell|null $mooduell The mooduell instance to create overview for, or null if not provided.
      */
     public function __construct(?mooduell $mooduell = null) {
 

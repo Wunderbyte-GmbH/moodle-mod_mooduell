@@ -232,11 +232,13 @@ class mod_mooduell_external extends external_api {
         return new external_function_parameters([]);
     }
 
+
     /**
-     * Returns all quizzes for user with capabilities
+     * Returns all quizzes for which the user has the required capabilities.
+     * If no userid is provided, it uses the current user's id.
      *
-     * @param  int $userid
-     * @return array
+     * @param int|null $userid Optional user ID to check capabilities for. Defaults to current user if null.
+     * @return array Array containing quizzes that the user has capabilities for, with quiz details like ID, name and course ID.
      */
     public static function get_quizzes_with_caps(?int $userid = null) {
         global $USER;

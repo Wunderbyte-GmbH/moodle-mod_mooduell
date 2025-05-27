@@ -76,12 +76,12 @@ class list_action implements renderable, templatable {
     }
 
     /**
-     * Render the questions table.
+     * Render questions table for a specific game
      *
-     * @param stdClass $game
-     * @param mooduell $mooduell
-     * @param int $counter
-     * @return array
+     * @param stdClass $game The game object.
+     * @param mooduell $mooduell The mooduell instance.
+     * @param int|null $counter Optional counter value.
+     * @return array Array containing table ID, encoded table and HTML output.
      */
     private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, ?int $counter = null): array {
         global $PAGE;

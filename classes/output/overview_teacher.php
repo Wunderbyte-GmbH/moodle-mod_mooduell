@@ -50,8 +50,9 @@ class overview_teacher implements renderable, templatable {
     protected $data;
 
     /**
-     * Constructor.
-     * @param mooduell $mooduell
+     * Constructor for overview_teacher class.
+     *
+     * @param mooduell|null $mooduell The mooduell instance, can be null.
      */
     public function __construct(?mooduell $mooduell = null) {
 

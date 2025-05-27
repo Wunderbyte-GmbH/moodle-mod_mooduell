@@ -99,12 +99,13 @@ function mooduell_add_instance(stdClass $formdata, ?mod_mooduell_mod_form $mform
 /**
  * Updates an instance of the mod_mooduell in the database.
  *
- * Given an object containing all the necessary data (defined in mod_form.php),
- * this function will update an existing instance with new data.
+ * Given an object containing the necessary data (defined by the form
+ * in mod_form.php), this function will update an existing instance
+ * with new data.
  *
- * @param object $moduleinstance An object from the form in mod_form.php.
- * @param mod_mooduell_mod_form $mform The form.
- * @return bool True if successful, false otherwise.
+ * @param object $moduleinstance An object from the form in mod_form.php
+ * @param mod_mooduell_mod_form|null $mform The form
+ * @return bool True if successful, false otherwise
  */
 function mooduell_update_instance($moduleinstance, ?mod_mooduell_mod_form $mform = null) {
     global $DB;
@@ -343,20 +344,18 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
 };
 
 /**
- * Serve the files from the mooduell file areas
- * @param object|null $course
- * @param object $context
- * @param string $component
- * @param string $filearea
- * @param int $qubaid
- * @param int $slot
- * @param array $args
- * @param int $forcedownload
- * @param array $options
- * @return false|void
- * @throws coding_exception
- * @throws moodle_exception
- * @throws require_login_exception
+ * Serves files for question text in MooDuell.
+ *
+ * @param object|null $course The course object.
+ * @param object|null $context The context object.
+ * @param string $component The component string.
+ * @param string $filearea The name of the file area.
+ * @param int $qubaid Question usage by activity ID.
+ * @param int $slot The slot number.
+ * @param array $args Extra arguments (itemid, path).
+ * @param int $forcedownload Whether or not force download.
+ * @param array|null $options Additional options affecting the file serving.
+ * @return bool False if file not found, sends file otherwise.
  */
 function mooduell_question_pluginfile(
     ?object $course = null,

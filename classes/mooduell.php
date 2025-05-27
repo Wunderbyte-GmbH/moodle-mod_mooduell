@@ -190,15 +190,20 @@ class mooduell {
         return new mooduell($cm->id);
     }
 
+
     /**
-     * Function to display page.
-     * @param bool|null $inline
-     * @param string|null $pagename
-     * @param string $gameid
-     * @return string
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * Display a page for MooDuell.
+     *
+     * This function handles the display of different pages within the MooDuell module.
+     * It can render different views based on the pagename parameter, including:
+     * - Main view (null): Shows QR code, open games, finished games, and quiz information
+     * - Questions view ('questions'): Displays the list of questions for a specific game
+     * - Students view ('studentsview'): Shows student-specific information and QR code
+     *
+     * @param bool|null $inline Whether to display the page inline (without header/footer).
+     * @param string|null $pagename The name of the page to display ('questions', 'studentsview', or null for main view).
+     * @param string|null $gameid The ID of the game when viewing questions.
+     * @return string The rendered HTML output for the requested page.
      */
     public function display_page(?bool $inline = null, ?string $pagename = null, ?string $gameid = '') {
         global $PAGE, $OUTPUT, $USER;
