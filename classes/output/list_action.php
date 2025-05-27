@@ -83,7 +83,7 @@ class list_action implements renderable, templatable {
      * @param int $counter
      * @return array
      */
-    private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, int $counter = null): array {
+    private function render_questions_table_for_game(stdClass $game, mooduell $mooduell, ?int $counter = null): array {
         global $PAGE;
 
         $tablename = bin2hex(random_bytes(12));

@@ -238,7 +238,7 @@ class mod_mooduell_external extends external_api {
      * @param  int $userid
      * @return array
      */
-    public static function get_quizzes_with_caps(int $userid = null) {
+    public static function get_quizzes_with_caps(?int $userid = null) {
         global $USER;
 
         $userid = $USER->id;
@@ -406,32 +406,34 @@ class mod_mooduell_external extends external_api {
     public static function get_mooduell_purchases_parameters() {
         return new external_function_parameters([]);
     }
+
+
     /**
-     * Stores a purchases to Database.
+     * Updates in-app purchases in the database
      *
-     * @param  string $productid
-     * @param  string $purchasetoken
-     * @param  string $receipt
-     * @param  string $signature
-     * @param  string $orderid
-     * @param  string $free
-     * @param  int $mooduellid
-     * @param  int $courseid
-     * @param  string $store
-     * @param  int $ispublic
-     * @return array
+     * @param string $productid The ID of the purchased product.
+     * @param string $purchasetoken The purchase token from the store.
+     * @param string|null $receipt The purchase receipt (optional).
+     * @param string|null $signature The purchase signature (optional).
+     * @param string|null $orderid The order ID (optional).
+     * @param string|null $free Whether this is a free purchase (optional).
+     * @param int $mooduellid The MooDuell instance ID (default 0).
+     * @param int|null $courseid The course ID (optional).
+     * @param string $store The store name (default empty string).
+     * @param int $ispublic Whether purchase is public (default 0).
+     * @return array Array containing status, itemid and type of the purchase.
      */
     public static function update_iapurchases(
         string $productid,
         string $purchasetoken,
-        string $receipt = null,
-        string $signature = null,
-        string $orderid = null,
-        string $free = null,
-        int $mooduellid,
-        int $courseid = null,
-        string $store,
-        int $ispublic
+        ?string $receipt = null,
+        ?string $signature = null,
+        ?string $orderid = null,
+        ?string $free = null,
+        int $mooduellid = 0,
+        ?int $courseid = null,
+        string $store = '',
+        int $ispublic = 0
     ) {
         global $USER, $CFG;
 

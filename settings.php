@@ -189,7 +189,7 @@ if ($ADMIN->fulltree) {
             'mooduell/enablepush',
             get_string('enablepush', 'mod_mooduell'),
             '',
-            0
+            1
         ));
 
         $settings->add(new admin_setting_configcheckbox(

@@ -25,7 +25,7 @@
 namespace mod_mooduell;
 
 use cache;
-use curl; // Use Moodle's curl class
+use curl;
 
 /**
  * Handles Firebase Cloud Message Logic.
@@ -49,7 +49,7 @@ class fcm_client {
     /**
      * Sends a push notification using Firebase Cloud Messaging.
      *
-     * @param string $fields Push notification fields.
+     * @param array $fields Push notification fields.
      * @return mixed Response from FCM or null on failure.
      */
     public function send_push_notification(array $fields) {

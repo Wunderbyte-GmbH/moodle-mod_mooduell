@@ -53,7 +53,7 @@ class overview_teacher implements renderable, templatable {
      * Constructor.
      * @param mooduell $mooduell
      */
-    public function __construct(mooduell $mooduell = null) {
+    public function __construct(?mooduell $mooduell = null) {
 
         $data = [];
         $qrcode = new qr_code();

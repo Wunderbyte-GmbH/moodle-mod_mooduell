@@ -200,7 +200,7 @@ class mooduell {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function display_page(bool $inline = null, string $pagename = null, $gameid = '') {
+    public function display_page(?bool $inline = null, ?string $pagename = null, ?string $gameid = '') {
         global $PAGE, $OUTPUT, $USER;
 
         $output = $PAGE->get_renderer('mod_mooduell');

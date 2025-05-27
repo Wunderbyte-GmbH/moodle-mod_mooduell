@@ -59,7 +59,7 @@ class mod_mooduell_generator extends testing_module_generator {
      * @return stdClass
      * @throws coding_exception
      */
-    public function create_instance($record = null, array $options = null) {
+    public function create_instance($record = null, ?array $options = null) {
         return parent::create_instance($record, (array) $options);
     }
 

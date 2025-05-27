@@ -64,7 +64,7 @@ function mooduell_supports($feature) {
  * @return bool|int
  * @throws dml_exception
  */
-function mooduell_add_instance(stdClass $formdata, mod_mooduell_mod_form $mform = null) {
+function mooduell_add_instance(stdClass $formdata, ?mod_mooduell_mod_form $mform = null) {
     global $DB;
     // Add the database record.
     $data = new stdClass();
@@ -106,7 +106,7 @@ function mooduell_add_instance(stdClass $formdata, mod_mooduell_mod_form $mform 
  * @param mod_mooduell_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function mooduell_update_instance($moduleinstance, mod_mooduell_mod_form $mform = null) {
+function mooduell_update_instance($moduleinstance, ?mod_mooduell_mod_form $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
@@ -359,15 +359,15 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
  * @throws require_login_exception
  */
 function mooduell_question_pluginfile(
-    object $course = null,
-    object $context,
-    string $component,
-    string $filearea,
-    int $qubaid,
-    int $slot,
-    array $args,
-    int $forcedownload,
-    array $options = []
+    ?object $course = null,
+    ?object $context = null,
+    string $component = '',
+    string $filearea = '',
+    int $qubaid = 0,
+    int $slot = 0,
+    array $args = [],
+    int $forcedownload = 0,
+    ?array $options = []
 ) {
 
     // Make sure the filearea is one of those used by the plugin.
