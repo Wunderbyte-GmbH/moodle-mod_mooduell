@@ -120,8 +120,9 @@ class fcm_client {
                 return $data['token'];
             }
         }
-        $serviceaccountfile = $CFG->dirroot . '/mod/mooduell/files/firebase.json';
-        $credentials = json_decode(file_get_contents($serviceaccountfile), true);
+        $serviceaccountfile = $CFG->dirroot . '/mod/mooduell/files/fb64.txt';
+        $json = base64_decode(file_get_contents($serviceaccountfile));
+        $credentials = json_decode($json, true);
         $privatekey = $credentials['private_key'];
 
         $token = [
