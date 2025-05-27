@@ -39,7 +39,6 @@ use SebastianBergmann\Environment\Console;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_mooduell extends behat_base {
-
     /**
      * Creates new mooduell games in the database
      * @Given /^I start games in "(?P<mooduellinstancename_string>(?:[^"]|\\")*)" against "(?P<playerbname_string>(?:[^"]|\\")*)"$/
@@ -68,11 +67,14 @@ class behat_mooduell extends behat_base {
 
             // Play the first three question of game.
             while ($questioncounter < 3) {
-
                 $questionid = $game->gamedata->questions[$questioncounter]->questionid;
                 // Retrieve random id of answerable questions.
-                $answerids = $DB->get_fieldset_select('question_answers', 'id', 'question=:questionid',
-                ['questionid' => $questionid]);
+                $answerids = $DB->get_fieldset_select(
+                    'question_answers',
+                    'id',
+                    'question=:questionid',
+                    ['questionid' => $questionid]
+                );
 
                 $game->validate_question($questionid, [$answerids[0]]);
                 ++$questioncounter;
@@ -199,5 +201,4 @@ class behat_mooduell extends behat_base {
 
         return $DB->get_record('user', ['username' => $name]);
     }
-
 }

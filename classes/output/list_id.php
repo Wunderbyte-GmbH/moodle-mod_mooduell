@@ -37,7 +37,6 @@ use templatable;
  *
  */
 class list_id implements renderable, templatable {
-
     /**
      * An array with all the data.
      *
@@ -62,14 +61,16 @@ class list_id implements renderable, templatable {
         }
 
         $returnurl = "/mod/mooduell/view.php?id=$cmid#questions";
-        $editquestionurl = new moodle_url($path,
-                                [
+        $editquestionurl = new moodle_url(
+            $path,
+            [
                                     'id' => $question->questionid,
                                     'courseid' => $COURSE->id,
                                     'sesskey' => sesskey(),
                                     'returnto' => 'url',
                                     'returnurl' => $returnurl,
-                                ]);
+            ]
+        );
 
         $this->data['id'] = $question->questionid;
         $this->data['questionurl'] = $editquestionurl->out(false);

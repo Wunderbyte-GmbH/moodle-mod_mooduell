@@ -34,7 +34,6 @@ use stdClass;
  * Contains functions to execute when the event course_module_created or the event user_enrolment_created is triggered.
  */
 class manage_tokens {
-
     /**
      * @var int|null
      */
@@ -115,7 +114,6 @@ class manage_tokens {
 
         // Some sanity checks.
         foreach ($tokens as $key => $token) {
-
             // Checks related to a specific token. (script execution continue).
             $unsettoken = false;
             // If sid is set then there must be a valid associated session no matter the token type.
@@ -148,7 +146,7 @@ class manage_tokens {
             $token = array_pop($tokens);
         } else {
             // Create a new token.
-            $token = new stdClass;
+            $token = new stdClass();
             $token->token = md5(uniqid(rand(), 1));
             $token->userid = $userid;
             $token->tokentype = EXTERNAL_TOKEN_PERMANENT;

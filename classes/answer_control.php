@@ -28,7 +28,6 @@ namespace mod_mooduell;
  * @package mod_mooduell
  */
 class answer_control {
-
     /**
      *
      * @var int
@@ -72,7 +71,6 @@ class answer_control {
 
             // Only strip HTML-Tags and remove markdown, if it's a text format.
             if ($data->answerformat == 1) {
-
                 // If there is still markdown in answers, we need to render it properly.
                 $this->answertext = format_text($this->answertext, FORMAT_MARKDOWN);
 

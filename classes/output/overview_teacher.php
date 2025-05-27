@@ -42,7 +42,6 @@ use templatable;
  *
  */
 class overview_teacher implements renderable, templatable {
-
     /**
      * An object with all the data.
      *
@@ -90,7 +89,6 @@ class overview_teacher implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
 
         return $this->data;
-
     }
 
     /**
@@ -128,7 +126,7 @@ class overview_teacher implements renderable, templatable {
 
         $finishedgames = $action == 'finishedgames' ? true : false;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_games('teacher', $finishedgames);
+        [$fields, $from, $where, $params] = $mooduell->return_sql_for_games('teacher', $finishedgames);
 
         $gamestable->set_sql($fields, $from, $where, $params);
 
@@ -148,7 +146,7 @@ class overview_teacher implements renderable, templatable {
 
         $gamestable->showdownloadbutton = true;
 
-        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(20, true);
+        [$idstring, $encodedtable, $html] = $gamestable->lazyouthtml(20, true);
 
         return $html;
     }
@@ -168,7 +166,7 @@ class overview_teacher implements renderable, templatable {
         $highscorestable->sort_default_column = 'score';
         $highscorestable->sort_default_order = SORT_DESC;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_highscores('teacher');
+        [$fields, $from, $where, $params] = $mooduell->return_sql_for_highscores('teacher');
 
         $highscorestable->set_sql($fields, $from, $where, $params);
 
@@ -188,7 +186,7 @@ class overview_teacher implements renderable, templatable {
 
         $highscorestable->showdownloadbutton = true;
 
-        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(20, true);
+        [$idstring, $encodedtable, $html] = $highscorestable->lazyouthtml(20, true);
 
         return $html;
     }
@@ -208,7 +206,7 @@ class overview_teacher implements renderable, templatable {
         $questionstable->sort_default_column = 'id';
         $questionstable->sort_default_order = SORT_ASC;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_questions();
+        [$fields, $from, $where, $params] = $mooduell->return_sql_for_questions();
 
         $questionstable->set_sql($fields, $from, $where, $params);
 
@@ -230,7 +228,7 @@ class overview_teacher implements renderable, templatable {
 
         $questionstable->infinitescroll = 40;
 
-        list($idstring, $encodedtable, $html) = $questionstable->lazyouthtml(40, true);
+        [$idstring, $encodedtable, $html] = $questionstable->lazyouthtml(40, true);
 
         return $html;
     }

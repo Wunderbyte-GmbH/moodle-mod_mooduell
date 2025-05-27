@@ -33,8 +33,6 @@ use template;
  * @package mod_mooduell
  */
 class renderer extends plugin_renderer_base {
-
-
     /**
      * Render a mooduell overview page for teachers.
      *

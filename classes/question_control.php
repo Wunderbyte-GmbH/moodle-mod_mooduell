@@ -34,7 +34,6 @@ use stdClass;
  * @package mod_mooduell
  */
 class question_control {
-
     /** @var int */
     public $questionid;
 
@@ -119,8 +118,11 @@ class question_control {
             $this->courseid = $COURSE->id;
 
             // We need the context id, but it might be there already.
-            $this->contextid = $data->contextid ?? $DB->get_field('question_categories',
-                    'contextid', ['id' => $this->category]);
+            $this->contextid = $data->contextid ?? $DB->get_field(
+                'question_categories',
+                'contextid',
+                ['id' => $this->category]
+            );
 
             // Normally we don't have this information, we use retrieve_result to retrieve it.
             if (isset($data->playeraanswered)) {
@@ -137,9 +139,13 @@ class question_control {
 
             // For drag and drop questions with text, we include the "combined feedback".
             if ($this->questiontype == 'ddwtos') {
-                if ($combinedfeedback = $DB->get_record('question_ddwtos', ['questionid' => $this->questionid],
-                    'correctfeedback, partiallycorrectfeedback, incorrectfeedback')) {
-
+                if (
+                    $combinedfeedback = $DB->get_record(
+                        'question_ddwtos',
+                        ['questionid' => $this->questionid],
+                        'correctfeedback, partiallycorrectfeedback, incorrectfeedback'
+                    )
+                ) {
                     // Remove HTML and decode HTML entities like "&nbsp;".
                     if (!empty($combinedfeedback->correctfeedback)) {
                         $combinedfeedback->correctfeedback =
@@ -159,7 +165,7 @@ class question_control {
             } else {
                 // Use empty combined feedback for question types that don't support it.
                 // This is needed to prevent webservice validation erros.
-                $combinedfeedback = new stdClass;
+                $combinedfeedback = new stdClass();
                 $combinedfeedback->correctfeedback = null;
                 $combinedfeedback->partiallycorrectfeedback = null;
                 $combinedfeedback->incorrectfeedback = null;
@@ -272,16 +278,16 @@ class question_control {
 
         switch ($this->questiontype) {
             case 'numerical':
-                list($resultarray, $iscorrect) = $this->validate_numerical_question($answerids);
+                [$resultarray, $iscorrect] = $this->validate_numerical_question($answerids);
                 break;
             case 'singlechoice':
             case 'multichoice':
             case 'truefalse':
-                list($resultarray, $iscorrect) =
+                [$resultarray, $iscorrect] =
                     $this->validate_single_multichoice_truefalse_question($answerids, $showcorrectanswer);
                 break;
             case 'ddwtos':
-                list($resultarray, $iscorrect) = $this->validate_ddwtos_question($answerids, $showcorrectanswer);
+                [$resultarray, $iscorrect] = $this->validate_ddwtos_question($answerids, $showcorrectanswer);
                 break;
             default:
                 $resultarray = [];
@@ -317,8 +323,11 @@ class question_control {
         // ... if the given answer is within the tolerance of one of them.
         foreach ($this->answers as $answer) {
             if ($answer->correct) {
-                $tolerance = $DB->get_field('question_numerical', 'tolerance',
-                    ['question' => $this->questionid, 'answer' => $answer->id]);
+                $tolerance = $DB->get_field(
+                    'question_numerical',
+                    'tolerance',
+                    ['question' => $this->questionid, 'answer' => $answer->id]
+                );
 
                 $min = $answer->answertext - $tolerance;
                 $max = $answer->answertext + $tolerance;
@@ -385,7 +394,6 @@ class question_control {
 
         // Loop through all answers.
         foreach ($this->answers as $answer) {
-
             // Check if given answers are in the same order as correct answers.
             if ($answer->id != $answerids[$position]) {
                 $iscorrect = 0;
@@ -458,9 +466,14 @@ class question_control {
 
         $idstring = implode("/", [$quid->id, 1, $this->questionid]);
 
-        $this->questiontext = file_rewrite_pluginfile_urls($this->questiontext,
-                'pluginfile.php', $this->contextid, 'question',
-                'questiontext', $idstring);
+        $this->questiontext = file_rewrite_pluginfile_urls(
+            $this->questiontext,
+            'pluginfile.php',
+            $this->contextid,
+            'question',
+            'questiontext',
+            $idstring
+        );
 
         $dom = new \DOMDocument();
         $dom->loadHTML($this->questiontext);
@@ -538,10 +551,8 @@ class question_control {
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         } else if ($this->questiontype == 'ddwtos') {
-
             // Parse all the answers of this type to make sure they are not too long.
             foreach ($this->answers as $answer) {
-
                 // We have a reduced max length for dragndrop.
                 if (strlen($this->questiontext) > MAXLENGTH / 2) {
                     $this->warnings[] = [
@@ -556,7 +567,6 @@ class question_control {
                     ];
                     $this->status = get_string('notok', 'mod_mooduell');
                 }
-
             }
         }
     }

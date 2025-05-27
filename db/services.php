@@ -34,8 +34,8 @@ $services = [
                 ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_tokens',
-                'downloadfiles' => 1,    // Allow file downloads.
-                'uploadfiles'  => 1,      // Allow file uploads.
+                'downloadfiles' => 1, // Allow file downloads.
+                'uploadfiles'  => 1, // Allow file uploads.
                 'enabled' => 1,
         ],
         'Wunderbyte MooDuell external' => [ // Very important, don't rename or will break local_bookingapi plugin!!!
@@ -63,8 +63,8 @@ $services = [
                 ],
                 'restrictedusers' => 0,
                 'shortname' => 'mod_mooduell_external',
-                'downloadfiles' => 1,    // Allow file downloads.
-                'uploadfiles'  => 1,      // Allow file uploads.
+                'downloadfiles' => 1, // Allow file downloads.
+                'uploadfiles'  => 1, // Allow file uploads.
                 'enabled' => 1,
         ],
 ];

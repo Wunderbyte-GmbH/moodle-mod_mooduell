@@ -31,7 +31,6 @@ use mod_mooduell\completion\completion_utils;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class custom_completion extends activity_custom_completion {
-
     /**
      * Fetch the list of custom completion rules that this module defines.
      *
@@ -90,16 +89,17 @@ class custom_completion extends activity_custom_completion {
 
         // Now, get the completion status of the custom completion rule.
         if ($challenge = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid, 'challengetype' => $rule])) {
-
             $completionexpected = $this->cm->completionexpected;
 
             // If the challenge is already expired take the result value from the challenge results table.
             if ($this->cm->completion == 2 && $completionexpected != 0 && time() > $completionexpected) {
-                if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                if (
+                    !$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                     'mooduellid' => $mooduellid,
                     'challengeid' => $challenge->id,
                     'userid' => $USER->id,
-                ])) {
+                    ])
+                ) {
                     // Error prevention.
                     $actualnumber = 0;
                 }

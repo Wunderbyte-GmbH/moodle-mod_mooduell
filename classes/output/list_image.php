@@ -36,7 +36,6 @@ use templatable;
  *
  */
 class list_image implements renderable, templatable {
-
     /**
      * An object with all the data.
      *

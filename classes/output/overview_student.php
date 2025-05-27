@@ -42,7 +42,6 @@ use templatable;
  *
  */
 class overview_student implements renderable, templatable {
-
     /**
      * An object with all the data.
      *
@@ -123,7 +122,7 @@ class overview_student implements renderable, templatable {
 
         $finishedgames = $action == 'finishedgames' ? true : false;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_games('student', $finishedgames);
+        [$fields, $from, $where, $params] = $mooduell->return_sql_for_games('student', $finishedgames);
 
         $gamestable->set_sql($fields, $from, $where, $params);
 
@@ -138,7 +137,7 @@ class overview_student implements renderable, templatable {
 
         $gamestable->define_cache('mod_mooduell', 'tablescache');
 
-        list($idstring, $encodedtable, $html) = $gamestable->lazyouthtml(20, true);
+        [$idstring, $encodedtable, $html] = $gamestable->lazyouthtml(20, true);
 
         return $html;
     }
@@ -157,7 +156,7 @@ class overview_student implements renderable, templatable {
         $highscorestable->sort_default_column = 'score';
         $highscorestable->sort_default_order = SORT_DESC;
 
-        list($fields, $from, $where, $params) = $mooduell->return_sql_for_highscores('student');
+        [$fields, $from, $where, $params] = $mooduell->return_sql_for_highscores('student');
 
         $highscorestable->set_sql($fields, $from, $where, $params);
 
@@ -173,7 +172,7 @@ class overview_student implements renderable, templatable {
         $highscorestable->showcountlabel = true;
         $highscorestable->pageable(true);
 
-        list($idstring, $encodedtable, $html) = $highscorestable->lazyouthtml(20, true);
+        [$idstring, $encodedtable, $html] = $highscorestable->lazyouthtml(20, true);
 
         return $html;
     }

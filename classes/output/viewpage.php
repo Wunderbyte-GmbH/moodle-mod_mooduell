@@ -35,7 +35,6 @@ use templatable;
  *
  */
 class viewpage implements renderable, templatable {
-
     /**
      * An array of data
      *

@@ -36,7 +36,6 @@ use templatable;
  *
  */
 class list_warnings implements renderable, templatable {
-
     /**
      * An array with all the data.
      *

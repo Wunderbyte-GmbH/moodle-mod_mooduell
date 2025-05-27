@@ -32,7 +32,7 @@ global $CFG;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once(__DIR__ . '/lib.php');
-require_once($CFG->libdir.'/questionlib.php');
+require_once($CFG->libdir . '/questionlib.php');
 
 /**
  * Module instance settings form.
@@ -42,7 +42,6 @@ require_once($CFG->libdir.'/questionlib.php');
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_mod_form extends moodleform_mod {
-
     /**
      * Defines forms elements
      */
@@ -113,7 +112,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
         } else {
             $cats = question_category_options($arrayofcontexts, false, 0, false);
-
         }
         $cats = array_pop($cats);
 
@@ -140,7 +138,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
             $i = 0;
             $max = 3;
             while ($i < $max) {
-
                 if ($listofmooduellcats && count($listofmooduellcats) > 0) {
                     $selectedcategory = array_shift($listofmooduellcats);
                 } else {
@@ -231,7 +228,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         }
         $mform->addHelpButton('waitfornextquestion', 'waitfornextquestion', 'mod_mooduell');
         $this->apply_admin_defaults();
-
     }
 
     /**
@@ -283,8 +279,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $catweightoptions = $this->return_list_of_category_weight_options();
 
         $formgroup = [];
-        $formgroup[] = &$mform->createElement('select', 'category',
-            get_string('questionscategory', 'mod_mooduell'), $categoryoptions);
+        $formgroup[] = &$mform->createElement(
+            'select',
+            'category',
+            get_string('questionscategory', 'mod_mooduell'),
+            $categoryoptions
+        );
         if ($selectedcategory) {
             $formgroup[0]->setSelected($selectedcategory->category);
         }
@@ -307,7 +307,6 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $children = [];
 
         foreach ($list as $child) {
-
             if ($parent->id == $child->parent) {
                 $children[] = $child;
                 foreach ($this->return_children_in_list($child, $list) as $grandchild) {
@@ -351,13 +350,14 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Preprocessing to prefill challenge data.
         $completionmodes = completion_utils::mooduell_get_completion_modes();
         foreach ($completionmodes as $mode => $field) {
-
             // Prefill target number if it already exists.
-            if ($existingtargetnumber = $DB->get_field(
-                'mooduell_challenges',
-                'targetnumber',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode]
-            )) {
+            if (
+                $existingtargetnumber = $DB->get_field(
+                    'mooduell_challenges',
+                    'targetnumber',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $mode]
+                )
+            ) {
                 $defaultvalues[$mode . 'enabled'] = 1;
                 $defaultvalues[$mode] = $existingtargetnumber;
             } else {
@@ -366,11 +366,13 @@ class mod_mooduell_mod_form extends moodleform_mod {
             }
 
             // Prefill challenge name if it already exists.
-            if ($existingchallengename = $DB->get_field(
-                'mooduell_challenges',
-                'challengename',
-                ['mooduellid' => $mooduellid, 'challengetype' => $mode]
-            )) {
+            if (
+                $existingchallengename = $DB->get_field(
+                    'mooduell_challenges',
+                    'challengename',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $mode]
+                )
+            ) {
                 $defaultvalues[$mode . 'name'] = $existingchallengename;
             } else {
                 $defaultvalues[$mode . 'name'] = get_string('challengename:' . $mode, 'mooduell');

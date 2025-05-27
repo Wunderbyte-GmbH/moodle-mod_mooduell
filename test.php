@@ -39,7 +39,6 @@ if ($mooduell) {
         $mooduellinstance = new mooduell($mooduellid->id);
         $mooduellinstance->update_all_subscriptions();
     }
-
 }
 
 $PAGE->set_pagelayout('standard');

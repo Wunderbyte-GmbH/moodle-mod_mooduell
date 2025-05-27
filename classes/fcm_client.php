@@ -31,7 +31,6 @@ use curl; // Use Moodle's curl class
  * Handles Firebase Cloud Message Logic.
  */
 class fcm_client {
-
     /** @var cache Application cache for storing tokens */
     private $cache;
 
@@ -50,7 +49,7 @@ class fcm_client {
     /**
      * Sends a push notification using Firebase Cloud Messaging.
      *
-     * @param string $messagetype The type of message to be sent.
+     * @param string $fields Push notification fields.
      * @return mixed Response from FCM or null on failure.
      */
     public function send_push_notification(array $fields) {
@@ -129,7 +128,7 @@ class fcm_client {
             "iss" => $credentials['client_email'],
             "scope" => "https://www.googleapis.com/auth/firebase.messaging",
             "aud" => "https://oauth2.googleapis.com/token",
-            "exp" => $now + 3600,  // 1 hour expiration
+            "exp" => $now + 3600, // 1 hour expiration
             "iat" => $now,
         ];
 
@@ -182,7 +181,6 @@ class fcm_client {
 
         // Return the JWT.
         return implode('.', $segments);
-
     }
 
     /**

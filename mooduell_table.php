@@ -66,7 +66,7 @@ if (!$table->is_downloading()) {
     $PAGE->navbar->add('Testing table class', new moodle_url('/mooduell_table.php'));
 }
 
-switch($action){
+switch ($action) {
     case 'opengames':
         // Generate the tabledata for open games.
         $tabledata = load_games_table_data($mooduellid, $table, $view, false);

@@ -32,7 +32,6 @@ use stdClass;
  * MooDuell Table sql class.
  */
 class table_highscores extends wunderbyte_table {
-
     /**
      * Parameter to store the action (what to show in the mooduell_table)
      * @var string action ('opengames'|'finishedgames'|'questions'|'highscores')
@@ -69,7 +68,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_ranking(stdClass $highscoreentry) {
         if ($highscoreentry->ranking) {
-
             $ranking = $highscoreentry->ranking;
 
             return $ranking;
@@ -82,7 +80,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_userid(stdClass $highscoreentry) {
         if ($highscoreentry->userid) {
-
             $mooduell = mooduell::get_instance($this->mooduellid);
             $username = $mooduell->return_name_by_id($highscoreentry->userid);
 
@@ -96,7 +93,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_score(stdClass $highscoreentry) {
         if ($highscoreentry->score !== null) {
-
             $score = $highscoreentry->score;
 
             return $score;
@@ -109,7 +105,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_gamesplayed(stdClass $highscoreentry) {
         if ($highscoreentry->gamesplayed !== null) {
-
             $gamesplayed = $highscoreentry->gamesplayed;
 
             return $gamesplayed;
@@ -122,7 +117,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_gameswon(stdClass $highscoreentry) {
         if ($highscoreentry->gameswon !== null) {
-
             $gameswon = $highscoreentry->gameswon;
 
             return $gameswon;
@@ -135,7 +129,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_gameslost(stdClass $highscoreentry) {
         if ($highscoreentry->gameslost !== null) {
-
             $gameslost = $highscoreentry->gameslost;
 
             return $gameslost;
@@ -148,7 +141,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_qcorrect(stdClass $highscoreentry) {
         if ($highscoreentry->qcorrect !== null) {
-
             $qcorrect = $highscoreentry->qcorrect;
 
             return $qcorrect;
@@ -161,7 +153,6 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_qplayed(stdClass $highscoreentry) {
         if ($highscoreentry->qplayed !== null) {
-
             $qplayed = $highscoreentry->qplayed;
 
             return $qplayed;
@@ -174,8 +165,7 @@ class table_highscores extends wunderbyte_table {
      */
     public function col_qcpercentage(stdClass $highscoreentry) {
         if ($highscoreentry->qcpercentage !== null) {
-
-            $qcpercentage = number_format($highscoreentry->qcpercentage, 1).' %';
+            $qcpercentage = number_format($highscoreentry->qcpercentage, 1) . ' %';
 
             return $qcpercentage;
         }

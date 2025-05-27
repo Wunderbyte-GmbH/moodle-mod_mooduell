@@ -38,7 +38,6 @@ use stdClass;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class wb_payment {
-
     /**
      * mod_mooduell_PUBLIC_KEY
      *
@@ -83,8 +82,8 @@ pwIDAQAB
         $decryptedcontent = openssl_decrypt($ciphertextraw, $cipher, $CFG->wwwroot, $options = OPENSSL_RAW_DATA, $iv);
         $parts = explode(';', $decryptedcontent);
         $result = [
-            'exptime' => $parts[0] ?? '',      // Default to an empty string if not set
-            'product' => $parts[1] ?? '',      // Default to an empty string if not set
+            'exptime' => $parts[0] ?? '', // Default to an empty string if not set
+            'product' => $parts[1] ?? '', // Default to an empty string if not set
         ];
         return $result;
     }

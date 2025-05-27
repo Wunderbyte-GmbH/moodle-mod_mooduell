@@ -38,7 +38,6 @@ require_once('mooduell.php');
  * Class mod_mooduell_external
  */
 class mod_mooduell_external extends external_api {
-
     /**
      * Starts new game against another user.
      *
@@ -59,8 +58,13 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
+            throw new moodle_exception(
+                'invalidcoursemodule ' . $params['quizid'],
+                'mooduell',
+                null,
+                null,
+                "Course module id:" . $params['quizid']
+            );
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -334,10 +338,11 @@ class mod_mooduell_external extends external_api {
                         'badges' => new external_value(PARAM_BOOL, 'badges'),
                         'unlock' => new external_value(PARAM_BOOL, 'unlock'),
                         'versions' => new external_single_structure(
-                        [
+                            [
                             "ios" => new external_value(PARAM_RAW, 'ios app version'),
                             "android" => new external_value(PARAM_RAW, 'android app version'),
-                        ]),
+                            ]
+                        ),
                         'themeimg' => new external_value(PARAM_TEXT, 'themeimg'),
                         'themeimgalt' => new external_value(PARAM_TEXT, 'themeimgalt'),
                         'themejson' => new external_value(PARAM_RAW, 'themejson'),
@@ -389,7 +394,8 @@ class mod_mooduell_external extends external_api {
                     'store' => new external_value(PARAM_TEXT, 'store', VALUE_OPTIONAL, ''),
                     'ispublic' => new external_value(PARAM_INT, 'ispublic'),
                     'timecreated' => new external_value(PARAM_INT, 'timecreated', VALUE_OPTIONAL, 0),
-                ])),
+                ]
+            )),
             ]);
     }
     /**
@@ -450,7 +456,6 @@ class mod_mooduell_external extends external_api {
             $params['platformid'] = $CFG->wwwroot;
         }
         return mooduell::purchase_item($params);
-
     }
     /**
      * Return params for iapurchases.
@@ -482,7 +487,6 @@ class mod_mooduell_external extends external_api {
             'store' => new external_value(PARAM_TEXT, 'store'),
             'ispublic' => new external_value(PARAM_INT, 'ispublic'),
         ]);
-
     }
 
     /**
@@ -515,8 +519,13 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
+            throw new moodle_exception(
+                'invalidcoursemodule ' . $params['quizid'],
+                'mooduell',
+                null,
+                null,
+                "Course module id:" . $params['quizid']
+            );
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -528,7 +537,7 @@ class mod_mooduell_external extends external_api {
         $gamecontroller = new game_control($mooduell, $params['gameid']);
 
         // Validate the question.
-        list ($response, $iscorrect, $answersfeedback) =
+         [$response, $iscorrect, $answersfeedback] =
             $gamecontroller->validate_question($params['questionid'], $params['answerids']);
         $result['response'] = $response;
         $result['iscorrect'] = $iscorrect;
@@ -573,8 +582,10 @@ class mod_mooduell_external extends external_api {
                 'quizid' => new external_value(PARAM_INT, 'quizid id'),
                 'gameid' => new external_value(PARAM_INT, 'gameid id'),
                 'questionid' => new external_value(PARAM_INT, 'question id'),
-                'answerids' => new external_multiple_structure(new external_value(PARAM_RAW, 'answer id'),
-                        'Array of answer ids'),
+                'answerids' => new external_multiple_structure(
+                    new external_value(PARAM_RAW, 'answer id'),
+                    'Array of answer ids'
+                ),
         ]);
     }
 
@@ -587,7 +598,7 @@ class mod_mooduell_external extends external_api {
             [
                 'response' => new external_multiple_structure(
                         // For numerical questions, it will contain the correct answer.
-                        new external_value(PARAM_RAW, 'ids of correct answers, correct answer OR 0 if false, 1 if true')
+                    new external_value(PARAM_RAW, 'ids of correct answers, correct answer OR 0 if false, 1 if true')
                 ),
                 'iscorrect' => new external_value(PARAM_INT, '0 if false, 1 if true'),
                 'generalfeedback' => new external_value(PARAM_TEXT, 'general feedback'),
@@ -634,7 +645,6 @@ class mod_mooduell_external extends external_api {
 
         // Now we run through all the quizzes to find the matching games.
         foreach ($quizzes as $quiz) {
-
             // We create Mooduell Instance.
             $instanceid = $quiz['coursemodule'];
             $mooduell = new mooduell($instanceid);
@@ -647,9 +657,7 @@ class mod_mooduell_external extends external_api {
             $quiz['challenges'] = completion_utils::get_completion_challenges_array($mooduell);
 
             if ($games && count($games) > 0) {
-
                 foreach ($games as $game) {
-
                     $quiz['games'][] = [
                             'gameid' => $game->id,
                             'playeraid' => $game->playeraid,
@@ -682,12 +690,19 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_games_by_courses_parameters() {
         return new external_function_parameters([
-                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
-                                'Array of course ids', VALUE_DEFAULT, []),
-                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
-                                VALUE_DEFAULT, -1),
-                ]
-        );
+                        'courseids' => new external_multiple_structure(
+                            new external_value(PARAM_INT, 'course id'),
+                            'Array of course ids',
+                            VALUE_DEFAULT,
+                            []
+                        ),
+                        'timemodified' => new external_value(
+                            PARAM_INT,
+                            'timemodified to reduce number of returned items',
+                            VALUE_DEFAULT,
+                            -1
+                        ),
+                ]);
     }
 
     /**
@@ -717,10 +732,14 @@ class mod_mooduell_external extends external_api {
                                                 'status' => new external_value(PARAM_TEXT, 'challenge status'),
                                                 'targetnumber' => new external_value(PARAM_INT, 'target number'),
                                                 'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
-                                                'targetdate' => new external_value(PARAM_INT,
-                                                    'unix timestamp of expected completion'),
-                                                'challengerank' => new external_value(PARAM_INT,
-                                                    'a user\'s ranking within a challenge'),
+                                                'targetdate' => new external_value(
+                                                    PARAM_INT,
+                                                    'unix timestamp of expected completion'
+                                                ),
+                                                'challengerank' => new external_value(
+                                                    PARAM_INT,
+                                                    'a user\'s ranking within a challenge'
+                                                ),
                                                 'localizedstrings' => new external_multiple_structure(
                                                     new external_single_structure([
                                                         'lang' => new external_value(PARAM_TEXT, 'language identifier'),
@@ -728,17 +747,17 @@ class mod_mooduell_external extends external_api {
                                                         'stringval' => new external_value(PARAM_TEXT, 'string value'),
                                                     ])
                                                 ),
-                                        ]
-                                )
-                        ),
+                                        ])),
                         'games' => new external_multiple_structure(new external_single_structure([
                                 'gameid' => new external_value(PARAM_INT, 'id of game'),
                                 'playeraid' => new external_value(PARAM_INT, 'id of player A'),
                                 'playerbid' => new external_value(PARAM_INT, 'id of player B'),
                                 'playeratime' => new external_value(PARAM_INT, 'time of player B'),
                                 'playerbtime' => new external_value(PARAM_INT, 'time of player B'),
-                                'status' => new external_value(PARAM_INT,
-                                        'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'),
+                                'status' => new external_value(
+                                    PARAM_INT,
+                                    'status, NULL is open game, 1 is player A\'s turn, 2 is player B\'s turn, 3 is finished'
+                                ),
                                 'winnerid' => new external_value(PARAM_INT, 'id of winner, 0 is not yet finished'),
                                 'timemodified' => new external_value(PARAM_INT, 'time modified'),
                         ])),
@@ -772,8 +791,7 @@ class mod_mooduell_external extends external_api {
         }
         // Ensure there are courseids to loop through.
         if (!empty($params['courseids'])) {
-
-            list ($courses, $warnings) = external_util::validate_courses($params['courseids'], $mycourses, false, true);
+             [$courses, $warnings] = external_util::validate_courses($params['courseids'], $mycourses, false, true);
 
             // Get the quizzes in this course, this function checks users visibility permissions.
             // We can avoid then additional validate_context calls.
@@ -781,8 +799,13 @@ class mod_mooduell_external extends external_api {
 
             // If there are not MooDuell Instances at all in the courses we wanted, we return an exception.
             if (count($quizzes) == 0) {
-                throw new moodle_exception('nomooduellincourses ', 'mooduell', null, null,
-                        "There are no MooDuell instances in the courses you were looking in");
+                throw new moodle_exception(
+                    'nomooduellincourses ',
+                    'mooduell',
+                    null,
+                    null,
+                    "There are no MooDuell instances in the courses you were looking in"
+                );
             }
 
             foreach ($quizzes as $quiz) {
@@ -807,7 +830,6 @@ class mod_mooduell_external extends external_api {
                 $quizdetails['quizname'] = external_format_string($quiz->name, $context->id);
 
                 if (has_capability('mod/quiz:view', $context)) {
-
                     // Fields only for managers.
                     if (has_capability('moodle/course:manageactivities', $context)) {
                         // We could do something here.
@@ -833,12 +855,19 @@ class mod_mooduell_external extends external_api {
      */
     public static function get_quizzes_by_courses_parameters() {
         return new external_function_parameters([
-                        'courseids' => new external_multiple_structure(new external_value(PARAM_INT, 'course id'),
-                                'Array of course ids', VALUE_DEFAULT, []),
-                        'timemodified' => new external_value(PARAM_INT, 'timemodified to reduce number of returned items',
-                                VALUE_DEFAULT, -1),
-                ]
-        );
+                        'courseids' => new external_multiple_structure(
+                            new external_value(PARAM_INT, 'course id'),
+                            'Array of course ids',
+                            VALUE_DEFAULT,
+                            []
+                        ),
+                        'timemodified' => new external_value(
+                            PARAM_INT,
+                            'timemodified to reduce number of returned items',
+                            VALUE_DEFAULT,
+                            -1
+                        ),
+                ]);
     }
 
     /**
@@ -889,8 +918,13 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
+            throw new moodle_exception(
+                'invalidcoursemodule ' . $params['quizid'],
+                'mooduell',
+                null,
+                null,
+                "Course module id:" . $params['quizid']
+            );
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -956,10 +990,14 @@ class mod_mooduell_external extends external_api {
                 'status' => new external_value(PARAM_TEXT, 'challenge status'),
                 'targetnumber' => new external_value(PARAM_INT, 'target number'),
                 'challengepercentage' => new external_value(PARAM_INT, 'challenge percentage'),
-                'targetdate' => new external_value(PARAM_INT,
-                    'unix timestamp of expected completion date'),
-                'challengerank' => new external_value(PARAM_INT,
-                    'a user\'s ranking within a challenge'),
+                'targetdate' => new external_value(
+                    PARAM_INT,
+                    'unix timestamp of expected completion date'
+                ),
+                'challengerank' => new external_value(
+                    PARAM_INT,
+                    'a user\'s ranking within a challenge'
+                ),
                 'localizedstrings' => new external_multiple_structure(
                     new external_single_structure([
                         'lang' => new external_value(PARAM_TEXT, 'language identifier'),
@@ -979,13 +1017,17 @@ class mod_mooduell_external extends external_api {
                 'imagetext' => new external_value(PARAM_RAW, 'image Text'),
                 'answers' => new external_multiple_structure(new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'answerid'),
-                    'answertext' => new external_value(PARAM_RAW,
-                            'answer text'),
+                    'answertext' => new external_value(
+                        PARAM_RAW,
+                        'answer text'
+                    ),
                 ])),
                 'combinedfeedback' => new external_single_structure([
                     'correctfeedback' => new external_value(PARAM_TEXT, 'correct feedback'),
-                    'partiallycorrectfeedback' => new external_value(PARAM_TEXT,
-                        'partially correct feedback'),
+                    'partiallycorrectfeedback' => new external_value(
+                        PARAM_TEXT,
+                        'partially correct feedback'
+                    ),
                     'incorrectfeedback' => new external_value(PARAM_TEXT, 'incorrect feedback'),
                 ]),
             ])),
@@ -1014,8 +1056,13 @@ class mod_mooduell_external extends external_api {
         // Now security checks.
 
         if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new moodle_exception('invalidcoursemodule ' . $params['quizid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
+            throw new moodle_exception(
+                'invalidcoursemodule ' . $params['quizid'],
+                'mooduell',
+                null,
+                null,
+                "Course module id:" . $params['quizid']
+            );
         }
         $context = context_module::instance($cm->id);
         self::validate_context($context);
@@ -1050,8 +1097,10 @@ class mod_mooduell_external extends external_api {
             'firstname' => new external_value(PARAM_RAW, 'firstname'),
             'lastname' => new external_value(PARAM_RAW, 'lastname'),
             'username' => new external_value(PARAM_RAW, 'username'),
-            'alternatename' => new external_value(PARAM_RAW,
-                    'nickname, stored as custom profile filed mooduell_alias'),
+            'alternatename' => new external_value(
+                PARAM_RAW,
+                'nickname, stored as custom profile filed mooduell_alias'
+            ),
             'lang' => new external_value(PARAM_RAW, 'language'),
             'profileimageurl' => new external_value(PARAM_RAW, 'profileimageurl'),
         ]));
@@ -1084,8 +1133,13 @@ class mod_mooduell_external extends external_api {
 
         // Every user can only set his/her own name.
         if ($params['userid'] != $USER->id) {
-            throw new moodle_exception('norighttosetnameofthisuser ' . $params['userid'], 'mooduell', null, null,
-                    "Course module id:" . $params['quizid']);
+            throw new moodle_exception(
+                'norighttosetnameofthisuser ' . $params['userid'],
+                'mooduell',
+                null,
+                null,
+                "Course module id:" . $params['quizid']
+            );
         }
 
         $newuser = $USER;
@@ -1118,8 +1172,7 @@ class mod_mooduell_external extends external_api {
     public static function set_alternatename_returns() {
         return new external_single_structure([
                         'status' => new external_value(PARAM_INT, 'status'),
-                ]
-        );
+                ]);
     }
 
     /**
@@ -1136,7 +1189,6 @@ class mod_mooduell_external extends external_api {
         $params = self::validate_parameters(self::get_user_stats_parameters(), $params);
 
         return game_control::get_user_stats($params['userid']);
-
     }
 
     /**
@@ -1162,8 +1214,7 @@ class mod_mooduell_external extends external_api {
                         'lostgames' => new external_value(PARAM_INT, 'lostgames'),
                         'correctlyanswered' => new external_value(PARAM_INT, 'correctlyanswered'),
                         'playedquestions' => new external_value(PARAM_INT, 'playedquestions'),
-                ]
-        );
+                ]);
     }
 
     /**
@@ -1205,9 +1256,7 @@ class mod_mooduell_external extends external_api {
                                 'lost' => new external_value(PARAM_INT, 'lost'), // Games lost.
                                 'score' => new external_value(PARAM_INT, 'firstname'),
                                 'played' => new external_value(PARAM_INT, 'played'), // Games played.
-                        ]
-                )
-        );
+                        ]));
     }
 
     /**
@@ -1244,12 +1293,16 @@ class mod_mooduell_external extends external_api {
         $data = $DB->get_records_sql($sql, $paramsarray);
 
         if (!$data || count($data) == 0) {
-            throw new moodle_exception('cantgetpushtoken', 'mooduell', null, null,
-                    "You can't get pushtoken of this user " . $params['userid']);
+            throw new moodle_exception(
+                'cantgetpushtoken',
+                'mooduell',
+                null,
+                null,
+                "You can't get pushtoken of this user " . $params['userid']
+            );
         }
 
         return mooduell::get_pushtokens($params['userid']);
-
     }
 
     /**
@@ -1273,11 +1326,8 @@ class mod_mooduell_external extends external_api {
                                                 'identifier' => new external_value(PARAM_RAW, 'identifier'),
                                                 'model' => new external_value(PARAM_RAW, 'model'),
                                                 'pushtoken' => new external_value(PARAM_RAW, 'pushtoken'),
-                                                ]
-                                )
-                        ),
-                ]
-        );
+                                                ])),
+                ]);
     }
 
     /**
@@ -1321,8 +1371,13 @@ class mod_mooduell_external extends external_api {
             $data = $DB->get_records_sql($sql, $paramsarray);
 
             if (!$data || count($data) == 0) {
-                throw new moodle_exception('cantsetpushtoken', 'mooduell', null, null,
-                        "You can't set pushtoken of this user " . $params['userid']);
+                throw new moodle_exception(
+                    'cantsetpushtoken',
+                    'mooduell',
+                    null,
+                    null,
+                    "You can't set pushtoken of this user " . $params['userid']
+                );
             }
         }
 
@@ -1339,8 +1394,7 @@ class mod_mooduell_external extends external_api {
                         'model' => new external_value(PARAM_RAW, 'identifier'),
                         'identifier' => new external_value(PARAM_RAW, 'model'),
                         'pushtoken' => new external_value(PARAM_RAW, 'pushtoken'),
-                ]
-        );
+                ]);
     }
 
     /**
@@ -1350,8 +1404,7 @@ class mod_mooduell_external extends external_api {
     public static function set_pushtokens_returns() {
         return new external_single_structure([
                         'status' => new external_value(PARAM_INT, 'status'),
-                ]
-        );
+                ]);
     }
 
     /**
@@ -1410,8 +1463,7 @@ class mod_mooduell_external extends external_api {
     public static function giveup_game_parameters() {
         return new external_function_parameters([
                         'gameid' => new external_value(PARAM_INT, 'game id'),
-                ]
-        );
+                ]);
     }
 
     /**
@@ -1421,8 +1473,7 @@ class mod_mooduell_external extends external_api {
     public static function giveup_game_returns() {
         return new external_single_structure([
                         'status' => new external_value(PARAM_INT, 'status'),
-                ]
-        );
+                ]);
     }
     /**
      * Updates the profile picture of a user.
@@ -1446,10 +1497,9 @@ class mod_mooduell_external extends external_api {
             throw new moodle_exception('nofile');
         }
 
-        list($w, $h) = getimagesizefromstring(base64_decode($filecontent));
+        [$w, $h] = getimagesizefromstring(base64_decode($filecontent));
         // Somehow 2 large Image made it to here, caancel upload.
         if ($w > 500 || $h > 1000) {
-
             return ['filename' => 'TOOLARGE'];
         }
 
@@ -1463,7 +1513,7 @@ class mod_mooduell_external extends external_api {
             'filearea' => 'aliasavatar',
             'itemid' => $USER->id,
             'filepath' => '/',
-            'filename' => $filename.time().'.jpg',
+            'filename' => $filename . time() . '.jpg',
         ];
 
         $files = $fs->get_area_files($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'], $fileinfo['itemid']);
@@ -1472,32 +1522,32 @@ class mod_mooduell_external extends external_api {
         }
 
         // Saving file.
-        $dir = make_temp_directory('wsupload').'/';
+        $dir = make_temp_directory('wsupload') . '/';
 
         if (empty($fileinfo['filename'])) {
-            $filename = uniqid('wsupload', true).'_'.time().'.tmp';
+            $filename = uniqid('wsupload', true) . '_' . time() . '.tmp';
         } else {
             $filename = $fileinfo['filename'];
         }
 
-        if (file_exists($dir.$filename)) {
-            $savedfilepath = $dir.uniqid('m').$filename;
+        if (file_exists($dir . $filename)) {
+            $savedfilepath = $dir . uniqid('m') . $filename;
         } else {
-            $savedfilepath = $dir.$filename;
+            $savedfilepath = $dir . $filename;
         }
 
         $fileinfo['filecontent'] = strtr($filecontent, '._-', '+/=');
 
         file_put_contents($savedfilepath, base64_decode($fileinfo['filecontent']));
 
-        require_once( $CFG->libdir . '/gdlib.php' );
+        require_once($CFG->libdir . '/gdlib.php');
 
         @chmod($savedfilepath, $CFG->filepermissions);
         unset($fileinfo['filecontent']);
         $fs->create_file_from_pathname($fileinfo, $savedfilepath);
 
         // Delete temporary files.
-        unset( $savedfilepath );
+        unset($savedfilepath);
 
         cache_helper::purge_by_event('setbackuserscache');
 
@@ -1512,8 +1562,7 @@ class mod_mooduell_external extends external_api {
         return new external_function_parameters([
                         'filename'  => new external_value(PARAM_FILE, 'file name'),
                         'filecontent' => new external_value(PARAM_TEXT, 'file content'),
-                ]
-        );
+                ]);
     }
 
 
@@ -1524,7 +1573,6 @@ class mod_mooduell_external extends external_api {
     public static function update_profile_picture_returns() {
         return new external_single_structure([
                         'filename' => new external_value(PARAM_TEXT, 'image url'),
-                ]
-        );
+                ]);
     }
 }

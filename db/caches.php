@@ -53,6 +53,4 @@ $definitions = [
         'staticacceleration' => true, // Helps to reduce database activity
         'static' => true,
     ],
-    
 ];
-

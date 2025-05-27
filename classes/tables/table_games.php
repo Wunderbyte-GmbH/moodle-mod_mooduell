@@ -34,7 +34,6 @@ use stdClass;
  * MooDuell Table sql class.
  */
 class table_games extends wunderbyte_table {
-
     /**
      * Parameter to store the action (what to show in the mooduell_table)
      * @var string action ('opengames'|'finishedgames'|'questions'|'highscores')
@@ -71,7 +70,6 @@ class table_games extends wunderbyte_table {
      */
     public function col_playeraid($game) {
         if ($game->playeraid) {
-
             $mooduell = mooduell::get_instance($this->mooduellid);
             $name = $mooduell->return_name_by_id($game->playeraid);
 
@@ -109,7 +107,6 @@ class table_games extends wunderbyte_table {
      */
     public function col_mooduellid($game) {
         if ($this->mooduellid) {
-
             $name = $this->mooduellid;
 
             return $name;

@@ -41,7 +41,6 @@ use core_user;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mooduell_external_test extends advanced_testcase {
-
     /**
      * Tests set up.
      */
@@ -106,7 +105,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_start_attempt() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
@@ -131,7 +130,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_get_games_by_courses() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
@@ -167,7 +166,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_get_quiz_users() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         $users = mod_mooduell_external::get_quiz_users($course->id, $cmd1->id);
 
@@ -175,13 +174,13 @@ class mooduell_external_test extends advanced_testcase {
         $this->assertIsArray($users);
         $this->assertEquals(2, count($users));
         // No built-in methods to compare stdClass instances.
-        $ids = array_map(function($item) {
+        $ids = array_map(function ($item) {
             return $item->id;
         }, $users);
-        $emails = array_map(function($item) {
+        $emails = array_map(function ($item) {
             return $item->email;
         }, $users);
-        $usernames = array_map(function($item) {
+        $usernames = array_map(function ($item) {
             return $item->username;
         }, $users);
         $this->assertEquals(true, in_array($user1->id, $ids));
@@ -201,7 +200,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_get_quizzes_by_courses() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         $duels = mod_mooduell_external::get_quizzes_by_courses([$course->id], -1);
 
@@ -227,7 +226,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_answer_question() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
@@ -253,7 +252,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_get_game_data() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
@@ -293,7 +292,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_get_highscores() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
@@ -385,7 +384,7 @@ class mooduell_external_test extends advanced_testcase {
      */
     public function test_user_functions() {
 
-        list($duel1, $user1, $user2, $cmd1, $course) = $this->returntestdata();
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
         $this->setUser($user1);
         // Get user token.
         $res = mod_mooduell_external::get_usertoken();

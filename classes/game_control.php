@@ -50,7 +50,6 @@ define("EMPTY_RESULT", " -  -  -  -  -  -  -  -  - ");
  * @package mod_mooduell
  */
 class game_control {
-
     /**
      *
      * @var stdClass
@@ -83,19 +82,22 @@ class game_control {
 
         // If we construct with a game id from the Webservice, we load all the data.
         if ($gameid && !$gamedata) {
-
             $data = $DB->get_record('mooduell_games', [
                     'id' => $gameid,
                     'mooduellid' => $this->mooduell->cm->instance,
             ]);
 
             if (!$data->id) {
-
                 // This error will also kick in if we have the gameid...
                 // ... but it's not asked for in the right quiz (mooduell instance id).
 
-                throw new moodle_exception('nosuchgame', 'mooduell', null, null,
-                        "We couldn't find the game you asked for in our database.");
+                throw new moodle_exception(
+                    'nosuchgame',
+                    'mooduell',
+                    null,
+                    null,
+                    "We couldn't find the game you asked for in our database."
+                );
             }
             $data->gameid = $gameid;
 
@@ -104,13 +106,19 @@ class game_control {
             $context = $mooduell->context;
 
             // A Teacher can access a game where he/she is was not involved.
-            if (!has_capability('mod/mooduell:managemooduellsettings', $context)
-            && ($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)) {
-                throw new moodle_exception('notallowedtoaccessthisgame', 'mooduell', null, null,
-                        "Your are not participant of this game, you can't access it's data");
+            if (
+                !has_capability('mod/mooduell:managemooduellsettings', $context)
+                && ($USER->id != $data->playeraid) && ($USER->id != $data->playerbid)
+            ) {
+                throw new moodle_exception(
+                    'notallowedtoaccessthisgame',
+                    'mooduell',
+                    null,
+                    null,
+                    "Your are not participant of this game, you can't access it's data"
+                );
             }
         } else if ($gamedata) {
-
             $gameid = $gamedata->id;
             $data = $gamedata;
             $data->gameid = $gameid;
@@ -124,7 +132,6 @@ class game_control {
         }
 
         $this->gamedata = $data;
-
     }
 
     /**
@@ -159,28 +166,27 @@ class game_control {
             // If the cachetime has not yet expired...
             $timeexpire = $timemodified + $cachetime;
             if ($timeexpire > $now) {
-
                 $enrolledusers = $cache->get($cachekey);
 
                 return $enrolledusers;
             }
             // We don't have to purge the cache, as it will be overwritten below.
-
         }
 
         $context = $mooduell->context;
-        $users = mooduell::get_enrolled_users_with_profile_mooduell_alias($context, '', 0, 'u.*', null, 0 , 0, true);
+        $users = mooduell::get_enrolled_users_with_profile_mooduell_alias($context, '', 0, 'u.*', null, 0, 0, true);
 
         $filteredusers = [];
 
         foreach ($users as $user) {
-
             // Instead of using the profile_load_custom_fields function, we included this call directly in the sql above.
             $user->profile_field_mooduell_alias = $user->mooduellalias ?? '';
 
             // First we check if the user needs an alternatename and if he has one.
-            if ($mooduell->settings->usefullnames == 0
-            && strlen($user->profile_field_mooduell_alias) == 0) {
+            if (
+                $mooduell->settings->usefullnames == 0
+                && strlen($user->profile_field_mooduell_alias) == 0
+            ) {
                 continue;
             } else {
                 // For backward compatibility we didn't change the "alternatename" key, but we now return ...
@@ -218,8 +224,14 @@ class game_control {
                 if (!$existingfile) {
                     $user->profileimageurl = $userpicture->get_url($PAGE)->out(false);
                 } else {
-                    $moodleurl = moodle_url::make_pluginfile_url($systemcontext->id, 'mod_mooduell', 'aliasavatar', $user->id, '/',
-                    $filename);
+                    $moodleurl = moodle_url::make_pluginfile_url(
+                        $systemcontext->id,
+                        'mod_mooduell',
+                        'aliasavatar',
+                        $user->id,
+                        '/',
+                        $filename
+                    );
                     $pictureurl = $moodleurl->__toString();
                     $user->profileimageurl = $pictureurl;
                 }
@@ -230,7 +242,6 @@ class game_control {
 
         // Save to cache, if cache is used at all.
         if ($cachetime > 0) {
-
             $cache->set($cachekey, $filteredusers);
             $cache->set($cachekeytimemodified, $now);
         }
@@ -336,8 +347,13 @@ class game_control {
             $returnarray['correctlyanswered'] = $correctlyanswered;
             $returnarray['playedquestions'] = $playedquestions;
         } catch (\exception $e) {
-            throw new moodle_exception('nomooduellinstance', 'mooduell', null, null,
-                    "No MooDuell instance seems to exist on your plattform");
+            throw new moodle_exception(
+                'nomooduellinstance',
+                'mooduell',
+                null,
+                null,
+                "No MooDuell instance seems to exist on your plattform"
+            );
         }
 
         // We don't want to return undefined, so we check if we have to fix something.
@@ -367,8 +383,13 @@ class game_control {
         // First we check if the playerbid provided is valid, if not, we throw and exception.
 
         if (!$this->mooduell->user_exists($playerbid)) {
-            throw new moodle_exception('adversaryiddoesnotexist', 'mooduell', null, null,
-                    "You provided a user id which could not be found in our DB");
+            throw new moodle_exception(
+                'adversaryiddoesnotexist',
+                'mooduell',
+                null,
+                null,
+                "You provided a user id which could not be found in our DB"
+            );
         }
 
         $data = $this->gamedata;
@@ -394,7 +415,6 @@ class game_control {
 
         // Write all our questions to our DB and link it to our gameID.
         foreach ($questions as $question) {
-
             // We set data back.
             $data = new stdClass();
             $data->questionid = $question->questionid;
@@ -426,8 +446,12 @@ class game_control {
         ]);
 
         if (count($categories) == 0) {
-            throw new moodle_exception('nocategoriesassociated', null, null,
-                    "There are no Categories associated to this quiz. We can't find any questions.");
+            throw new moodle_exception(
+                'nocategoriesassociated',
+                null,
+                null,
+                "There are no Categories associated to this quiz. We can't find any questions."
+            );
         }
 
         // First we calculate the number of question every category gets.
@@ -449,9 +473,11 @@ class game_control {
         $bonusmode = false;
         while (count($questions) < $setnumberofquestions) {
             foreach ($categories as $key => $category) {
-                if (($category->numberofquestions > 0 || $bonusmode)
+                if (
+                    ($category->numberofquestions > 0 || $bonusmode)
                         && count($category->availableQuestions) > 0
-                        && count($questions) < $setnumberofquestions) {
+                        && count($questions) < $setnumberofquestions
+                ) {
                     $emergencybrake = false;
                     $i = array_rand($category->availableQuestions);
 
@@ -461,16 +487,22 @@ class game_control {
                     --$categories[$key]->numberofquestions;
                 }
                 // If we run out in one category, we enter bonus mode.
-                if (count($category->availableQuestions) == 0
-                        && $category->numberofquestions > 0) {
+                if (
+                    count($category->availableQuestions) == 0
+                        && $category->numberofquestions > 0
+                ) {
                     $bonusmode = true;
                 }
             }
             if (!$emergencybrake) {
                 $emergencybrake = true;
             } else if (count($questions) != $setnumberofquestions) {
-                throw new moodle_exception('wrongnumberofquestions', null, null,
-                        "For some unknown reason we didn't receive the right number of questions");
+                throw new moodle_exception(
+                    'wrongnumberofquestions',
+                    null,
+                    null,
+                    "For some unknown reason we didn't receive the right number of questions"
+                );
             }
         }
 
@@ -502,8 +534,13 @@ class game_control {
         // If there is a game with a wrong number of questions, we should clean it right away to avoid further damage.
         if (count($mquestions) != 9) {
             $DB->delete_records('mooduell_games', ['id' => $this->gamedata->id]);
-            throw new moodle_exception('wrongnumberofquestions1', 'mooduell', null, null,
-                    "we received the wrong number of questions linked to our Mooduell game");
+            throw new moodle_exception(
+                'wrongnumberofquestions1',
+                'mooduell',
+                null,
+                null,
+                "we received the wrong number of questions linked to our Mooduell game"
+            );
         }
 
         $questions = [];
@@ -528,7 +565,7 @@ class game_control {
             $searcharray[] = $mquestion->questionid;
         }
 
-        list($inorequal, $params) = $DB->get_in_or_equal($searcharray, SQL_PARAMS_NAMED);
+        [$inorequal, $params] = $DB->get_in_or_equal($searcharray, SQL_PARAMS_NAMED);
 
         if ($CFG->version >= 2022041900) {
             $sql = "SELECT q.*, qc.contextid, qc.name AS categoryname, qbe.questioncategoryid AS category
@@ -543,19 +580,23 @@ class game_control {
                      WHERE q.id $inorequal";
         }
         if (!$questionsdata = $DB->get_records_sql($sql, $params)) {
-            throw new moodle_exception('wrongnumberofquestions2', 'mooduell', null, null,
-                    "we received the wrong number of questions linked to our Mooduell game");
+            throw new moodle_exception(
+                'wrongnumberofquestions2',
+                'mooduell',
+                null,
+                null,
+                "we received the wrong number of questions linked to our Mooduell game"
+            );
         }
 
         foreach ($mquestions as $mquestion) {
-
             $question = new question_control($questionsdata[$mquestion->questionid]);
 
             $question->playeraanswered = $mquestion->playeraanswered;
             $question->playerbanswered = $mquestion->playerbanswered;
 
             // Add empty combined feedback to prevent webservice errors.
-            $combinedfeedback = new stdClass;
+            $combinedfeedback = new stdClass();
             $combinedfeedback->correctfeedback = null;
             $combinedfeedback->partiallycorrectfeedback = null;
             $combinedfeedback->incorrectfeedback = null;
@@ -607,8 +648,13 @@ class game_control {
 
         // Get the question type.
         if (!$questiontype = $DB->get_field('question', 'qtype', ['id' => $questionid])) {
-            throw new moodle_exception('missingquestiontype', 'mooduell', null, null,
-                "Question without a question type.");
+            throw new moodle_exception(
+                'missingquestiontype',
+                'mooduell',
+                null,
+                null,
+                "Question without a question type."
+            );
         }
 
         // Check if it's the right question sequence.
@@ -618,8 +664,13 @@ class game_control {
         $questions = $this->gamedata->questions;
 
         if (!$this->is_it_active_users_turn()) {
-            throw new moodle_exception('notyourturn', 'mooduell', null, null,
-                    "It's not your turn to answer a question");
+            throw new moodle_exception(
+                'notyourturn',
+                'mooduell',
+                null,
+                null,
+                "It's not your turn to answer a question"
+            );
         }
 
         $activequestion = null;
@@ -632,10 +683,17 @@ class game_control {
                     break;
                 }
                 // Sequence check to make sure we haven't skipped a question.
-                if (($USER->id == $this->gamedata->playeraid && $question->playeraanswered == null) ||
-                        ($USER->id == $this->gamedata->playerbid && $question->playerbanswered == null)) {
-                    throw new moodle_exception('outofsequence', 'mooduell', null, null,
-                            "You tried to answer a question out of sequence");
+                if (
+                    ($USER->id == $this->gamedata->playeraid && $question->playeraanswered == null) ||
+                        ($USER->id == $this->gamedata->playerbid && $question->playerbanswered == null)
+                ) {
+                    throw new moodle_exception(
+                        'outofsequence',
+                        'mooduell',
+                        null,
+                        null,
+                        "You tried to answer a question out of sequence"
+                    );
                 }
             }
 
@@ -644,15 +702,19 @@ class game_control {
             $showcorrectanswer = $this->mooduell->settings->showcorrectanswer == 1;
 
             if ($activequestion) {
-                list($resultarray, $iscorrect) = $activequestion->validate_question($answerids, $showcorrectanswer);
+                [$resultarray, $iscorrect] = $activequestion->validate_question($answerids, $showcorrectanswer);
 
                 // Get the answer-specific feedbacks.
                 $answersfeedback = $activequestion->return_answers_feedback();
             } else {
-                throw new moodle_exception('noactivequestion', 'mooduell', null, null,
-                        "Couldn't find the question you wanted to answer");
+                throw new moodle_exception(
+                    'noactivequestion',
+                    'mooduell',
+                    null,
+                    null,
+                    "Couldn't find the question you wanted to answer"
+                );
             }
-
         } else {
             $resultarray[] = -1; // Error code.
             $iscorrect = 0;
@@ -666,7 +728,6 @@ class game_control {
                 // There, we don't need the correct answerids, but just if the player has answered correctly.
                 // 1 = false, 2 = correct.
                 if (!$showcorrectanswer) {
-
                     // If correct, we set result to 2, if false, we set result to 1.
                     $iscorrect ? $result = 2 : $result = 1;
                 } else {
@@ -686,8 +747,13 @@ class game_control {
                 $iscorrect ? $result = 2 : $result = 1;
                 break;
             default:
-                throw new moodle_exception('wrongquestiontype', 'mooduell', null, null,
-                    'Question type ' . $questiontype . ' is not supported right now.');
+                throw new moodle_exception(
+                    'wrongquestiontype',
+                    'mooduell',
+                    null,
+                    null,
+                    'Question type ' . $questiontype . ' is not supported right now.'
+                );
         }
 
         // Trigger question answered event.
@@ -732,10 +798,8 @@ class game_control {
         $send = false;
         $message = '';
         foreach ($gamedata->questions as $question) {
-
             $i += $question->playeraanswered != null ? 1 : 0;
             $j += $question->playerbanswered != null ? 1 : 0;
-
         }
 
         if ($gamedata->status === 3) {
@@ -800,7 +864,6 @@ class game_control {
         $usefullnames = $this->mooduell->settings->usefullnames == 1;
 
         foreach ($users as $user) {
-
             profile_load_custom_fields($user);
 
             if ($user->id === $this->gamedata->playeraid) {
@@ -837,27 +900,27 @@ class game_control {
 
         switch ($messagetype) {
             case 'youwin':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $message = get_string($messagetype, 'mod_mooduell', $playerbname);
                 $recepientid = $playera->id;
                 break;
             case 'youlose':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $message = get_string($messagetype, 'mod_mooduell', $playerbname);
                 $recepientid = $playera->id;
                 break;
             case 'draw':
-                $message = get_string($messagetype, 'mod_mooduell',  $playerbname);
+                $message = get_string($messagetype, 'mod_mooduell', $playerbname);
                 $recepientid = $playera->id;
                 break;
             case 'YOURTURNA':
-                $message = get_string('yourturn', 'mod_mooduell',  $playerbname);
+                $message = get_string('yourturn', 'mod_mooduell', $playerbname);
                 $recepientid = $playera->id;
                 break;
             case 'YOURTURNB':
-                $message = get_string('yourturn', 'mod_mooduell',  $playeraname);
+                $message = get_string('yourturn', 'mod_mooduell', $playeraname);
                 $recepientid = $playerb->id;
                 break;
             case 'challenged':
-                $message = get_string($messagetype, 'mod_mooduell',  $playeraname);
+                $message = get_string($messagetype, 'mod_mooduell', $playeraname);
                 $recepientid = $playerb->id;
                 break;
         }
@@ -920,10 +983,8 @@ class game_control {
         $i = 0;
         $j = 0;
         foreach ($this->gamedata->questions as $question) {
-
             $i += $question->playeraanswered != null ? 1 : 0;
             $j += $question->playerbanswered != null ? 1 : 0;
-
         }
 
         // If we have incomplete packages, we can always go on...
@@ -984,11 +1045,15 @@ class game_control {
 
         // Depending if I am player A or B, we update the right field.
         if ($this->gamedata->playeraid == $USER->id) {
-
             // We throw an Error if the question is already answered.
             if ($question->playeraanswered != null) {
-                throw new moodle_exception('questionalreadyanswered', 'mooduell', null, null,
-                        "You just answered a question which was already answered");
+                throw new moodle_exception(
+                    'questionalreadyanswered',
+                    'mooduell',
+                    null,
+                    null,
+                    "You just answered a question which was already answered"
+                );
             }
 
             $update->playeraanswered = $result;
@@ -1000,11 +1065,15 @@ class game_control {
                 }
             }
         } else {
-
             // We throw an Error if the question is already answered.
             if ($question->playerbanswered != null) {
-                throw new moodle_exception('questionalreadyanswered', 'mooduell', null, null,
-                        "You just answered a question which was already answered");
+                throw new moodle_exception(
+                    'questionalreadyanswered',
+                    'mooduell',
+                    null,
+                    null,
+                    "You just answered a question which was already answered"
+                );
             }
 
             $update->playerbanswered = $result;
@@ -1043,11 +1112,11 @@ class game_control {
             $this->gamedata->status = 3;
 
             // Set winnerid.
-            list($update->winnerid,
+            [$update->winnerid,
                     $update->playeracorrect,
                     $update->playerbcorrect,
                     $update->playeraqplayed,
-                    $update->playerbqplayed)
+                    $update->playerbqplayed]
                 = $this->return_winnerid_and_correct_answers();
             $this->gamedata->winnerid = $update->winnerid;
         } else {
@@ -1057,7 +1126,7 @@ class game_control {
                 $update->status = $USER->id == $this->gamedata->playeraid ? 2 : 1;
             }
             // Even if the game is not finished, we still want to update correct (and played) answers for this game.
-            list($update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed)
+            [$update->playeracorrect, $update->playerbcorrect, $update->playeraqplayed, $update->playerbqplayed]
                 = $this->return_correct_and_played_answers();
         }
 
@@ -1079,7 +1148,6 @@ class game_control {
         // Now the mooduell_games table has been updated...
         // ... so we can trigger the game_finished event.
         if ($updatestatus && $this->is_game_finished()) {
-
             $event = game_finished::create([
                 'context' => $this->mooduell->context,
                 'objectid' => $this->mooduell->cm->id,
@@ -1101,9 +1169,14 @@ class game_control {
     private function is_game_finished() {
 
         if (count($this->gamedata->questions) != 9) {
-            throw new moodle_exception('nottherightnumberofquestions', 'mooduell', null, null,
-                    'Not the right number of questions (' . count($this->gamedata->questions) .
-                    '), we cant decide if game is finsihed or not');
+            throw new moodle_exception(
+                'nottherightnumberofquestions',
+                'mooduell',
+                null,
+                null,
+                'Not the right number of questions (' . count($this->gamedata->questions) .
+                '), we cant decide if game is finsihed or not'
+            );
         }
 
         foreach ($this->gamedata->questions as $question) {
@@ -1121,7 +1194,7 @@ class game_control {
      */
     private function return_winnerid_and_correct_answers() {
 
-        list($playeracorrect, $playerbcorrect, $playeraqplayed, $playerbqplayed) = $this->return_correct_and_played_answers();
+        [$playeracorrect, $playerbcorrect, $playeraqplayed, $playerbqplayed] = $this->return_correct_and_played_answers();
 
         $winnerid = 0;
 
@@ -1177,7 +1250,6 @@ class game_control {
         $playerbstring = '';
 
         foreach ($this->gamedata->questions as $question) {
-
             if ($question->playeraanswered == null) {
                 $playerastring .= ' - ';
             } else {
@@ -1218,8 +1290,10 @@ class game_control {
         $okstring = get_string('ok', 'mod_mooduell');
 
         foreach ($mooduell->questions as $question) {
-            if ($question->category == $category->category
-                    && $question->status == $okstring) {
+            if (
+                $question->category == $category->category
+                    && $question->status == $okstring
+            ) {
                 $returnarray[] = $question;
             }
         }
@@ -1238,7 +1312,6 @@ class game_control {
         $pushenabled = get_config('mooduell', 'enablepush');
 
         if ($pushenabled) {
-
             $fields = $this->gather_notifcation_data($messagetype);
 
             // If the user has no pushtokens, we abort.
@@ -1254,14 +1327,14 @@ class game_control {
                     'Content-Type: application/json',
             ];
             $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch, CURLOPT_POST, true );
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
-            $result = curl_exec($ch );
-            curl_close( $ch );
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            $result = curl_exec($ch);
+            curl_close($ch);
             return $result;
         }
         return;

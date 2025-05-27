@@ -30,7 +30,6 @@ use stdClass;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class send_push_notification_task extends \core\task\adhoc_task {
-
     /**
      * Execute the task.
      * {@inheritdoc}
@@ -41,16 +40,11 @@ class send_push_notification_task extends \core\task\adhoc_task {
         $taskdata = $this->get_custom_data();
 
         if ($taskdata != null) {
-
             $mooduell = new mooduell($taskdata->cm->id);
             $gamecontroller = new game_control($mooduell, $taskdata->gameid);
             $fields = $gamecontroller->gather_notifcation_data($taskdata->message);
             $fcmclient = new fcm_client();
             $fcmclient->send_push_notification($fields);
-
         }
-
     }
-
-
 }

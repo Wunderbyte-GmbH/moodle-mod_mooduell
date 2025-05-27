@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/question/format/xml/format.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_generator extends testing_module_generator {
-
     /**
      * @var int keep track of how many games have been created.
      */

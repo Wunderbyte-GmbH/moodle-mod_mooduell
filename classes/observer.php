@@ -40,7 +40,6 @@ use mod_mooduell\event\question_wrongly_answered;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_mooduell_observer {
-
     /**
      * Will be triggered when a game has been finished.
      *

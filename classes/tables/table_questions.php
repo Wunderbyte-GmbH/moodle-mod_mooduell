@@ -38,7 +38,6 @@ use stdClass;
  * MooDuell Table sql class.
  */
 class table_questions extends wunderbyte_table {
-
     /**
      * Parameter to store the action (what to show in the mooduell_table)
      * @var string action ('opengames'|'finishedgames'|'questions'|'highscores')
@@ -99,7 +98,6 @@ class table_questions extends wunderbyte_table {
             $question = new question_control($question);
 
             $this->questions[$question->questionid] = $question;
-
         }
         $id = new list_id($question, $mooduell->cm->id);
 

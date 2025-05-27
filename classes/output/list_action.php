@@ -40,7 +40,6 @@ use templatable;
  *
  */
 class list_action implements renderable, templatable {
-
     /**
      * An array with all the data.
      *
@@ -60,7 +59,7 @@ class list_action implements renderable, templatable {
 
         $this->data['counter'] = (int) $counter;
         $this->data['deletelink'] = $mooduell->cm->id;
-        list($idstring, $encodedtable, $html) = $this->render_questions_table_for_game($game, $mooduell);
+        [$idstring, $encodedtable, $html] = $this->render_questions_table_for_game($game, $mooduell);
         $this->data['thisgametable'] = $html;
         $this->data['encodedtable'] = $encodedtable;
         $this->data['idstring'] = $idstring;

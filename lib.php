@@ -183,7 +183,6 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
     $groupname = 'categoriesgroup' . $counter;
 
     while (isset($formdata->$groupname)) {
-
         $entry = new stdClass();
         $newrecord = (object) $formdata->$groupname;
         $entry->category = $newrecord->category;
@@ -200,7 +199,6 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
 
     // Write categories to categories table.
     if (count($categoriesarray) > 0) {
-
         // First we have to check if we have any category entry for our Mooduell Id.
         $foundrecords = $DB->get_records('mooduell_categories', ['mooduellid' => $mooduellid]);
         $newrecords = $categoriesarray;
@@ -215,7 +213,6 @@ function mooduell_update_categories(int $mooduellid, object $formdata) {
         $i = 0;
 
         while ($i < $max) {
-
             $foundrecord = count($foundrecords) > 0 ? array_pop($foundrecords) : null;
             $newrecord = count($newrecords) > 0 ? array_pop($newrecords) : null;
 
@@ -259,8 +256,7 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
     $completionmodes = completion_utils::mooduell_get_completion_modes();
 
     foreach ($completionmodes as $mode => $value) {
-
-        $challengeobj = new stdClass;
+        $challengeobj = new stdClass();
         $challengeobj->mooduellid = $mooduellid;
         $challengeobj->challengetype = $mode;
 
@@ -307,7 +303,7 @@ function mooduell_update_challenges(int $mooduellid, object $formdata) {
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=[]) {
+function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
 
        // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_SYSTEM) {
@@ -324,7 +320,6 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
         send_stored_file($file, 86400, 0, $forcedownload, $options);
     } else {
-
             // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
             $itemid = array_shift($args); // The first item in the $args array.
 
@@ -333,7 +328,7 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         if (!$args) {
             $filepath = '/';
         } else {
-            $filepath = '/'.implode('/', $args).'/';
+            $filepath = '/' . implode('/', $args) . '/';
         }
 
             // Retrieve the file from the Files API.
@@ -345,7 +340,6 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
             // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
             send_stored_file($file, 86400, 0, $forcedownload, $options);
     }
-
 };
 
 /**
@@ -448,11 +442,13 @@ if ($CFG->version >= 2021051700) {
             $completionmodes = custom_completion::get_defined_custom_rules();
             foreach ($completionmodes as $completionmode) {
                 // Get the target number of each completion mode.
-                if ($targetnumber = $DB->get_field(
-                    'mooduell_challenges',
-                    'targetnumber',
-                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
-                )) {
+                if (
+                    $targetnumber = $DB->get_field(
+                        'mooduell_challenges',
+                        'targetnumber',
+                        ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+                    )
+                ) {
                     $result->customdata['customcompletionrules'][$completionmode] = $targetnumber;
                 }
             }
@@ -486,19 +482,21 @@ if ($CFG->version >= 2021051700) {
         $completionmodes = completion_utils::mooduell_get_completion_modes();
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-
-            if ($challenge = $DB->get_record('mooduell_challenges', [
+            if (
+                $challenge = $DB->get_record('mooduell_challenges', [
                     'mooduellid' => $mooduellid,
                     'challengetype' => $completionmode,
-                ])) {
-
+                ])
+            ) {
                 // If the challenge is already expired take the result value from the challenge results table.
                 if ($cm->completion == 2 && $cm->completionexpected != 0 && time() > $cm->completionexpected) {
-                    if (!$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                    if (
+                        !$actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                         'mooduellid' => $mooduellid,
                         'challengeid' => $challenge->id,
                         'userid' => $USER->id,
-                    ])) {
+                        ])
+                    ) {
                         // Error prevention.
                         $actualnumber = 0;
                     }

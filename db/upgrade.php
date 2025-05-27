@@ -72,7 +72,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021051200) {
-
         // Define field qcpercentage to be added to mooduell_highscores.
         $table = new xmldb_table('mooduell_highscores');
         $field = new xmldb_field('qcpercentage', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, '0', 'qplayed');
@@ -86,7 +85,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021101800) {
-
         // Define field showgeneralfeedback to be added to table mooduell.
         $table = new xmldb_table('mooduell');
         $field = new xmldb_field('showgeneralfeedback', XMLDB_TYPE_INTEGER, 1, null, true, null, '0', 'showcorrectanswer');
@@ -100,7 +98,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021102100) {
-
         // Define field showanswersfeedback to be added to table mooduell.
         $table = new xmldb_table('mooduell');
         $field = new xmldb_field('showanswersfeedback', XMLDB_TYPE_INTEGER, 1, null, true, null, '0', 'showgeneralfeedback');
@@ -116,18 +113,39 @@ function xmldb_mooduell_upgrade($oldversion) {
     // Add fields for completion rules.
     if ($oldversion < 2021102205) {
         $table = new xmldb_table('mooduell');
-        $field = new xmldb_field('completiongamesplayed', XMLDB_TYPE_INTEGER, '4', null,
-        null, null, '0');
+        $field = new xmldb_field(
+            'completiongamesplayed',
+            XMLDB_TYPE_INTEGER,
+            '4',
+            null,
+            null,
+            null,
+            '0'
+        );
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        $field = new xmldb_field('completiongameswon', XMLDB_TYPE_INTEGER, '4', null,
-        null, null, '0');
+        $field = new xmldb_field(
+            'completiongameswon',
+            XMLDB_TYPE_INTEGER,
+            '4',
+            null,
+            null,
+            null,
+            '0'
+        );
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        $field = new xmldb_field('completionrightanswers', XMLDB_TYPE_INTEGER, '4', null,
-        null, null, '0');
+        $field = new xmldb_field(
+            'completionrightanswers',
+            XMLDB_TYPE_INTEGER,
+            '4',
+            null,
+            null,
+            null,
+            '0'
+        );
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
@@ -138,7 +156,6 @@ function xmldb_mooduell_upgrade($oldversion) {
 
     // Add field challenges to mooduell_highscores table.
     if ($oldversion < 2021110800) {
-
         // Define field challenges to be added to mooduell_highscores.
         $table = new xmldb_table('mooduell_highscores');
         $field = new xmldb_field('challenges', XMLDB_TYPE_TEXT, null, null, null, null, null, 'qcpercentage');
@@ -177,7 +194,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021112200) {
-
         // Define field completiongamesplayed to be dropped from mooduell.
         $table = new xmldb_table('mooduell');
 
@@ -276,7 +292,6 @@ function xmldb_mooduell_upgrade($oldversion) {
     }
 
     if ($oldversion < 2024030600) {
-
         // Define field validuntil to be added to mooduell_purchase.
         $table = new xmldb_table('mooduell_purchase');
         $field = new xmldb_field('validuntil', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'ispublic');

@@ -63,22 +63,24 @@ class completion_utils {
         $challengesarray = [];
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-
-            if ($challenge = $DB->get_record(
-                'mooduell_challenges',
-                ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
-            )) {
-
+            if (
+                $challenge = $DB->get_record(
+                    'mooduell_challenges',
+                    ['mooduellid' => $mooduellid, 'challengetype' => $completionmode]
+                )
+            ) {
                 // Remove fields not supported by webservice.
                 unset($challenge->mooduellid);
 
                 // If the challenge is already expired take the result value from the challenge results table.
                 if ($mooduellinstance->cm->completion == 2 && $completionexpected != 0 && time() > $completionexpected) {
-                    if (!$challenge->actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
+                    if (
+                        !$challenge->actualnumber = (int) $DB->get_field('mooduell_challenge_results', 'result', [
                         'mooduellid' => $mooduellid,
                         'challengeid' => $challenge->id,
                         'userid' => $USER->id,
-                    ])) {
+                        ])
+                    ) {
                         // Error prevention.
                         $challenge->actualnumber = 0;
                     }
@@ -133,11 +135,15 @@ class completion_utils {
                 $languages = $stringman->get_list_of_translations();
 
                 foreach ($languages as $langkey => $langval) {
-                    $stringobj = new stdClass;
+                    $stringobj = new stdClass();
                     $stringobj->lang = $langkey;
                     $stringobj->stringkey = $completionmode;
-                    $stringobj->stringval = $stringman->get_string('app:' . $completionmode, 'mooduell',
-                        $challenge->targetnumber, $langkey);
+                    $stringobj->stringval = $stringman->get_string(
+                        'app:' . $completionmode,
+                        'mooduell',
+                        $challenge->targetnumber,
+                        $langkey
+                    );
                     $localizedstrings[] = $stringobj;
                 }
 

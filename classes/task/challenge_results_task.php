@@ -29,7 +29,6 @@ use stdClass;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class challenge_results_task extends \core\task\adhoc_task {
-
     /**
      * Execute the task.
      * {@inheritdoc}
@@ -47,10 +46,8 @@ class challenge_results_task extends \core\task\adhoc_task {
             // If completionexpected timestamp has changed in the meantime, we don't do anything.
             if ($completionexpected = $DB->get_field('course_modules', 'completionexpected', ['id' => $taskdata->cmid])) {
                 if ($completionexpected == $taskdata->completionexpected) {
-
                     // This is where the magic happens.
                     $this->store_challenge_results($taskdata);
-
                 } else {
                     echo 'Challenge results task: Not executed beacuse expiration date has changed in the meantime.' . PHP_EOL;
                     return;
@@ -86,20 +83,21 @@ class challenge_results_task extends \core\task\adhoc_task {
         $players = game_control::return_users_for_game($mooduellinstance, false);
 
         foreach ($completionmodes as $completionmode => $statsfield) {
-
-            if ($challenge = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid,
+            if (
+                $challenge = $DB->get_record('mooduell_challenges', ['mooduellid' => $mooduellid,
                                                                      'challengetype' => $completionmode,
-                                                                     ])) {
+                                                                     ])
+            ) {
                 foreach ($players as $player) {
-
                     // Get the player's current statistics to set result values.
                     $studentstatistics = $mooduellinstance->return_list_of_statistics_student($player);
 
-                    if ($challengeresult = $DB->get_record('mooduell_challenge_results', ['mooduellid' => $mooduellid,
+                    if (
+                        $challengeresult = $DB->get_record('mooduell_challenge_results', ['mooduellid' => $mooduellid,
                                                                                           'challengeid' => $challenge->id,
                                                                                           'userid' => $player->id,
-                                                                                          ])) {
-
+                                                                                          ])
+                    ) {
                         if ($taskdata->completionexpected < $challengeresult->timemodified) {
                             echo 'Challenge results task: Could not update because a task with a later date has already run.'
                                 . PHP_EOL;
@@ -112,7 +110,7 @@ class challenge_results_task extends \core\task\adhoc_task {
                         // Update, if there already is a stored challenge result.
                         $DB->update_record('mooduell_challenge_results', $challengeresult);
                     } else {
-                        $challengeresult = new stdClass;
+                        $challengeresult = new stdClass();
                         $challengeresult->mooduellid = $mooduellid;
                         $challengeresult->challengeid = $challenge->id;
                         $challengeresult->userid = $player->id;

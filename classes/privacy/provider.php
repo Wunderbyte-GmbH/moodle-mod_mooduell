@@ -40,13 +40,13 @@ use core_privacy\local\request\writer;
  */
 class provider implements
         // This plugin stores personal data.
-        \core_privacy\local\metadata\provider,
+    \core_privacy\local\metadata\provider,
 
         // This plugin is a core_user_data_provider.
-        \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\plugin\provider,
 
         // This plugin is capable of determining which users have data within it.
-        \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\request\core_userlist_provider {
     /**
      * Return the fields which contain personal data.
      * @param collection $collection a reference to the collection to use to store the metadata.
@@ -273,7 +273,6 @@ class provider implements
 
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
-
             if (!$context instanceof \context_module) {
                 continue;
             }
@@ -372,7 +371,7 @@ class provider implements
         }
 
         $userids = $userlist->get_userids();
-        list($usersql, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        [$usersql, $userparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
         $select = "mooduellid = :mooduellid AND playeraid $usersql";
         $params = ['mooduellid' => $cm->instance] + $userparams;
@@ -394,7 +393,7 @@ class provider implements
         global $DB;
         $user = $contextlist->get_user();
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdg.*, cm.id AS cmid, md.name AS mooduellname, u.firstname, u.lastname
                  FROM {course_modules} cm
@@ -494,7 +493,7 @@ class provider implements
         global $DB;
         $user = $contextlist->get_user();
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdh.*, cm.id AS cmid, u.firstname, u.lastname, md.name AS mooduellname
                   FROM {course_modules} cm
@@ -557,7 +556,7 @@ class provider implements
         global $DB;
         $user = $contextlist->get_user();
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdp.*, cm.id AS cmid, u.firstname, u.lastname
                   FROM {course_modules} cm
@@ -609,7 +608,7 @@ class provider implements
         global $DB;
         $user = $contextlist->get_user();
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         $sql = "SELECT mdq.*, cm.id AS cmid, q.questiontext, md.name as mooduellname
                   FROM {course_modules} cm

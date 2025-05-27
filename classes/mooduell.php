@@ -85,7 +85,6 @@ const ACCEPTEDTYPES = [
  * @package mod_mooduell
  */
 class mooduell {
-
     /**
      * @var array mooduell instances
      */
@@ -139,9 +138,11 @@ class mooduell {
 
         $this->course = get_course($this->cm->course);
 
-        if (!$this->settings = $DB->get_record('mooduell', [
+        if (
+            !$this->settings = $DB->get_record('mooduell', [
             'id' => $this->cm->instance,
-        ])) {
+            ])
+        ) {
             throw new moodle_exception('invalidmooduell', 'mooduell', null, null, "Mooduell id: {$this->cm->instance}");
         }
         $this->context = context_module::instance($this->cm->id);
@@ -293,7 +294,6 @@ class mooduell {
         $returngames = [];
 
         foreach ($games as $game) {
-
             $returngames[] = [
                 'mooduellid' => $game->mooduellid,
                 'gameid' => $game->id,
@@ -430,8 +430,8 @@ class mooduell {
         global $DB, $CFG;
 
         // Get Subscriptions.
-        list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
-        list($insqlproduct, $inparams2) = $DB->get_in_or_equal('unlockplatformsubscription');
+        [$insqlplatform, $inparams1] = $DB->get_in_or_equal($CFG->wwwroot);
+        [$insqlproduct, $inparams2] = $DB->get_in_or_equal('unlockplatformsubscription');
 
         $params = array_merge($inparams1, $inparams2);
 
@@ -516,11 +516,14 @@ class mooduell {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-        curl_setopt($ch, CURLOPT_HTTPHEADER,
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
             [
               "Authorization: Basic " . base64_encode('at.wunderbyte.mooduellapp:4575a924-9af6-4a88-95d1-9c80aa1444b1'),
               "Content-Type: application/json",
-            ]);
+            ]
+        );
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responsedata = curl_exec($ch);
@@ -558,7 +561,7 @@ class mooduell {
             return $returnitems;
         }
         $leeway = time() - (60 * 60 * 24 * 4);
-        list($insqlplatform, $inparams1) = $DB->get_in_or_equal($CFG->wwwroot);
+        [$insqlplatform, $inparams1] = $DB->get_in_or_equal($CFG->wwwroot);
         $params = $inparams1;
         $params[] = $leeway;
         $sql = "SELECT *
@@ -860,7 +863,6 @@ class mooduell {
         $returndata = [];
         if ($data && count($data) > 0) {
             foreach ($data as $entry) {
-
                 $returndata[] = [
                     'identifier' => $entry->identifier,
                     'model' => $entry->model,
@@ -1037,7 +1039,6 @@ class mooduell {
         }
         $arraywithoutranks = [];
         foreach ($temparray as $key => $value) {
-
             // If quizid = 0, we only return active user, else we return all users.
             if ($mooduellid == 0 && $key != $USER->id) {
                 continue;
@@ -1247,7 +1248,6 @@ class mooduell {
         $categorydata = [];
 
         foreach ($mooduellcategories as $moodcat) {
-
             if (empty($moodcat->category)) {
                 continue;
             }
@@ -1798,18 +1798,18 @@ class mooduell {
      * @return array of user records
      */
     public static function get_enrolled_users_with_profile_mooduell_alias(
-            context $context,
-            $withcapability = '',
-            $groupid = 0,
-            $userfields = 'u.*',
-            $orderby = null,
-            $limitfrom = 0,
-            $limitnum = 0,
-            $onlyactive = false
-        ) {
+        context $context,
+        $withcapability = '',
+        $groupid = 0,
+        $userfields = 'u.*',
+        $orderby = null,
+        $limitfrom = 0,
+        $limitnum = 0,
+        $onlyactive = false
+    ) {
         global $DB;
 
-        list($esql, $params) = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);
+        [$esql, $params] = get_enrolled_sql($context, $withcapability, $groupid, $onlyactive);
         $sql = "SELECT $userfields, s1.data AS mooduellalias
                   FROM {user} u
                   JOIN ($esql) je ON je.id = u.id
@@ -1824,7 +1824,7 @@ class mooduell {
         if ($orderby) {
             $sql = "$sql ORDER BY $orderby";
         } else {
-            list($sort, $sortparams) = users_order_by_sql('u');
+            [$sort, $sortparams] = users_order_by_sql('u');
             $sql = "$sql ORDER BY $sort";
             $params = array_merge($params, $sortparams);
         }
