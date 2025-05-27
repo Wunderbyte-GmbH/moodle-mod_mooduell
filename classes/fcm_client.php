@@ -43,8 +43,8 @@ class fcm_client {
      * Initializes cache for Firebase Cloud Messaging tokens.
      */
     public function __construct() {
-        // Initialize a cache instance
-        $this->cache = cache::make('mod_mooduell', 'fcmtoken'); // Make sure this cache is defined in your plugin's db/caches.php
+        // Initialize a cache instance.
+        $this->cache = cache::make('mod_mooduell', 'fcmtoken');
     }
 
     /**
@@ -53,10 +53,10 @@ class fcm_client {
      * @param string $messagetype The type of message to be sent.
      * @return mixed Response from FCM or null on failure.
      */
-    public function send_push_notification(string $messagetype, array $fields) {
+    public function send_push_notification(array $fields) {
         $pushenabled = get_config('mooduell', 'enablepush');
         if ($pushenabled) {
-            if (!$fields) {
+            if (empty($fields['registration_ids'])) {
                 return null;
             }
 
@@ -66,29 +66,38 @@ class fcm_client {
                 return null;
             }
 
-            $message = [
-                'message' => [
-                    'token' => $fields['registration_ids'],
-                    'notification' => [
-                        'title' => $fields['notification']['title'],
-                        'body'  => $fields['notification']['body'],
+            $results = [];
+            foreach ($fields['registration_ids'] as $token) {
+                $message = [
+                    'message' => [
+                        'token' => $token,
+                        'notification' => [
+                            'title' => $fields['notification']['title'],
+                            'body' => $fields['notification']['body'],
+                        ],
+                        'data' => $fields['data'] ?? [],
                     ],
-                    'data' => $fields['data'] ?? [],
-                ],
-            ];
+                ];
 
-            $curl = new curl();
-            $response = $curl->post('https://fcm.googleapis.com/v1/projects/mooduellapp/messages:send', json_encode($message), [
-                'CURLOPT_HTTPHEADER' => [
-                    'Authorization: Bearer ' . $accesstoken,
-                    'Content-Type: application/json',
-                ],
-            ]);
-            if ($response === false) {
-                debugging('Curl failed: ' . $curl->error);
+                // Use Moodle's curl.
+                $curl = new curl();
+                $response = $curl->post('https://fcm.googleapis.com/v1/projects/mooduellapp/messages:send', json_encode($message), [
+                    'CURLOPT_HTTPHEADER' => [
+                        'Authorization: Bearer ' . $accesstoken,
+                        'Content-Type: application/json',
+                    ],
+                ]);
+
+                if ($response === false) {
+                    debugging('Curl failed for token ' . $token . ': ' . $curl->error);
+                } else {
+                    $results[$token] = $response;
+                }
             }
-            return $response;
+
+            return $results;
         }
+
         return null;
     }
 
@@ -104,11 +113,11 @@ class fcm_client {
         global $CFG;
         $now = time();
 
-        // Check cache first
+        // Check cache first.
         if ($cached = $this->cache->get('fcmtoken')) {
             $data = json_decode($cached, true);
             if ($data['expiry'] > $now) {
-                return $data['token']; // Return cached token if valid
+                return $data['token'];
             }
         }
         $serviceaccountfile = $CFG->dirroot . '/mod/mooduell/files/firebase.json';
@@ -125,26 +134,25 @@ class fcm_client {
 
         $jwt = $this->jwt_encode($token, $privatekey);
 
-        // Use Moodle's curl class
-        $curl = new curl();
-        $response = $curl->post('https://oauth2.googleapis.com/token', http_build_query([
-            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion' => $jwt,
-        ]), [
-            'CURLOPT_HTTPHEADER' => ['Content-Type: application/x-www-form-urlencoded']
-        ]);
+        $curl = new \curl();
+        $querystring = 'grant_type=' . urlencode('urn:ietf:params:oauth:grant-type:jwt-bearer') . '&' .
+            'assertion=' . urlencode($jwt);
+
+        $options = [
+            'CURLOPT_HTTPHEADER' => ['Content-Type: application/x-www-form-urlencoded'],
+        ];
+
+        $response = $curl->post('https://oauth2.googleapis.com/token', $querystring, $options);
 
         $result = json_decode($response, true);
         if (isset($result['access_token'])) {
-            // Cache the token
+            // Cache the token.
             $this->cache->set('fcmtoken', json_encode([
-                'token' => $result['access_token'],
-                'expiry' => $now + 3600,
+            'token' => $result['access_token'],
+            'expiry' => $now + 3600,
             ]));
-
             return $result['access_token'];
         }
-
         return null;
     }
 
@@ -163,10 +171,17 @@ class fcm_client {
             $this->base64url_encode(json_encode($payload)),
         ];
 
-        openssl_sign(implode('.', $segments), $signature, $privatekey, 'sha256');
+        $unsignedtoken = implode('.', $segments);
+
+        // Sign the token.
+        openssl_sign($unsignedtoken, $signature, $privatekey, OPENSSL_ALGO_SHA256);
+
+        // Encode the signature.
         $segments[] = $this->base64url_encode($signature);
 
+        // Return the JWT.
         return implode('.', $segments);
+
     }
 
     /**

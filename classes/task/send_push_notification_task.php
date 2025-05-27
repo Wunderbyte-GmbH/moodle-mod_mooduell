@@ -45,10 +45,8 @@ class send_push_notification_task extends \core\task\adhoc_task {
             $mooduell = new mooduell($taskdata->cm->id);
             $gamecontroller = new game_control($mooduell, $taskdata->gameid);
             $fields = $gamecontroller->gather_notifcation_data($taskdata->message);
-
-            // $gamecontroller->send_push_notification($taskdata->message);
             $fcmclient = new fcm_client();
-            $fcmclient->send_push_notification($taskdata, $fields);
+            $fcmclient->send_push_notification($fields);
 
         }
 

@@ -46,5 +46,13 @@ $definitions = [
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackquestionscache'],
     ],
+    'fcmtoken' => [
+        'mode' => cache_store::MODE_APPLICATION, // Use application cache store
+        'simplekeys' => true, // Keys are simple strings
+        'simpledata' => true, // Data is simple JSON strings
+        'staticacceleration' => true, // Helps to reduce database activity
+        'static' => true,
+    ],
+    
 ];
 
