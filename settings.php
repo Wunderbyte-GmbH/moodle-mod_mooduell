@@ -154,14 +154,6 @@ if ($ADMIN->fulltree) {
         ));
 
         $settings->add(new admin_setting_configtext(
-            'mooduell/pushtoken',
-            get_string('pushtoken', 'mod_mooduell'),
-            '',
-            '',
-            PARAM_TEXT
-        ));
-
-        $settings->add(new admin_setting_configtext(
             'mooduell/supporturl',
             get_string('supporturl', 'mod_mooduell'),
             '',
