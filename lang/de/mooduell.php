@@ -116,7 +116,6 @@ $string['noimage'] = 'Kein Bild';
 $string['nomessage'] = 'Es gibt keine Nachrichten.';
 $string['noopengames'] = 'Es gibt noch keine offenen Spiele.';
 $string['noquestions'] = 'Es gibt noch keine Fragen in diesem Quiz.';
-$string['noquestions'] = 'Keine Fragen';
 $string['nostatistics'] = 'Es tut uns leid, die Statistik konnte nicht geladen werden.';
 $string['notenoughquestions'] = 'Es gibt nicht genug Fragen in diesem Spiel. Füge der gewählten Fragenkategorie mehr Fragen hinzu oder wechsle die Kategorie.';
 $string['notok'] = 'Nicht OK';
