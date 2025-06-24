@@ -47,13 +47,16 @@ if ($ADMIN->fulltree) {
     $pluginconfig = get_config('mooduell');
     if (!empty($pluginconfig->licensekey)) {
         $licensekey = $pluginconfig->licensekey;
+        $decryptedlicensekey = wb_payment::decryptlicensekey($licensekey);
+        if (array_key_exists('exptime', $decryptedlicensekey)) {
+            $expirationdate = $decryptedlicensekey['exptime'];
 
-        $expirationdate = wb_payment::decryptlicensekey($licensekey)['exptime'];
-        if (wb_payment::pro_version_is_activated()) {
-            $licensekeydesc = "<p style='color: green; font-weight: bold'>"
-                . get_string('license_activated', 'mod_mooduell')
-                . $expirationdate
-                . ")</p>";
+            if (wb_payment::pro_version_is_activated()) {
+                $licensekeydesc = "<p style='color: green; font-weight: bold'>"
+                    . get_string('license_activated', 'mod_mooduell')
+                    . $expirationdate
+                    . ")</p>";
+            }
         } else {
             $licensekeydesc = "<p style='color: red; font-weight: bold'>"
                 . get_string('license_invalid', 'mod_mooduell')

@@ -66,7 +66,9 @@ pwIDAQAB
 
         // Step 2: Decrypt using public key.
         openssl_public_decrypt($encryptedlicensekey, $licensekey, self::MOD_MOODUELL_PUBLIC_KEY);
-
+        if (!$licensekey) {
+            return [];
+        }
         // Step 3: Do another base64 decode and decrypt using wwwroot.
         $c = base64_decode($licensekey);
         $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
@@ -74,7 +76,7 @@ pwIDAQAB
 
         // Bugfix when passing wrong license keys that are too short.
         if (strlen($iv) != 16) {
-            return false;
+            return [];
         }
 
         $sha2len = 32;
@@ -102,6 +104,9 @@ pwIDAQAB
             // DEBUG: echo "License key from plugin config: $licensekey_from_settings<br>"; END.
 
             $data = self::decryptlicensekey($licensekeyfromsettings);
+            if ($data == []) {
+                return false;
+            }
             // Return true if the current timestamp has not yet reached the expiration date.
             if (time() < strtotime($data['exptime']) && isset($data['product']) && $data['product'] == 'mooduell') {
                 return true;
