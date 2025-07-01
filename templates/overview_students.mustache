@@ -92,8 +92,12 @@
                                 <p>{{#str}} qrshare, mod_mooduell {{/str}}</p>
                             </div>
                             {{#qrimage}}
-                            <div class="col-md" style="text-align: center">
-                                <img style="width:200px" src="{{qrimage}}" />
+                            <div class="col-md qrcol" style="text-align: center">
+                                <img  class="qrimage" style="width:200px" src="{{qrimage}}" />
+                                <div class="reloadcontainer" style="display: none">
+                                    <p>{{#str}} reloadtext, mod_mooduell {{/str}}</p>
+                                    <button type="button" class="btn btn-secondary btn-reload">{{#str}} reloadbutton, mod_mooduell {{/str}}</button>
+                                </div>
                             </div>
                             {{/qrimage}}
                         </div>
@@ -153,3 +157,10 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
+
+
+{{#js}}
+    require(['mod_mooduell/qrrefresh'], function(qr) {
+    qr.init();
+    });
+{{/js}}
