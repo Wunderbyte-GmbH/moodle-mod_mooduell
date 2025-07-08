@@ -30,6 +30,26 @@ defined('MOODLE_INTERNAL') || die();
 global $ADMIN;
 
 if ($ADMIN->fulltree) {
+    require_once(__DIR__ . '/../../config.php');
+
+    // Collecting necessary settings.
+    $settingscheck = [
+        'webservices' => get_config('core', 'enablewebservices'),
+        'mobileservices' => get_config('core', 'enablemobilewebservice'),
+    ];
+
+    // Prepare data for Mustache template.
+    $templatecontext = (object)[
+        'settings_check' => $settingscheck,
+    ];
+
+    // Add a custom setting type to display the rendered template.
+    $settings->add(new admin_setting_heading(
+        'integrationcheckheading',
+        get_string('integrationcheck_integrationcheck', 'mod_mooduell'),
+        $OUTPUT->render_from_template('mod_mooduell/integration_check', $templatecontext)
+    ));
+
     // Has PRO version been activated?
     $proversion = wb_payment::pro_version_is_activated();
 
