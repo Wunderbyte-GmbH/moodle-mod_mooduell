@@ -65,6 +65,24 @@
     {{/warnings}}
 </ul>
 
+{{#users_without_capability.0}}
+<div class="alert alert-warning" role="alert">
+    <p><strong>{{#str}} caplistmissingrights, mod_mooduell {{/str}}</strong></p>
+    <p>{{#str}} caplistdescription, mod_mooduell {{/str}}</p>
+    <button class="btn btn-link btn-sm pl-0" type="button" data-toggle="collapse" data-target="#usersListCollapse" aria-expanded="false" aria-controls="usersListCollapse">
+        {{#str}} caplistuserlist, mod_mooduell {{/str}}<i class="fas fa-chevron-down"></i>
+    </button>
+    <div class="collapse" id="usersListCollapse">
+        <ul>
+            {{#users_without_capability}}
+                <li>{{.}}</li>
+            {{/users_without_capability}}
+        </ul>
+    </div>
+</div>
+{{/users_without_capability.0}}
+
+
 {{#statistics}}
 {{#str}} downloaduniviemoduell, mod_mooduell {{/str}}
 <br>

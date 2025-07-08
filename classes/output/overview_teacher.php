@@ -25,6 +25,7 @@
 
 namespace mod_mooduell\output;
 
+use context_course;
 use mod_mooduell\mooduell;
 use mod_mooduell\qr_code;
 use mod_mooduell\tables\table_games;
@@ -78,7 +79,39 @@ class overview_teacher implements renderable, templatable {
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $mooduell->return_list_of_statistics_teacher();
 
+
+        $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
+
         $this->data = $data;
+    }
+
+    /**
+     * Get a list of users who do not have the 'mooduell:viewinstance' capability.
+     *
+     * @param mooduell $mooduell
+     * @return array
+     */
+    private function get_users_without_capability(mooduell $mooduell): array {
+        global $DB;
+
+        // Get the context of the course module.
+        $context = context_course::instance($mooduell->course->id);
+
+        // Get all enrolled users in the course.
+        $enrolledusers = get_enrolled_users($context);
+
+        $userswithoutcapability = [];
+
+        foreach ($enrolledusers as $user) {
+            if (
+                !has_capability('webservice/rest:use', $context, $user)
+                || !has_capability('moodle/webservice:createmobiletoken', $context, $user)
+            ) {
+                $userswithoutcapability[] = fullname($user);
+            }
+        }
+
+        return $userswithoutcapability;
     }
 
     /**
