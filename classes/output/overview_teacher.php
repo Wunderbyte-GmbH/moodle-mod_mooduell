@@ -78,8 +78,6 @@ class overview_teacher implements renderable, templatable {
         $data['highscores'] = $this->render_highscores_table($mooduell);
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $mooduell->return_list_of_statistics_teacher();
-
-
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
 
         $this->data = $data;

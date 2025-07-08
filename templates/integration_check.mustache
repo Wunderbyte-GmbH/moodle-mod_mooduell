@@ -13,6 +13,20 @@
 }}
 {{!
     @template mod_mooduell/integration_check
+    Template for integration check in mooduell settings.
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    * settings_check - array
+
+    Example context (json):
+    {
+        "settings_check": {
+            "webservices": true,
+            "mobileservices": false
+        }
+    }
 }}
 
 <table class="table">

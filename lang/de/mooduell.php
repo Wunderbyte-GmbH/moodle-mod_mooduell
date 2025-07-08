@@ -40,9 +40,9 @@ $string['cachedef_questionscache'] = "Cache Fragen für spiele.";
 $string['cachedef_tablescache'] = "Cache für Tabellen im Plugin";
 $string['cachedef_userscache'] = "Cache für Users und ihre Permissions in der App";
 $string['cachetime'] = "Cache in Sekunden. Längere Zeiten verbessern performance.";
-$string['caplistmissingrights'] = 'Benutzer ohne Berechtigungen';
 $string['caplistdescription'] = 'Die folgenden Benutzer besitzen nicht die erforderlichen Berechtigungen (webservice/rest:use oder moodle/webservice:createmobiletoken).
 Ohne diese werden diese User MooDuell nicht verwenden können.';
+$string['caplistmissingrights'] = 'Benutzer ohne Berechtigungen';
 $string['caplistuserlist'] = 'Benutzerliste';
 $string['categoriesexplanation'] = 'Wenn du mehr als eine Kategorie auswählst, gib bitte auch eine Gewichtung an. Gewichtungen müssen NICHT zusammen 100 ergeben.';
 $string['category'] = 'Kategorie';

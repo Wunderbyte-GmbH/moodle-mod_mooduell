@@ -31,7 +31,7 @@ global $ADMIN;
 
 if ($ADMIN->fulltree) {
     require_once(__DIR__ . '/../../config.php');
-
+    require_login();
     // Collecting necessary settings.
     $settingscheck = [
         'webservices' => get_config('core', 'enablewebservices'),
