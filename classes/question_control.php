@@ -540,28 +540,32 @@ class question_control {
      * @throws coding_exception
      */
     private function check_for_right_length_of_questiontext() {
-        if (strlen($this->questiontext) < MINLENGTH) {
+        // Remove HTML tags from questiontext before checking its length.
+        $plaintextquestion = strip_tags($this->questiontext);
+
+        if (strlen($plaintextquestion) < MINLENGTH) {
             $this->warnings[] = [
-                    'message' => get_string('questiontexttooshort', 'mod_mooduell', $this->questionid),
+                'message' => get_string('questiontexttooshort', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
-        } else if (strlen($this->questiontext) > MAXLENGTH) {
+        } else if (strlen($plaintextquestion) > MAXLENGTH) {
             $this->warnings[] = [
-                    'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
+                'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
             ];
             $this->status = get_string('notok', 'mod_mooduell');
         } else if ($this->questiontype == 'ddwtos') {
-            // Parse all the answers of this type to make sure they are not too long.
             foreach ($this->answers as $answer) {
-                // We have a reduced max length for dragndrop.
-                if (strlen($this->questiontext) > MAXLENGTH / 2) {
+                // Remove HTML tags before checking the length for drag-and-drop questions.
+                if (strlen($plaintextquestion) > MAXLENGTH / 2) {
                     $this->warnings[] = [
-                            'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
+                        'message' => get_string('questiontexttoolong', 'mod_mooduell', $this->questionid),
                     ];
                     $this->status = get_string('notok', 'mod_mooduell');
                 }
 
-                if (strlen($answer->answertext) > MAXLENGTH_ANSWER / 2) {
+                // Also strip tags from each answer text.
+                $plaintextanswer = strip_tags($answer->answertext);
+                if (strlen($plaintextanswer) > MAXLENGTH_ANSWER / 2) {
                     $this->warnings[] = [
                         'message' => get_string('answertexttoolong', 'mod_mooduell', $this->questionid),
                     ];
@@ -570,6 +574,7 @@ class question_control {
             }
         }
     }
+
 
     /**
      * Verify question type.
