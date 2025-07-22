@@ -6,7 +6,41 @@ on:
       - labeled
 
 jobs:
-  call-labeled-issue-workflow:
-    uses: Wunderbyte-GmbH/catalyst-moodle-workflows/.github/workflows/labeled-issue.yml@main
-    secrets:
-      webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+  create-task:
+    runs-on: self-hosted-erpnext
+
+    steps:
+      - name: Format Payload
+        run: |
+          # Use jq to properly handle quotes and special characters
+          jq -n \
+            --arg title "${{ github.event.issue.title }}" \
+            --arg body "${{ github.event.issue.body }}" \
+            --arg number "${{ github.event.issue.number }}" \
+            --arg project "${{ github.event.label.name }}" \
+            --arg url "${{ github.event.issue.html_url }}" \
+            '{
+              "subject": ("GH#" + $number + " - " + $title),
+              "project": $project,
+              "status": "Open",
+              "description": ("<p><a href=\"" + $url + "\">GH#" + $number + "</a></p><br>" + $body)
+            }' > payload.json
+
+          # Debug: Show the payload (you can remove this after testing)
+          echo "Generated payload:"
+          cat payload.json
+
+      - name: Make API Request to ERPNext
+        run: |
+          if curl --fail -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: ${{ secrets.WEBHOOK_TOKEN }}" \
+            -d @payload.json \
+            https://erp.wunderbyte.at/api/resource/Task; then
+            echo "Task created successfully"
+          else
+            echo "Failed to create task"
+            echo "Payload content:"
+            cat payload.json
+            exit 1
+          fi
