@@ -43,8 +43,13 @@ class send_push_notification_task extends \core\task\adhoc_task {
             $mooduell = new mooduell($taskdata->cm->id);
             $gamecontroller = new game_control($mooduell, $taskdata->gameid);
             $fields = $gamecontroller->gather_notifcation_data($taskdata->message);
-            $fcmclient = new fcm_client();
-            $fcmclient->send_push_notification($fields);
+
+            if ($fields !== null) {
+                $fcmclient = new fcm_client();
+                $fcmclient->send_push_notification($fields);
+            } else {
+                debugging('No push notification sent: notification data fields are null', DEBUG_DEVELOPER);
+            }
         }
     }
 }
