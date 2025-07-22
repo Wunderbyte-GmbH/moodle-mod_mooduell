@@ -11,14 +11,20 @@ jobs:
 
     steps:
       - name: Format Payload
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
         run: |
-          # Use jq to properly handle quotes and special characters
+          # Use jq with environment variables to handle quotes and special characters
           jq -n \
-            --arg title "${{ github.event.issue.title }}" \
-            --arg body "${{ github.event.issue.body }}" \
-            --arg number "${{ github.event.issue.number }}" \
-            --arg project "${{ github.event.label.name }}" \
-            --arg url "${{ github.event.issue.html_url }}" \
+            --arg title "$ISSUE_TITLE" \
+            --arg body "$ISSUE_BODY" \
+            --arg number "$ISSUE_NUMBER" \
+            --arg project "$LABEL_NAME" \
+            --arg url "$ISSUE_URL" \
             '{
               "subject": ("GH#" + $number + " - " + $title),
               "project": $project,
