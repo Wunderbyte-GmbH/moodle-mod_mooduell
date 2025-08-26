@@ -22,6 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_question\local\bank\question_bank_helper;
 use mod_mooduell\completion\completion_utils;
 use mod_mooduell\task\challenge_results_task;
 use mod_quiz\question\bank\qbank_helper;
@@ -91,7 +92,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
      */
     private function mooduell_questions() {
 
-        global $COURSE, $DB, $CFG;
+        global $COURSE, $DB, $CFG, $PAGE;
 
         // Get MooDuell id.
         $mooduellid = $this->get_mooduell_id();
@@ -104,19 +105,28 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $mform->setExpanded('questionsettings');
 
         // First, create an array of contexts (containing course context only).
-        $arrayofcontexts[] = \context_course::instance($COURSE->id);
+        $arrayofcontexts[] = context_module::instance($PAGE->cm->id);
 
         // Now, retrieve a list of categories with a function from questionlib.
         $listofcategories = [];
-        if ($CFG->version >= 2022041900) {
+        if ($CFG->version >= 2025041400) {
+            $sharedbanks = question_bank_helper::get_activity_instances_with_shareable_questions([$COURSE->id]);
+            $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
+            $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, true, 0, false);
+        } else if ($CFG->version >= 2022041900) {
             $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
         } else {
             $cats = question_category_options($arrayofcontexts, false, 0, false);
         }
-        $cats = array_pop($cats);
+        $categories = [];
+        foreach ($cats as $cat) {
+            if (is_array($cat)) {
+                $categories = array_merge($categories, $cat);
+            }
+        }
 
-        if (!empty($cats)) {
-            foreach ($cats as $key => $value) {
+        if (!empty($categories)) {
+            foreach ($categories as $key => $value) {
                 // Repair the keys, so they'll work in our dropdown.
                 $keypair = explode(',', $key);
                 $newkey = $keypair[0];
