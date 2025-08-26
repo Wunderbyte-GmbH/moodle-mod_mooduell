@@ -69,7 +69,7 @@
 <div class="alert alert-warning" role="alert">
     <p><strong>{{#str}} caplistmissingrights, mod_mooduell {{/str}}</strong></p>
     <p>{{#str}} caplistdescription, mod_mooduell {{/str}}</p>
-    <button class="btn btn-link btn-sm pl-0" type="button" data-toggle="collapse" data-target="#usersListCollapse" aria-expanded="false" aria-controls="usersListCollapse">
+    <button class="btn btn-link btn-sm pl-0" type="button" data-bs-toggle="collapse" data-bs-target="#usersListCollapse" aria-expanded="false" aria-controls="usersListCollapse">
         {{#str}} caplistuserlist, mod_mooduell {{/str}}<i class="fas fa-chevron-down"></i>
     </button>
     <div class="collapse" id="usersListCollapse">
@@ -81,7 +81,6 @@
     </div>
 </div>
 {{/users_without_capability.0}}
-
 
 {{#statistics}}
 {{#str}} downloaduniviemoduell, mod_mooduell {{/str}}
@@ -112,7 +111,7 @@
             </div>
          </div>
           <div class="col-md" style="display: flex; justify-content:center; align-items: center; margin-bottom: 10px">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 {{#str}} showqr, mod_mooduell {{/str}}
             </button>
         </div>
@@ -124,7 +123,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">QR Code Login</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -145,7 +144,7 @@
                             {{/qrimage}}
                         </div>
                         <div class="modal-footer qrcode">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
                         </div>
                     </div>
                 </div>
@@ -155,23 +154,23 @@
 
 <ul class="nav nav-tabs" id="mooduellTab" role="tablist">
     <li class="nav-item">
-            <a class="nav-link active" id="statistics-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="true"><h4>{{#str}}
-                statistics, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link active" id="statistics-tab" data-bs-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="true"><h4>{{#str}}
+            statistics, mod_mooduell {{/str}}</h4></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="opengames-tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames" aria-selected="true"><h4>{{#str}}
+        <a class="nav-link" id="opengames-tab" data-bs-toggle="tab" href="#opengames" role="tab" aria-controls="opengames" aria-selected="true"><h4>{{#str}}
             opengames, mod_mooduell {{/str}}</h4></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="finishedgames-tab" data-toggle="tab" href="#finishedgames" role="tab" aria-controls="finishedgames" aria-selected="false"><h4>{{#str}}
+        <a class="nav-link" id="finishedgames-tab" data-bs-toggle="tab" href="#finishedgames" role="tab" aria-controls="finishedgames" aria-selected="false"><h4>{{#str}}
             finishedgames, mod_mooduell {{/str}}</h4></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><h4>{{#str}}
+        <a class="nav-link" id="questions-tab" data-bs-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><h4>{{#str}}
             questions, mod_mooduell {{/str}}</h4></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="highscores-tab" data-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
+        <a class="nav-link" id="highscores-tab" data-bs-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
     </li>
 </ul>
 
