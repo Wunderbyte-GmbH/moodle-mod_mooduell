@@ -32,7 +32,9 @@
 }}
 
 
-<a href="#" id="mooduellModalLabel" data-bs-toggle="modal" data-bs-target="#mooduell-modal{{counter}}">
+<a href="#" id="mooduellModalLabel" data-bs-toggle="modal" data-bs-target="#mooduell-modal{{counter}}"
+    data-toggle="modal" data-target="#mooduell-modal{{counter}}"
+    >
     <i class="fa fa-info"></i>
 </a>
 
@@ -41,7 +43,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary justify-content-end">
-                <button type="button" class="btn btn-closex text-white" data-bs-dismiss="modal">X</button>
+                <button type="button" class="btn btn-closex text-white" data-dismiss="modal" data-bs-dismiss="modal">X</button>
             </div>
             <div class="modal-body">
                 <!-- The actual content goes here. -->
@@ -50,7 +52,7 @@
                 </div>
             </div>
             <div class="modal-footer bg-primary">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

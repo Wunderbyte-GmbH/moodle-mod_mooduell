@@ -69,7 +69,8 @@
             </div>
          </div>
           <div class="col-md" style="display: flex; justify-content:center; align-items: center; margin-bottom: 10px">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-toggle="modal" data-target="#exampleModal">
                 {{#str}} showqr, mod_mooduell {{/str}}
             </button>
         </div>
@@ -81,7 +82,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">QR Code Login</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -102,7 +103,7 @@
                             {{/qrimage}}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
                         </div>
                     </div>
                 </div>
@@ -112,26 +113,26 @@
 
 <ul class="nav nav-tabs" id="mooduellTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="statistics-tab" data-bs-toggle="tab" href="#statistics" role="tab"
+        <a class="nav-link active" id="statistics-tab" data-bs-toggle="tab" data-toggle="tab"  href="#statistics" role="tab"
             aria-controls="statistics" aria-selected="true">
             <h4>{{#str}}
                 statistics, mod_mooduell {{/str}}</h4>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="opengames-tab" data-bs-toggle="tab" href="#opengames" role="tab" aria-controls="opengames"
+        <a class="nav-link" id="opengames-tab" data-bs-toggle="tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames"
             aria-selected="true">
             <h4>{{#str}} opengames, mod_mooduell {{/str}}</h4>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="finishedgames-tab" data-bs-toggle="tab" href="#finishedgames" role="tab"
+        <a class="nav-link" id="finishedgames-tab" data-bs-toggle="tab" data-toggle="tab" href="#finishedgames" role="tab"
             aria-controls="finishedgames" aria-selected="false">
             <h4>{{#str}} finishedgames, mod_mooduell {{/str}}</h4>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="highscores-tab" data-bs-toggle="tab" href="#highscores" role="tab"
+        <a class="nav-link" id="highscores-tab" data-bs-toggle="tab" data-toggle="tab" href="#highscores" role="tab"
             aria-controls="highscores" aria-selected="false">
             <h4>{{#str}} highscores, mod_mooduell {{/str}}</h4>
         </a>
