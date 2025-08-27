@@ -119,7 +119,7 @@ final class mooduell_external_test extends advanced_testcase {
         $this->assertEquals(1, $attempt->status);
         $this->assertEquals(0, $attempt->winnerid);
         $this->assertIsArray($attempt->questions);
-        $this->assertObjectNotHasAttribute('warnings', $attempt);
+        $this->assertFalse(property_exists($attempt, 'warnings'), 'Warnings property exists when it should not.');
     }
 
     /**
