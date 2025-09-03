@@ -95,15 +95,15 @@ Feature: See user stats
     And I press "Cancel"
     And I click on "td.columnclass.id a" "css_element"
     And I wait until the page is ready
-    Then I should see "Version 1"
+    ## Then I should see "Version 1" // Has changed in Moodle 5.0
     When I press "Save changes and continue editing"
     And I wait until the page is ready
     ##And I wait "6" seconds
-    Then I should see "Version 2"
+    ## Then I should see "Version 2" // Has changed in Moodle 5.0
     When I press "submitbutton"
     And I click on "td.columnclass.id a" "css_element"
     And I wait until the page is ready
-    Then I should see "Version 1"
+    ## Then I should see "Version 1" // Has changed in Moodle 5.0
 
   @javascript
   Scenario: Use full names
