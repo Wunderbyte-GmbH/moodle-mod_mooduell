@@ -33,6 +33,11 @@ function xmldb_mooduell_install() {
 
     require_once($CFG->libdir . '/testing/classes/util.php');
 
+    if ($DB->record_exists('user_info_field', ['shortname' => 'mooduell_alias'])) {
+        // The field already exists, so we do not need to create it again.
+        return true;
+    }
+
     // First we need a test generator.
     $testgenerator = testing_util::get_data_generator();
 
