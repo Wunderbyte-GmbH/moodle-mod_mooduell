@@ -1,3 +1,6 @@
+## Version 2.2.1 (2025090300)
+* Supports Moodle 5.0
+
 ## Version 2.1.11 (2025021900)
 * Bugfix: Make sure highscore table is diffent for student and teacher
 
