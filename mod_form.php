@@ -109,7 +109,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         if ($CFG->version >= 2025041400) {
             $sharedbanks = question_bank_helper::get_activity_instances_with_shareable_questions([$COURSE->id]);
             $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
-            $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, true, 0, false);
+            $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
         } else if ($CFG->version >= 2022041900) {
             $arrayofcontexts[] = context_course::instance($COURSE->id);
             $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
