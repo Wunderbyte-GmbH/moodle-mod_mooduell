@@ -107,9 +107,12 @@ class mod_mooduell_mod_form extends moodleform_mod {
         // Now, retrieve a list of categories with a function from questionlib.
         $listofcategories = [];
         if ($CFG->version >= 2025041400) {
+            // Moodle 5.0 and later.
             $sharedbanks = question_bank_helper::get_activity_instances_with_shareable_questions([$COURSE->id]);
-            $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
-            $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
+            if (!empty($sharedbanks)) {
+                $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
+                $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
+            }
         } else if ($CFG->version >= 2022041900) {
             $arrayofcontexts[] = context_course::instance($COURSE->id);
             $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
