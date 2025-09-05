@@ -108,6 +108,7 @@ class mod_mooduell_mod_form extends moodleform_mod {
         $listofcategories = [];
         if ($CFG->version >= 2025041400) {
             // Moodle 5.0 and later.
+            $cats = [];
             $sharedbanks = question_bank_helper::get_activity_instances_with_shareable_questions([$COURSE->id]);
             if (!empty($sharedbanks)) {
                 $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
