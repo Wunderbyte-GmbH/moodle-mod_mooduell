@@ -91,7 +91,7 @@
                     <p class="card-text">
                         {{#str}} stat_easiest_question_desc1, mod_mooduell {{/str}}{{eq_correct_count}}{{#str}} stat_easiest_question_desc2, mod_mooduell {{/str}}
                     </p>
-                    <a href="{{path}}?courseid={{courseid}}&id={{eq_id}}&returnurl=/mod/mooduell/view.php?id={{cmid}}#statistics"
+                    <a href="{{{equrl}}}"
                     target="_blank" class="btn bg-light text-info" style="border-style: none;">
                     {{#str}} stat_edit_question, mod_mooduell {{/str}}
                     </a>
@@ -109,7 +109,7 @@
                     <p class="card-text">
                         {{#str}} stat_hardest_question_desc1, mod_mooduell {{/str}}{{hq_incorrect_count}}{{#str}} stat_hardest_question_desc2, mod_mooduell {{/str}}
                     </p>
-                    <a href="{{path}}?courseid={{courseid}}&id={{hq_id}}&returnurl=/mod/mooduell/view.php?id={{cmid}}#statistics"
+                    <a href="{{{hqurl}}}"
                         target="_blank" class="btn bg-light text-danger" style="border-style: none;">
                     {{#str}} stat_edit_question, mod_mooduell {{/str}}
                     </a>

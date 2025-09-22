@@ -1283,7 +1283,6 @@ class mooduell {
         $listofstatistics = [];
         $listofstatistics['cmid'] = $this->cm->id;
         $listofstatistics['courseid'] = $this->course->id;
-
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
             $listofstatistics['path'] = '/question/bank/editquestion/question.php';
@@ -1460,7 +1459,75 @@ class mooduell {
             $listofstatistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
 
+        $listofstatistics['equrl'] = $this->get_question_edit_url($listofstatistics['eq_id'], $this->cm->id);
+        $listofstatistics['hqurl'] = $this->get_question_edit_url($listofstatistics['hq_id'], $this->cm->id);
+
         return $listofstatistics;
+    }
+
+    /**
+     * Generate the edit URL for a question based on the Moodle version.
+     *
+     * @param int $questionid
+     * @param int $cmid
+     * @return string The URL to edit a question.
+     */
+    public function get_question_edit_url(int $questionid, int $cmid) {
+        global $CFG, $DB, $COURSE;
+
+        $path = '/question/question.php';
+        $qbankcmid = null;
+        $categoryid = null;
+        if ($CFG->version >= 2025040100) {
+            $questions = $this->return_list_of_all_questions_in_quiz();
+            if (!empty($questions)) {
+                $question = $questions[$questionid];
+                $categoryid = $question->category;
+            }
+            $sql = "SELECT DISTINCT c.instanceid
+                      FROM {mooduell_categories} mc
+                INNER JOIN {question_categories} qc ON qc.id = mc.category
+                LEFT JOIN {question_bank_entries} qbe ON qbe.questioncategoryid = qc.id
+                INNER JOIN (
+                    SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
+                      FROM {question_versions} qv1
+                 LEFT JOIN (
+                        SELECT questionbankentryid, max(version) maxversion
+                          FROM {question_versions}
+                      GROUP BY questionbankentryid
+                        ) qv2
+                    ON qv1.questionbankentryid = qv2.questionbankentryid
+                   AND qv1.version = qv2.maxversion
+                  ) qv
+                ON qbe.id = qv.questionbankentryid
+              INNER JOIN {question} q ON q.id = qv.questionid
+              INNER JOIN {context} c on c.id = qc.contextid
+                     WHERE qc.id = :categoryid AND q.id = :questionid";
+
+            $params = [
+                'questionid' => $questionid,
+                'categoryid' => $categoryid,
+            ];
+            $qbankcmid = $DB->count_records_sql($sql, $params);
+            $path = '/question/bank/editquestion/question.php';
+        } else if ($CFG->version >= 2022041900) {
+            $path = '/question/bank/editquestion/question.php';
+        }
+
+        $returnurl = "/mod/mooduell/view.php?id=$cmid#questions";
+        $urlparams = [
+            'id' => $questionid,
+            'courseid' => $COURSE->id,
+            'sesskey' => sesskey(),
+            'returnto' => 'url',
+            'returnurl' => $returnurl,
+        ];
+
+        if (!empty($qbankcmid)) {
+            $urlparams['cmid'] = $qbankcmid;
+        }
+
+        return new moodle_url($path, $urlparams);
     }
 
     /**
@@ -1558,7 +1625,6 @@ class mooduell {
         }
 
         $listofstatistics['percentage_of_correct_answers'] = $correctanswerspercentage;
-
         return $listofstatistics;
     }
 
