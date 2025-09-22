@@ -1411,6 +1411,7 @@ class mooduell {
         $entry = $DB->get_record_sql($sql, $params);
         if (!empty($entry)) {
             $listofstatistics['eq_id'] = $entry->questionid;
+             $listofstatistics['equrl'] = $this->get_question_edit_url($listofstatistics['eq_id'], $this->cm->id);
             // Remove HTML tags and shorten to a maximum of 50 characters.
             if (strlen(strip_tags($entry->questionname)) > 50) {
                 $listofstatistics['eq_name'] = substr(strip_tags($entry->questionname), 0, 50) . '... ?';
@@ -1450,6 +1451,7 @@ class mooduell {
         $entry = $DB->get_record_sql($sql, $params);
         if (!empty($entry)) {
             $listofstatistics['hq_id'] = $entry->questionid;
+            $listofstatistics['hqurl'] = $this->get_question_edit_url($listofstatistics['hq_id'], $this->cm->id);
             // Remove HTML tags and shorten to a maximum of 50 characters.
             if (strlen(strip_tags($entry->questionname)) > 50) {
                 $listofstatistics['hq_name'] = substr(strip_tags($entry->questionname), 0, 50) . '... ?';
@@ -1458,9 +1460,6 @@ class mooduell {
             }
             $listofstatistics['hq_incorrect_count'] = $entry->incorrect_count;
         }
-
-        $listofstatistics['equrl'] = $this->get_question_edit_url($listofstatistics['eq_id'], $this->cm->id);
-        $listofstatistics['hqurl'] = $this->get_question_edit_url($listofstatistics['hq_id'], $this->cm->id);
 
         return $listofstatistics;
     }
@@ -1477,13 +1476,7 @@ class mooduell {
 
         $path = '/question/question.php';
         $qbankcmid = null;
-        $categoryid = null;
         if ($CFG->version >= 2025040100) {
-            $questions = $this->return_list_of_all_questions_in_quiz();
-            if (!empty($questions)) {
-                $question = $questions[$questionid];
-                $categoryid = $question->category;
-            }
             $sql = "SELECT DISTINCT c.instanceid
                       FROM {mooduell_categories} mc
                 INNER JOIN {question_categories} qc ON qc.id = mc.category
@@ -1502,11 +1495,9 @@ class mooduell {
                 ON qbe.id = qv.questionbankentryid
               INNER JOIN {question} q ON q.id = qv.questionid
               INNER JOIN {context} c on c.id = qc.contextid
-                     WHERE qc.id = :categoryid AND q.id = :questionid";
-
+                     WHERE q.id = :questionid";
             $params = [
                 'questionid' => $questionid,
-                'categoryid' => $categoryid,
             ];
             $qbankcmid = $DB->count_records_sql($sql, $params);
             $path = '/question/bank/editquestion/question.php';
