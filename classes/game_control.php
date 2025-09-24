@@ -924,7 +924,9 @@ class game_control {
                 $recepientid = $playerb->id;
                 break;
         }
-
+        if ($recepientid == null) {
+            return null;
+        }
         $tokens = $this->return_push_tokens_of_user($recepientid);
 
         if (!$tokens || count($tokens) === 0) {
