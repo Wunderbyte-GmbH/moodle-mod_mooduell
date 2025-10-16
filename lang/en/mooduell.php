@@ -38,6 +38,7 @@ $string['app:completiongameswon'] = 'Win {$a} games to complete this challenge.'
 $string['app:completionrightanswers'] = 'Answer {$a} questions correctly to complete this challenge.';
 $string['app:completionrightanswersperc'] = 'Answer {$a}% of all questions correctly to complete this challenge.';
 $string['appstoreurl'] = "Link to the Apple App Store";
+$string['cachedef_fcmtoken'] = "Cache FCM token.";
 $string['cachedef_questionscache'] = "Cache questions for games.";
 $string['cachedef_tablescache'] = "Cache for tables in the plugin.";
 $string['cachedef_userscache'] = "Cache users and their permissions in the app.";
