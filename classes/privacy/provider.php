@@ -38,6 +38,7 @@ use core_privacy\local\request\writer;
  * The privacy provider class of mod_mooduell.
  * @package mod_mooduell
  */
+// phpcs:ignore 
 class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,
