@@ -22,8 +22,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_completion\api;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
@@ -341,7 +339,7 @@ function mooduell_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
             // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
             send_stored_file($file, 86400, 0, $forcedownload, $options);
     }
-};
+}
 
 /**
  * Serves files for question text in MooDuell.

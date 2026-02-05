@@ -30,7 +30,6 @@
  * Structure step to restore one mooduell activity
  */
 class restore_mooduell_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * define structure
      * @return mixed
@@ -114,7 +113,6 @@ class restore_mooduell_activity_structure_step extends restore_activity_structur
         $newgameitemid = $DB->insert_record('mooduell_games', $data);
 
         $this->set_mapping('mooduell_game', $oldid, $newgameitemid);
-
     }
 
     /**

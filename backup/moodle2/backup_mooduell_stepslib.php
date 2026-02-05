@@ -30,7 +30,6 @@
  * Define the complete mooduell structure for backup, with file and id annotations
  */
 class backup_mooduell_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * define structure.
      * @return backup_nested_element

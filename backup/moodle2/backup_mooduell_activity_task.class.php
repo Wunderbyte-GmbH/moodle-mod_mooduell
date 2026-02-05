@@ -31,7 +31,6 @@ require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/backup_mooduell_steps
  * Provides the steps to perform one complete backup of the Page instance
  */
 class backup_mooduell_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity
      */
@@ -57,11 +56,11 @@ class backup_mooduell_activity_task extends backup_activity_task {
         $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of pxages.
-        $search = "/(".$base."\/mod\/mooduell\/index.php\?id\=)([0-9]+)/";
+        $search = "/(" . "$base" . "\/mod\/mooduell\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@MODUELLINDEX*$2@$', $content);
 
         // Link to pxage view by moduleid.
-        $search = "/(".$base."\/mod\/mooduell\/view.php\?id\=)([0-9]+)/";
+        $search = "/(" . "$base" . "\/mod\/mooduell\/view.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@MOODUELLVIEWBYID*$2@$', $content);
 
         return $content;

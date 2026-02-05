@@ -30,7 +30,6 @@ require_once($CFG->dirroot . '/mod/mooduell/backup/moodle2/restore_mooduell_step
  * mooduell restore task that provides all the settings and steps to perform one complete restore of the activity
  */
 class restore_mooduell_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have.
      */
@@ -53,9 +52,11 @@ class restore_mooduell_activity_task extends restore_activity_task {
     public static function define_decode_contents() {
         $contents = [];
 
-        $contents[] = new restore_decode_content('mooduell',
-                ['intro', 'content'],
-                'mooduell');
+        $contents[] = new restore_decode_content(
+            'mooduell',
+            ['intro', 'content'],
+            'mooduell'
+        );
         return $contents;
     }
 
@@ -66,11 +67,13 @@ class restore_mooduell_activity_task extends restore_activity_task {
     public static function define_decode_rules() {
         $rules = [];
 
-        $rules[] = new restore_decode_rule('MOODUELLVIEWBYID',
-                '/mod/mooduell/view.php?id=$1', 'course_module');
+        $rules[] = new restore_decode_rule(
+            'MOODUELLVIEWBYID',
+            '/mod/mooduell/view.php?id=$1',
+            'course_module'
+        );
 
         return $rules;
-
     }
 
     /**
@@ -80,8 +83,12 @@ class restore_mooduell_activity_task extends restore_activity_task {
     public static function define_restore_log_rules() {
         $rules = [];
 
-        $rules[] = new restore_log_rule('mooduell',
-                'view', 'view.php?id={course_module}', '{mooduell}');
+        $rules[] = new restore_log_rule(
+            'mooduell',
+            'view',
+            'view.php?id={course_module}',
+            '{mooduell}'
+        );
 
         return $rules;
     }
@@ -97,8 +104,12 @@ class restore_mooduell_activity_task extends restore_activity_task {
     public static function define_restore_log_rules_for_course() {
         $rules = [];
 
-        $rules[] = new restore_log_rule('mooduell',
-                'view all', 'index.php?id={course}', null);
+        $rules[] = new restore_log_rule(
+            'mooduell',
+            'view all',
+            'index.php?id={course}',
+            null
+        );
 
         return $rules;
     }
