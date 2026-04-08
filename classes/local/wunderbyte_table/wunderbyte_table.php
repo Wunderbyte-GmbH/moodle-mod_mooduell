@@ -674,7 +674,7 @@ class wunderbyte_table extends table_sql {
 
         $encodedtable = $this->return_encoded_table();
 
-        // mooduell embeds the table renderer without the wunderbyte settings table,
+        // Mooduell embeds the table renderer without the wunderbyte settings table,
         // so table-level persisted settings must stay disabled here.
         if (!empty(get_config('mod_mooduell', 'allowedittable'))) {
             tablesettings::apply_setting($this);

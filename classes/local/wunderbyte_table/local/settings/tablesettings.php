@@ -101,7 +101,7 @@ class tablesettings {
      * @throws dml_exception
      */
     public static function return_jsontablesettings_from_db(int $id = 0, string $hash = '', int $userid = -1) {
-        // mooduell does not create the dedicated wunderbyte settings table.
+        // Mooduell does not create the dedicated wunderbyte settings table.
         // Keep DB-backed table settings disabled and return empty settings.
         return '{}';
     }
