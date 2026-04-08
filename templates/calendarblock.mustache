@@ -1,0 +1,67 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/calendar
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * data-rowswithdates, data-tableid
+
+    Example context (json):
+    {
+        "uniqueid": "12345",
+        "rowswithdates": "[ [ '2020-05-01', 'Event 1' ], [ '2020-05-15', 'Event 2' ] ]"
+    }
+}}
+<div class="">
+    <div class="calendar" id="wb-calendar-{{uniqueid}}" data-rowswithdates="{{rowswithdates}}">
+      <div class="calendar-header">
+        <span class="month-picker" id="month-picker"> May </span>
+        <div class="year-picker" id="year-picker">
+          <span class="year-change" id="pre-year">
+              <i class="fa-solid fa-angle-left"></i>
+          </span>
+          <span id="year">2020 </span>
+          <span class="year-change" id="next-year">
+              <i class="fa-solid fa-angle-right"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="calendar-body">
+        <div class="calendar-week-days">
+        <div>{{#str}}sunday, mooduell{{/str}}</div>
+        <div>{{#str}}monday, mooduell{{/str}}</div>
+        <div>{{#str}}tuesday, mooduell{{/str}}</div>
+        <div>{{#str}}wednesday, mooduell{{/str}}</div>
+        <div>{{#str}}thursday, mooduell{{/str}}</div>
+        <div>{{#str}}friday, mooduell{{/str}}</div>
+        <div>{{#str}}saturday, mooduell{{/str}}</div>
+        </div>
+        <div class="calendar-days">
+        </div>
+      </div>
+      <div class="month-list"></div>
+    </div>
+  </div>
+{{#js}}
+      require(['mod_mooduell/initcalendar'], function(fn) {
+            fn.init('wb-calendar-{{uniqueid}}');
+      });
+{{/js}}

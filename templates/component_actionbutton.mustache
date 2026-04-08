@@ -1,0 +1,151 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/actionbutton
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+
+    Example context (json):
+    {
+    "showactionbuttons": [
+        {
+        "ischeckbox": false,
+        "href": "https://example.com",
+        "class": "button-class",
+        "methodname": "method1",
+        "name": "name1",
+        "id": "button1",
+        "nomodal": false,
+        "selectionmandatory": true,
+        "data": [
+            {
+            "key": "data1",
+            "value": "value1"
+            },
+            {
+            "key": "data2",
+            "value": "value2"
+            }
+        ],
+        "iclass": "fa fa-icon",
+        "label": "Button 1 Label"
+        },
+        {
+        "ischeckbox": true,
+        "id": "checkbox1",
+        "methodname": "method2",
+        "name": "name2",
+        "checked": true,
+        "disabled": false,
+        "class": "checkbox-class",
+        "data": [
+            {
+            "key": "data3",
+            "value": "value3"
+            },
+            {
+            "key": "data4",
+            "value": "value4"
+            }
+        ],
+        "label": "Checkbox 1 Label"
+        }
+    ]
+    }
+}}
+{{#showactionbuttons}}
+    {{#ischeckbox}}
+        <div class="form-check">
+            <input
+            id="wb-checkbox-{{id}}"
+            name="{{methodname}}-{{name}}"
+            type="checkbox"
+            {{#checked}} checked {{/checked}}
+            {{#disabled}} disabled {{/disabled}}
+            class="{{class}} form-check-input"
+            data-type="wb_action_button"
+            data-id="{{id}}"
+            data-ischeckbox = true
+            data-methodname="{{methodname}}"
+            {{#data}}
+                data-{{key}}="{{value}}"
+            {{/data}}>
+            <label class="form-check-label" for="wb-checkbox-{{id}}">{{label}}</label>
+        </div>
+    {{/ischeckbox}}
+    {{^ischeckbox}}
+        {{^isselect}}
+            {{^istextinput}}
+                <span>
+                    <a href="{{href}}"
+                        class="{{class}}"
+                        data-type="wb_action_button"
+                        title="{{methodname}}-{{name}}"
+                        data-id="{{id}}"
+                        data-methodname="{{methodname}}"
+                        data-formname="{{formname}}"
+                        data-nomodal="{{nomodal}}"
+                        data-selectionmandatory="{{selectionmandatory}}"
+                        {{#data}}
+                            data-{{key}}="{{value}}"
+                        {{/data}}>
+                        <i class="{{iclass}}" aria-label="{{arialabel}}" title="{{title}}"></i>
+                        {{label}}
+                    </a>
+                </span>
+            {{/istextinput}}
+        {{/isselect}}
+    {{/ischeckbox}}
+
+    {{#isselect}}
+    <div class="mb-3">
+            <select
+                id="{{id}}"
+                name="{{name}}"
+                class="form-select"
+                data-id="{{id}}"
+                data-type="wb_action_button"
+                data-methodname="{{methodname}}"
+            >
+                {{#options}}
+                    <option value="{{value}}"
+                        {{#disabled}}disabled{{/disabled}}
+                        {{#selected}}selected{{/selected}}>
+                        {{text}}
+                    </option>
+                {{/options}}
+            </select>
+        </div>
+    {{/isselect}}
+
+    {{#istextinput}}
+        <div class="mb-3">
+            <input type="text"
+                id="{{id}}"
+                name="{{name}}"
+                class="{{class}}"
+                placeholder="{{data.placeholder}}"
+                maxlength="{{data.maxlength}}"
+                data-type="wb_action_button"
+                data-methodname="{{methodname}}"
+                {{#data}}
+                    data-{{key}}="{{value}}"
+                {{/data}}>
+        </div>
+    {{/istextinput}}
+{{/showactionbuttons}}

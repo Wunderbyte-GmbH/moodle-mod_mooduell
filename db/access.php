@@ -111,4 +111,18 @@ $capabilities = [
                         'teacher' => CAP_ALLOW,
                 ],
         ],
+        'mod/mooduell:canaccess' => [
+                'captype' => 'read',
+                'contextlevel' => CONTEXT_SYSTEM,
+                'archetypes' => [
+                        'user' => CAP_ALLOW,
+                ],
+        ],
+        'mod/mooduell:canedittable' => [
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_SYSTEM,
+                'archetypes' => [
+                        'manager' => CAP_ALLOW,
+                ],
+        ],
 ];

@@ -53,4 +53,32 @@ $definitions = [
         'staticacceleration' => true,
         'static' => true,
     ],
+    'cachedrawdata' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 500,
+        'invalidationevents' => ['changesinwunderbytetable'],
+    ],
+    'cachedfulltable' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['smallchangesinwunderbytetable', 'changesinwunderbytetable'],
+    ],
+    'encodedtables' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 100,
+        'invalidationevents' => ['setbackencodedtables'],
+    ],
+    'cachedfilters' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 100,
+        'invalidationevents' => ['setbackfilters'],
+    ],
 ];

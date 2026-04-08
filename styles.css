@@ -35,3 +35,985 @@
 #page-mod-mooduell-view .wunderbyte-table-table span.correct {
     color: green;
 }
+
+/* BEGIN embedded wunderbyte table styles */
+.wunderbyte_table_filter_on .wunderbyte_table_container {
+    display: grid;
+    grid-template-columns: 0.5fr 3fr;
+    grid-template-areas: "aside content";
+    gap: 15px;
+}
+
+.wunderbyte_table_container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "content";
+    gap: 0;
+}
+
+.wunderbyte_table_container aside {
+    grid-area: aside;
+    max-width: 310px;
+    padding: 20px;
+}
+
+.wb-records-count-label {
+    width: 100%;
+}
+
+.wunderbyte_table_container .wunderbyteTableClass {
+    grid-area: content;
+}
+
+.wunderbyte_table_container .wunderbyteTableClass .wbt-pagination-navs {
+    margin-top: 1rem;
+}
+
+.wunderbyte_table_container .wunderbyteTableClass .wbt-pagination-navs > div {
+    display: inline-block;
+}
+
+.wunderbyte_table_container .wunderbyteTableClass .wbt-pagination-navs .wbt-gotopage {
+    margin: 0 1rem;
+    color: grey;
+}
+
+.wunderbyte_table_container .icons-collapse-expand {
+    margin-left: 3px;
+}
+
+.wunderbyte_table_container .dropdown-menu {
+    width: max-content;
+}
+
+@media screen and (max-width: 768px) {
+    .wunderbyte_table_container {
+        display: block;
+    }
+
+    .wunderbyte-table-table table {
+        border: 0;
+    }
+
+    .wunderbyte-table-table table caption {
+        font-size: 1.3em;
+    }
+
+    .wunderbyte-table-table table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .wunderbyte-table-table table tr {
+        border: 1px solid #ddd;
+        display: block;
+        margin-bottom: 0.625em;
+    }
+
+    .wunderbyte-table-table table td {
+        border-top: none;
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: 0.8em;
+        text-align: right;
+    }
+
+    .wunderbyte-table-table table td:last-child {
+        border-bottom: 0;
+    }
+
+    .wunderbyte-table-table table td:not(.wbcheckbox)::before {
+        /*
+        * aria-label has no advantage, it won't be read inside a table
+        content: attr(aria-label);
+        */
+        content: attr(data-localized) ":";
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .wunderbyte-table-table table td.wbcheckbox::before {
+        /*
+        * aria-label has no advantage, it won't be read inside a table
+        content: attr(aria-label);
+        */
+        content: "✓";
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .wunderbyte-table-grid table td:last-child {
+        border-bottom: 0;
+    }
+
+    .wunderbyte-table-grid table .novalue {
+        display: none;
+    }
+
+    .wunderbyte-table-grid table tr {
+        border: 1px solid;
+    }
+
+    .wunderbyteTableSearch {
+        text-align: right;
+        max-width: unset;
+        margin-left: auto;
+        min-width: calc(100vw - 100px);
+    }
+}
+
+.wunderbyte-table-grid .list-group-item + .list-group-item {
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    border-top-width: 1px;
+}
+
+.wunderbyteTableJavascript.search-data-element h3 {
+    word-break: break-word;
+}
+
+.wunderbyte-table-table table th[data-sortable] {
+    position: relative;
+    margin-right: 3px;
+    padding-left: 18px;
+}
+
+.wunderbyte-table-table table th[data-sortable]::before,
+.wunderbyte-table-table table th[data-sortable]::after {
+    position: absolute;
+    display: block;
+    opacity: 0.125;
+    left: 5px;
+    line-height: 9px;
+    font-size: 0.9em;
+}
+
+.wunderbyte-table-table th[data-sortable].desc::after {
+    opacity: 1;
+}
+
+.wunderbyte-table-table th[data-sortable].asc::before {
+    opacity: 1;
+}
+
+.wunderbyte-table-table th[data-sortable]::before {
+    content: "\f0de";
+    font: var(--fa-font-solid);
+    font-size: 14px;
+    font-family: 'FontAwesome', 'Font Awesome 6 Free';
+    top: 35%;
+    right: 0;
+}
+
+.wunderbyte-table-table th[data-sortable]::after {
+    content: "\f0dd";
+    font: var(--fa-font-solid);
+    font-size: 14px;
+    font-family: 'FontAwesome', 'Font Awesome 6 Free';
+    top: 40%;
+}
+
+.wunderbyte-table-table .scroll-y {
+    height: 600px;
+    border: 1px solid #dee2e6;
+    overflow: auto;
+}
+
+/* Set header to stick to the top of the container. */
+.wunderbyte-table-table .scroll-y thead tr th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+
+.wunderbyteTableSearch {
+    text-align: right;
+    max-width: 250px;
+    margin-left: auto;
+}
+
+.wunderbyte_table_container aside.inactive {
+    margin-left: -500px;
+    height: 0;
+    display: none;
+}
+
+.wunderbyte-table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    padding: 10px;
+    gap: 20px;
+}
+
+.wunderbyte_table_filter_on .wunderbyte-table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    padding: 10px;
+    gap: 20px;
+}
+
+/* FILTER */
+.wunderbyteTableFilter .mb-3 .collapse {
+    padding-left: 16px;
+}
+
+.wunderbyteTableFilter ul {
+    overflow-y: auto;
+    /* Show all filters without scrollbar. */
+    /* max-height: 20.5rem; */
+}
+
+.wunderbyteTableFilter .collapse-accordion-toggle[aria-expanded=true] span svg:not(:first-child) {
+    display: none;
+}
+
+.wunderbyteTableFilter .collapse-accordion-toggle[aria-expanded=false] span svg:not(:last-child) {
+    display: none;
+}
+
+.wunderbyteTableFilter li {
+    position: relative;
+    display: block;
+    min-height: 1.6rem;
+    padding-left: 2rem;
+}
+
+.wunderbyteTableFilter .form-check-label {
+    color: #77838f;
+    font-size: 1rem;
+    padding-left: 6px;
+    position: relative;
+    margin-bottom: 0;
+    vertical-align: top;
+}
+
+.wunderbyteTableFilter .form-check-input,
+.wunderbyteTableFilter .form-check .form-check-input[type="checkbox"] {
+    position: absolute;
+    left: 0;
+    z-index: 30000001;
+    width: 20px;
+    height: 1.3rem;
+    opacity: 0;
+    margin-left: 0;
+}
+
+.wunderbyteTableFilter :checked ~ .form-check-label::before {
+    border-color: #090761;
+}
+
+.wunderbyteTableFilter :checked ~ .form-check-label::after {
+    background-color: #090761;
+    border-radius: 3px;
+}
+
+.wunderbyteTableFilter .form-check-label::after {
+    top: 0.55rem;
+    background: 0 0;
+    border-radius: 3px;
+    left: -1.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    content: "";
+    position: absolute;
+    z-index: 200000;
+}
+
+.wunderbyteTableFilter .form-check-label::before {
+    position: absolute;
+    top: 0.3rem;
+    left: -1.75rem;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    content: "";
+    background-color: transparent;
+    border: #e7e7ec solid 1px;
+    border-radius: 3px;
+    z-index: 200000;
+}
+
+.wunderbyte-table-grid .list-group-item {
+    box-shadow: 0 .5rem .937rem rgba(140, 152, 164, .1);
+}
+
+.wunderbyte-table-grid .grid-entry {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    border: 1px solid;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+/* FILTER */
+.wunderbyteTableFilter .mb-3 .collapse {
+    padding-left: 16px;
+}
+
+.wunderbyteTableFilter .filtertitle {
+    font-size: large;
+}
+
+.wunderbyteTableFilter ul {
+    overflow-y: auto;
+    /* Show all filters without scrollbar. */
+    /* max-height: 20.5rem; */
+}
+
+.wunderbyteTableFilter .collapse-accordion-toggle[aria-expanded=true] span svg:not(:first-child) {
+    display: none;
+}
+
+.wunderbyteTableFilter .collapse-accordion-toggle[aria-expanded=false] span svg:not(:last-child) {
+    display: none;
+}
+
+.wunderbyteTableFilter button {
+    border-width: 0;
+    background-color: transparent;
+    width: 100%;
+    outline: 0;
+    box-shadow: none;
+}
+
+.wunderbyteTableFilter li {
+    position: relative;
+    display: block;
+    min-height: 1.6rem;
+    padding-left: 2rem;
+}
+.wunderbyteTableFilter :checked ~ .form-check-label::before {
+    border-color: #090761;
+}
+
+.wunderbyteTableFilter :checked ~ .form-check-label::after {
+    background-color: #090761;
+    border-radius: 3px;
+}
+.wunderbyteTableFilter .form-check-label::after {
+    top: 0.55rem;
+    background: 0 0;
+    border-radius: 3px;
+    left: -1.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    content: "";
+    position: absolute;
+    z-index: 200000;
+}
+
+.wunderbyteTableFilter .form-check-label::before {
+    position: absolute;
+    top: 0.3rem;
+    left: -1.75rem;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    content: "";
+    background-color: transparent;
+    border: #e7e7ec solid 1px;
+    border-radius: 3px;
+    z-index: 200000;
+}
+
+.inactivefilter .wunderbyte_table_container {
+    grid-template-columns: 0fr 2fr;
+    gap: 0;
+}
+
+.wunderbyteTableSelect .sortcolumn {
+    width: max-content;
+    height: 36px;
+    border-radius: 10px;
+    border-color: darkgray;
+    padding-left: 5px;
+}
+
+.wunderbyteTableSelect a.changesortorder:hover {
+    text-decoration: none;
+}
+
+.wunderbyte-table-table .wb-table-column {
+    z-index: 2;
+}
+
+.wunderbyteTableFilter .datepickerform {
+    margin: 20px;
+    padding: 10px;
+    position: relative;
+    display: block;
+    min-height: 1.6rem;
+    padding-left: 2rem;
+}
+
+.wunderbyteTableFilter .datepicker-label {
+
+    color: #77838f;
+    font-size: 1rem;
+    padding-top: 6px;
+    padding-left: 6px;
+    position: relative;
+    margin-bottom: 6px;
+    vertical-align: top;
+}
+
+.wunderbyteTableFilter .datepicker-input {
+
+    color: #77838f;
+    padding-left: 6px;
+    border: #77838f;
+}
+
+.wunderbyteTableFilter .datepicker-input:hover {
+    box-shadow: 0 0 1px 1px #77838f;
+}
+
+.wunderbyteTableFilter .intrangeform {
+    margin: 20px;
+    padding: 10px;
+    position: relative;
+    display: block;
+    min-height: 1.6rem;
+    padding-left: 2rem;
+}
+
+.wunderbyteTableFilter .intrange-label {
+
+    color: #77838f;
+    font-size: 1rem;
+    padding-top: 6px;
+    padding-left: 6px;
+    position: relative;
+    margin-bottom: 6px;
+    vertical-align: top;
+}
+
+.wunderbyteTableFilter .intrange-input {
+    padding-left: 6px;
+    border: #77838f;
+    box-shadow: 0 0 1px 1px #98a3ad;
+}
+
+.wunderbyteTableFilter .intrange-input:hover {
+    box-shadow: 0 0 1px 1px #77838f;
+}
+
+.wunderbyteTableFilter .alert-warning {
+    margin-top: 20px;
+}
+
+.wunderbyteTableSearchIcon,
+.wunderbyteTableSwitchTemplatesIcon {
+    padding-top: 7px;
+    padding-right: 5px;
+    font-size: 1.3em;
+}
+
+.wunderbyteTableSortIcon {
+    font-size: 1.2em;
+}
+
+.wb-table-sortable-active {
+    background-color: grey;
+}
+
+.wb-table-sortable-drag {
+    background-color: lightgrey;
+}
+
+/* Move filters on top of table */
+
+.wunderbyte_table_filter_on .wunderbyte_table_container.showontop {
+    display: block;
+}
+
+.wunderbyte_table_filter_on .wunderbyte_table_container.showontop aside {
+    max-width: 100%;
+}
+
+.wunderbyteTableFilter.row {
+    margin: 0;
+    flex-direction: column;
+}
+
+.showontop .wunderbyteTableFilter.row {
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.showontop aside {
+    padding: 0;
+}
+
+.wunderbyteTableFilter .dd {
+    padding: 10px;
+    background: transparent;
+    max-width: fit-content;
+}
+
+.wunderbyte_table_container .wunderbyteTableFilter .dropdownMenuButton {
+    background: #fff;
+    min-width: fit-content;
+    width: 250px;
+    text-align: start;
+    height: auto;
+    white-space: normal;
+    border: 1px solid #d3d3d3bd;
+}
+
+.wunderbyte_table_container .wunderbyteTableFilter .dropdownMenuButton::after {
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    top: 0;
+    width: 20px;
+    font-size: 17px;
+}
+
+.dropdowncontainer .dropdown-menu.show {
+    width: 100%;
+}
+
+.dropdowncontainer .wunderbyterFilterList {
+    margin: 0;
+    padding: 0;
+}
+
+/* Berta related CSS ? */
+
+.wunderbyte_table_components {
+    background: #e9f0f3;
+}
+
+.wunderbyte_table_container.showontop .filterheader {
+    background: #e9f0f3;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inactivefilter .wunderbyte_table_container.showontop .filterheader {
+    display: none;
+}
+
+.wunderbyte_table_container.showontop .filterheader .wunderbyte_table_components {
+    width: 100%;
+}
+
+.wunderbyteTableFilter .form-check-label {
+    color: black;
+}
+
+.hierarchybutton {
+    margin-bottom: 4px;
+    position: relative;
+}
+
+.hierarchy .hierarchybutton::after {
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    top: 0;
+}
+
+.dropdown-menu .filtersearch {
+    position: absolute;
+    height: 46px;
+    top: -49px;
+    left: -1px;
+    width: calc(100% + 2px);
+}
+
+.dropdown-menu .labelsearch {
+    display: none;
+    position: absolute;
+    height: 46px;
+    top: -60px;
+    z-index: 9999;
+}
+
+.dropdown-menu .labelsearch span {
+    position: relative;
+    color: rgba(15, 108, 191, .75);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.dropdown-menu .labelsearch span::after {
+    position: absolute;
+    width: 110%;
+    height: 10px;
+    background: #fff;
+    content: '';
+    left: -5%;
+    bottom: 2%;
+    z-index: -10;
+    border-radius: 2px;
+}
+
+.wunderbyteTableFilter .dropdown-item .form-check-label {
+    white-space: normal;
+    word-break: break-all;
+}
+
+@media screen and (max-width: 991px) {
+    .wunderbyte_table_filter_on .wunderbyte_table_container {
+        display: block;
+    }
+
+    .wunderbyte_table_filter_on .wunderbyte_table_container aside {
+        max-width: 100%;
+    }
+
+    .wunderbyte_table_container .filterheader {
+        padding: 0;
+    }
+
+    .wunderbyte_table_container aside {
+        padding: 15px;
+    }
+
+    .wunderbyte_table_container .wunderbyteTableFilter .dd,
+    .wunderbyte_table_container .wunderbyteTableFilter .dropdownMenuButton {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .showontop .wunderbyteTableFilter.row {
+        flex-direction: column;
+    }
+
+}
+
+.wunderbyte_table_calendar .calendar {
+    height: 22rem;
+    width: fit-content;
+    background-color: white;
+    border-radius: 0;
+    border: 1px solid black;
+    overflow: hidden;
+    padding: 5px 5px 0 5px;
+    margin-bottom: 2rem;
+}
+
+.wunderbyte_table_calendar .calendar-days .highlight-date {
+    font-weight: bold;
+    text-decoration: underline;
+    /* Example text color */
+}
+
+.wunderbyte_table_calendar .calendar {
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+}
+
+.wunderbyte_table_calendar .calendar-header {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0;
+    align-items: center;
+    font-weight: 700;
+    color: black;
+    padding: 10px;
+    border-bottom: 1px solid black;
+
+}
+
+.wunderbyte_table_calendar .calendar-body {
+    padding: 10px;
+}
+
+.wunderbyte_table_calendar .calendar-week-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+}
+
+.wunderbyte_table_calendar .calendar-week-days div:hover {
+    color: black;
+    transform: scale(1.2);
+    transition: all .2s ease-in-out;
+}
+
+.wunderbyte_table_calendar .calendar-week-days div {
+    display: grid;
+    place-items: center;
+    color: black;
+    height: 50px;
+}
+
+.wunderbyte_table_calendar .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    color: #0a0921;
+}
+
+.wunderbyte_table_calendar .calendar-days div {
+    width: 37px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    animation: to-top 1s forwards;
+    color: white;
+    background: var(--primary);
+    font-weight: 300;
+}
+
+.wunderbyte_table_calendar .month-picker {
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.wunderbyte_table_calendar .year-picker {
+    display: flex;
+    align-items: center;
+}
+
+.wunderbyte_table_calendar .year-change {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.wunderbyte_table_calendar .year-change:hover {
+    background-color: #9796f0;
+    transition: all .2s ease-in-out;
+    transform: scale(1.12);
+}
+
+.wunderbyte_table_calendar .calendar-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#year:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    transition: all 0.2s ease-in-out;
+}
+
+.wunderbyte_table_calendar .calendar-days div span {
+    position: absolute;
+}
+
+.wunderbyte_table_calendar .calendar-days div:hover {
+    transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+    background-color: #0063a678;
+    /* border-radius: 20%; */
+    color: #f8fbff;
+}
+
+.wunderbyte_table_calendar .month-list {
+    position: relative;
+    left: 0;
+    bottom: 180px;
+    background-color: #ebebeb;
+    color: #151426;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 5px;
+    border-radius: 20px;
+}
+
+.wunderbyte_table_calendar .month-list > div {
+    display: grid;
+    place-content: center;
+    /* margin: 5px 10px; */
+    transition: all 0.2s ease-in-out;
+}
+
+.wunderbyte_table_calendar .month-list > div > div {
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.wunderbyte_table_calendar .month-list > div > div:hover {
+    color: #f8fbff;
+    transform: scale(0.9);
+    transition: all 0.2s ease-in-out;
+}
+
+.wunderbyte_table_calendar .month-list.show {
+    visibility: visible;
+    pointer-events: visible;
+    transition: 0.6s ease-in-out;
+    animation: to-left .71s forwards;
+}
+
+.wunderbyte_table_calendar .month-list.hideonce {
+    visibility: hidden;
+}
+
+.month-list.hide {
+    animation: to-right 1s forwards;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.wunderbyte_table_calendar .date-time-formate {
+    height: 4rem;
+    width: 100%;
+    font-family: Dubai Light, Century Gothic;
+    position: relative;
+    display: flex;
+    top: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.wunderbyte_table_calendar .day-text-formate {
+    font-family: Microsoft JhengHei UI;
+    font-size: 1.4rem;
+    padding-right: 5%;
+    border-right: 3px solid #9796f0;
+}
+
+.wunderbyte_table_calendar .date-time-value {
+    display: block;
+    position: relative;
+    text-align: center;
+    padding-left: 5%;
+}
+
+.wunderbyte_table_calendar .time-formate {
+    font-size: 1.5rem;
+}
+
+.wunderbyte_table_calendar .time-formate.hideTime {
+    animation: hidetime 1.5s forwards;
+}
+
+.wunderbyte_table_calendar .day-text-formate.hidetime {
+    animation: hidetime 1.5s forwards;
+}
+
+.wunderbyte_table_calendar .date-formate.hideTime {
+    animation: hidetime 1.5s forwards;
+}
+
+.wunderbyte_table_calendar .day-text-formate.showtime {
+    animation: showtime 1s forwards;
+}
+
+.wunderbyte_table_calendar .time-formate.showtime {
+    animation: showtime 1s forwards;
+}
+
+.wunderbyte_table_calendar .date-formate.showtime {
+    animation: showtime 1s forwards;
+}
+
+.wunderbyte_table_calendar .year-change pre {
+    margin: 0;
+}
+
+.wbtablefilterview .category-item.collapsed .fa-chevron-down {
+    display: inline-block;
+}
+
+.wbtablefilterview .category-item:not(.collapsed) .fa-chevron-up {
+    display: inline-block;
+}
+
+.wbtablefilterview .category-item.collapsed .fa-chevron-up {
+    display: none;
+}
+
+.wbtablefilterview .category-item:not(.collapsed) .fa-chevron-down {
+    display: none;
+}
+
+@keyframes to-top {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes to-left {
+    0% {
+        transform: translateX(230%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes to-right {
+    10% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-150%);
+        opacity: 1;
+    }
+}
+
+@keyframes showtime {
+    0% {
+        transform: translateX(250%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes hidetime {
+    0% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-370%);
+        opacity: 1;
+    }
+}
+/* END embedded wunderbyte table styles */

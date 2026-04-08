@@ -1,0 +1,267 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/viewtable
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    * statistics - array: An array with values.
+    * opengames - array: empty array, will be filled with JS.
+    * finishedgames - array: empty array, will be filled with JS.
+    * highscores - array: empty array, will be filled with JS.
+
+    Example context (json):
+    {
+    "filter": {
+        "categories": [
+        {
+            "collapsed": "collapsed",
+            "uniqueid": "12345",
+            "expanded": true,
+            "name": "Category1",
+            "columnname": "tablecolumn1",
+            "category": "tablecolumn1",
+            "default": true,
+            "values": [
+            {
+                "value": "value1",
+                "key": "Value1",
+                "identifier": "idValue1",
+                "checked": "checked"
+            },
+            {
+                "value": "value2",
+                "key": "Value2",
+                "identifier": "idValue2",
+                "checked": ""
+            }
+            ],
+            "datepicker": false
+        },
+        {
+            "collapsed": "",
+            "uniqueid": "67890",
+            "idstring": "sdkjafjlsadjflasjdklf",
+            "expanded": false,
+            "name": "Category2",
+            "columnname": "tablecolumn2",
+            "default": false,
+            "values": [
+            {
+                "value": "value4",
+                "key": "Value4",
+                "identifier": "idValue4",
+                "checked": "",
+                "count": "8"
+            },
+            {
+                "value": "value5",
+                "key": "Value5",
+                "identifier": "idValue5",
+                "checked": "checked",
+                "count": "5"
+            }
+            ],
+            "datepicker": true,
+            "datepickers": [
+            {
+                "timestamp": true,
+                "label": "DatePicker1",
+                "checkboxlabel": "Enable Date Picker 1",
+                "datereadable": "2023-05-17",
+                "timereadable": "09:30",
+                "operator": "greater",
+                "columnname": "column1",
+                "startcolumn": "",
+                "endcolumn": "",
+                "starttimestamp": "",
+                "startdatereadable": "",
+                "starttimereadable": "",
+                "endtimestamp": "",
+                "enddatereadable": "",
+                "endtimereadable": "",
+                "possibleoperations": [
+                {
+                    "operator": "greater",
+                    "label": "Greater than"
+                },
+                {
+                    "operator": "less",
+                    "label": "Less than"
+                }
+                ]
+            },
+            {
+                "timestamp": false,
+                "label": "DatePicker2",
+                "checkboxlabel": "Enable Date Picker 2",
+                "datereadable": "",
+                "timereadable": "",
+                "operator": "",
+                "columnname": "column2",
+                "startcolumn": "startcolumn",
+                "endcolumn": "endcolumn",
+                "starttimestamp": "123456",
+                "startdatereadable": "2023-05-15",
+                "starttimereadable": "12:00",
+                "endtimestamp": "789012",
+                "enddatereadable": "2023-05-19",
+                "endtimereadable": "18:00",
+                "possibleoperations": [
+                {
+                    "operator": "equals",
+                    "label": "Equals"
+                },
+                {
+                    "operator": "between",
+                    "label": "Between"
+                }
+                ]
+            }
+            ]
+        }
+        ]
+    }
+    }
+
+}}
+
+{{#filter}}
+    <div class="wunderbyteTableFilter row" tabindex="-1">
+    {{#categories}}
+    <div class="col dropdowncontainer dd">
+    <div class="dropdown">
+    <button
+        {{#expanded}}
+            aria-expanded="true"
+        {{/expanded}}
+        {{^expanded}}
+            aria-expanded="false"
+        {{/expanded}}
+    aria-controls="id_collapse_{{columnname}}" class="btn dropdown-toggle dropdownMenuButton" type="button" data-ident="{{columnname}}" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true">
+        {{name}} <span class="filtercounter badge bg-light text-bs-light {{^filtercounter}}hidden{{/filtercounter}}">{{filtercounter}}</span>
+    </button>
+    <div class="dropdown-menu">
+       <div class="mt-2 ms-2 me-2 {{show}}" id="id_collapse_{{columnname}}">
+           <label class="ps-4 labelsearch">
+                <span class="small">{{ name }}</span>
+            </label>
+            <input class="search form-control mb-2 filtersearch" name="filtersearch-{{columnname}}" placeholder="{{#str}}search, core{{/str}}" hidden>
+                {{#default}}
+                    <ul class="wunderbyterFilterList pt-2 list-group-flush">
+                        {{#values}}
+                            <li class="form-check list-group-item dropdown-item">
+                                    <input class="filterelement filterouter form-check-input" type="checkbox" value="{{value}}" id="{{identifier}}{{columnname}}{{idstring}}" {{checked}} name="{{category}}" data-action="csshide" data-key="{{key}}" data-targetvalue="{{value}}">
+                                    <label class="form-check-label" for="{{identifier}}{{columnname}}{{idstring}}">
+                                        <span class="filterkeylabel">{{key}}</span> <span class="filtercountlabel">{{#count}}({{count}}){{/count}}</span>
+                                    </label>
+                            </li>
+                        {{/values}}
+                    </ul>
+                {{/default}}
+                {{#hierarchy}}
+                    <ul class="wunderbyterFilterList hierarchy pt-2" data-moodletype="hierarchylist">
+                        <span class="d-flex">
+                        <input class="hierarchycategory-checkbox ms-1" type="checkbox"
+                                value="{{value}}"
+                                id="{{index}}{{columnname}}{{idstring}}"
+                                {{checked}} name="{{id}}"
+                                data-key="{{label}}"
+                                data-targetvalue="{{columnname}}">
+                        <button class="btn btn-nolabel dropdown-item dropdown-toggle hierarchybutton" data-ident="{{columnname}}" data-toggle="collapse" data-bs-toggle="collapse" role="button">
+                            <span class="filtercategorykeylabel">{{label}}</span>
+                        </button>
+                        </span>
+                        <div class="collapse" id="{{id}}">
+                            <div class="card card-body">
+                                {{#values}}
+                                    <li class="form-check">
+                                            <input class="filterelement form-check-input hierarchychild-checkbox" type="checkbox" value="{{value}}" id="{{identifier}}{{columnname}}{{idstring}}" {{checked}} name="{{category}}" data-action="csshide" data-key="{{key}}" data-targetvalue="{{value}}">
+                                            <label class="form-check-label" for="{{identifier}}{{columnname}}{{idstring}}">
+                                                <span class="filterkeylabel">{{key}}</span> <span class="filtercountlabel">{{#count}}({{count}}){{/count}}</span>
+                                            </label>
+                                    </li>
+                                {{/values}}
+                            </div>
+                        </div>
+                    </ul>
+                {{/hierarchy}}
+                {{#datepicker}}
+                    {{#datepickers}}
+                        <form class="datepickerform">
+                            {{#timestamp}}
+                                <input class="filterelement form-check-input" type="checkbox" id="{{label}}{{columnname}}{{idstring}}" {{checked}} data-action="csshide" name="{{columnname}}" value="datecheckbox" data-dateelement = "dateelement" data-filtername="{{label}}" data-operator="{{operator}}" data-columnname="{{columnname}}">
+                                <label class="filterelement form-check-label" for="{{label}}{{columnname}}{{idstring}}">{{checkboxlabel}}</label>
+                                <div class="datepicker-label">{{label}}</div>
+                                <input class="filterelement datepicker-input" type="date" id="{{label}}{{columnname}}{{idstring}}datefilter_date" value="{{datereadable}}" data-timestamp="{{timestamp}}" name="{{columnname}}_single-date" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                                <input class="filterelement datepicker-input" type="time" id="{{label}}{{columnname}}{{idstring}}datefilter_time" name="{{columnname}}_single-time" value="{{timereadable}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                            {{/timestamp}}
+                            {{#startcolumn}}
+
+                                <input class="filterelement form-check-input" type="checkbox" id="{{label}}{{columnname}}{{idstring}}" {{checked}} data-action="csshide" name="{{columnname}}" value="datecheckbox" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}" data-operator="{{operator}}" data-timespan="true">
+                                <label class="filterelement form-check-label" for="{{label}}{{columnname}}{{idstring}}">{{checkboxlabel}}</label>
+                                <div class="filtertimespan">
+                                    <div class="datepicker-label">{{#str}} startvalue, mooduell {{/str}}</div>
+                                    <input class="filterelement datepicker-input" type="date" id="startdate_date_{{startcolumn}}{{label}}{{columnname}}{{idstring}}" value="{{startdatereadable}}" data-timestamp="{{starttimestamp}}" name="date-{{startcolumn}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}" data-applytocolumn="{{startcolumn}}">
+                                    <input class="filterelement datepicker-input" type="time" id="startdate_time_{{startcolumn}}{{label}}{{columnname}}{{idstring}}" name="time-{{startcolumn}}" value="{{starttimereadable}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}" data-applytocolumn="{{startcolumn}}">
+                                    <div class="datepicker-label">{{#str}} endvalue, mooduell {{/str}}</div>
+                                    <input class="filterelement datepicker-input" type="date" id="enddate_date_{{endcolumn}}{{label}}{{columnname}}{{idstring}}" value="{{enddatereadable}}" data-timestamp="{{endtimestamp}}" name="date-{{endcolumn}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}" data-applytocolumn="{{endcolumn}}">
+                                    <input class="filterelement datepicker-input" type="time" id="enddate_time_{{endcolumn}}{{label}}{{columnname}}{{idstring}}" name="time-{{endcolumn}}" value="{{endtimereadable}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}" data-applytocolumn="{{endcolumn}}">
+                                </div>
+                                <div>
+                                    <label for="filteroperationselect_{{label}}{{columnname}}{{idstring}}" class="datepicker-label">{{#str}} displayrecords, mooduell {{/str}}</label>
+                                    <select class="form-control filterelement" id="filteroperationselect_{{label}}{{columnname}}{{idstring}}" name="{{columnname}}" data-dateelement = "dateelement" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                                        {{#possibleoperations}}
+                                            <option value="{{operator}}">{{label}}</option>
+                                        {{/possibleoperations}}
+                                    </select>
+                                    <div class="datepicker-label">{{#str}} selectedtimespan, mooduell {{/str}}</div>
+                                </div>
+
+                            {{/startcolumn}}
+                        </form>
+                    {{/datepickers}}
+                {{/datepicker}}
+                {{#intrange}}
+                    {{#intranges}}
+                        <form class="intrangeform">
+                                <input class="filterelement form-check-input" type="checkbox" id="{{label}}{{columnname}}{{idstring}}" {{checked}} data-action="csshide" name="{{columnname}}" value="intrange" data-intrangeelement = "intrangeelement-checkbox" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                                <label class="filterelement form-check-label" for="{{label}}{{columnname}}{{idstring}}">{{#str}} apply_filter, mooduell {{/str}}</label>
+                                <div class="filterelement intrange-label">{{#str}} from, mooduell {{/str}}</div>
+                                <input class="filterelement filterelement intrange-input" id="{{label}}{{columnname}}{{idstring}}intrangefilter_intrange-start" value="{{startvalue}}" name="intrange-start-{{columnname}}" data-intrangeelement = "intrangeelement" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                                <div class="filterelement intrange-label">{{#str}} to, mooduell {{/str}}</div>
+                                <input class="filterelement intrange-input" id="{{label}}{{columnname}}{{idstring}}intrangefilter_intrange-end" value="{{endvalue}}" name="intrange-end-{{columnname}}" data-intrangeelement = "intrangeelement" data-filtername="{{label}}" data-columnname="{{columnname}}">
+                                <div class="filterelement alert alert-warning intrange" id="{{label}}{{columnname}}{{idstring}}intrangefilter_alert" hidden>{{#str}} alertentriessanitized, mooduell {{/str}}</div>
+                        </form>
+                    {{/intranges}}
+                {{/intrange}}
+                {{#exactcolumn}}
+                    <div class="prefix-filter">
+                        <label for="prefix-search">{{localizedname}}</label>
+                        <input type="text" id="prefixsearch{{idstring}}" name="prefixsearch" value="{{searchvalue}}" placeholder="{{#str}} searchtitleprefix, mooduell {{/str}}"/>
+                    </div>
+                {{/exactcolumn}}
+            </div>
+    {{! <a class="dropdown-item" role="button">Action</a>
+    <a class="dropdown-item" role="button">Another action</a>
+    <a class="dropdown-item" role="button">Something else here</a> }}
+    </div>
+</div>
+</div>
+    {{/categories}}
+    </div>
+{{/filter}}

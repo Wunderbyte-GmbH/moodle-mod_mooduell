@@ -34,6 +34,29 @@ use template;
  */
 class renderer extends plugin_renderer_base {
     /**
+     * Render lazy table wrapper used by embedded wunderbyte table.
+     *
+     * @param templatable $viewtable
+     * @return string|bool
+     */
+    public function render_lazytable(templatable $viewtable) {
+        $data = $viewtable->export_for_template($this);
+        return $this->render_from_template('mod_mooduell/table_lazy', $data);
+    }
+
+    /**
+     * Render a table object with the selected template name.
+     *
+     * @param templatable $tabledata
+     * @param string $templatename
+     * @return string
+     */
+    public function render_table(templatable $tabledata, string $templatename) {
+        $data = $tabledata->export_for_template($this);
+        return $this->render_from_template($templatename, $data);
+    }
+
+    /**
      * Render a mooduell overview page for teachers.
      *
      * @param templatable $overview

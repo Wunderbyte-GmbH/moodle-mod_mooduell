@@ -24,7 +24,7 @@
 
 namespace mod_mooduell\tables;
 
-use local_wunderbyte_table\wunderbyte_table;
+use mod_mooduell\local\wunderbyte_table\wunderbyte_table;
 use mod_mooduell\mooduell;
 use stdClass;
 
