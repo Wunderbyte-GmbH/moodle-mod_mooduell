@@ -13,10 +13,6 @@ jobs:
       # moodle_branches: "MOODLE_401_STABLE MOODLE_402_STABLE"  # Optional: Only test specific Moodle versions
       min_php: "7.4"  # Optional: Set minimum PHP version
 
-      # Command to install more dependencies
-      extra_plugin_runners: |
-        moodle-plugin-ci add-plugin --branch main Wunderbyte-GmbH/moodle-local_wunderbyte_table
-
       # If you need to ignore specific paths (third-party libraries are ignored by default)
       # ignore_paths: 'vue3,moodle/tests/fixtures,moodle/Sniffs,moodle/vue3,OpenTBS,TinyButStrong'
 
