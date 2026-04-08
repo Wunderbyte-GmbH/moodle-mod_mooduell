@@ -27,9 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_mooduell';
 $plugin->release = 'v2.2.5';
 $plugin->supported = [405, 501];
-$plugin->version = 2026020900;
+$plugin->version = 2026040800;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [
-    'local_wunderbyte_table' => 2026020300,
-];
