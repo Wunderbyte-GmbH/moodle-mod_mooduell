@@ -932,8 +932,11 @@ class mooduell {
         global $DB, $USER;
 
         // If there was no mooduellid, we have to retrieve it here.
-        if (!$mooduellid) {
-            if (!$mooduellid = $DB->get_field('course_modules', 'instance', ['id' => $cmid])) {
+        if ($mooduellid === null) {
+            if (!$cmid) {
+                // cmid/quizid of 0 means "all quizzes" — no instance filter.
+                $mooduellid = 0;
+            } else if (!$mooduellid = $DB->get_field('course_modules', 'instance', ['id' => $cmid])) {
                 throw new moodle_exception(
                     'mooduellinstancedoesnotexist',
                     'mooduell',

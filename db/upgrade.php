@@ -305,5 +305,45 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024030600, 'mooduell');
     }
 
+    if ($oldversion < 2026041300) {
+        // Add performance indexes to mooduell_games.
+        $table = new xmldb_table('mooduell_games');
+        $indexes = [
+            new xmldb_index('ix_mooduellid_status', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'status']),
+            new xmldb_index('ix_playeraid_status', XMLDB_INDEX_NOTUNIQUE, ['playeraid', 'status']),
+            new xmldb_index('ix_playerbid_status', XMLDB_INDEX_NOTUNIQUE, ['playerbid', 'status']),
+            new xmldb_index('ix_timemodified', XMLDB_INDEX_NOTUNIQUE, ['timemodified']),
+        ];
+        foreach ($indexes as $index) {
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
+        }
+
+        // Add performance index to mooduell_questions.
+        $table = new xmldb_table('mooduell_questions');
+        $index = new xmldb_index('ix_gameid', XMLDB_INDEX_NOTUNIQUE, ['gameid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Add performance index to mooduell_pushtokens.
+        $table = new xmldb_table('mooduell_pushtokens');
+        $index = new xmldb_index('ix_userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Add performance index to mooduell_purchase.
+        $table = new xmldb_table('mooduell_purchase');
+        $index = new xmldb_index('ix_userid_validuntil', XMLDB_INDEX_NOTUNIQUE, ['userid', 'validuntil']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2026041300, 'mooduell');
+    }
+
     return true;
 }

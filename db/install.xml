@@ -51,6 +51,12 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_mooduellid_status" UNIQUE="false" FIELDS="mooduellid, status"/>
+        <INDEX NAME="ix_playeraid_status" UNIQUE="false" FIELDS="playeraid, status"/>
+        <INDEX NAME="ix_playerbid_status" UNIQUE="false" FIELDS="playerbid, status"/>
+        <INDEX NAME="ix_timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_categories" COMMENT="Stores categories from which to chose the random questions of this MooDuell instance.">
       <FIELDS>
@@ -105,6 +111,9 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_gameid" UNIQUE="false" FIELDS="gameid"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_pushtokens" COMMENT="Stores all the pushtokens for all the users">
       <FIELDS>
@@ -118,6 +127,9 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_highscores" COMMENT="Stores the highscores and is updated constantly by event 'game_finished'">
       <FIELDS>
@@ -168,6 +180,9 @@
         <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id" COMMENT="Ref to MooDuell."/>
         <KEY NAME="fk_courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id" COMMENT="Reference to Course."/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_userid_validuntil" UNIQUE="false" FIELDS="userid, validuntil"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>

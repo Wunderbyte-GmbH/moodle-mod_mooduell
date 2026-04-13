@@ -1022,6 +1022,8 @@ class game_control {
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
