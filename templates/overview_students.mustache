@@ -68,11 +68,17 @@
             {{/playstorelink}}
             </div>
          </div>
-          <div class="col-md" style="display: flex; justify-content:center; align-items: center; margin-bottom: 10px">
+                    <div class="col-md" style="display: flex; justify-content:center; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
             data-toggle="modal" data-target="#exampleModal">
                 {{#str}} showqr, mod_mooduell {{/str}}
             </button>
+                        {{#webloginurl}}
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#mooduellWebAppEmbedStudent"
+                        data-toggle="collapse" data-target="#mooduellWebAppEmbedStudent" aria-expanded="false" aria-controls="mooduellWebAppEmbedStudent">
+                                {{#str}} startmooduell, mod_mooduell {{/str}}
+                        </button>
+                        {{/webloginurl}}
         </div>
     </div>
             <!-- Modal -->
@@ -91,11 +97,6 @@
                                 <h4>{{#str}} qrtitle, mod_mooduell {{/str}}</h4>
                                 <p>{{#str}} qrdesc, mod_mooduell {{/str}}</p>
                                 <p>{{#str}} qrshare, mod_mooduell {{/str}}</p>
-                                {{#webloginurl}}
-                                <a href="{{webloginurl}}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                                    {{#str}} startmooduell, mod_mooduell {{/str}}
-                                </a>
-                                {{/webloginurl}}
                             </div>
                             {{#qrimage}}
                             <div class="col-md qrcol" style="text-align: center">
@@ -113,6 +114,14 @@
                     </div>
                 </div>
             </div>
+            {{#webloginurl}}
+            <div class="collapse mt-3" id="mooduellWebAppEmbedStudent">
+                <div class="card card-body" style="padding: 12px;">
+                    <iframe src="{{webloginurl}}" title="MooDuell Web App" loading="lazy"
+                        style="width: 100%; height: 980px; border: 0;"></iframe>
+                </div>
+            </div>
+            {{/webloginurl}}
 </div>
 {{/statistics}}
 
