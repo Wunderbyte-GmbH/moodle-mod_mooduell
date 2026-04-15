@@ -26,7 +26,7 @@
 use mod_mooduell\utils\wb_payment;
 defined('MOODLE_INTERNAL') || die();
 
-global $ADMIN;
+global $ADMIN, $CFG;
 
 if ($ADMIN->fulltree) {
     // Collecting necessary settings.
@@ -201,7 +201,7 @@ if ($ADMIN->fulltree) {
             'mooduell/webappurl',
             get_string('webappurl', 'mod_mooduell'),
             get_string('webappurldesc', 'mod_mooduell'),
-            'https://mooduellapp.wunderbyte.at/frame.html',
+            $CFG->wwwroot . '/mod/mooduell/app/frame.html',
             PARAM_URL
         ));
 

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapp=self.webpackChunkapp||[]).push([[5654],{5654:(r,n,e)=>{e.r(n),e.d(n,{SendIntentWeb:()=>u});var t=e(8239),s=e(6120);class u extends s.Uw{constructor(){super()}checkSendIntentReceived(){return(0,t.Z)(function*(){return{title:null}})()}finish(){}}}}]);

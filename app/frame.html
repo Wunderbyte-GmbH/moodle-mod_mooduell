@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MooDuell – Web Demo</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% -5%, rgba(0, 200, 255, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(0, 116, 151, 0.12) 0%, transparent 50%),
+        linear-gradient(160deg, #001e2e 0%, #002d40 45%, #001219 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 48px 60px;
+    }
+
+    /* ── Stage: phone + sidebar ──────────────────────────── */
+    .stage {
+      display: flex;
+      align-items: center;
+      gap: 56px;
+    }
+
+    /* ── Phone Shell ─────────────────────────────────────── */
+    .phone {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      background: #111;
+      border-radius: 54px;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 0 3px #001e29,
+        0 0 0 5px rgba(0, 150, 190, 0.4),
+        0 32px 80px rgba(0, 0, 0, 0.7),
+        0 0 120px rgba(0, 116, 151, 0.25);
+      flex-shrink: 0;
+    }
+
+    /* Side buttons */
+    .phone::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 126px;
+      width: 3px;
+      height: 34px;
+      background: linear-gradient(180deg, #1a5a6e, #0f3d4d);
+      border-radius: 2px 0 0 2px;
+      box-shadow: 0 46px 0 #1a5a6e, 0 88px 0 #1a5a6e;
+    }
+
+    .phone::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 172px;
+      width: 3px;
+      height: 64px;
+      background: linear-gradient(180deg, #1a5a6e, #0f3d4d);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* Screen area */
+    .screen {
+      position: absolute;
+      inset: 6px;
+      border-radius: 48px;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status bar — sits above the iframe, no overlap */
+    .status-bar {
+      flex-shrink: 0;
+      height: 42px;
+      background: #1c5870;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      border-radius: 48px 48px 0 0;
+    }
+
+    .status-bar .time {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .status-bar .icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-bar .icons svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+      opacity: 0.9;
+    }
+
+    /* The app iframe */
+    .app-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    .sidebar {
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      height: 140px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      filter:
+        drop-shadow(0 0 24px rgba(0, 200, 255, 0.5)) drop-shadow(0 4px 32px rgba(0, 116, 151, 0.6));
+    }
+
+    .tagline {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: -16px;
+    }
+
+    .sidebar-heading {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .sidebar-heading span {
+      color: #EC8600;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(0, 150, 190, 0.2);
+      border: 1px solid rgba(0, 180, 220, 0.2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: #5ecfef;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .badges {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: linear-gradient(135deg, #EC8600, #d67300);
+      box-shadow: 0 4px 20px rgba(236, 134, 0, 0.35);
+      transition: all 0.2s;
+    }
+
+    .badge:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(236, 134, 0, 0.5);
+    }
+
+    .badge svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .web-note {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.22);
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Embed mode (loaded from Moodle iframe) ───────────── */
+    body.embed-mode {
+      background: transparent;
+      padding: 0;
+      min-height: unset;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    body.embed-mode .sidebar {
+      display: none;
+    }
+
+    /* ── Responsive scale-down for smaller screens ───────── */
+    @media (max-height: 960px) {
+      .phone {
+        --scale: 0.82;
+        transform: scale(var(--scale));
+        transform-origin: center top;
+        margin-bottom: calc((844px * (var(--scale) - 1)));
+      }
+    }
+
+    @media (max-height: 780px) {
+      .phone {
+        --scale: 0.68;
+        transform: scale(var(--scale));
+        transform-origin: center top;
+        margin-bottom: calc((844px * (var(--scale) - 1)));
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar">
+          <span class="time" id="sb-time">9:41</span>
+          <span class="icons">
+            <!-- Signal bars -->
+            <svg viewBox="0 0 24 24">
+              <path d="M1 21h4V9H1v12zm6 0h4V3H7v18zm6 0h4v-6h-4v6z" />
+            </svg>
+            <!-- Wifi -->
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4 2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+            </svg>
+            <!-- Battery -->
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
+            </svg>
+          </span>
+        </div>
+        <iframe class="app-frame" id="mooduell-frame" title="MooDuell App" allow="camera; microphone"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation-by-user-activation"></iframe>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <img class="logo" src="assets/images/Logo-full-whiteweb.png" alt="MooDuell" />
+      <span class="tagline">The Moodle Quiz Duel</span>
+      <div class="sidebar-heading">Challenge your<br>colleagues to a<br><span>quiz duel.</span></div>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm0 12c5.33 0 8 2.67 8 4v2H4v-2c0-1.33 2.67-4 8-4z" /></svg>
+          </div>
+          <span>Duel any Moodle user — no separate account needed</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z" />
+            </svg>
+          </div>
+          <span>Questions sourced directly from your Moodle quizzes</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z" />
+            </svg>
+          </div>
+          <span>Track progress, rankings and learning challenges</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="badges">
+        <a class="badge" href="#" aria-label="App Store">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+          </svg>
+          App Store
+        </a>
+        <a class="badge" href="#" aria-label="Google Play">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M3.18 23.76c.37.2.8.22 1.2.07l12.12-6.95-2.56-2.58-10.76 9.46zm-1.1-20.7A1.9 1.9 0 0 0 2 4v16a1.9 1.9 0 0 0 .08 1.02l.07.07 8.97-8.97v-.2L2.15 3zm17.3 9.42-2.42-1.38-2.83 2.83 2.83 2.83 2.45-1.4a1.74 1.74 0 0 0 0-2.88zm-16.16 9.4 10.7-9.38-2.55-2.55-8.15 12z" />
+          </svg>
+          Google Play
+        </a>
+      </div>
+      <p class="web-note">Push notifications, camera and payment features require the native app.</p>
+    </div>
+
+  </div><!-- end .stage -->
+
+  <script>
+    // Forward any Moodle launch params (source, moodleurl, token) into the iframe.
+    // This lets frame.html act as a pure shell while the Angular app does the auto-login.
+    (function () {
+      const params = window.location.search;
+      const searchParams = new URLSearchParams(params);
+      const frame = document.getElementById('mooduell-frame');
+      frame.src = 'index.html' + params;
+      // If launched from Moodle, hide the sidebar/branding — only show the phone.
+      if (searchParams.get('source') === 'moodle') {
+        document.body.classList.add('embed-mode');
+      }
+      // Clean the outer URL so the one-time token is not visible in the address bar.
+      if (params) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    })();
+
+    function updateClock() {
+      const el = document.getElementById('sb-time');
+      if (el) {
+        const d = new Date();
+        el.textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0');
+      }
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+  </script>
+
+</body>
+
+</html>

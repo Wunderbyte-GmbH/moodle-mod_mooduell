@@ -83,8 +83,8 @@ class qr_code {
         $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
         $baseurl = get_config('mooduell', 'webappurl');
 
-        if (empty($baseurl)) {
-            $baseurl = 'https://mooduellapp.wunderbyte.at/frame.html';
+        if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
+            $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
         }
 
         $launchurl = new \moodle_url($baseurl, [
