@@ -71,4 +71,28 @@ class qr_code {
         $datauri = $qrcode->writeDataUri();
         return $datauri;
     }
+
+    /**
+     * Creates a one-click web launch URL for the currently logged in Moodle user.
+     *
+     * @return string
+     */
+    public function generate_web_launch_url(): string {
+        global $CFG, $USER;
+
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        $baseurl = get_config('mooduell', 'webappurl');
+
+        if (empty($baseurl)) {
+            $baseurl = 'https://mooduellapp.wunderbyte.at/frame.html';
+        }
+
+        $launchurl = new \moodle_url($baseurl, [
+            'source' => 'moodle',
+            'moodleurl' => $CFG->wwwroot,
+            'token' => $tokenobject->token,
+        ]);
+
+        return $launchurl->out(false);
+    }
 }

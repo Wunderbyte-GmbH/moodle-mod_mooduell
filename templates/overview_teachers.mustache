@@ -132,6 +132,11 @@
                                 <h4>{{#str}} qrtitle, mod_mooduell {{/str}}</h4>
                                 <p>{{#str}} qrdesc, mod_mooduell {{/str}}</p>
                                 <p>{{#str}} qrshare, mod_mooduell {{/str}}</p>
+                                {{#webloginurl}}
+                                <a href="{{webloginurl}}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                    {{#str}} startmooduell, mod_mooduell {{/str}}
+                                </a>
+                                {{/webloginurl}}
                             </div>
                             {{#qrimage}}
                             <div class="col-md qrcol" style="text-align: center">

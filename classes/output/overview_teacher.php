@@ -62,6 +62,7 @@ class overview_teacher implements renderable, templatable {
         $qrcodeimage = $qrcode->generate_qr_code();
         // Create the list of open games we can pass on to the renderer.
         $data['qrimage'] = $qrcodeimage;
+        $data['webloginurl'] = $qrcode->generate_web_launch_url();
 
         $data['appstorelink'] = get_config('mooduell', 'appstoreurl');
         $data['playstorelink'] = get_config('mooduell', 'playstoreurl');

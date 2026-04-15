@@ -62,6 +62,7 @@ class overview_student implements renderable, templatable {
         $qrcodeimage = $qrcode->generate_qr_code();
         // Create the list of open games we can pass on to the renderer.
         $data['qrimage'] = $qrcodeimage;
+        $data['webloginurl'] = $qrcode->generate_web_launch_url();
 
         $data['opengames'] = $this->render_open_games_table($mooduell);
         $data['finishedgames'] = $this->render_finished_games_table($mooduell);

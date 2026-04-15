@@ -197,6 +197,14 @@ if ($ADMIN->fulltree) {
             PARAM_URL
         ));
 
+        $settings->add(new admin_setting_configtext(
+            'mooduell/webappurl',
+            get_string('webappurl', 'mod_mooduell'),
+            get_string('webappurldesc', 'mod_mooduell'),
+            'https://mooduellapp.wunderbyte.at/frame.html',
+            PARAM_URL
+        ));
+
         $settings->add(new admin_setting_configcheckbox(
             'mooduell/enablepush',
             get_string('enablepush', 'mod_mooduell'),
