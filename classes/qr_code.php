@@ -45,7 +45,8 @@ class qr_code {
     public function generate_qr_code() {
         global $CFG, $DB, $USER;
 
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        // Force-create a unique token so it is never shared with the autologin URL tokens.
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
 
         $url = $CFG->wwwroot;
 

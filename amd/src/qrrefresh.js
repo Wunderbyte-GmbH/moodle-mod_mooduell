@@ -45,6 +45,7 @@ export const init = () => {
     }
 
     let timeoutId;
+    const expiresAt = Date.now() + 300000;
 
     const resetVisualState = () => {
         if (qrImage) {
@@ -66,15 +67,38 @@ export const init = () => {
         }
     };
 
-    const startExpiryTimer = () => {
+    const syncVisualState = () => {
+        if (Date.now() >= expiresAt) {
+            markExpired();
+            return;
+        }
+        resetVisualState();
+    };
+
+    const scheduleExpiryTimer = () => {
         if (timeoutId) {
             clearTimeout(timeoutId);
         }
-        resetVisualState();
-        timeoutId = setTimeout(markExpired, 300000);
+        const remaining = expiresAt - Date.now();
+        if (remaining <= 0) {
+            markExpired();
+            return;
+        }
+        timeoutId = setTimeout(markExpired, remaining);
     };
 
-    modal.addEventListener('shown.bs.modal', startExpiryTimer);
+    const onModalShown = () => {
+        syncVisualState();
+    };
+
+    // Bootstrap 5 emits native events; Bootstrap 4 emits jQuery events.
+    modal.addEventListener('shown.bs.modal', onModalShown);
+    if (window.jQuery) {
+        window.jQuery(modal).on('shown.bs.modal', onModalShown);
+    }
+
+    syncVisualState();
+    scheduleExpiryTimer();
 
 };
 

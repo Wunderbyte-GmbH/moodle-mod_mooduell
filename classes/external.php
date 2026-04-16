@@ -149,13 +149,18 @@ class mod_mooduell_external extends external_api {
      * Returns external web token while using QR webservice token
      */
     public static function get_usertoken() {
-        global $USER;
+        global $USER, $DB;
         $params = [];
         self::validate_parameters(self::get_usertoken_parameters(), $params);
 
-        // Returns mooduell_external token and delete mooduell_tokens token.
+        // Returns mooduell_external token and delete ONLY the specific short-lived token
+        // used to authenticate this request. This preserves any other mod_mooduell_tokens
+        // tokens (e.g. the QR login token) so they remain usable after autologin fires.
         $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_external', 0);
-        manage_tokens::delete_user_token('mod_mooduell_tokens');
+        $wstoken = optional_param('wstoken', '', PARAM_ALPHANUM);
+        if (!empty($wstoken)) {
+            $DB->delete_records('external_tokens', ['token' => $wstoken, 'userid' => $USER->id]);
+        }
         $token = $tokenobject->token;
         $return['token'] = $token;
 
