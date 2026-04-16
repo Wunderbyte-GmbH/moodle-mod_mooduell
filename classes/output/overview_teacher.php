@@ -56,6 +56,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell|null $mooduell The mooduell instance, can be null.
      */
     public function __construct(?mooduell $mooduell = null) {
+        global $CFG;
 
         $data = [];
         $qrcode = new qr_code();
@@ -67,6 +68,7 @@ class overview_teacher implements renderable, templatable {
 
         $data['appstorelink'] = get_config('mooduell', 'appstoreurl');
         $data['playstorelink'] = get_config('mooduell', 'playstoreurl');
+        $data['launchlogourl'] = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
 
         if (!empty($data['appstorelink'])) {
             $data['appstoreqrimage'] = $qrcode->generate_url_qr_code($data['appstorelink']);

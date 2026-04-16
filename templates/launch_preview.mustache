@@ -3,20 +3,29 @@
 }}
 <div class="mooduell-launch-preview">
     <div class="mooduell-launch-stage">
-        <div class="mooduell-phone-shell" aria-label="MooDuell phone preview">
-            <div class="mooduell-phone-screen">
-                <div class="mooduell-phone-statusbar">
-                    <span>9:41</span>
-                    <span class="mooduell-phone-status-icons">WiFi 100%</span>
+        <div class="mooduell-phone-wrap" aria-label="MooDuell phone preview">
+            <div class="mooduell-phone-shell">
+                <div class="mooduell-phone-screen">
+                    <div class="mooduell-phone-statusbar">
+                        <span class="mooduell-phone-time">9:41</span>
+                        <span class="mooduell-phone-status-icons">WiFi 100%</span>
+                    </div>
+                    {{#webapppreviewurl}}
+                    <iframe class="mooduell-phone-iframe" src="{{webapppreviewurl}}" title="MooDuell Web Preview" loading="lazy"></iframe>
+                    {{/webapppreviewurl}}
                 </div>
-                {{#webapppreviewurl}}
-                <iframe class="mooduell-phone-iframe" src="{{webapppreviewurl}}" title="MooDuell Web Preview" loading="lazy"></iframe>
-                {{/webapppreviewurl}}
             </div>
         </div>
 
         <div class="mooduell-launch-sidebar">
             <p class="mooduell-launch-eyebrow">{{#str}} launch_eyebrow, mod_mooduell {{/str}}</p>
+
+            {{#launchlogourl}}
+            <img class="mooduell-launch-logo" src="{{launchlogourl}}" alt="MooDuell" />
+            {{/launchlogourl}}
+
+            <p class="mooduell-launch-tagline">{{#str}} launch_tagline, mod_mooduell {{/str}}</p>
+
             <h3 class="mooduell-launch-title">{{#str}} launch_title, mod_mooduell {{/str}}</h3>
             <p class="mooduell-launch-text">{{#str}} launch_description, mod_mooduell {{/str}}</p>
 
@@ -40,12 +49,16 @@
                     {{#str}} univiemooduellplaystore, mod_mooduell {{/str}}
                 </button>
                 {{/playstorelink}}
+            </div>
 
+            <div class="mooduell-login-qr-button-wrap">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mooduellLoginQrModal"
                     data-toggle="modal" data-target="#mooduellLoginQrModal">
                     {{#str}} showqrlogin, mod_mooduell {{/str}}
                 </button>
             </div>
+
+            <p class="mooduell-launch-note">{{#str}} launch_note, mod_mooduell {{/str}}</p>
         </div>
     </div>
 </div>
