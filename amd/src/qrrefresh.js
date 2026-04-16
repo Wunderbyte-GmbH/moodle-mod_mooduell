@@ -24,40 +24,57 @@
 
 
 export const init = () => {
-    const qrImageContainer = document.querySelector('#exampleModal .modal-body .qrcol'); // Adjusted selector for QR code container.
-    let timeoutId; // Variable to store the timeout ID.
+    const modal = document.getElementById('mooduellLoginQrModal');
+    if (!modal) {
+        return;
+    }
 
-    // Function to handle the start time click event.
-    const handleStartTimeClick = () => {
+    const qrImageContainer = modal.querySelector('[data-qr-expiring="true"]');
+    if (!qrImageContainer) {
+        return;
+    }
+
+    const qrImage = qrImageContainer.querySelector('img');
+    const reloadContainer = qrImageContainer.querySelector('.reloadcontainer');
+    const reloadButton = qrImageContainer.querySelector('.btn-reload');
+
+    if (reloadButton) {
+        reloadButton.addEventListener('click', () => {
+            location.reload();
+        });
+    }
+
+    let timeoutId;
+
+    const resetVisualState = () => {
+        if (qrImage) {
+            qrImage.style.filter = '';
+            qrImage.style.opacity = '';
+        }
+        if (reloadContainer) {
+            reloadContainer.style.display = 'none';
+        }
+    };
+
+    const markExpired = () => {
+        if (qrImage) {
+            qrImage.style.filter = 'grayscale(100%)';
+            qrImage.style.opacity = '0.1';
+        }
+        if (reloadContainer) {
+            reloadContainer.style.display = 'block';
+        }
+    };
+
+    const startExpiryTimer = () => {
         if (timeoutId) {
             clearTimeout(timeoutId);
         }
-
-        // Start a timeout of 5 minutes (300000 milliseconds).
-        timeoutId = setTimeout(() => {
-            // Check if the QR container exists.
-            if (qrImageContainer) {
-                // Hide the existing QR code image.
-                const qrImage = qrImageContainer.querySelector('img');
-                const reloadcontainer = qrImageContainer.querySelector('.reloadcontainer');
-                if (qrImage) {
-                    qrImage.style.filter = 'grayscale(100%)';
-                    qrImage.style.opacity = '0.1';
-                }
-                if (reloadcontainer) {
-                    reloadcontainer.style.display = 'block';
-                }
-
-                // Add click event to the reload button.
-                const reloadButton = qrImageContainer.querySelector('.btn-reload');
-                reloadButton.addEventListener('click', () => {
-                    location.reload();
-                });
-            }
-        }, 300000); // 300000 ms = 5 minutes.
+        resetVisualState();
+        timeoutId = setTimeout(markExpired, 300000);
     };
 
-    handleStartTimeClick();
+    modal.addEventListener('shown.bs.modal', startExpiryTimer);
 
 };
 

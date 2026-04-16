@@ -73,6 +73,27 @@ class qr_code {
     }
 
     /**
+     * Creates a data URI QR code image for an arbitrary URL.
+     *
+     * @param string $url
+     * @return string
+     */
+    public function generate_url_qr_code(string $url): string {
+        $qrcode = new QrCode($url);
+        $qrcode
+            ->setSize(300)
+            ->setWriterByName('png')
+            ->setMargin(10)
+            ->setEncoding('UTF-8')
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+            ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
+            ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
+            ->setValidateResult(false);
+
+        return $qrcode->writeDataUri();
+    }
+
+    /**
      * Creates a one-click web launch URL for the currently logged in Moodle user.
      *
      * @return string
@@ -85,6 +106,34 @@ class qr_code {
 
         if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
             $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
+        }
+
+        $launchurl = new \moodle_url($baseurl, [
+            'source' => 'moodle',
+            'moodleurl' => $CFG->wwwroot,
+            'token' => $tokenobject->token,
+        ]);
+
+        return $launchurl->out(false);
+    }
+
+    /**
+     * Creates a one-click web app URL that points directly to index.html for iframe embedding.
+     *
+     * @return string
+     */
+    public function generate_web_app_launch_url(): string {
+        global $CFG, $USER;
+
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        $baseurl = get_config('mooduell', 'webappurl');
+
+        if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
+            $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
+        }
+
+        if (strpos($baseurl, '/frame.html') !== false) {
+            $baseurl = str_replace('/frame.html', '/index.html', $baseurl);
         }
 
         $launchurl = new \moodle_url($baseurl, [

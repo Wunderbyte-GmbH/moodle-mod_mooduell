@@ -1,0 +1,134 @@
+{{!
+    Shared launch preview block (phone frame + QR modals).
+}}
+<div class="mooduell-launch-preview">
+    <div class="mooduell-launch-stage">
+        <div class="mooduell-phone-shell" aria-label="MooDuell phone preview">
+            <div class="mooduell-phone-screen">
+                <div class="mooduell-phone-statusbar">
+                    <span>9:41</span>
+                    <span class="mooduell-phone-status-icons">WiFi 100%</span>
+                </div>
+                {{#webapppreviewurl}}
+                <iframe class="mooduell-phone-iframe" src="{{webapppreviewurl}}" title="MooDuell Web Preview" loading="lazy"></iframe>
+                {{/webapppreviewurl}}
+            </div>
+        </div>
+
+        <div class="mooduell-launch-sidebar">
+            <p class="mooduell-launch-eyebrow">{{#str}} launch_eyebrow, mod_mooduell {{/str}}</p>
+            <h3 class="mooduell-launch-title">{{#str}} launch_title, mod_mooduell {{/str}}</h3>
+            <p class="mooduell-launch-text">{{#str}} launch_description, mod_mooduell {{/str}}</p>
+
+            <ul class="mooduell-launch-features">
+                <li>{{#str}} launch_feature_one, mod_mooduell {{/str}}</li>
+                <li>{{#str}} launch_feature_two, mod_mooduell {{/str}}</li>
+                <li>{{#str}} launch_feature_three, mod_mooduell {{/str}}</li>
+            </ul>
+
+            <div class="mooduell-launch-buttons">
+                {{#appstorelink}}
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#mooduellAppStoreModal"
+                    data-toggle="modal" data-target="#mooduellAppStoreModal">
+                    {{#str}} univiemooduellappstore, mod_mooduell {{/str}}
+                </button>
+                {{/appstorelink}}
+
+                {{#playstorelink}}
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#mooduellPlayStoreModal"
+                    data-toggle="modal" data-target="#mooduellPlayStoreModal">
+                    {{#str}} univiemooduellplaystore, mod_mooduell {{/str}}
+                </button>
+                {{/playstorelink}}
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mooduellLoginQrModal"
+                    data-toggle="modal" data-target="#mooduellLoginQrModal">
+                    {{#str}} showqrlogin, mod_mooduell {{/str}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#appstorelink}}
+<div class="modal fade" id="mooduellAppStoreModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{#str}} appstore_qr_title, mod_mooduell {{/str}}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>{{#str}} appstore_qr_desc, mod_mooduell {{/str}}</p>
+                {{#appstoreqrimage}}
+                <img class="mooduell-qr-image" src="{{appstoreqrimage}}" alt="App Store QR" />
+                {{/appstoreqrimage}}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-primary" href="{{appstorelink}}" target="_blank" rel="noopener noreferrer">
+                    {{#str}} openappstore, mod_mooduell {{/str}}
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{/appstorelink}}
+
+{{#playstorelink}}
+<div class="modal fade" id="mooduellPlayStoreModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{#str}} playstore_qr_title, mod_mooduell {{/str}}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>{{#str}} playstore_qr_desc, mod_mooduell {{/str}}</p>
+                {{#playstoreqrimage}}
+                <img class="mooduell-qr-image" src="{{playstoreqrimage}}" alt="Play Store QR" />
+                {{/playstoreqrimage}}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-primary" href="{{playstorelink}}" target="_blank" rel="noopener noreferrer">
+                    {{#str}} openplaystore, mod_mooduell {{/str}}
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{/playstorelink}}
+
+<div class="modal fade" id="mooduellLoginQrModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{#str}} login_qr_title, mod_mooduell {{/str}}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{#str}} qrdesc, mod_mooduell {{/str}}</p>
+                <p>{{#str}} qrshare, mod_mooduell {{/str}}</p>
+                {{#qrimage}}
+                <div class="text-center qrcol" data-qr-expiring="true">
+                    <img class="mooduell-qr-image" src="{{qrimage}}" alt="Login QR" />
+                    <div class="reloadcontainer" style="display: none">
+                        <p>{{#str}} reloadtext, mod_mooduell {{/str}}</p>
+                        <button type="button" class="btn btn-secondary btn-reload">{{#str}} reloadbutton, mod_mooduell {{/str}}</button>
+                    </div>
+                </div>
+                {{/qrimage}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">{{#str}} close, mod_mooduell {{/str}}</button>
+            </div>
+        </div>
+    </div>
+</div>
