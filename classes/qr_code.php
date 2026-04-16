@@ -45,8 +45,9 @@ class qr_code {
     public function generate_qr_code() {
         global $CFG, $DB, $USER;
 
-        // Force-create a unique token so it is never shared with the autologin URL tokens.
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
+        // The autologin URL generators always force-create their own separate tokens,
+        // so this QR token is never shared with or consumed by the autologin flow.
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
 
         $url = $CFG->wwwroot;
 
@@ -102,7 +103,9 @@ class qr_code {
     public function generate_web_launch_url(): string {
         global $CFG, $USER;
 
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        // Force-create a unique token so this autologin URL token is always separate
+        // from the QR login token and can be deleted independently after use.
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
         $baseurl = get_config('mooduell', 'webappurl');
 
         if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
@@ -126,7 +129,9 @@ class qr_code {
     public function generate_web_app_launch_url(): string {
         global $CFG, $USER;
 
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        // Force-create a unique token so this autologin URL token is always separate
+        // from the QR login token and can be deleted independently after use.
+        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
         $baseurl = get_config('mooduell', 'webappurl');
 
         if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
