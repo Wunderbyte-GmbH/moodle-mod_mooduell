@@ -37,6 +37,7 @@ $string['app:completiongamesplayed'] = 'Finish {$a} games to complete this chall
 $string['app:completiongameswon'] = 'Win {$a} games to complete this challenge.';
 $string['app:completionrightanswers'] = 'Answer {$a} questions correctly to complete this challenge.';
 $string['app:completionrightanswersperc'] = 'Answer {$a}% of all questions correctly to complete this challenge.';
+$string['app'] = 'App';
 $string['appstoreurl'] = "Link to the Apple App Store";
 $string['appstorebutton'] = 'App Store';
 $string['webappurl'] = 'Link to the MooDuell Web App (frame.html)';

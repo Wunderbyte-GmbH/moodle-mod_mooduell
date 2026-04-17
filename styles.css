@@ -1,34 +1,42 @@
-#mooduellTabContent div.card-deck {
+#mooduellTabContent div.card-deck,
+#mooduellEarmarkContent div.card-deck {
     margin-top: 8px;
     text-align: center;
 }
 
-#mooduellTabContent div.wbblue {
+#mooduellTabContent div.wbblue,
+#mooduellEarmarkContent div.wbblue {
     background-color: #263683;
 }
 
-#mooduellTabContent div.wborange {
+#mooduellTabContent div.wborange,
+#mooduellEarmarkContent div.wborange {
     background-color: #ed8701;
 }
 
-#mooduellTabContent h1 {
+#mooduellTabContent h1,
+#mooduellEarmarkContent h1 {
     font-size: 3.5vw;
     font-weight: bold;
 }
 
-#mooduellTabContent h1.smallheader {
+#mooduellTabContent h1.smallheader,
+#mooduellEarmarkContent h1.smallheader {
     font-size: 2.5vw;
 }
 
-#mooduellTabContent .card-body .card-text.subheader {
+#mooduellTabContent .card-body .card-text.subheader,
+#mooduellEarmarkContent .card-body .card-text.subheader {
     font-size: 1.7vw;
 }
 
-#mooduellTabContent .text-black h1 {
+#mooduellTabContent .text-black h1,
+#mooduellEarmarkContent .text-black h1 {
     color: black;
 }
 
-#mooduellTabContent .text-white h1 {
+#mooduellTabContent .text-white h1,
+#mooduellEarmarkContent .text-white h1 {
     color: white;
 }
 

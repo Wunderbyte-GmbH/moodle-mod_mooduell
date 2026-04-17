@@ -78,18 +78,22 @@ class overview_teacher implements renderable, templatable {
             $data['playstoreqrimage'] = $qrcode->generate_url_qr_code($data['playstorelink']);
         }
 
-        $data['opengames'] = $this->render_open_games_table($mooduell);
-        $data['finishedgames'] = $this->render_finished_games_table($mooduell);
+        // Check if local_wunderbyte_table is installed with the required version.
+        $wbtinfo = \core_plugin_manager::instance()->get_plugin_info('local_wunderbyte_table');
+        $data['haswunderbyte'] = ($wbtinfo !== null && $wbtinfo->versiondb >= 2026020300);
+
+        $data['opengames'] = $data['haswunderbyte'] ? $this->render_open_games_table($mooduell) : '';
+        $data['finishedgames'] = $data['haswunderbyte'] ? $this->render_finished_games_table($mooduell) : '';
         $data['warnings'] = $mooduell->check_quiz();
 
         // Add the Name of the instance.
         $data['quizname'] = $mooduell->cm->name;
         $data['mooduellid'] = $mooduell->cm->id;
         // Add the list of questions.
-        $data['questions'] = $this->render_questions_table($mooduell);
-        $data['highscores'] = $this->render_highscores_table($mooduell);
+        $data['questions'] = $data['haswunderbyte'] ? $this->render_questions_table($mooduell) : '';
+        $data['highscores'] = $data['haswunderbyte'] ? $this->render_highscores_table($mooduell) : '';
         $data['categories'] = $mooduell->return_list_of_categories();
-        $data['statistics'] = $mooduell->return_list_of_statistics_teacher();
+        $data['statistics'] = $data['haswunderbyte'] ? $mooduell->return_list_of_statistics_teacher() : null;
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
 
         $this->data = $data;

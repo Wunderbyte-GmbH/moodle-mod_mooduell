@@ -34,6 +34,7 @@
        "opengames": [],
        "finishedgames": [],
        "warnings": [],
+       "haswunderbyte": true,
        "quizname": "test",
        "mooduellid": "409",
        "questions": [],
@@ -57,13 +58,15 @@
 
 }}
 
-<ul>
-    {{#warnings}}
-        <li>
-            <h4 style="color: red">{{message}}</h4>
-        </li>
-    {{/warnings}}
-</ul>
+{{#warnings}}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{{/warnings}}
 
 {{#users_without_capability.0}}
 <div class="alert alert-warning" role="alert">
@@ -82,56 +85,119 @@
 </div>
 {{/users_without_capability.0}}
 
+{{! When local_wunderbyte_table is NOT installed: show only the app preview }}
+{{^haswunderbyte}}
 {{> mooduell/launch_preview }}
+{{/haswunderbyte}}
 
-<ul class="nav nav-tabs" id="mooduellTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="statistics-tab" data-bs-toggle="tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="true"><h4>{{#str}}
-            statistics, mod_mooduell {{/str}}</h4></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="opengames-tab" data-bs-toggle="tab" data-toggle="tab" href="#opengames" role="tab" aria-controls="opengames" aria-selected="true"><h4>{{#str}}
-            opengames, mod_mooduell {{/str}}</h4></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="finishedgames-tab" data-bs-toggle="tab" data-toggle="tab" href="#finishedgames" role="tab" aria-controls="finishedgames" aria-selected="false"><h4>{{#str}}
-            finishedgames, mod_mooduell {{/str}}</h4></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="questions-tab" data-bs-toggle="tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><h4>{{#str}}
-            questions, mod_mooduell {{/str}}</h4></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="highscores-tab" data-bs-toggle="tab" data-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false"><h4>{{#str}} highscores, mod_mooduell {{/str}}</h4></a>
-    </li>
-</ul>
+{{! When local_wunderbyte_table is installed: show earmark-style vertical tabs }}
+{{#haswunderbyte}}
+<div class="mooduell-earmark-tabs d-flex align-items-start mt-4 gap-3">
 
-<div class="tab-content" id="mooduellTabContent">
-    <div class="tab-pane fade show active" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
-        {{> mooduell/table_statistics_teacher }}
+    {{! Left vertical nav (earmarks) }}
+    <ul class="nav flex-column nav-pills mooduell-earmark-nav" id="mooduellEarmarkNav" role="tablist" aria-orientation="vertical">
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link active" id="mooduell-tab-app" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-app" role="tab" aria-controls="mooduell-pane-app" aria-selected="true"
+               title="{{#str}} app, mod_mooduell {{/str}}" aria-label="{{#str}} app, mod_mooduell {{/str}}">
+                <i class="fa fa-mobile" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link" id="mooduell-tab-statistics" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-statistics" role="tab" aria-controls="mooduell-pane-statistics" aria-selected="false"
+               title="{{#str}} statistics, mod_mooduell {{/str}}" aria-label="{{#str}} statistics, mod_mooduell {{/str}}">
+                <i class="fa fa-bar-chart" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link" id="mooduell-tab-opengames" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-opengames" role="tab" aria-controls="mooduell-pane-opengames" aria-selected="false"
+               title="{{#str}} opengames, mod_mooduell {{/str}}" aria-label="{{#str}} opengames, mod_mooduell {{/str}}">
+                <i class="fa fa-gamepad" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link" id="mooduell-tab-finishedgames" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-finishedgames" role="tab" aria-controls="mooduell-pane-finishedgames" aria-selected="false"
+               title="{{#str}} finishedgames, mod_mooduell {{/str}}" aria-label="{{#str}} finishedgames, mod_mooduell {{/str}}">
+                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link" id="mooduell-tab-questions" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-questions" role="tab" aria-controls="mooduell-pane-questions" aria-selected="false"
+               title="{{#str}} questions, mod_mooduell {{/str}}" aria-label="{{#str}} questions, mod_mooduell {{/str}}">
+                <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="nav-item mb-2" role="presentation">
+            <a class="nav-link" id="mooduell-tab-highscores" data-bs-toggle="tab" data-toggle="tab"
+               href="#mooduell-pane-highscores" role="tab" aria-controls="mooduell-pane-highscores" aria-selected="false"
+               title="{{#str}} highscores, mod_mooduell {{/str}}" aria-label="{{#str}} highscores, mod_mooduell {{/str}}">
+                <i class="fa fa-trophy" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+
+    {{! Right tab content }}
+    <div class="tab-content flex-fill pt-1" id="mooduellEarmarkContent">
+        <div class="tab-pane fade show active" id="mooduell-pane-app" role="tabpanel" aria-labelledby="mooduell-tab-app">
+            {{> mooduell/launch_preview }}
+        </div>
+        <div class="tab-pane fade" id="mooduell-pane-statistics" role="tabpanel" aria-labelledby="mooduell-tab-statistics">
+            {{> mooduell/table_statistics_teacher }}
+        </div>
+        <div class="tab-pane fade" id="mooduell-pane-opengames" role="tabpanel" aria-labelledby="mooduell-tab-opengames">
+            {{{opengames}}}
+        </div>
+        <div class="tab-pane fade" id="mooduell-pane-finishedgames" role="tabpanel" aria-labelledby="mooduell-tab-finishedgames">
+            {{{finishedgames}}}
+        </div>
+        <div class="tab-pane fade" id="mooduell-pane-questions" role="tabpanel" aria-labelledby="mooduell-tab-questions">
+            <ul>
+            {{#categories}}
+                <li>
+                    <a href="../../question/edit.php?courseid={{courseid}}&category={{catid}}%2C{{contextid}}">
+                    {{#str}} addquestionstocategory, mod_mooduell, {{catname}} {{/str}}
+                    </a>
+                </li>
+            {{/categories}}
+            </ul>
+            {{{questions}}}
+        </div>
+        <div class="tab-pane fade" id="mooduell-pane-highscores" role="tabpanel" aria-labelledby="mooduell-tab-highscores">
+            {{{highscores}}}
+        </div>
     </div>
-    <div class="tab-pane fade" id="opengames" role="tabpanel" aria-labelledby="opengames-tab">
-        {{{opengames}}}
-    </div>
-    <div class="tab-pane fade" id="finishedgames" role="tabpanel" aria-labelledby="finishedgames-tab">
-        {{{finishedgames}}}
-    </div>
-    <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
-        <ul>
-        {{#categories}}
-            <li>
-                <a href="../../question/edit.php?courseid={{courseid}}&category={{catid}}%2C{{contextid}}">
-                {{#str}} addquestionstocategory, mod_mooduell, {{catname}} {{/str}}
-                </a>
-            </li>
-        {{/categories}}
-        </ul>
-        {{{questions}}}
-    </div>
-    <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
-        {{{highscores}}}
-    </div>
+
 </div>
+
+<style>
+.mooduell-earmark-nav .nav-link {
+    white-space: nowrap;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: .5rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+.mooduell-earmark-nav .nav-item { margin-bottom: .35rem !important; }
+.mooduell-earmark-nav .nav-link.active {
+    font-weight: 600;
+    box-shadow: inset 2px 0 0 rgba(0,0,0,.2);
+}
+@media (max-width: 768px) {
+    .mooduell-earmark-tabs { flex-direction: column; }
+    .mooduell-earmark-nav { flex-direction: row !important; overflow-x: auto; width: 100%; }
+    .mooduell-earmark-nav .nav-item { margin-right: .4rem; margin-bottom: 0 !important; }
+    .mooduell-earmark-nav .nav-link { border-radius: .5rem; }
+}
+</style>
+{{/haswunderbyte}}
 
 <div class="d-flex justify-content-center" id="spinner">
     <div class="spinner-border hidden" role="status">
