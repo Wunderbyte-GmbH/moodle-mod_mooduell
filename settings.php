@@ -81,14 +81,16 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    $settings->add(
-        new admin_setting_configtext(
-            'mooduell/licensekey',
-            get_string('licensekey', 'mod_mooduell'),
-            $licensekeydesc,
-            ''
-        )
+    $licensekeysetting = new admin_setting_configtext(
+        'mooduell/licensekey',
+        get_string('licensekey', 'mod_mooduell'),
+        $licensekeydesc,
+        ''
     );
+    $licensekeysetting->set_updatedcallback(function () {
+        cache_helper::purge_by_event('setbacklicenseaccesscountcache');
+    });
+    $settings->add($licensekeysetting);
 
         $setting = new admin_setting_configcheckbox(
             'mooduell/usefullnames',

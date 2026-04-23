@@ -236,6 +236,7 @@ class mod_mooduell_observer {
         // The $event->relateduserid stores the user for which to create the token.
         // $event->userid is the user who did the enrolment (which is irrelevant in this case).
         manage_tokens::generate_token_for_user($event->relateduserid);
+        \cache_helper::purge_by_event('setbacklicenseaccesscountcache');
 
         return true;
     }

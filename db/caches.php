@@ -53,4 +53,11 @@ $definitions = [
         'staticacceleration' => true,
         'static' => true,
     ],
+    'licenseaccesscountcache' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => true,
+        'ttl' => 60 * 60 * 24,
+        'invalidationevents' => ['setbacklicenseaccesscountcache'],
+    ],
 ];

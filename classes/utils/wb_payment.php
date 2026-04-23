@@ -26,6 +26,7 @@
 
 namespace mod_mooduell\utils;
 
+use cache;
 use stdClass;
 
 /**
@@ -39,11 +40,22 @@ use stdClass;
  */
 class wb_payment {
     /**
+     * Product identifiers to allowed subscribed user limits.
+     * Null means unlimited users.
+     */
+    public const LICENSE_PRODUCT_LIMITS = [
+        'mooduellpro' => 1000,
+        'mooduellpremium' => 5000,
+        'mooduellpremiumplus' => 20000,
+        'mooduell' => null,
+    ];
+
+    /**
      * mod_mooduell_PUBLIC_KEY
      *
      * @var mixed
      */
-    const MOD_MOODUELL_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----
+    public const MOD_MOODUELL_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu8vRBnPDug2pKoGY9wQS
 KNTK1SzrPuU0KC8xm22GPQZQM1XkPpvNwBp8CmXUN29r/qiPxapDNVmIH5Ectvb+
 NA7EsuVSS8xV6HfjV0tNZKIfFA4b1JD7t6l4gGDLuoppvKQV9n1JP/uZhQlFZ8Dg
@@ -107,9 +119,21 @@ pwIDAQAB
             if ($data == []) {
                 return false;
             }
+
+            if (!isset($data['product']) || !array_key_exists($data['product'], self::LICENSE_PRODUCT_LIMITS)) {
+                return false;
+            }
+
             // Return true if the current timestamp has not yet reached the expiration date.
-            if (time() < strtotime($data['exptime']) && isset($data['product']) && $data['product'] == 'mooduell') {
-                return true;
+            if (time() < strtotime($data['exptime'])) {
+                if ($data['product'] === 'mooduell') {
+                    return true;
+                }
+
+                $userlimit = self::LICENSE_PRODUCT_LIMITS[$data['product']];
+                if ($userlimit !== null && self::count_subscribed_users_with_mooduell_access() <= $userlimit) {
+                    return true;
+                }
             }
         }
         // Overriding - always use PRO for testing / debugging.
@@ -118,5 +142,47 @@ pwIDAQAB
             return true;
         }
         return false;
+    }
+
+    /**
+     * Counts users who are enrolled in a course containing at least one mooduell activity.
+     * The value is cached in MUC to avoid frequent DB work.
+     *
+     * @return int
+     */
+    protected static function count_subscribed_users_with_mooduell_access(): int {
+        global $DB;
+
+        $cache = cache::make('mod_mooduell', 'licenseaccesscountcache');
+        $cachekey = 'subscribeduserswithmooduell';
+        $cachedcount = $cache->get($cachekey);
+
+        if ($cachedcount !== false) {
+            return (int) $cachedcount;
+        }
+
+        $now = time();
+        $params = [
+            'timestartnow' => $now,
+            'timeendnow' => $now,
+        ];
+
+        $sql = "SELECT COUNT(DISTINCT ue.userid)
+                  FROM {user_enrolments} ue
+                  JOIN {enrol} e ON e.id = ue.enrolid
+                  JOIN {course} c ON c.id = e.courseid
+                  JOIN {mooduell} md ON md.course = c.id
+                  JOIN {user} u ON u.id = ue.userid
+                 WHERE e.status = 0
+                   AND ue.status = 0
+                   AND (ue.timestart = 0 OR ue.timestart <= :timestartnow)
+                   AND (ue.timeend = 0 OR ue.timeend > :timeendnow)
+                   AND u.deleted = 0
+                   AND u.suspended = 0";
+
+        $usercount = (int) $DB->count_records_sql($sql, $params);
+        $cache->set($cachekey, $usercount);
+
+        return $usercount;
     }
 }
