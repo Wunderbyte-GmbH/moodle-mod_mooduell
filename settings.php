@@ -23,6 +23,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\notification;
 use mod_mooduell\utils\wb_payment;
 defined('MOODLE_INTERNAL') || die();
 
@@ -50,6 +51,11 @@ if ($ADMIN->fulltree) {
     // Has PRO version been activated?
     $proversion = wb_payment::pro_version_is_activated();
 
+    $adminlimitmessage = wb_payment::get_admin_limit_warning_message();
+    if (!empty($adminlimitmessage)) {
+        notification::add($adminlimitmessage, \core\output\notification::NOTIFY_WARNING);
+    }
+
     $settings->add(
         new admin_setting_heading(
             'licensekeycfgheading',
@@ -67,12 +73,49 @@ if ($ADMIN->fulltree) {
         $decryptedlicensekey = wb_payment::decryptlicensekey($licensekey);
         if (array_key_exists('exptime', $decryptedlicensekey)) {
             $expirationdate = $decryptedlicensekey['exptime'];
+            $product = $decryptedlicensekey['product'] ?? '';
+            $productnames = [
+                'mooduell' => 'ENTERPRISE',
+                'mooduellpro' => 'PRO',
+                'mooduellpremium' => 'PREMIUM',
+                'mooduellpremiumplus' => 'PREMIUM PLUS',
+            ];
+            $productdisplay = $productnames[$product] ?? $product;
+
+            $activeusers = wb_payment::get_current_active_license_users();
+            $productlimit = wb_payment::LICENSE_PRODUCT_LIMITS[$product] ?? null;
+            $activedisplay = number_format((int)$activeusers, 0, ',', '.');
+            $limitdisplay = ($productlimit === null) ? 'Unlimitiert' : number_format((int)$productlimit, 0, ',', '.');
 
             if (wb_payment::pro_version_is_activated()) {
                 $licensekeydesc = "<p style='color: green; font-weight: bold'>"
                     . get_string('license_activated', 'mod_mooduell')
                     . $expirationdate
-                    . ")</p>";
+                    . ")<br>Produkt: "
+                    . s($productdisplay)
+                    . "<br>Aktiv: "
+                    . s($activedisplay)
+                    . "/"
+                    . s($limitdisplay)
+                    . "</p>";
+            } else if (
+                time() < strtotime($expirationdate)
+                && $productlimit !== null
+                && $activeusers > $productlimit
+            ) {
+                $messagecontext = (object)[
+                    'product' => $productdisplay,
+                    'active' => $activedisplay,
+                    'limit' => $limitdisplay,
+                ];
+
+                $licensekeydesc = "<p style='color: red; font-weight: bold'>"
+                    . get_string('license_overlimit_settings', 'mod_mooduell', $messagecontext)
+                    . "</p>";
+            } else {
+                $licensekeydesc = "<p style='color: red; font-weight: bold'>"
+                    . get_string('license_invalid', 'mod_mooduell')
+                    . "</p>";
             }
         } else {
             $licensekeydesc = "<p style='color: red; font-weight: bold'>"

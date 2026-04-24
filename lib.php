@@ -26,6 +26,7 @@ use core_completion\api;
 use mod_mooduell\mooduell;
 use mod_mooduell\completion\custom_completion;
 use mod_mooduell\completion\completion_utils;
+use mod_mooduell\utils\wb_payment;
 
 /**
  * Return if the plugin supports $feature.
@@ -64,6 +65,11 @@ function mooduell_supports($feature) {
  */
 function mooduell_add_instance(stdClass $formdata, ?mod_mooduell_mod_form $mform = null) {
     global $DB;
+
+    if (wb_payment::is_creation_blocked_due_to_license_limit()) {
+        throw new moodle_exception('licenselimit_newactivity_blocked', 'mod_mooduell');
+    }
+
     // Add the database record.
     $data = new stdClass();
     $data->name = $formdata->name;

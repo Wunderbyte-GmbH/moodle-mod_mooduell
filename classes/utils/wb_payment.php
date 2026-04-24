@@ -51,6 +51,11 @@ class wb_payment {
     ];
 
     /**
+     * Threshold from which admin warnings should be shown.
+     */
+    public const LICENSE_WARNING_THRESHOLD_PERCENT = 80;
+
+    /**
      * mod_mooduell_PUBLIC_KEY
      *
      * @var mixed
@@ -142,6 +147,101 @@ pwIDAQAB
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return current license usage information for limited mooduell products.
+     *
+     * @return array
+     * @throws \dml_exception
+     */
+    public static function get_limited_license_status(): array {
+        $status = [
+            'islimitedproduct' => false,
+            'product' => '',
+            'limit' => 0,
+            'currentusers' => 0,
+            'percentage' => 0,
+            'atwarningthreshold' => false,
+            'isoverlimit' => false,
+        ];
+
+        $pluginconfig = get_config('mooduell');
+        if (empty($pluginconfig->licensekey)) {
+            return $status;
+        }
+
+        $data = self::decryptlicensekey($pluginconfig->licensekey);
+        if ($data == [] || !isset($data['product']) || !array_key_exists($data['product'], self::LICENSE_PRODUCT_LIMITS)) {
+            return $status;
+        }
+
+        if (time() >= strtotime($data['exptime'])) {
+            return $status;
+        }
+
+        $productlimit = self::LICENSE_PRODUCT_LIMITS[$data['product']];
+        if ($productlimit === null) {
+            return $status;
+        }
+
+        $currentusers = self::count_subscribed_users_with_mooduell_access();
+        $percentage = (int)floor(($currentusers / $productlimit) * 100);
+
+        $status['islimitedproduct'] = true;
+        $status['product'] = $data['product'];
+        $status['limit'] = $productlimit;
+        $status['currentusers'] = $currentusers;
+        $status['percentage'] = $percentage;
+        $status['atwarningthreshold'] = $percentage >= self::LICENSE_WARNING_THRESHOLD_PERCENT;
+        $status['isoverlimit'] = $currentusers > $productlimit;
+
+        return $status;
+    }
+
+    /**
+     * Returns true when creating new games and activities must be blocked due to license limits.
+     *
+     * @return bool
+     * @throws \dml_exception
+     */
+    public static function is_creation_blocked_due_to_license_limit(): bool {
+        $status = self::get_limited_license_status();
+        return !empty($status['isoverlimit']);
+    }
+
+    /**
+     * Build warning message for admin pages when usage reaches warning threshold.
+     *
+     * @return string|null
+     * @throws \dml_exception
+     */
+    public static function get_admin_limit_warning_message(): ?string {
+        $status = self::get_limited_license_status();
+        if (empty($status['islimitedproduct']) || empty($status['atwarningthreshold'])) {
+            return null;
+        }
+
+        $stringdata = (object)[
+            'current' => $status['currentusers'],
+            'limit' => $status['limit'],
+            'percentage' => $status['percentage'],
+        ];
+
+        if (!empty($status['isoverlimit'])) {
+            return get_string('licenselimit_over_warning', 'mod_mooduell', $stringdata);
+        }
+
+        return get_string('licenselimit_threshold_warning', 'mod_mooduell', $stringdata);
+    }
+
+    /**
+     * Return the current number of active users counted for mooduell licensing.
+     *
+     * @return int
+     */
+    public static function get_current_active_license_users(): int {
+        return self::count_subscribed_users_with_mooduell_access();
     }
 
     /**

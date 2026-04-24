@@ -36,6 +36,7 @@ use DateTime;
 use dml_exception;
 use mod_mooduell\event\game_finished;
 use mod_mooduell\event\question_answered;
+use mod_mooduell\utils\wb_payment;
 use moodle_exception;
 use stdClass;
 use tool_dataprivacy\context_instance;
@@ -379,6 +380,10 @@ class game_control {
      */
     public function start_new_game(int $playerbid) {
         global $DB;
+
+        if (wb_payment::is_creation_blocked_due_to_license_limit()) {
+            throw new moodle_exception('licenselimit_newgame_blocked', 'mod_mooduell');
+        }
 
         // First we check if the playerbid provided is valid, if not, we throw and exception.
 

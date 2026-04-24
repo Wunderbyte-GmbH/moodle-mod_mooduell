@@ -106,6 +106,7 @@ $string['integrationcheck_webservicesactive'] = 'Webdienste Aktiv';
 $string['lastplayed'] = 'Zuletzt gespielt';
 $string['license_activated'] = 'PRO-Version wurde erfolgreich aktiviert.<br>(Läuft ab am: ';
 $string['license_invalid'] = 'Ungültiger Lizenz-Schlüssel.';
+$string['license_overlimit_settings'] = 'Ihre {$a->product}-Lizenz ist gültig, kann aber derzeit nicht aktiviert werden, weil Ihre Plattform aktuell {$a->active} aktive Nutzerinnen und Nutzer für MooDuell hat und das Lizenzlimit bei {$a->limit} liegt.<br>Deshalb können keine neuen Spiele mehr erstellt werden und es können keine neuen MooDuell-Aktivitäten mehr angelegt werden.';
 $string['licensekey'] = 'PRO-Lizenz-Schlüssel';
 $string['licensekeycfg'] = 'PRO-Version aktivieren';
 $string['licensekeycfgdesc'] = 'Mit einer PRO-Lizenz können Sie eine beliebige Anzahl von MooDuell Quizzes erstellen. Ausserdem ist es möglich die Anwendung mittels Theme an Ihr gewünschtes Design anzupassen.';
