@@ -29,8 +29,18 @@ use advanced_testcase;
 use coding_exception;
 use context_course;
 use mod_mooduell_generator;
-use mod_mooduell_external;
 use core_user;
+use mod_mooduell\external\answer_question;
+use mod_mooduell\external\get_game_data;
+use mod_mooduell\external\get_games_by_courses;
+use mod_mooduell\external\get_highscores;
+use mod_mooduell\external\get_quiz_users;
+use mod_mooduell\external\get_quizzes_by_courses;
+use mod_mooduell\external\get_user_stats;
+use mod_mooduell\external\get_user_token;
+use mod_mooduell\external\giveup_game;
+use mod_mooduell\external\set_alternatename;
+use mod_mooduell\external\start_attempt;
 
 /**
  * Test class for mooduell external functions.
@@ -110,7 +120,7 @@ final class mooduell_external_test extends advanced_testcase {
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
-        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
 
         // Check attempt.
         $this->assertEquals($user1->id, $attempt->playeraid);
@@ -135,10 +145,10 @@ final class mooduell_external_test extends advanced_testcase {
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
-        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
 
         // Get games data.
-        $games = mod_mooduell_external::get_games_by_courses([$course->id], -1);
+        $games = get_games_by_courses::execute([$course->id], -1);
 
         // Check games.
         $this->assertIsArray($games["quizzes"][0]);
@@ -169,7 +179,7 @@ final class mooduell_external_test extends advanced_testcase {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
-        $users = mod_mooduell_external::get_quiz_users($course->id, $cmd1->id);
+        $users = get_quiz_users::execute($course->id, $cmd1->id);
 
         // Check users.
         $this->assertIsArray($users);
@@ -203,7 +213,7 @@ final class mooduell_external_test extends advanced_testcase {
 
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
 
-        $duels = mod_mooduell_external::get_quizzes_by_courses([$course->id], -1);
+        $duels = get_quizzes_by_courses::execute([$course->id], -1);
 
         // Check no warnings.
         $this->assertEmpty($duels['warnings']);
@@ -231,16 +241,16 @@ final class mooduell_external_test extends advanced_testcase {
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
-        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
         // Player A question 0 - submit correct answer.
         $questionid = (int) $attempt->questions[0]->questionid;
         $answerid = array_search(true, array_column($attempt->questions[0]->answers, 'correct', 'id'));
-        $res = mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        $res = answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
         $this->assertEquals(1, $res["iscorrect"]);
         // Player A question 1 - submit incorrect answer.
         $questionid = (int) $attempt->questions[1]->questionid;
         $answerid = array_search(false, array_column($attempt->questions[1]->answers, 'correct', 'id'));
-        $res = mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        $res = answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
         $this->assertEquals(0, $res["iscorrect"]);
     }
 
@@ -257,20 +267,20 @@ final class mooduell_external_test extends advanced_testcase {
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
-        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
 
         // Player A question 0 - submit correct answer.
         $questionid = (int) $attempt->questions[0]->questionid;
         $answerid = array_search(true, array_column($attempt->questions[0]->answers, 'correct', 'id'));
-        $res = mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        $res = answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
 
         // Player A question 1 - submit incorrect answer.
         $questionid = (int) $attempt->questions[1]->questionid;
         $answerid = array_search(false, array_column($attempt->questions[1]->answers, 'correct', 'id'));
-        $res = mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        $res = answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
 
         // Get games data.
-        $game = mod_mooduell_external::get_game_data($course->id, $cmd1->id, $attempt->gameid);
+        $game = get_game_data::execute($course->id, $cmd1->id, $attempt->gameid);
         // Check game data.
         $this->assertEquals($user1->id, (int) $game->playeraid);
         $this->assertEquals($user2->id, (int) $game->playerbid);
@@ -297,36 +307,36 @@ final class mooduell_external_test extends advanced_testcase {
 
         // Game will be started in behalf of user1.
         $this->setUser($user1);
-        $attempt = mod_mooduell_external::start_attempt($course->id, $cmd1->id, $user2->id);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
 
         // Player A question 0 - submit correct answer.
         $questionid = (int) $attempt->questions[0]->questionid;
         $answerid = array_search(true, array_column($attempt->questions[0]->answers, 'correct', 'id'));
-        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
 
         // Player A question 1 - submit incorrect answer.
         $questionid = (int) $attempt->questions[1]->questionid;
         $answerid = array_search(false, array_column($attempt->questions[1]->answers, 'correct', 'id'));
-        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
 
         // Player A question 2 - submit correct answer.
         $questionid = (int) $attempt->questions[2]->questionid;
         $answerid = array_search(true, array_column($attempt->questions[2]->answers, 'correct', 'id'));
-        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
 
         // Switch to user2.
         $this->setUser($user2);
         // Player B question 0 - submit incorrect answer.
         $questionid = (int) $attempt->questions[0]->questionid;
         $answerid = array_search(false, array_column($attempt->questions[0]->answers, 'correct', 'id'));
-        mod_mooduell_external::answer_question($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
+        answer_question::execute($cmd1->id, $attempt->gameid, $questionid, [$answerid]);
         // User2 giveup game.
-        $res = mod_mooduell_external::giveup_game($attempt->gameid);
+        $res = giveup_game::execute($attempt->gameid);
         $this->assertEquals(1, $res['status']);
 
         // Evaluate highscores and games data.
         $this->setAdminUser();
-        $hs = mod_mooduell_external::get_highscores($cmd1->id);
+        $hs = get_highscores::execute($cmd1->id);
         // Check highscores data.
         $user1expected = [
             "quizid" => $cmd1->id,
@@ -355,8 +365,8 @@ final class mooduell_external_test extends advanced_testcase {
         $this->assertEquals($user1expected, $hs[0]);
         $this->assertEquals($user2expected, $hs[1]);
         // Check users stats.
-        $user1stats = mod_mooduell_external::get_user_stats($user1->id);
-        $user2stats = mod_mooduell_external::get_user_stats($user2->id);
+        $user1stats = get_user_stats::execute($user1->id);
+        $user2stats = get_user_stats::execute($user2->id);
         $user1statsexpected = [
             "playedgames" => 1,
             "wongames" => 1,
@@ -388,10 +398,10 @@ final class mooduell_external_test extends advanced_testcase {
         [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
         $this->setUser($user1);
         // Get user token.
-        $res = mod_mooduell_external::get_usertoken();
+        $res = get_user_token::execute();
         $this->assertIsString($res['token']);
         // Set alternate name and verify it.
-        $res = mod_mooduell_external::set_alternatename($user1->id, 'u1');
+        $res = set_alternatename::execute($user1->id, 'u1');
         $this->assertEquals(1, $res['status']);
         $res = core_user::get_user($user1->id);
         profile_load_custom_fields($res);

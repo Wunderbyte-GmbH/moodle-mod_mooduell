@@ -25,6 +25,8 @@
 
 use mod_mooduell\game_control;
 use mod_mooduell\mooduell;
+use mod_mooduell\external\get_game_data;
+use mod_mooduell\external\get_games_by_courses;
 use mod_mooduell\question_control;
 use SebastianBergmann\Environment\Console;
 
@@ -96,7 +98,7 @@ class behat_mooduell extends behat_base {
         // MANDATORY STEP: force $USER explicitly to $playername. Otherwise 'admin' is always current user in Behat!
         advanced_testcase::setUser($this->get_user_by_name($playername));
 
-        $data = mod_mooduell_external::get_games_by_courses([], 0);
+        $data = get_games_by_courses::execute([], 0);
 
         $numgames = 0;
         if (empty($data["quizzes"])) {
@@ -124,7 +126,7 @@ class behat_mooduell extends behat_base {
 
                 $isplayera = ($status == '1') && ($activeuser == $playera);
 
-                $gamedata = mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
+                $gamedata = get_game_data::execute($courseid, $quizid, $gameid);
                 $questions = $gamedata->questions;
                 $questioncounter = self::return_question_counter($questions, $isplayera);
                 if ($questioncounter >= 9) {
@@ -132,7 +134,7 @@ class behat_mooduell extends behat_base {
                     continue;
                 }
 
-                $gamedata = (object)mod_mooduell_external::get_game_data($courseid, $quizid, $gameid);
+                $gamedata = (object)get_game_data::execute($courseid, $quizid, $gameid);
                 $game = new game_control($mooduell, $gameid, $gamedata);
                 while ($questioncounter < 9) {
                     try {
