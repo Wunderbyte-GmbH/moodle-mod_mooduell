@@ -386,6 +386,107 @@ final class mooduell_external_test extends advanced_testcase {
     }
 
     /**
+     * Test start attempt with invalid course module id.
+     * @runInSeparateProcess
+     * @covers ::start_attempt
+     */
+    public function test_start_attempt_invalid_cmid_throws_exception(): void {
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
+
+        $this->setUser($user1);
+        $this->expectException(\moodle_exception::class);
+
+        start_attempt::execute($course->id, -1, $user2->id);
+    }
+
+    /**
+     * Test answer question with invalid course module id.
+     * @runInSeparateProcess
+     * @covers ::answer_question
+     */
+    public function test_answer_question_invalid_cmid_throws_exception(): void {
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
+
+        $this->setUser($user1);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
+        $questionid = (int) $attempt->questions[0]->questionid;
+        $answerid = array_search(true, array_column($attempt->questions[0]->answers, 'correct', 'id'));
+
+        $this->expectException(\moodle_exception::class);
+        answer_question::execute(-1, $attempt->gameid, $questionid, [$answerid]);
+    }
+
+    /**
+     * Test get game data with invalid course module id.
+     * @runInSeparateProcess
+     * @covers ::get_game_data
+     */
+    public function test_get_game_data_invalid_cmid_throws_exception(): void {
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
+
+        $this->setUser($user1);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
+
+        $this->expectException(\moodle_exception::class);
+        get_game_data::execute($course->id, -1, $attempt->gameid);
+    }
+
+    /**
+     * Test that non-participants cannot give up a game.
+     * @runInSeparateProcess
+     * @covers ::giveup_game
+     */
+    public function test_giveup_game_non_participant_cannot_modify_game(): void {
+        global $DB;
+
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
+
+        $this->setUser($user1);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
+
+        $outsider = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($outsider->id, $course->id);
+
+        $this->setUser($outsider);
+        $res = giveup_game::execute($attempt->gameid);
+        $this->assertEquals(0, $res['status']);
+
+        $game = $DB->get_record('mooduell_games', ['id' => $attempt->gameid], '*', MUST_EXIST);
+        $this->assertEquals(0, (int)$game->winnerid);
+        $this->assertEquals(1, (int)$game->status);
+    }
+
+    /**
+     * Test give up by player B updates persisted game state correctly.
+     * @runInSeparateProcess
+     * @covers ::giveup_game
+     * @covers ::get_game_data
+     */
+    public function test_giveup_game_by_playerb_persists_expected_state(): void {
+        global $DB;
+
+        [$duel1, $user1, $user2, $cmd1, $course] = $this->returntestdata();
+
+        $this->setUser($user1);
+        $attempt = start_attempt::execute($course->id, $cmd1->id, $user2->id);
+
+        $this->setUser($user2);
+        $res = giveup_game::execute($attempt->gameid);
+        $this->assertEquals(1, $res['status']);
+
+        $game = $DB->get_record('mooduell_games', ['id' => $attempt->gameid], '*', MUST_EXIST);
+        $this->assertEquals(3, (int)$game->status);
+        $this->assertEquals($user1->id, (int)$game->winnerid);
+        $this->assertEquals(9, (int)$game->playerbqplayed);
+        $this->assertGreaterThan(0, (int)$game->timemodified);
+
+        $this->setUser($user1);
+        $gamedata = get_game_data::execute($course->id, $cmd1->id, $attempt->gameid);
+        $this->assertEquals(3, (int)$gamedata->status);
+        $this->assertEquals($user1->id, (int)$gamedata->winnerid);
+    }
+
+    /**
      * Test user functions.
      * @runInSeparateProcess
      * @covers ::get_usertoken
