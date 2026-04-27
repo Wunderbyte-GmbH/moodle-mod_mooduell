@@ -23,7 +23,7 @@
  * Basic usage — works anywhere the user is logged in:
  *   [mooduell]
  *
- * Log in as the most-recently-active enrolled user from a given course:
+ * Log in as the least-recently-used webservice user from a given course:
  *   [mooduell randomuserfromcourse=12]
  *
  * @package    mod_mooduell
@@ -39,32 +39,40 @@ namespace mod_mooduell;
 class shortcodes {
 
     /**
-     * Returns the ID of the least-recently-active enrolled user in a course.
+     * Returns the ID of the least-recently-used webservice user in a course.
      *
-     * Queries user_lastaccess (which Moodle updates on every course page visit)
-     * joined with user_enrolments to ensure the user is actively enrolled.
+     * Uses external_tokens.lastaccess for mod_mooduell_external so the ordering
+     * reflects actual app/webservice activity instead of course page visits.
      * Deleted and suspended users are excluded.
      *
      * @param int $courseid
-     * @return int|null  User ID, or null if no eligible users found.
+     * @return int|null User ID, or null if no eligible users found.
      */
     private static function get_least_recently_active_user_in_course(int $courseid): ?int {
         global $DB;
 
-        $sql = 'SELECT u.id
+        $sql = 'SELECT u.id,
+                       COALESCE(MAX(et.lastaccess), 0) AS ws_lastaccess
                   FROM {user} u
                   JOIN {user_enrolments} ue ON ue.userid = u.id
                   JOIN {enrol} e            ON e.id = ue.enrolid AND e.courseid = :courseid
-             LEFT JOIN {user_lastaccess} la ON la.userid = u.id AND la.courseid = :courseid2
+             LEFT JOIN {external_services} es ON es.shortname = :servicename AND es.enabled = 1
+             LEFT JOIN {external_tokens} et ON et.userid = u.id
+                                           AND et.externalserviceid = es.id
+                                           AND et.tokentype = :tokentype
+                                           AND (et.validuntil = 0 OR et.validuntil > :now)
                  WHERE u.deleted  = 0
                    AND u.suspended = 0
                    AND ue.status  = 0
-                  ORDER BY la.timeaccess ASC NULLS FIRST
+              GROUP BY u.id
+              ORDER BY ws_lastaccess ASC, u.id ASC
                  LIMIT 1';
 
         $record = $DB->get_record_sql($sql, [
-            'courseid'  => $courseid,
-            'courseid2' => $courseid,
+            'courseid'    => $courseid,
+            'servicename' => 'mod_mooduell_external',
+            'tokentype'   => EXTERNAL_TOKEN_PERMANENT,
+            'now'         => time(),
         ]);
 
         return $record ? (int) $record->id : null;
@@ -78,10 +86,10 @@ class shortcodes {
      * No cmid or course context is required — a short-lived autologin token is
      * minted for whoever is currently viewing the page.
      *
-     * Usage:
+    * Usage:
      *   [mooduell]
      *
-    * Log in as the least-recently-active enrolled user from a given course:
+    * Log in as the least-recently-used webservice user from a given course:
      *   [mooduell randomuserfromcourse=12]
      *
      * @param string        $shortcode  The shortcode tag name ("mooduell").
@@ -105,8 +113,8 @@ class shortcodes {
             return '';
         }
 
-        // Resolve target user: randomuserfromcourse picks the least-recently-active
-        // enrolled user from the given course; otherwise default to current user.
+        // Resolve target user: randomuserfromcourse picks the least-recently-used
+        // webservice user from the given course; otherwise default to current user.
         $targetuserid = null;
         $randomcourseid = !empty($args['randomuserfromcourse']) ? (int) $args['randomuserfromcourse'] : 0;
         if (!empty($randomcourseid)) {
