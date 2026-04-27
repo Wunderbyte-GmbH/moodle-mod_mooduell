@@ -78,6 +78,11 @@ class set_alternatename extends external_api {
 
         profile_save_data($newuser);
 
+        // Purge the users cache so the next get_quiz_users call returns fresh data
+        // with the updated alternatename instead of the stale cached value.
+        $cache = \cache::make('mod_mooduell', 'userscache');
+        $cache->purge();
+
         return ['status' => 1];
     }
     /**
