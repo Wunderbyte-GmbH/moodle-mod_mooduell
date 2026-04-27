@@ -38,13 +38,26 @@ namespace mod_mooduell;
  */
 class shortcodes {
     /**
+     * Render a warning box for shortcode validation failures.
+     *
+     * @param string $stringidentifier
+     * @param mixed $a Optional string placeholder data.
+     * @return string
+     */
+    private static function render_shortcode_warning(string $stringidentifier, $a = null): string {
+        return '<div class="alert alert-warning mooduell-shortcode-warning" role="alert">'
+            . \s(\get_string($stringidentifier, 'mod_mooduell', $a))
+            . '</div>';
+    }
+
+    /**
      * Returns whether the given course contains at least one MooDuell activity.
      *
      * @param int $courseid
      * @return bool
      */
     private static function course_has_mooduell_instance(int $courseid): bool {
-        $instances = get_coursemodules_in_course('mooduell', $courseid);
+        $instances = \get_coursemodules_in_course('mooduell', $courseid);
         return !empty($instances);
     }
 
@@ -81,7 +94,7 @@ class shortcodes {
         $record = $DB->get_record_sql($sql, [
             'courseid'    => $courseid,
             'servicename' => 'mod_mooduell_external',
-            'tokentype'   => EXTERNAL_TOKEN_PERMANENT,
+            'tokentype'   => \EXTERNAL_TOKEN_PERMANENT,
             'now'         => time(),
         ]);
 
@@ -119,11 +132,15 @@ class shortcodes {
     ): string {
         global $CFG, $PAGE;
 
-        $configuredtoken = (string) get_config('mooduell', 'shortcodetoken');
+        $configuredtoken = (string) \get_config('mooduell', 'shortcodetoken');
         $providedtoken = isset($args['securitytoken']) ? trim((string) $args['securitytoken']) : '';
 
-        if ($configuredtoken === '' || $providedtoken === '' || !hash_equals($configuredtoken, $providedtoken)) {
-            return '';
+        if ($configuredtoken === '' || $providedtoken === '') {
+            return self::render_shortcode_warning('shortcode_warning_missing_securitytoken');
+        }
+
+        if (!hash_equals($configuredtoken, $providedtoken)) {
+            return self::render_shortcode_warning('shortcode_warning_invalid_securitytoken');
         }
 
         // Only render for authenticated, non-guest users.
@@ -137,12 +154,12 @@ class shortcodes {
         $randomcourseid = !empty($args['randomuserfromcourse']) ? (int) $args['randomuserfromcourse'] : 0;
         if (!empty($randomcourseid)) {
             if (!self::course_has_mooduell_instance($randomcourseid)) {
-                return '';
+                return self::render_shortcode_warning('shortcode_warning_missing_mooduell_instance', $randomcourseid);
             }
 
             $targetuserid = self::get_least_recently_active_user_in_course($randomcourseid);
             if (empty($targetuserid)) {
-                return ''; // No eligible users in that course.
+                return self::render_shortcode_warning('shortcode_warning_no_eligible_user', $randomcourseid);
             }
         }
 
@@ -156,8 +173,8 @@ class shortcodes {
         $data['qrimage']          = $qrcode->generate_qr_code();
         $data['launchlogourl']    = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
 
-        $appstorelink  = get_config('mooduell', 'appstoreurl');
-        $playstorelink = get_config('mooduell', 'playstoreurl');
+        $appstorelink  = \get_config('mooduell', 'appstoreurl');
+        $playstorelink = \get_config('mooduell', 'playstoreurl');
 
         if (!empty($appstorelink)) {
             $data['appstorelink']    = $appstorelink;
