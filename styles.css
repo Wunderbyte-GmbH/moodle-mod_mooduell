@@ -213,7 +213,12 @@
     gap: 0.65rem;
     margin: 0;
     padding: 0;
-    list-style: none;
+    list-style: none !important;
+}
+
+#page-mod-mooduell-view .mooduell-launch-features li::marker,
+.mooduell-launch-features li::marker {
+    content: '';
 }
 
 #page-mod-mooduell-view .mooduell-launch-features li,
