@@ -253,3 +253,6 @@ $string['xseconds'] = '{$a} Sekunden';
 $string['youlose'] = 'Du hast gegen {$a} verloren';
 $string['yourturn'] = 'Du bist dran gegen {$a}';
 $string['youwin'] = 'Du hast gegen {$a} gewonnen';
+
+// Shortcode-Strings.
+$string['shortcode_mooduell_description'] = 'Bettet die MooDuell-Web-App als authentifizierten iFrame für den aktuellen Nutzer ein. Verwendung: [[mooduell]] (erkennt die Instanz im Kurs automatisch) oder [[mooduell cmid=5]] für eine bestimmte Instanz.';

@@ -294,3 +294,6 @@ $string['xseconds'] = '{$a} seconds';
 $string['youlose'] = 'You lost against {$a}';
 $string['yourturn'] = 'It\'s your turn against {$a}';
 $string['youwin'] = 'You won against {$a}';
+
+// Shortcode strings.
+$string['shortcode_mooduell_description'] = 'Embeds the MooDuell web app as an authenticated iframe for the current user. Usage: [[mooduell]] (auto-detects the instance in the course) or [[mooduell cmid=5]] to target a specific instance.';

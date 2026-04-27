@@ -15,18 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Shortcode definitions for mod_mooduell.
  *
- * @package     mod_mooduell
- * @copyright   2020 Wunderbyte GmbH <info@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Moodle's shortcode filter (filter_shortcodes) reads this file to discover
+ * which shortcode tags a plugin provides and which class/method handles each one.
+ *
+ * @package    mod_mooduell
+ * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_mooduell';
-$plugin->release = 'v2.2.5';
-$plugin->supported = [405, 501];
-$plugin->version = 2026042700;
-$plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_STABLE;
+$shortcodes = [
+    'mooduell' => [
+        'callback' => 'mod_mooduell\shortcodes::mooduell',
+        'description' => 'shortcode_mooduell_description',
+    ],
+];
