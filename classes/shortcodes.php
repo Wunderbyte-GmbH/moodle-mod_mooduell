@@ -66,26 +66,40 @@ class shortcodes {
         object $env,
         ?\Closure $next
     ): string {
+        global $CFG, $PAGE;
+
         // Only render for authenticated, non-guest users.
         if (!isloggedin() || isguestuser()) {
             return '';
         }
 
-        // Generate an authenticated single-use launch URL for the current user.
-        // This only needs $USER->id — no course or activity context required.
+        // Build the same data the student view uses for the phone-frame block.
         $qrcode = new qr_code();
-        $url = $qrcode->generate_web_app_launch_url();
 
-        if (empty($url)) {
-            return '';
+        $data = [];
+        $data['webapppreviewurl'] = $qrcode->generate_web_app_launch_url();
+        $data['webloginurl']      = $qrcode->generate_web_launch_url();
+        $data['qrimage']          = $qrcode->generate_qr_code();
+        $data['launchlogourl']    = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
+
+        $appstorelink  = get_config('mooduell', 'appstoreurl');
+        $playstorelink = get_config('mooduell', 'playstoreurl');
+
+        if (!empty($appstorelink)) {
+            $data['appstorelink']    = $appstorelink;
+            $data['appstoreqrimage'] = $qrcode->generate_url_qr_code($appstorelink);
+        }
+        if (!empty($playstorelink)) {
+            $data['playstorelink']    = $playstorelink;
+            $data['playstoreqrimage'] = $qrcode->generate_url_qr_code($playstorelink);
         }
 
-        // s() HTML-encodes the URL (& → &amp; etc.) for safe use in an attribute.
-        return '<iframe class="mooduell-embed-iframe"'
-            . ' src="' . s($url) . '"'
-            . ' title="MooDuell"'
-            . ' loading="lazy"'
-            . ' allow="camera; microphone">'
-            . '</iframe>';
+        $output = $PAGE->get_renderer('mod_mooduell');
+        $html = $output->render_from_template('mod_mooduell/launch_preview', $data);
+
+        // Boot the QR expiry timer (same AMD module the student view uses).
+        $PAGE->requires->js_call_amd('mod_mooduell/qrrefresh', 'init');
+
+        return $html;
     }
 }

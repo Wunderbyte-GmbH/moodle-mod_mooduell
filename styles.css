@@ -44,7 +44,13 @@
     color: green;
 }
 
-#page-mod-mooduell-view .mooduell-launch-preview {
+/* ── Launch preview (phone frame + sidebar) ─────────────────────────────────
+   Rules apply both on the native view page AND wherever the [mooduell]
+   shortcode is used (any course page, dashboard, site homepage, etc.).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+#page-mod-mooduell-view .mooduell-launch-preview,
+.mooduell-launch-preview {
     margin: 1rem 0 1.5rem;
     background:
         radial-gradient(ellipse at 35% 48%, rgba(0, 200, 255, 0.2) 0%, transparent 48%),
@@ -54,7 +60,8 @@
     padding: 1.5rem;
 }
 
-#page-mod-mooduell-view .mooduell-launch-stage {
+#page-mod-mooduell-view .mooduell-launch-stage,
+.mooduell-launch-stage {
     display: flex;
     flex-wrap: wrap;
     gap: 3rem;
@@ -62,11 +69,13 @@
     justify-content: center;
 }
 
-#page-mod-mooduell-view .mooduell-phone-wrap {
+#page-mod-mooduell-view .mooduell-phone-wrap,
+.mooduell-phone-wrap {
     flex-shrink: 0;
 }
 
-#page-mod-mooduell-view .mooduell-phone-shell {
+#page-mod-mooduell-view .mooduell-phone-shell,
+.mooduell-phone-shell {
     position: relative;
     width: 390px;
     height: 844px;
@@ -80,7 +89,8 @@
         0 0 120px rgba(0, 116, 151, 0.25);
 }
 
-#page-mod-mooduell-view .mooduell-phone-shell::before {
+#page-mod-mooduell-view .mooduell-phone-shell::before,
+.mooduell-phone-shell::before {
     content: "";
     position: absolute;
     left: -5px;
@@ -92,7 +102,8 @@
     box-shadow: 0 46px 0 #1a5a6e, 0 88px 0 #1a5a6e;
 }
 
-#page-mod-mooduell-view .mooduell-phone-shell::after {
+#page-mod-mooduell-view .mooduell-phone-shell::after,
+.mooduell-phone-shell::after {
     content: "";
     position: absolute;
     right: -5px;
@@ -103,7 +114,8 @@
     border-radius: 0 2px 2px 0;
 }
 
-#page-mod-mooduell-view .mooduell-phone-screen {
+#page-mod-mooduell-view .mooduell-phone-screen,
+.mooduell-phone-screen {
     position: absolute;
     inset: 6px;
     border-radius: 48px;
@@ -113,7 +125,8 @@
     flex-direction: column;
 }
 
-#page-mod-mooduell-view .mooduell-phone-statusbar {
+#page-mod-mooduell-view .mooduell-phone-statusbar,
+.mooduell-phone-statusbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -125,17 +138,20 @@
     border-radius: 48px 48px 0 0;
 }
 
-#page-mod-mooduell-view .mooduell-phone-time {
+#page-mod-mooduell-view .mooduell-phone-time,
+.mooduell-phone-time {
     letter-spacing: 0.02em;
 }
 
-#page-mod-mooduell-view .mooduell-phone-iframe {
+#page-mod-mooduell-view .mooduell-phone-iframe,
+.mooduell-phone-iframe {
     width: 100%;
     height: 100%;
     border: 0;
 }
 
-#page-mod-mooduell-view .mooduell-launch-sidebar {
+#page-mod-mooduell-view .mooduell-launch-sidebar,
+.mooduell-launch-sidebar {
     width: min(360px, 100%);
     flex: 0 1 360px;
     color: #fff;
@@ -144,7 +160,8 @@
     gap: 0.8rem;
 }
 
-#page-mod-mooduell-view .mooduell-launch-eyebrow {
+#page-mod-mooduell-view .mooduell-launch-eyebrow,
+.mooduell-launch-eyebrow {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -152,7 +169,8 @@
     font-size: 0.68rem;
 }
 
-#page-mod-mooduell-view .mooduell-launch-logo {
+#page-mod-mooduell-view .mooduell-launch-logo,
+.mooduell-launch-logo {
     width: 140px;
     height: auto;
     max-width: 100%;
@@ -160,7 +178,8 @@
     filter: drop-shadow(0 0 24px rgba(0, 200, 255, 0.45)) drop-shadow(0 4px 32px rgba(0, 116, 151, 0.5));
 }
 
-#page-mod-mooduell-view .mooduell-launch-tagline {
+#page-mod-mooduell-view .mooduell-launch-tagline,
+.mooduell-launch-tagline {
     margin: -0.45rem 0 0;
     color: rgba(255, 255, 255, 0.35);
     font-size: 0.68rem;
@@ -169,7 +188,8 @@
     font-weight: 500;
 }
 
-#page-mod-mooduell-view .mooduell-launch-title {
+#page-mod-mooduell-view .mooduell-launch-title,
+.mooduell-launch-title {
     margin: 0;
     font-size: 2rem;
     line-height: 1.15;
@@ -177,7 +197,8 @@
     max-width: 12ch;
 }
 
-#page-mod-mooduell-view .mooduell-launch-text {
+#page-mod-mooduell-view .mooduell-launch-text,
+.mooduell-launch-text {
     margin: 0;
     color: rgba(255, 255, 255, 0.7);
     font-size: 1rem;
@@ -185,7 +206,8 @@
     max-width: 32ch;
 }
 
-#page-mod-mooduell-view .mooduell-launch-features {
+#page-mod-mooduell-view .mooduell-launch-features,
+.mooduell-launch-features {
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
@@ -194,7 +216,8 @@
     list-style: none;
 }
 
-#page-mod-mooduell-view .mooduell-launch-features li {
+#page-mod-mooduell-view .mooduell-launch-features li,
+.mooduell-launch-features li {
     color: rgba(255, 255, 255, 0.74);
     font-size: 0.92rem;
     line-height: 1.42;
@@ -203,21 +226,24 @@
     max-width: 34ch;
 }
 
-#page-mod-mooduell-view .mooduell-launch-features li::before {
+#page-mod-mooduell-view .mooduell-launch-features li::before,
+.mooduell-launch-features li::before {
     content: "•";
     position: absolute;
     left: 0;
     color: rgba(255, 255, 255, 0.84);
 }
 
-#page-mod-mooduell-view .mooduell-launch-buttons {
+#page-mod-mooduell-view .mooduell-launch-buttons,
+.mooduell-launch-buttons {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 0.35rem;
 }
 
-#page-mod-mooduell-view .mooduell-launch-buttons .btn-warning {
+#page-mod-mooduell-view .mooduell-launch-buttons .btn-warning,
+.mooduell-launch-buttons .btn-warning {
     border: none;
     border-radius: 10px;
     color: #fff;
@@ -227,7 +253,8 @@
     box-shadow: 0 4px 20px rgba(236, 134, 0, 0.35);
 }
 
-#page-mod-mooduell-view .mooduell-login-qr-button-wrap .btn-primary {
+#page-mod-mooduell-view .mooduell-login-qr-button-wrap .btn-primary,
+.mooduell-login-qr-button-wrap .btn-primary {
     border: none;
     border-radius: 10px;
     color: #fff;
@@ -237,39 +264,47 @@
     box-shadow: 0 4px 20px rgba(0, 116, 151, 0.4);
 }
 
-#page-mod-mooduell-view .mooduell-launch-note {
+#page-mod-mooduell-view .mooduell-launch-note,
+.mooduell-launch-note {
     margin: 0.1rem 0 0;
     font-size: 0.65rem;
     color: rgba(255, 255, 255, 0.3);
     line-height: 1.65;
 }
 
-#page-mod-mooduell-view .mooduell-qr-image {
+#page-mod-mooduell-view .mooduell-qr-image,
+.mooduell-qr-image {
     width: 220px;
     max-width: 100%;
 }
 
 @media (max-width: 991px) {
-    #page-mod-mooduell-view .mooduell-launch-stage {
+
+    #page-mod-mooduell-view .mooduell-launch-stage,
+    .mooduell-launch-stage {
         gap: 1.4rem;
     }
 
-    #page-mod-mooduell-view .mooduell-launch-sidebar {
+    #page-mod-mooduell-view .mooduell-launch-sidebar,
+    .mooduell-launch-sidebar {
         width: 100%;
         max-width: 560px;
         flex-basis: auto;
     }
 
-    #page-mod-mooduell-view .mooduell-phone-shell {
+    #page-mod-mooduell-view .mooduell-phone-shell,
+    .mooduell-phone-shell {
         width: 340px;
         height: 736px;
     }
 
-    #page-mod-mooduell-view .mooduell-phone-iframe {
+    #page-mod-mooduell-view .mooduell-phone-iframe,
+    .mooduell-phone-iframe {
         height: 100%;
     }
 
-    #page-mod-mooduell-view .mooduell-launch-title {
+    #page-mod-mooduell-view .mooduell-launch-title,
+    .mooduell-launch-title {
         font-size: 1.6rem;
     }
 }
