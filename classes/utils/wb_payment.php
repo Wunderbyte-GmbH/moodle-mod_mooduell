@@ -113,7 +113,7 @@ pwIDAQAB
      * @return bool true if the license key is valid at current date
      * @throws \dml_exception
      */
-    public static function pro_version_is_activated() {
+    public static function pro_version_is_activated($checkuserlimit = true) {
         // Get license key which has been set in settings.php.
         $pluginconfig = get_config('mooduell');
         if (!empty($pluginconfig->licensekey)) {
@@ -136,7 +136,10 @@ pwIDAQAB
                 }
 
                 $userlimit = self::LICENSE_PRODUCT_LIMITS[$data['product']];
-                if ($userlimit !== null && self::count_subscribed_users_with_mooduell_access() <= $userlimit) {
+                if ($checkuserlimit && $userlimit !== null && self::count_subscribed_users_with_mooduell_access() <= $userlimit) {
+                    return true;
+                }
+                if (!$checkuserlimit) {
                     return true;
                 }
             }

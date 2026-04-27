@@ -94,7 +94,12 @@ class manage_tokens {
      * @throws dml_exception
      * @return stdClass
      */
-    public static function generate_token_for_user(int $userid, $servicename = 'mod_mooduell_external', $duration = 0, bool $forceNew = false) {
+    public static function generate_token_for_user(
+        int $userid,
+        $servicename = 'mod_mooduell_external',
+        $duration = 0,
+        bool $forcenew = false
+    ) {
 
         global $DB, $USER, $CFG;
 
@@ -142,7 +147,7 @@ class manage_tokens {
         }
 
         // If some valid tokens exist then use the most recent (unless a fresh token is explicitly required).
-        if (!$forceNew && count($tokens) > 0) {
+        if (!$forcenew && count($tokens) > 0) {
             $token = array_pop($tokens);
         } else {
             // Create a new token.

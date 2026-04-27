@@ -37,7 +37,6 @@ namespace mod_mooduell;
  * Shortcode handler class for mod_mooduell.
  */
 class shortcodes {
-
     /**
      * Returns the ID of the least-recently-used webservice user in a course.
      *
@@ -86,10 +85,10 @@ class shortcodes {
      * No cmid or course context is required — a short-lived autologin token is
      * minted for whoever is currently viewing the page.
      *
-    * Usage:
+     * Usage:
      *   [mooduell]
      *
-    * Log in as the least-recently-used webservice user from a given course:
+     * Log in as the least-recently-used webservice user from a given course:
      *   [mooduell randomuserfromcourse=12]
      *
      * @param string        $shortcode  The shortcode tag name ("mooduell").
@@ -109,9 +108,9 @@ class shortcodes {
         global $CFG, $PAGE;
 
         // Only render for authenticated, non-guest users.
-        if (!isloggedin() || isguestuser()) {
-            return '';
-        }
+        // if (!isloggedin() || isguestuser()) {
+        // return '';
+        // }.
 
         // Resolve target user: randomuserfromcourse picks the least-recently-used
         // webservice user from the given course; otherwise default to current user.

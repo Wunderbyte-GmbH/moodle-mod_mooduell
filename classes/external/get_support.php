@@ -50,7 +50,7 @@ class get_support extends external_api {
      */
     public static function execute() {
         $url = get_config('mooduell', 'supporturl');
-        $pay = \mod_mooduell\utils\wb_payment::pro_version_is_activated();
+        $pay = \mod_mooduell\utils\wb_payment::pro_version_is_activated(false);
         $badges = get_config('mooduell', 'disablebadges');
         $themeimg = get_config('mod_mooduell', 'companylogo');
         $themeimgalt = get_config('mod_mooduell', 'companylogoalternative');
