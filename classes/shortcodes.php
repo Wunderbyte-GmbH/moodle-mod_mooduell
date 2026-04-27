@@ -20,11 +20,11 @@
  * Register shortcodes here for use with Moodle's shortcode filter
  * (filter_shortcodes or Moodle 4.x core shortcodes).
  *
- * Basic usage — works anywhere the user is logged in:
- *   [mooduell]
+ * Basic usage:
+ *   [mooduell securitytoken=ABCDEFGH]
  *
  * Log in as the least-recently-used webservice user from a given course:
- *   [mooduell randomuserfromcourse=12]
+ *   [mooduell randomuserfromcourse=12 securitytoken=ABCDEFGH]
  *
  * @package    mod_mooduell
  * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
@@ -37,6 +37,17 @@ namespace mod_mooduell;
  * Shortcode handler class for mod_mooduell.
  */
 class shortcodes {
+    /**
+     * Returns whether the given course contains at least one MooDuell activity.
+     *
+     * @param int $courseid
+     * @return bool
+     */
+    private static function course_has_mooduell_instance(int $courseid): bool {
+        $instances = get_coursemodules_in_course('mooduell', $courseid);
+        return !empty($instances);
+    }
+
     /**
      * Returns the ID of the least-recently-used webservice user in a course.
      *
@@ -85,14 +96,15 @@ class shortcodes {
      * No cmid or course context is required — a short-lived autologin token is
      * minted for whoever is currently viewing the page.
      *
-     * Usage:
-     *   [mooduell]
+    * Usage:
+    *   [mooduell securitytoken=ABCDEFGH]
      *
-     * Log in as the least-recently-used webservice user from a given course:
-     *   [mooduell randomuserfromcourse=12]
+    * Log in as the least-recently-used webservice user from a given course:
+    *   [mooduell randomuserfromcourse=12 securitytoken=ABCDEFGH]
      *
-     * @param string        $shortcode  The shortcode tag name ("mooduell").
-     * @param array         $args       Shortcode attributes. Optional: randomuserfromcourse (int course ID).
+    * @param string        $shortcode  The shortcode tag name ("mooduell").
+    * @param array         $args       Shortcode attributes. securitytoken is required for all usages.
+    *                                  randomuserfromcourse (int course ID) is optional.
      * @param string|null   $content    Inner content between tags (unused).
      * @param object        $env        Rendering environment from the filter.
      * @param \Closure|null $next       Next handler in the filter chain.
@@ -107,6 +119,13 @@ class shortcodes {
     ): string {
         global $CFG, $PAGE;
 
+        $configuredtoken = (string) get_config('mooduell', 'shortcodetoken');
+        $providedtoken = isset($args['securitytoken']) ? trim((string) $args['securitytoken']) : '';
+
+        if ($configuredtoken === '' || $providedtoken === '' || !hash_equals($configuredtoken, $providedtoken)) {
+            return '';
+        }
+
         // Only render for authenticated, non-guest users.
         // if (!isloggedin() || isguestuser()) {
         // return '';
@@ -117,6 +136,10 @@ class shortcodes {
         $targetuserid = null;
         $randomcourseid = !empty($args['randomuserfromcourse']) ? (int) $args['randomuserfromcourse'] : 0;
         if (!empty($randomcourseid)) {
+            if (!self::course_has_mooduell_instance($randomcourseid)) {
+                return '';
+            }
+
             $targetuserid = self::get_least_recently_active_user_in_course($randomcourseid);
             if (empty($targetuserid)) {
                 return ''; // No eligible users in that course.

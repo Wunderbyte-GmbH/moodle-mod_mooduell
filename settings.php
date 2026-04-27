@@ -30,6 +30,12 @@ defined('MOODLE_INTERNAL') || die();
 global $ADMIN, $CFG;
 
 if ($ADMIN->fulltree) {
+    $shortcodetoken = get_config('mooduell', 'shortcodetoken');
+    if (empty($shortcodetoken)) {
+        $shortcodetoken = random_string(8);
+        set_config('shortcodetoken', $shortcodetoken, 'mooduell');
+    }
+
     // Collecting necessary settings.
     $settingscheck = [
         'webservices' => get_config('core', 'enablewebservices'),
@@ -134,6 +140,14 @@ if ($ADMIN->fulltree) {
         cache_helper::purge_by_event('setbacklicenseaccesscountcache');
     });
     $settings->add($licensekeysetting);
+
+    $settings->add(new admin_setting_configtext(
+        'mooduell/shortcodetoken',
+        get_string('shortcodetoken', 'mod_mooduell'),
+        get_string('shortcodetoken_desc', 'mod_mooduell'),
+        $shortcodetoken,
+        PARAM_RAW_TRIMMED
+    ));
 
         $setting = new admin_setting_configcheckbox(
             'mooduell/usefullnames',
