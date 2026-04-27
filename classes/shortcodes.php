@@ -21,10 +21,10 @@
  * (filter_shortcodes or Moodle 4.x core shortcodes).
  *
  * Basic usage — works anywhere the user is logged in:
- *   [[mooduell]]
+ *   [mooduell]
  *
- * Step 2 – log in as the most-recently-active user from a course (not yet implemented):
- *   [[mooduell randomuserfromcourse=12]]
+ * Log in as the most-recently-active enrolled user from a given course:
+ *   [mooduell randomuserfromcourse=12]
  *
  * @package    mod_mooduell
  * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
@@ -39,6 +39,38 @@ namespace mod_mooduell;
 class shortcodes {
 
     /**
+     * Returns the ID of the least-recently-active enrolled user in a course.
+     *
+     * Queries user_lastaccess (which Moodle updates on every course page visit)
+     * joined with user_enrolments to ensure the user is actively enrolled.
+     * Deleted and suspended users are excluded.
+     *
+     * @param int $courseid
+     * @return int|null  User ID, or null if no eligible users found.
+     */
+    private static function get_least_recently_active_user_in_course(int $courseid): ?int {
+        global $DB;
+
+        $sql = 'SELECT u.id
+                  FROM {user} u
+                  JOIN {user_enrolments} ue ON ue.userid = u.id
+                  JOIN {enrol} e            ON e.id = ue.enrolid AND e.courseid = :courseid
+             LEFT JOIN {user_lastaccess} la ON la.userid = u.id AND la.courseid = :courseid2
+                 WHERE u.deleted  = 0
+                   AND u.suspended = 0
+                   AND ue.status  = 0
+                  ORDER BY la.timeaccess ASC NULLS FIRST
+                 LIMIT 1';
+
+        $record = $DB->get_record_sql($sql, [
+            'courseid'  => $courseid,
+            'courseid2' => $courseid,
+        ]);
+
+        return $record ? (int) $record->id : null;
+    }
+
+    /**
      * Renders an authenticated MooDuell web-app iframe for the current user.
      *
      * Works anywhere in Moodle (course pages, dashboard, site homepage, blocks,
@@ -47,17 +79,17 @@ class shortcodes {
      * minted for whoever is currently viewing the page.
      *
      * Usage:
-     *   [[mooduell]]
+     *   [mooduell]
      *
-     * Step 2 – random user from course (not yet implemented):
-     *   [[mooduell randomuserfromcourse=12]]
+    * Log in as the least-recently-active enrolled user from a given course:
+     *   [mooduell randomuserfromcourse=12]
      *
      * @param string        $shortcode  The shortcode tag name ("mooduell").
-     * @param array         $args       Shortcode attributes (currently unused).
+     * @param array         $args       Shortcode attributes. Optional: randomuserfromcourse (int course ID).
      * @param string|null   $content    Inner content between tags (unused).
      * @param object        $env        Rendering environment from the filter.
      * @param \Closure|null $next       Next handler in the filter chain.
-     * @return string Rendered <iframe> HTML, or empty string for guests.
+     * @return string Rendered HTML, or empty string for guests / no eligible users.
      */
     public static function mooduell(
         string $shortcode,
@@ -73,12 +105,24 @@ class shortcodes {
             return '';
         }
 
+        // Resolve target user: randomuserfromcourse picks the least-recently-active
+        // enrolled user from the given course; otherwise default to current user.
+        $targetuserid = null;
+        $randomcourseid = !empty($args['randomuserfromcourse']) ? (int) $args['randomuserfromcourse'] : 0;
+        if (!empty($randomcourseid)) {
+            $targetuserid = self::get_least_recently_active_user_in_course($randomcourseid);
+            if (empty($targetuserid)) {
+                return ''; // No eligible users in that course.
+            }
+        }
+
         // Build the same data the student view uses for the phone-frame block.
+        // Pass $targetuserid (null = current user) to the URL generators.
         $qrcode = new qr_code();
 
         $data = [];
-        $data['webapppreviewurl'] = $qrcode->generate_web_app_launch_url();
-        $data['webloginurl']      = $qrcode->generate_web_launch_url();
+        $data['webapppreviewurl'] = $qrcode->generate_web_app_launch_url($targetuserid);
+        $data['webloginurl']      = $qrcode->generate_web_launch_url($targetuserid);
         $data['qrimage']          = $qrcode->generate_qr_code();
         $data['launchlogourl']    = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
 

@@ -96,16 +96,19 @@ class qr_code {
     }
 
     /**
-     * Creates a one-click web launch URL for the currently logged in Moodle user.
+     * Creates a one-click web launch URL.
      *
+     * @param int|null $userid  Target user ID. Defaults to the currently logged-in user.
      * @return string
      */
-    public function generate_web_launch_url(): string {
+    public function generate_web_launch_url(?int $userid = null): string {
         global $CFG, $USER;
+
+        $userid = $userid ?? $USER->id;
 
         // Force-create a unique token so this autologin URL token is always separate
         // from the QR login token and can be deleted independently after use.
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
+        $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
         $baseurl = get_config('mooduell', 'webappurl');
 
         if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
@@ -124,14 +127,17 @@ class qr_code {
     /**
      * Creates a one-click web app URL that points directly to index.html for iframe embedding.
      *
+     * @param int|null $userid  Target user ID. Defaults to the currently logged-in user.
      * @return string
      */
-    public function generate_web_app_launch_url(): string {
+    public function generate_web_app_launch_url(?int $userid = null): string {
         global $CFG, $USER;
+
+        $userid = $userid ?? $USER->id;
 
         // Force-create a unique token so this autologin URL token is always separate
         // from the QR login token and can be deleted independently after use.
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300, true);
+        $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
         $baseurl = get_config('mooduell', 'webappurl');
 
         if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
