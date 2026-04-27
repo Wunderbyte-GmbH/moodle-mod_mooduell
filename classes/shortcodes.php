@@ -53,7 +53,7 @@ class shortcodes {
      *   [[mooduell randomuserfromcourse=12]]
      *
      * @param string        $shortcode  The shortcode tag name ("mooduell").
-     * @param object        $args       Shortcode attributes (currently unused).
+     * @param array         $args       Shortcode attributes (currently unused).
      * @param string|null   $content    Inner content between tags (unused).
      * @param object        $env        Rendering environment from the filter.
      * @param \Closure|null $next       Next handler in the filter chain.
@@ -61,7 +61,7 @@ class shortcodes {
      */
     public static function mooduell(
         string $shortcode,
-        object $args,
+        array $args,
         ?string $content,
         object $env,
         ?\Closure $next
