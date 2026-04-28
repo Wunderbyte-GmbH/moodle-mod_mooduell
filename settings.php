@@ -153,7 +153,7 @@ if ($ADMIN->fulltree) {
             'mooduell/usefullnames',
             get_string('usefullnames', 'mod_mooduell'),
             "",
-            0
+            1
         );
         $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
         $settings->add($setting);
