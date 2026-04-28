@@ -109,11 +109,7 @@ class qr_code {
         // Force-create a unique token so this autologin URL token is always separate
         // from the QR login token and can be deleted independently after use.
         $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
-        $baseurl = get_config('mooduell', 'webappurl');
-
-        if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
-            $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
-        }
+        $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
 
         $launchurl = new \moodle_url($baseurl, [
             'source' => 'moodle',
@@ -138,15 +134,7 @@ class qr_code {
         // Force-create a unique token so this autologin URL token is always separate
         // from the QR login token and can be deleted independently after use.
         $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
-        $baseurl = get_config('mooduell', 'webappurl');
-
-        if (empty($baseurl) || strpos($baseurl, 'mooduellapp.wunderbyte.at/frame.html') !== false) {
-            $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
-        }
-
-        if (strpos($baseurl, '/frame.html') !== false) {
-            $baseurl = str_replace('/frame.html', '/index.html', $baseurl);
-        }
+        $baseurl = $CFG->wwwroot . '/mod/mooduell/app/index.html';
 
         $launchurl = new \moodle_url($baseurl, [
             'source' => 'moodle',
