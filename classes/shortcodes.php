@@ -75,26 +75,25 @@ class shortcodes {
         global $DB;
 
         $sql = 'SELECT u.id,
-                       COALESCE(MAX(et.lastaccess), 0) AS ws_lastaccess
-                  FROM {user} u
-                  JOIN {user_enrolments} ue ON ue.userid = u.id
-                  JOIN {enrol} e            ON e.id = ue.enrolid AND e.courseid = :courseid
-             LEFT JOIN {external_services} es ON es.shortname = :servicename AND es.enabled = 1
-             LEFT JOIN {external_tokens} et ON et.userid = u.id
-                                           AND et.externalserviceid = es.id
-                                           AND et.tokentype = :tokentype
-                                           AND (et.validuntil = 0 OR et.validuntil > :now)
-                 WHERE u.deleted  = 0
-                   AND u.suspended = 0
-                   AND ue.status  = 0
-              GROUP BY u.id
-              ORDER BY ws_lastaccess ASC, u.id ASC
-                 LIMIT 1';
+            COALESCE(MAX(et.lastaccess), 0) AS ws_lastaccess
+                FROM {user} u
+                JOIN {user_enrolments} ue ON ue.userid = u.id
+                JOIN {enrol} e            ON e.id = ue.enrolid AND e.courseid = :courseid
+            LEFT JOIN {external_services} es ON es.shortname = :servicename AND es.enabled = 1
+            LEFT JOIN {external_tokens} et ON et.userid = u.id
+                                        AND et.externalserviceid = es.id
+                                        AND et.tokentype = :tokentype
+                                        AND (et.validuntil = 0 OR et.validuntil > :now)
+                WHERE u.deleted   = 0
+                AND u.suspended = 0
+                AND ue.status   = 0
+            GROUP BY u.id
+            ORDER BY COALESCE(MAX(et.lastaccess), 0) ASC, u.id ASC';
 
         $record = $DB->get_record_sql($sql, [
             'courseid'    => $courseid,
             'servicename' => 'mod_mooduell_external',
-            'tokentype'   => \EXTERNAL_TOKEN_PERMANENT,
+            'tokentype'   => EXTERNAL_TOKEN_PERMANENT,
             'now'         => time(),
         ]);
 
