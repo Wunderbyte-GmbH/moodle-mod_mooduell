@@ -48,6 +48,7 @@ class get_highscores extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $quizid
      * @return mixed
      */
     public static function execute(int $quizid) {

@@ -90,6 +90,7 @@ class manage_tokens {
      * @param int $userid The id of the user for which a token should be created.
      * @param string $servicename
      * @param int $duration
+     * @param bool $forcenew
      * @throws coding_exception
      * @throws dml_exception
      * @return stdClass

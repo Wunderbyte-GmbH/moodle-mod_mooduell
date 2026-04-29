@@ -9,6 +9,48 @@
     background-color: #263683;
 }
 
+.mooduell-earmark-nav .nav-link {
+    white-space: nowrap;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: .5rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.mooduell-earmark-nav .nav-item {
+    margin-bottom: .35rem;
+}
+
+.mooduell-earmark-nav .nav-link.active {
+    font-weight: 600;
+    box-shadow: inset 2px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .mooduell-earmark-tabs {
+        flex-direction: column;
+    }
+
+    .mooduell-earmark-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .mooduell-earmark-nav .nav-item {
+        margin-right: .4rem;
+        margin-bottom: 0;
+    }
+
+    .mooduell-earmark-nav .nav-link {
+        border-radius: .5rem;
+    }
+}
+
 #mooduellTabContent div.wborange,
 #mooduellEarmarkContent div.wborange {
     background-color: #ed8701;
@@ -152,7 +194,8 @@
 
 #page-mod-mooduell-view .mooduell-launch-sidebar,
 .mooduell-launch-sidebar {
-    width: min(360px, 100%);
+    width: 360px;
+    max-width: 100%;
     flex: 0 1 360px;
     color: #fff;
     display: flex;
@@ -213,7 +256,7 @@
     gap: 0.65rem;
     margin: 0;
     padding: 0;
-    list-style: none !important;
+    list-style: none;
 }
 
 #page-mod-mooduell-view .mooduell-launch-features li::marker,

@@ -50,6 +50,9 @@ class get_game_data extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $courseid
+     * @param int $quizid
+     * @param int $gameid
      * @return mixed
      */
     public static function execute(int $courseid, int $quizid, int $gameid) {

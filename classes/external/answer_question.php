@@ -54,6 +54,10 @@ class answer_question extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $quizid
+     * @param int $gameid
+     * @param int $questionid
+     * @param array $answerids
      * @return mixed
      */
     public static function execute(int $quizid, int $gameid, int $questionid, array $answerids = []) {

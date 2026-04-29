@@ -59,6 +59,8 @@ class get_games_by_courses extends external_api {
     /**
      * Executes the external function.
      *
+     * @param array $courseids
+     * @param int $timemodified
      * @return mixed
      */
     public static function execute(array $courseids, int $timemodified) {

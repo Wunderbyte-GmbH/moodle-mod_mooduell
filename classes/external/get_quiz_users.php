@@ -49,6 +49,8 @@ class get_quiz_users extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $courseid
+     * @param int $quizid
      * @return mixed
      */
     public static function execute(int $courseid, int $quizid) {

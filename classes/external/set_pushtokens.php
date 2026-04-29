@@ -51,6 +51,10 @@ class set_pushtokens extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $userid
+     * @param string $identifier
+     * @param string $model
+     * @param string $pushtoken
      * @return mixed
      */
     public static function execute(int $userid, string $identifier, string $model, string $pushtoken) {

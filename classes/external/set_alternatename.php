@@ -49,6 +49,8 @@ class set_alternatename extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $userid
+     * @param string $alternatename
      * @return mixed
      */
     public static function execute(int $userid, string $alternatename) {

@@ -52,15 +52,19 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
     And I wait until the page is ready
-    And I follow "Statistics"
-    And I follow "Open games"
+    And I click on "#mooduell-tab-statistics" "css_element"
+    And I wait until the page is ready
+    And I click on "#mooduell-tab-opengames" "css_element"
+    And I wait until the page is ready
     And I should see "Username 1"
     And I should see "Username 2"
     And I click on "td.columnclass.action a" "css_element"
     And I should see "No image"
     And I click on ".wunderbyte-table-table div.modal-footer button" "css_element"
-    And I follow "Finished games"
-    And I follow "Highscores"
+    And I click on "#mooduell-tab-finishedgames" "css_element"
+    And I wait until the page is ready
+    And I click on "#mooduell-tab-highscores" "css_element"
+    And I wait until the page is ready
 
   @javascript
   Scenario: Opening the activity will show the tabs Statistics
@@ -73,8 +77,10 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user1"
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
-    And I follow "Open games"
-    And I follow "Statistics"
+    And I click on "#mooduell-tab-opengames" "css_element"
+    And I wait until the page is ready
+    And I click on "#mooduell-tab-statistics" "css_element"
+    And I wait until the page is ready
     Then I should see "Active users"
 
   @javascript
@@ -87,7 +93,8 @@ Feature: See user stats
     And I start games in "Mooduell Test" against "user1"
     And I start games in "Mooduell Test" against "user2"
     When I follow "Mooduell Test"
-    And I follow "Questions"
+    And I click on "#mooduell-tab-questions" "css_element"
+    And I wait until the page is ready
     And I should see "No image"
     And I should see "OK"
     And I click on "td.columnclass.id a" "css_element"
@@ -115,5 +122,6 @@ Feature: See user stats
     And I press "Save and return to course"
     And I start games in "Mooduell Test" against "user1"
     When I follow "Mooduell Test"
-    And I follow "Open games"
+    And I click on "#mooduell-tab-opengames" "css_element"
+    And I wait until the page is ready
     Then I should see "Duell user1"

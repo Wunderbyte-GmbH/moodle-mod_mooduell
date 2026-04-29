@@ -49,6 +49,8 @@ class update_profile_picture extends external_api {
     /**
      * Executes the external function.
      *
+     * @param string $filename
+     * @param string $filecontent
      * @return mixed
      */
     public static function execute(string $filename, string $filecontent) {

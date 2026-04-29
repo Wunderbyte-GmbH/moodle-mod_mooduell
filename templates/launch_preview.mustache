@@ -1,5 +1,28 @@
 {{!
+    @template mod_mooduell/launch_preview
+
     Shared launch preview block (phone frame + QR modals).
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * webapppreviewurl - string: URL for the iframe phone preview (optional).
+    * qrimage - string: Base64 data URI for the login QR code (optional).
+    * appstorelink - string: Apple App Store URL (optional).
+    * playstorelink - string: Google Play Store URL (optional).
+    * appstoreqrimage - string: Base64 data URI for App Store QR (optional).
+    * playstoreqrimage - string: Base64 data URI for Play Store QR (optional).
+    * launchlogourl - string: URL of the MooDuell logo image (optional).
+
+    Example context (json):
+    {
+        "webapppreviewurl": "https://example.com/mod/mooduell/app/",
+        "qrimage": "",
+        "appstorelink": "",
+        "playstorelink": "",
+        "launchlogourl": ""
+    }
 }}
 <div class="mooduell-launch-preview">
     <div class="mooduell-launch-stage">

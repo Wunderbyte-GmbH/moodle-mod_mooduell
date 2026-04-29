@@ -48,6 +48,7 @@ class delete_iap extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $itemid
      * @return mixed
      */
     public static function execute(int $itemid) {

@@ -48,6 +48,7 @@ class get_user_stats extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $userid
      * @return mixed
      */
     public static function execute(int $userid) {

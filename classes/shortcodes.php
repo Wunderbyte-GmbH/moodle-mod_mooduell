@@ -108,15 +108,15 @@ class shortcodes {
      * No cmid or course context is required — a short-lived autologin token is
      * minted for whoever is currently viewing the page.
      *
-    * Usage:
-    *   [mooduell securitytoken=ABCDEFGH]
+     * Usage:
+     *   [mooduell securitytoken=ABCDEFGH]
      *
-    * Log in as the least-recently-used webservice user from a given course:
-    *   [mooduell randomuserfromcourse=12 securitytoken=ABCDEFGH]
+     * Log in as the least-recently-used webservice user from a given course:
+     *   [mooduell randomuserfromcourse=12 securitytoken=ABCDEFGH]
      *
-    * @param string        $shortcode  The shortcode tag name ("mooduell").
-    * @param array         $args       Shortcode attributes. securitytoken is required for all usages.
-    *                                  randomuserfromcourse (int course ID) is optional.
+     * @param string        $shortcode  The shortcode tag name ("mooduell").
+     * @param array         $args       Shortcode attributes. securitytoken is required for all usages.
+     *                                  randomuserfromcourse (int course ID) is optional.
      * @param string|null   $content    Inner content between tags (unused).
      * @param object        $env        Rendering environment from the filter.
      * @param \Closure|null $next       Next handler in the filter chain.

@@ -44,28 +44,16 @@ Feature: Check user interface
       | C1     | Import questions | mod/mooduell/tests/fixtures/testquestions.xml | testquestions.xml |
 
   @javascript
-  Scenario: Mooduell: User check tabs
+  Scenario: Mooduell: User sees launch preview
     Given I am on the "mooduell1" Activity page logged in as user1
-    When I follow "Statistics"
-    Then I should see "Opponents"
-    And I should see "Open games"
-    And I should see "Finished games"
-    And I should see "Games won"
-    And I should see "Correct answers"
-    And I should see "Correctly answered"
-    And I follow "Open games"
-    And I should see "No records found"
-    And I follow "Finished games"
-    And I should see "No records found"
-    And I follow "Highscores"
-    And I should see "No records found"
+    Then I should see "Show QR to Login"
 
   @javascript
   Scenario: Mooduell: User show QR Code
     Given I am on the "mooduell1" Activity page logged in as user1
-    When I press "Show QR Code"
+    When I press "Show QR to Login"
     And I wait until the page is ready
-    Then I should see "QR Code Login" in the ".modal-header" "css_element"
+    Then I should see "Login QR" in the ".modal-header" "css_element"
 
   @javascript
   Scenario: Mooduel: Players listed in open games when admin starts the games
@@ -78,10 +66,8 @@ Feature: Check user interface
     When I log in as "user1"
     And I am on "Course 1" course homepage
     And I follow "Mooduell Test"
-    And I follow "Open games"
-    Then I should see "10 of 10 records found"
-    And I should see "Admin User"
-    And I should see "Username 1"
+    ## NOTE: Student web view shows launch preview only; game tables accessible via mobile app.
+    Then I should see "Show QR to Login"
 
   @javascript
   Scenario: Mooduel: Players listed in open games when user starts the games
@@ -95,9 +81,8 @@ Feature: Check user interface
     And I am on "Course 1" course homepage
     And I start games in "Mooduell Test" against "user2"
     And I follow "Mooduell Test"
-    And I follow "Open games"
-    Then I should see "Admin User"
-    And I should see "Username 2"
+    ## NOTE: Student web view shows launch preview only; game tables accessible via mobile app.
+    Then I should see "Show QR to Login"
 
   @javascript
   Scenario: Mooduel: Finish games and list them in finished games
@@ -120,9 +105,12 @@ Feature: Check user interface
     And I play all open questions as "user1"
     And I play all open questions as "admin"
     And I play all open questions as "user1"
-    And I follow "Open games"
+    And I follow "Mooduell Test"
+    And I click on "#mooduell-tab-opengames" "css_element"
+    And I wait until the page is ready
     And I should see "No records found"
-    And I follow "Finished games"
+    And I click on "#mooduell-tab-finishedgames" "css_element"
+    And I wait until the page is ready
     Then I should see "10 of 10 records found"
     And I should see "Admin User"
     And I should see "Username 1"

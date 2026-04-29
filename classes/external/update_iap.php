@@ -57,6 +57,16 @@ class update_iap extends external_api {
     /**
      * Executes the external function.
      *
+     * @param string $productid
+     * @param string $purchasetoken
+     * @param string|null $receipt
+     * @param string|null $signature
+     * @param string|null $orderid
+     * @param string|null $free
+     * @param int $mooduellid
+     * @param int|null $courseid
+     * @param string $store
+     * @param int $ispublic
      * @return mixed
      */
     public static function execute(

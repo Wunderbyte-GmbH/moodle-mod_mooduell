@@ -48,6 +48,7 @@ class giveup_game extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $gameid
      * @return mixed
      */
     public static function execute(int $gameid) {

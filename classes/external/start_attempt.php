@@ -50,6 +50,9 @@ class start_attempt extends external_api {
     /**
      * Executes the external function.
      *
+     * @param int $courseid
+     * @param int $quizid
+     * @param int $playerbid
      * @return mixed
      */
     public static function execute(int $courseid, int $quizid, int $playerbid) {

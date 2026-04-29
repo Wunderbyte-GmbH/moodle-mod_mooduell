@@ -110,6 +110,7 @@ pwIDAQAB
     /**
      * Helper function to determine if the user has set a valid license key which has not yet expired.
      *
+     * @param bool $checkuserlimit
      * @return bool true if the license key is valid at current date
      * @throws \dml_exception
      */
