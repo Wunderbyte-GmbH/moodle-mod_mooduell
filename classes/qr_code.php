@@ -41,13 +41,17 @@ require_once($CFG->dirroot . '/mod/mooduell/thirdparty/vendor/autoload.php');
 class qr_code {
     /**
      * Creates QR Code with pin for current User and returns QRImage that can be displayed.
+     *
+     * @param int|null $userid  Target user ID. Defaults to the currently logged-in user.
      */
-    public function generate_qr_code() {
+    public function generate_qr_code(?int $userid = null) {
         global $CFG, $DB, $USER;
+
+        $userid = $userid ?? $USER->id;
 
         // The autologin URL generators always force-create their own separate tokens,
         // so this QR token is never shared with or consumed by the autologin flow.
-        $tokenobject = manage_tokens::generate_token_for_user($USER->id, 'mod_mooduell_tokens', 300);
+        $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
 
         $url = $CFG->wwwroot;
 

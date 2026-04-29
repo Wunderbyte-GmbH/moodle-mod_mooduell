@@ -169,7 +169,7 @@ class shortcodes {
         $data = [];
         $data['webapppreviewurl'] = $qrcode->generate_web_app_launch_url($targetuserid);
         $data['webloginurl']      = $qrcode->generate_web_launch_url($targetuserid);
-        $data['qrimage']          = $qrcode->generate_qr_code();
+        $data['qrimage']          = $qrcode->generate_qr_code($targetuserid);
         $data['launchlogourl']    = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
 
         $appstorelink  = \get_config('mooduell', 'appstoreurl');
