@@ -62,7 +62,13 @@ class shortcodes {
     }
 
     /**
-     * Returns the ID of the least-recently-used webservice user in a course.
+     * Returns the ID of a randomly selected user from the pool of the
+     * least-recently-active webservice users in a course.
+     *
+     * When at least 5 eligible users exist, the 5 least-recently-used are
+     * collected and one is chosen at random — reducing the chance that two
+     * concurrent viewers receive the same account. With fewer than 5 eligible
+     * users the single least-recently-used user is returned directly.
      *
      * Uses external_tokens.lastaccess for mod_mooduell_external so the ordering
      * reflects actual app/webservice activity instead of course page visits.
@@ -90,14 +96,27 @@ class shortcodes {
             GROUP BY u.id
             ORDER BY COALESCE(MAX(et.lastaccess), 0) ASC, u.id ASC';
 
-        $record = $DB->get_record_sql($sql, [
+        $params = [
             'courseid'    => $courseid,
             'servicename' => 'mod_mooduell_external',
             'tokentype'   => EXTERNAL_TOKEN_PERMANENT,
             'now'         => time(),
-        ]);
+        ];
 
-        return $record ? (int) $record->id : null;
+        // Fetch up to 5 candidates; if fewer than 5 exist, fall back to the top 1.
+        $candidates = $DB->get_records_sql($sql, $params, 0, 5);
+        if (empty($candidates)) {
+            return null;
+        }
+
+        if (count($candidates) >= 5) {
+            $ids = array_keys($candidates);
+            return (int) $ids[array_rand($ids)];
+        }
+
+        // Fewer than 5 eligible users — just use the least-recently-active one.
+        $first = reset($candidates);
+        return (int) $first->id;
     }
 
     /**
