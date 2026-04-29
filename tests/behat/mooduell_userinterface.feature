@@ -53,7 +53,7 @@ Feature: Check user interface
     Given I am on the "mooduell1" Activity page logged in as user1
     When I press "Show QR to Login"
     And I wait until the page is ready
-    Then I should see "Login QR" in the ".modal-header" "css_element"
+    Then I should see "Login QR" in the "#mooduellLoginQrModal .modal-title" "css_element"
 
   @javascript
   Scenario: Mooduel: Players listed in open games when admin starts the games

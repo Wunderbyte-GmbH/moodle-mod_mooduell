@@ -97,10 +97,13 @@ Feature: See user stats
     And I wait until the page is ready
     And I should see "No image"
     And I should see "OK"
-    And I click on "td.columnclass.id a" "css_element"
+    And I click on ".wunderbyte-table-table td.columnclass.id a" "css_element"
     And I wait until the page is ready
     And I press "Cancel"
-    And I click on "td.columnclass.id a" "css_element"
+    And I click on "#mooduell-tab-questions" "css_element"
+    And I wait until the page is ready
+    And I should see "No image"
+    And I click on ".wunderbyte-table-table td.columnclass.id a" "css_element"
     And I wait until the page is ready
     ## Then I should see "Version 1" // Has changed in Moodle 5.0
     When I press "Save changes and continue editing"
@@ -108,7 +111,10 @@ Feature: See user stats
     ##And I wait "6" seconds
     ## Then I should see "Version 2" // Has changed in Moodle 5.0
     When I press "submitbutton"
-    And I click on "td.columnclass.id a" "css_element"
+    And I click on "#mooduell-tab-questions" "css_element"
+    And I wait until the page is ready
+    And I should see "No image"
+    And I click on ".wunderbyte-table-table td.columnclass.id a" "css_element"
     And I wait until the page is ready
     ## Then I should see "Version 1" // Has changed in Moodle 5.0
 
