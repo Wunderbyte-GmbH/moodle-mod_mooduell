@@ -356,3 +356,68 @@
         font-size: 1.6rem;
     }
 }
+
+/* Stack vertically + scale phone down on small screens (e.g. Moodle with sidebar) */
+@media (max-width: 767px) {
+
+    #page-mod-mooduell-view .mooduell-launch-stage,
+    .mooduell-launch-stage {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Scale from 340×736 → ~245×530. transform-origin: top center keeps it centred.
+       Negative margin-bottom collapses the unused layout space so the sidebar
+       sits directly below the visual phone bottom. */
+    #page-mod-mooduell-view .mooduell-phone-wrap,
+    .mooduell-phone-wrap {
+        transform: scale(0.72);
+        transform-origin: top center;
+        margin-bottom: calc(736px * (0.72 - 1)); /* ≈ -206px */
+    }
+
+    #page-mod-mooduell-view .mooduell-launch-sidebar,
+    .mooduell-launch-sidebar {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    #page-mod-mooduell-view .mooduell-launch-title,
+    .mooduell-launch-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* Extra-small screens — scale phone further */
+@media (max-width: 479px) {
+
+    #page-mod-mooduell-view .mooduell-phone-wrap,
+    .mooduell-phone-wrap {
+        transform: scale(0.56);
+        transform-origin: top center;
+        margin-bottom: calc(736px * (0.56 - 1)); /* ≈ -324px */
+    }
+}
+
+/* Height-based scaling — short viewports (laptops, browser toolbars, Moodle nav).
+   The phone is 844px tall by default; these kick in before it overflows the screen. */
+@media (max-height: 900px) and (min-width: 768px) {
+
+    #page-mod-mooduell-view .mooduell-phone-wrap,
+    .mooduell-phone-wrap {
+        transform: scale(0.78);
+        transform-origin: top center;
+        margin-bottom: calc(844px * (0.78 - 1)); /* ≈ -186px */
+    }
+}
+
+@media (max-height: 720px) and (min-width: 768px) {
+
+    #page-mod-mooduell-view .mooduell-phone-wrap,
+    .mooduell-phone-wrap {
+        transform: scale(0.62);
+        transform-origin: top center;
+        margin-bottom: calc(844px * (0.62 - 1)); /* ≈ -321px */
+    }
+}
