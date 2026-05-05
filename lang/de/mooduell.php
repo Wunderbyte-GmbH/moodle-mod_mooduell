@@ -167,6 +167,7 @@ $string['qrshare'] = "Alternativ kannst du den QR-Code auch direkt auf deinem Sm
 $string['qrtitle'] = "Anleitung QR-Login:";
 $string['question'] = 'Frage';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Frage hat keine richtigen Antworten';
+$string['questionimagenotssl'] = 'ID {$a}: Die Frage enthält ein Bild, das per HTTP statt HTTPS verlinkt ist. Das Bild wird auf Android-Geräten nicht geladen.';
 $string['questionid'] = 'ID';
 $string['questionimage'] = 'Bild';
 $string['questions'] = 'Fragen';

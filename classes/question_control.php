@@ -427,6 +427,9 @@ class question_control {
         // Check for the right questiontext length.
         $this->check_for_right_length_of_questiontext();
 
+        // Check that images in the question text use HTTPS (HTTP images fail on Android).
+        $this->check_for_http_image_urls();
+
         if (count($this->warnings) == 0) {
             $this->status = get_string('ok', 'mod_mooduell');
         }
@@ -575,6 +578,21 @@ class question_control {
         }
     }
 
+
+    /**
+     * Check that any image URLs embedded in the question text use HTTPS.
+     * HTTP images are blocked on Android (cleartext traffic policy) and will
+     * cause the question to appear broken on the device.
+     * @throws coding_exception
+     */
+    private function check_for_http_image_urls() {
+        if (!empty($this->imageurl) && strpos($this->imageurl, 'http://') === 0) {
+            $this->warnings[] = [
+                'message' => get_string('questionimagenotssl', 'mod_mooduell', $this->questionid),
+            ];
+            $this->status = get_string('notok', 'mod_mooduell');
+        }
+    }
 
     /**
      * Verify question type.

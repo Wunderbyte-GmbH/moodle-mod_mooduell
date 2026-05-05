@@ -209,6 +209,7 @@ $string['qrshare'] = 'You can also use this QR-Code directly from your Smartphon
 $string['qrtitle'] = "QR Login - How to:";
 $string['question'] = 'question';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Question has no correct answers';
+$string['questionimagenotssl'] = 'ID {$a}: Question contains an image linked via HTTP instead of HTTPS. This will cause the image to fail loading on Android devices.';
 $string['questionid'] = 'ID';
 $string['questionimage'] = 'Image';
 $string['questions'] = 'Questions';
