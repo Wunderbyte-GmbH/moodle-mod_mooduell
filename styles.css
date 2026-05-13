@@ -374,7 +374,8 @@
     .mooduell-phone-wrap {
         transform: scale(0.72);
         transform-origin: top center;
-        margin-bottom: calc(736px * (0.72 - 1)); /* ≈ -206px */
+        margin-bottom: calc(736px * (0.72 - 1));
+        /* ≈ -206px */
     }
 
     #page-mod-mooduell-view .mooduell-launch-sidebar,
@@ -396,7 +397,8 @@
     .mooduell-phone-wrap {
         transform: scale(0.56);
         transform-origin: top center;
-        margin-bottom: calc(736px * (0.56 - 1)); /* ≈ -324px */
+        margin-bottom: calc(736px * (0.56 - 1));
+        /* ≈ -324px */
     }
 }
 
@@ -408,7 +410,8 @@
     .mooduell-phone-wrap {
         transform: scale(0.78);
         transform-origin: top center;
-        margin-bottom: calc(844px * (0.78 - 1)); /* ≈ -186px */
+        margin-bottom: calc(844px * (0.78 - 1));
+        /* ≈ -186px */
     }
 }
 
@@ -418,6 +421,7 @@
     .mooduell-phone-wrap {
         transform: scale(0.62);
         transform-origin: top center;
-        margin-bottom: calc(844px * (0.62 - 1)); /* ≈ -321px */
+        margin-bottom: calc(844px * (0.62 - 1));
+        /* ≈ -321px */
     }
 }
