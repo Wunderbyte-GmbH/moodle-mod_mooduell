@@ -373,6 +373,113 @@ class mooduell {
     }
 
     /**
+     * Returns playable question ids grouped by category and caches the state.
+     *
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_playable_question_ids_by_category(): array {
+        $cache = cache::make('mod_mooduell', 'questionstatecache');
+        $cachekey = 'playablequestions_' . $this->settings->id;
+        $cached = $cache->get($cachekey);
+
+        if ($cached !== false) {
+            return $cached;
+        }
+
+        $questions = $this->return_list_of_all_questions_in_quiz();
+        $okstring = get_string('ok', 'mod_mooduell');
+        $result = [];
+
+        foreach ($questions as $question) {
+            if ($question->status == $okstring) {
+                $result[$question->category][] = (int) $question->questionid;
+            }
+        }
+
+        $cache->set($cachekey, $result);
+        return $result;
+    }
+
+    /**
+     * Returns instantiated question objects for the given question ids in the same order.
+     *
+     * @param array $questionids
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_questions_by_ids(array $questionids): array {
+        global $DB;
+
+        if (empty($questionids)) {
+            return [];
+        }
+
+        $questionids = array_values(array_map('intval', $questionids));
+
+        // If full question objects are already loaded in this request, reuse them to avoid any behavioral changes.
+        if (!empty($this->questions)) {
+            $questionmap = [];
+            foreach ($this->questions as $question) {
+                $questionmap[(int) $question->questionid] = $question;
+            }
+            $result = [];
+            foreach ($questionids as $questionid) {
+                if (isset($questionmap[$questionid])) {
+                    $result[] = $questionmap[$questionid];
+                }
+            }
+            if (count($result) === count($questionids)) {
+                return $result;
+            }
+        }
+
+        $sqldata = $this->return_sql_for_all_questions_of_quiz();
+        [$inorequal, $inparams] = $DB->get_in_or_equal($questionids, SQL_PARAMS_NAMED, 'qid');
+        $params = array_merge($sqldata['params'], $inparams);
+        $sql = "SELECT DISTINCT " . $sqldata['select'] .
+            " FROM " . $sqldata['from'] .
+            " WHERE " . $sqldata['where'] .
+            " AND q.id $inorequal";
+        $questionsdata = $DB->get_records_sql($sql, $params);
+        if (empty($questionsdata)) {
+            return [];
+        }
+
+        $listofanswers = $this->get_answer_list_for_question_ids($questionids);
+        $result = [];
+        foreach ($questionids as $questionid) {
+            if (!isset($questionsdata[$questionid])) {
+                continue;
+            }
+            $result[] = new question_control($questionsdata[$questionid], $listofanswers);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns answer records for a list of question ids.
+     *
+     * @param array $questionids
+     * @return array
+     * @throws dml_exception
+     */
+    private function get_answer_list_for_question_ids(array $questionids): array {
+        global $DB;
+
+        if (empty($questionids)) {
+            return [];
+        }
+
+        [$inorequal, $params] = $DB->get_in_or_equal($questionids, SQL_PARAMS_NAMED, 'aqid');
+        $sql = "SELECT *
+                  FROM {question_answers}
+                 WHERE question $inorequal";
+        return $DB->get_records_sql($sql, $params) ?: [];
+    }
+
+    /**
      * Returns list of highscores.
      * @return array
      * @throws dml_exception

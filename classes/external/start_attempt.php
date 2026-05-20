@@ -64,19 +64,8 @@ class start_attempt extends external_api {
 
         $params = self::validate_parameters(self::execute_parameters(), $params);
 
-        if (!$cm = get_coursemodule_from_id('mooduell', $params['quizid'])) {
-            throw new \moodle_exception(
-                'invalidcoursemodule ' . $params['quizid'],
-                'mooduell',
-                null,
-                null,
-                'Course module id:' . $params['quizid']
-            );
-        }
-        $context = \context_module::instance($cm->id);
-        self::validate_context($context);
-
         $mooduell = new \mod_mooduell\mooduell($params['quizid']);
+        self::validate_context($mooduell->context);
         $gamecontroller = new \mod_mooduell\game_control($mooduell);
         $startgameresult = $gamecontroller->start_new_game($params['playerbid']);
 

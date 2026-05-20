@@ -419,14 +419,17 @@ class game_control {
         $this->gamedata->gameid = $DB->insert_record('mooduell_games', $data);
 
         // Write all our questions to our DB and link it to our gameID.
+        $questionrecords = [];
         foreach ($questions as $question) {
             // We set data back.
             $data = new stdClass();
             $data->questionid = $question->questionid;
             $data->mooduellid = $this->mooduell->cm->instance;
             $data->gameid = $this->gamedata->gameid;
-
-            $DB->insert_record('mooduell_questions', $data);
+            $questionrecords[] = $data;
+        }
+        if (!empty($questionrecords)) {
+            $DB->insert_records('mooduell_questions', $questionrecords);
         }
 
         $this->gamedata->questions = $questions;
@@ -444,7 +447,7 @@ class game_control {
      */
     private function set_random_questions() {
         global $DB;
-        $questions = [];
+        $questionids = [];
 
         $categories = $DB->get_records('mooduell_categories', [
                 'mooduellid' => $this->mooduell->cm->instance,
@@ -467,27 +470,29 @@ class game_control {
         }
 
         // Now we add the numbersofquestions key to each category.
+        $playablequestionids = $this->mooduell->get_playable_question_ids_by_category();
+
         foreach ($categories as $category) {
             $category->numberofquestions = (int) round(($category->weight / $sum) * $setnumberofquestions);
 
-            // We get all the available questions.
-            $category->availableQuestions = $this->return_playable_questions_for_category($category);
+            // We get all available playable question ids for this category.
+            $category->availableQuestions = $playablequestionids[$category->category] ?? [];
         }
 
         $emergencybrake = true;
         $bonusmode = false;
-        while (count($questions) < $setnumberofquestions) {
+        while (count($questionids) < $setnumberofquestions) {
             foreach ($categories as $key => $category) {
                 if (
                     ($category->numberofquestions > 0 || $bonusmode)
                         && count($category->availableQuestions) > 0
-                        && count($questions) < $setnumberofquestions
+                        && count($questionids) < $setnumberofquestions
                 ) {
                     $emergencybrake = false;
                     $i = array_rand($category->availableQuestions);
 
-                    $question = $category->availableQuestions[$i];
-                    $questions[] = $question;
+                    $questionid = $category->availableQuestions[$i];
+                    $questionids[] = $questionid;
                     unset($categories[$key]->availableQuestions[$i]);
                     --$categories[$key]->numberofquestions;
                 }
@@ -501,7 +506,7 @@ class game_control {
             }
             if (!$emergencybrake) {
                 $emergencybrake = true;
-            } else if (count($questions) != $setnumberofquestions) {
+            } else if (count($questionids) != $setnumberofquestions) {
                 throw new moodle_exception(
                     'wrongnumberofquestions',
                     null,
@@ -511,10 +516,19 @@ class game_control {
             }
         }
 
-        // We now have an "ordered" array of questions, categories are not mixed up.
-        shuffle($questions);
+        // We now have an "ordered" array of question ids, categories are not mixed up.
+        shuffle($questionids);
 
-        // Make sure we have no duplicates.
+        $questions = $this->mooduell->get_questions_by_ids($questionids);
+
+        if (count($questions) != $setnumberofquestions) {
+            throw new moodle_exception(
+                'wrongnumberofquestions',
+                null,
+                null,
+                "For some unknown reason we didn't receive the right number of questions"
+            );
+        }
 
         return $questions;
     }
