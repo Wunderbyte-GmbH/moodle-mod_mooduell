@@ -46,6 +46,17 @@ $definitions = [
         'staticaccelerationsize' => 1,
         'invalidationevents' => ['setbackquestionscache'],
     ],
+    'questionstatecache' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => true,
+        'invalidationevents' => ['setbackquestionstatecache'],
+    ],
+    'challengelocalizationcache' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => true,
+    ],
     'fcmtoken' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,

@@ -274,6 +274,7 @@ class mod_mooduell_observer {
         cache_helper::purge_by_event('setbacktablescache');
         if (!$onlytables) {
             cache_helper::purge_by_event('setbackquestionscache');
+            cache_helper::purge_by_event('setbackquestionstatecache');
         }
 
         return true;

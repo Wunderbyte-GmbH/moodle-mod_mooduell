@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace mod_mooduell\completion;
 
+use cache;
 use mod_mooduell\mooduell;
 use stdClass;
 
@@ -130,21 +131,27 @@ class completion_utils {
                 $challenge->challengerank = null;
 
                 // Add an array of objects containing localized language strings needed by the app.
-                $localizedstrings = [];
-                $stringman = get_string_manager();
-                $languages = $stringman->get_list_of_translations();
+                $cache = cache::make('mod_mooduell', 'challengelocalizationcache');
+                $cachekey = $completionmode . '_' . (int) $challenge->targetnumber;
+                $localizedstrings = $cache->get($cachekey);
+                if ($localizedstrings === false) {
+                    $localizedstrings = [];
+                    $stringman = get_string_manager();
+                    $languages = $stringman->get_list_of_translations();
 
-                foreach ($languages as $langkey => $langval) {
-                    $stringobj = new stdClass();
-                    $stringobj->lang = $langkey;
-                    $stringobj->stringkey = $completionmode;
-                    $stringobj->stringval = $stringman->get_string(
-                        'app:' . $completionmode,
-                        'mooduell',
-                        $challenge->targetnumber,
-                        $langkey
-                    );
-                    $localizedstrings[] = $stringobj;
+                    foreach ($languages as $langkey => $langval) {
+                        $stringobj = new stdClass();
+                        $stringobj->lang = $langkey;
+                        $stringobj->stringkey = $completionmode;
+                        $stringobj->stringval = $stringman->get_string(
+                            'app:' . $completionmode,
+                            'mooduell',
+                            $challenge->targetnumber,
+                            $langkey
+                        );
+                        $localizedstrings[] = $stringobj;
+                    }
+                    $cache->set($cachekey, $localizedstrings);
                 }
 
                 $challenge->localizedstrings = $localizedstrings;

@@ -305,5 +305,50 @@ function xmldb_mooduell_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024030600, 'mooduell');
     }
 
+    if ($oldversion < 2026052000) {
+        $table = new xmldb_table('mooduell_games');
+        $index = new xmldb_index('idx_mooduell_games_mid_paid', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'playeraid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        $index = new xmldb_index('idx_mooduell_games_mid_pbid', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'playerbid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        $index = new xmldb_index('idx_mooduell_games_mid_status', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'status']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('mooduell_questions');
+        $index = new xmldb_index('idx_mooduell_questions_gameid', XMLDB_INDEX_NOTUNIQUE, ['gameid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        $index = new xmldb_index('idx_mooduell_questions_mid_gid', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'gameid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('mooduell_challenges');
+        $index = new xmldb_index('idx_mooduell_chal_mid_type', XMLDB_INDEX_NOTUNIQUE, ['mooduellid', 'challengetype']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('mooduell_challenge_results');
+        $index = new xmldb_index(
+            'idx_mooduell_chres_mid_cid_uid',
+            XMLDB_INDEX_NOTUNIQUE,
+            ['mooduellid', 'challengeid', 'userid']
+        );
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Mooduell savepoint reached.
+        upgrade_mod_savepoint(true, 2026052000, 'mooduell');
+    }
+
     return true;
 }

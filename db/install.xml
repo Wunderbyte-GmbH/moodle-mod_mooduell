@@ -51,6 +51,11 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_mooduell_games_mid_paid" UNIQUE="false" FIELDS="mooduellid, playeraid"/>
+        <INDEX NAME="idx_mooduell_games_mid_pbid" UNIQUE="false" FIELDS="mooduellid, playerbid"/>
+        <INDEX NAME="idx_mooduell_games_mid_status" UNIQUE="false" FIELDS="mooduellid, status"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_categories" COMMENT="Stores categories from which to chose the random questions of this MooDuell instance.">
       <FIELDS>
@@ -75,6 +80,9 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_mooduellid" TYPE="foreign" FIELDS="mooduellid" REFTABLE="mooduell" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_mooduell_chal_mid_type" UNIQUE="false" FIELDS="mooduellid, challengetype"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_challenge_results" COMMENT="Stores user-specific MooDuell completion challenge results.">
       <FIELDS>
@@ -92,6 +100,9 @@
         <KEY NAME="fk_challengeid" TYPE="foreign" FIELDS="challengeid" REFTABLE="mooduell_challenges" REFFIELDS="id"/>
         <KEY NAME="fk_userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_mooduell_chres_mid_cid_uid" UNIQUE="false" FIELDS="mooduellid, challengeid, userid"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_questions" COMMENT="Stores all the questions linked to this quiz">
       <FIELDS>
@@ -105,6 +116,10 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_mooduell_questions_gameid" UNIQUE="false" FIELDS="gameid"/>
+        <INDEX NAME="idx_mooduell_questions_mid_gid" UNIQUE="false" FIELDS="mooduellid, gameid"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="mooduell_pushtokens" COMMENT="Stores all the pushtokens for all the users">
       <FIELDS>
