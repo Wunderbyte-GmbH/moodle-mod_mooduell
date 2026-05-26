@@ -21,6 +21,7 @@
   "HIGHSCORES": "Highscores",
   "ABOUT": "About",
   "LOGOUT": "Logout",
+  "LOGOUTCONFIRM": "Are you sure you want to log out?",
   "LOGIN": "Login",
   "CHOOSE": "Choose...",
   "PROFILE": "Profile",
