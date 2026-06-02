@@ -82,6 +82,35 @@
             </div>
 
             <p class="mooduell-launch-note">{{#str}} launch_note, mod_mooduell {{/str}}</p>
+
+            <div class="mooduell-mobile-cta">
+                <p class="mooduell-mobile-cta-text">{{#str}} launch_mobile_hint, mod_mooduell {{/str}}</p>
+
+                {{#qrimage}}
+                <div class="mooduell-mobile-qr-wrap text-center">
+                    <img class="mooduell-qr-image" src="{{qrimage}}" alt="Login QR" />
+                </div>
+                {{/qrimage}}
+
+                <div class="mooduell-mobile-cta-links">
+                    {{#appstorelink}}
+                    <a class="btn btn-warning" href="{{appstorelink}}" target="_blank" rel="noopener noreferrer">
+                        {{#str}} openappstore, mod_mooduell {{/str}}
+                    </a>
+                    {{/appstorelink}}
+
+                    {{#playstorelink}}
+                    <a class="btn btn-warning" href="{{playstorelink}}" target="_blank" rel="noopener noreferrer">
+                        {{#str}} openplaystore, mod_mooduell {{/str}}
+                    </a>
+                    {{/playstorelink}}
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mooduellLoginQrModal"
+                        data-toggle="modal" data-target="#mooduellLoginQrModal">
+                        {{#str}} showqrlogin, mod_mooduell {{/str}}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

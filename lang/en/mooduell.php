@@ -112,6 +112,7 @@ $string['launch_eyebrow'] = 'MooDuell Web Preview';
 $string['launch_feature_one'] = 'Duel any Moodle user with one-time login tokens';
 $string['launch_feature_three'] = 'Track progress, rankings and learning challenges';
 $string['launch_feature_two'] = 'Questions are sourced directly from your Moodle quizzes';
+$string['launch_mobile_hint'] = 'Use the native MooDuell app for the best experience. Install it from the store and scan your personal login QR code.';
 $string['launch_note'] = 'Push notifications, camera and payment features require the native app.';
 $string['launch_tagline'] = 'The Moodle Quiz Duel';
 $string['launchcolor_background'] = 'Launch background color';

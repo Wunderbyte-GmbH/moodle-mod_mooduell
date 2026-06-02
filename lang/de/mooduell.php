@@ -109,6 +109,7 @@ $string['launch_eyebrow'] = 'MooDuell Web-Vorschau';
 $string['launch_feature_one'] = 'Duelle gegen alle Moodle-Nutzer*innen mit Einmal-Login-Tokens';
 $string['launch_feature_three'] = 'Behalte Fortschritt, Rankings und Lern-Challenges im Blick';
 $string['launch_feature_two'] = 'Fragen kommen direkt aus deinen Moodle-Quizzen';
+$string['launch_mobile_hint'] = 'Nutze die native MooDuell-App für das beste Erlebnis. Installiere sie aus dem Store und scanne deinen persönlichen Login-QR-Code.';
 $string['launch_note'] = 'Push-Benachrichtigungen, Kamera- und Zahlungsfunktionen benötigen die native App.';
 $string['launch_tagline'] = 'Das Moodle Quiz-Duell';
 $string['launchcolor_background'] = 'Launch-Hintergrundfarbe';
