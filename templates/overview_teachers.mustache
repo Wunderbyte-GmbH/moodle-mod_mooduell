@@ -177,7 +177,7 @@
                                     <label for="mooduell-question-category" class="form-label">{{#str}} category, question {{/str}}</label>
                                     <select id="mooduell-question-category" name="category" class="form-select" required>
                                         {{#questioncategories}}
-                                            <option value="{{value}}">{{catname}}</option>
+                                            <option value="{{value}}" data-cmid="{{catcmid}}">{{catname}}</option>
                                         {{/questioncategories}}
                                     </select>
                                     <div class="mt-3">
@@ -255,15 +255,18 @@
     document.getElementById('mooduell-question-create-form').addEventListener('submit', function(event) {
         event.preventDefault();
         const form = event.target;
-        const categoryVal = form.querySelector('[name="category"]').value;
+        const categorySelect = form.querySelector('[name="category"]');
+        const categoryVal = categorySelect.value;
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
         const qtypeInput = form.querySelector('[name="qtype"]:checked');
         if (!qtypeInput) { return; }
         const qtype = qtypeInput.value;
-        const cmid = form.dataset.cmid;
+        const catid = categoryVal.split(',')[0];
+        const cmid = (selectedOption && selectedOption.dataset.cmid) ? selectedOption.dataset.cmid : form.dataset.cmid;
         const courseid = form.dataset.courseid;
         const sesskey = form.dataset.sesskey;
         const baseUrl = form.dataset.questionnewurl;
         const returnurl = '/question/edit.php?cmid=' + cmid + '&cat=' + encodeURIComponent(categoryVal) + '&qpage=0';
-        window.location.href = baseUrl + '?courseid=' + courseid + '&sesskey=' + sesskey + '&qtype=' + qtype + '&returnurl=' + encodeURIComponent(returnurl) + '&cmid=' + cmid + '&category=' + encodeURIComponent(categoryVal);
+        window.location.href = baseUrl + '?courseid=' + courseid + '&sesskey=' + sesskey + '&qtype=' + qtype + '&returnurl=' + encodeURIComponent(returnurl) + '&cmid=' + cmid + '&category=' + catid;
     });
 {{/js}}

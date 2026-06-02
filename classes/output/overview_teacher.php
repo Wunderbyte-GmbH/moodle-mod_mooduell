@@ -119,18 +119,28 @@ class overview_teacher implements renderable, templatable {
      */
     private function build_question_categories(mooduell $mooduell, array $categories): array {
         $courseid = $mooduell->course->id;
+        $defaultcmid = $mooduell->cm->id;
 
         $modals = [];
         foreach ($categories as $category) {
             $categoryid = (int) $category['catid'];
-            $contextid = (int) $category['contextid'];
+            $contextid  = (int) $category['contextid'];
+
+            // Use the cmid of the question bank that owns this category's context
+            // so Moodle pre-selects the correct category in the question creation form.
+            $catcmid = $defaultcmid;
+            $context = \context::instance_by_id($contextid, IGNORE_MISSING);
+            if ($context && $context->contextlevel == CONTEXT_MODULE) {
+                $catcmid = (int) $context->instanceid;
+            }
 
             $modals[] = [
                 'categoryid' => $categoryid,
-                'contextid' => $contextid,
-                'catname' => $category['catname'],
-                'value' => $categoryid . ',' . $contextid,
-                'courseid' => $courseid,
+                'contextid'  => $contextid,
+                'catname'    => $category['catname'],
+                'value'      => $categoryid . ',' . $contextid,
+                'courseid'   => $courseid,
+                'catcmid'    => $catcmid,
             ];
         }
 
