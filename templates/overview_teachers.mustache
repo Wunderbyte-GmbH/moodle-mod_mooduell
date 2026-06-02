@@ -155,16 +155,38 @@
             {{{finishedgames}}}
         </div>
         <div class="tab-pane fade" id="mooduell-pane-questions" role="tabpanel" aria-labelledby="mooduell-tab-questions">
-            <ul>
-            {{#categories}}
-                <li>
-                    <a href="../../question/edit.php?courseid={{courseid}}&category={{catid}}%2C{{contextid}}">
-                    {{#str}} addquestionstocategory, mod_mooduell, {{catname}} {{/str}}
-                    </a>
-                </li>
-            {{/categories}}
-            </ul>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#mooduell-question-category-modal">
+                {{#str}} addquestionstocategory, mod_mooduell {{/str}}
+            </button>
             {{{questions}}}
+            <div class="modal fade" id="mooduell-question-category-modal" tabindex="-1" aria-labelledby="mooduell-question-category-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="mooduell-question-category-modal-label">{{#str}} addquestionstocategory, mod_mooduell {{/str}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}} closebuttontitle {{/str}}"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted">{{#str}} selectcategoryabove, question {{/str}}</p>
+                            <form action="{{questionbankurl}}" method="get" class="d-grid gap-3">
+                                <input type="hidden" name="courseid" value="{{courseid}}">
+                                <div>
+                                    <label for="mooduell-question-category" class="form-label">{{#str}} category, question {{/str}}</label>
+                                    <select id="mooduell-question-category" name="category" class="form-select" required>
+                                        {{#questioncategories}}
+                                            <option value="{{value}}">{{catname}}</option>
+                                        {{/questioncategories}}
+                                    </select>
+                                </div>
+                                <div class="modal-footer px-0 pb-0">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}} cancel {{/str}}</button>
+                                    <button type="submit" class="btn btn-primary">{{#str}} addquestion, question {{/str}}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="tab-pane fade" id="mooduell-pane-highscores" role="tabpanel" aria-labelledby="mooduell-tab-highscores">
             {{{highscores}}}

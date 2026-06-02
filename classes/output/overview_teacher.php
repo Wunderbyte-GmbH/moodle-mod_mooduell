@@ -100,8 +100,39 @@ class overview_teacher implements renderable, templatable {
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $data['haswunderbyte'] ? $mooduell->return_list_of_statistics_teacher() : null;
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
+        $data['questionbankurl'] = $CFG->wwwroot . '/question/edit.php';
+        $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
 
         $this->data = $data;
+    }
+
+    /**
+     * Build selectable catalogue data for opening the question bank.
+     *
+     * @param mooduell $mooduell
+     * @param array $categories
+     * @return array
+     */
+    private function build_question_categories(mooduell $mooduell, array $categories): array {
+        global $CFG;
+
+        $courseid = $mooduell->course->id;
+
+        $modals = [];
+        foreach ($categories as $category) {
+            $categoryid = (int) $category['catid'];
+            $contextid = (int) $category['contextid'];
+
+            $modals[] = [
+                'categoryid' => $categoryid,
+                'contextid' => $contextid,
+                'catname' => $category['catname'],
+                'value' => $categoryid . ',' . $contextid,
+                'courseid' => $courseid,
+            ];
+        }
+
+        return $modals;
     }
 
     /**
