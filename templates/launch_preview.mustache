@@ -88,7 +88,11 @@
 
                 {{#qrimage}}
                 <div class="mooduell-mobile-qr-wrap text-center">
-                    <img class="mooduell-qr-image" src="{{qrimage}}" alt="Login QR" />
+                    <button type="button" class="mooduell-mobile-qr-trigger" data-bs-toggle="modal" data-bs-target="#mooduellLoginQrModal"
+                        data-toggle="modal" data-target="#mooduellLoginQrModal">
+                        <img class="mooduell-qr-image" src="{{qrimage}}" alt="Login QR" />
+                        <span class="mooduell-mobile-qr-helper">{{#str}} launch_mobile_tapqr, mod_mooduell {{/str}}</span>
+                    </button>
                 </div>
                 {{/qrimage}}
 
@@ -104,11 +108,6 @@
                         {{#str}} openplaystore, mod_mooduell {{/str}}
                     </a>
                     {{/playstorelink}}
-
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mooduellLoginQrModal"
-                        data-toggle="modal" data-target="#mooduellLoginQrModal">
-                        {{#str}} showqrlogin, mod_mooduell {{/str}}
-                    </button>
                 </div>
             </div>
         </div>

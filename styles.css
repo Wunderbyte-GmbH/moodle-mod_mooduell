@@ -39,6 +39,7 @@
         flex-direction: row;
         overflow-x: auto;
         width: 100%;
+        margin: 0 0 0.8rem;
     }
 
     .mooduell-earmark-nav .nav-item {
@@ -360,6 +361,40 @@
     margin: 0.4rem 0 0.2rem;
 }
 
+#page-mod-mooduell-view .mooduell-mobile-qr-trigger,
+.mooduell-mobile-qr-trigger {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.8rem 0.8rem 0.55rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+#page-mod-mooduell-view .mooduell-mobile-qr-trigger:hover,
+.mooduell-mobile-qr-trigger:hover,
+#page-mod-mooduell-view .mooduell-mobile-qr-trigger:focus,
+.mooduell-mobile-qr-trigger:focus {
+    background: rgba(255, 255, 255, 0.11);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.09), 0 10px 28px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+#page-mod-mooduell-view .mooduell-mobile-qr-helper,
+.mooduell-mobile-qr-helper {
+    font-size: 0.78rem;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+}
+
 #page-mod-mooduell-view .mooduell-mobile-cta-links .btn,
 .mooduell-mobile-cta-links .btn {
     width: 100%;
@@ -436,8 +471,18 @@
         margin-top: 0.4rem;
     }
 
+    #page-mod-mooduell-view .mooduell-mobile-qr-wrap,
+    .mooduell-mobile-qr-wrap {
+        margin: 0.55rem 0 0.25rem;
+    }
+
     #page-mod-mooduell-view .mooduell-launch-buttons,
     .mooduell-launch-buttons {
+        display: none;
+    }
+
+    #page-mod-mooduell-view .mooduell-login-qr-button-wrap,
+    .mooduell-login-qr-button-wrap {
         display: none;
     }
 
