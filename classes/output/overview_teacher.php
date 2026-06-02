@@ -101,7 +101,9 @@ class overview_teacher implements renderable, templatable {
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $data['haswunderbyte'] ? $mooduell->return_list_of_statistics_teacher() : null;
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
-        $data['questionediturl'] = $CFG->wwwroot . '/question/edit.php';
+        $data['questionnewurl'] = $CFG->wwwroot . '/question/bank/editquestion/question.php';
+        $data['courseid'] = $mooduell->course->id;
+        $data['sesskey'] = sesskey();
         $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
         $data['questiontypes'] = $this->build_question_types();
 

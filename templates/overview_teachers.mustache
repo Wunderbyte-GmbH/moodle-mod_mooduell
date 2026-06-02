@@ -167,8 +167,11 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}} closebuttontitle {{/str}}"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{questionediturl}}" method="get" class="d-grid gap-3" id="mooduell-question-create-form">
-                                <input type="hidden" name="cmid" value="{{mooduellid}}">
+                            <form class="d-grid gap-3" id="mooduell-question-create-form"
+                                  data-questionnewurl="{{questionnewurl}}"
+                                  data-courseid="{{courseid}}"
+                                  data-sesskey="{{sesskey}}"
+                                  data-cmid="{{mooduellid}}">
                                 <div data-region="question-category-step">
                                     <p class="text-muted">{{#str}} selectcategorybelow, mod_mooduell {{/str}}</p>
                                     <label for="mooduell-question-category" class="form-label">{{#str}} category, question {{/str}}</label>
@@ -247,5 +250,20 @@
             qtypeStep.classList.add('d-none');
             categoryStep.classList.remove('d-none');
         }
+    });
+
+    document.getElementById('mooduell-question-create-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const categoryVal = form.querySelector('[name="category"]').value;
+        const qtypeInput = form.querySelector('[name="qtype"]:checked');
+        if (!qtypeInput) { return; }
+        const qtype = qtypeInput.value;
+        const cmid = form.dataset.cmid;
+        const courseid = form.dataset.courseid;
+        const sesskey = form.dataset.sesskey;
+        const baseUrl = form.dataset.questionnewurl;
+        const returnurl = '/question/edit.php?cmid=' + cmid + '&cat=' + encodeURIComponent(categoryVal) + '&qpage=0';
+        window.location.href = baseUrl + '?courseid=' + courseid + '&sesskey=' + sesskey + '&qtype=' + qtype + '&returnurl=' + encodeURIComponent(returnurl) + '&cmid=' + cmid + '&category=' + encodeURIComponent(categoryVal);
     });
 {{/js}}
