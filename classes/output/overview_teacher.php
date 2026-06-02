@@ -70,6 +70,11 @@ class overview_teacher implements renderable, templatable {
         $data['playstorelink'] = get_config('mooduell', 'playstoreurl');
         $data['launchlogourl'] = $CFG->wwwroot . '/mod/mooduell/app/assets/images/Logo-full-whiteweb.png';
 
+        $launchthemeconfig = $this->get_launch_theme_config();
+        $data['launchthemecustom'] = $launchthemeconfig['launchthemecustom'];
+        $data['launchthemeinherit'] = $launchthemeconfig['launchthemeinherit'];
+        $data['launchstyle'] = $launchthemeconfig['launchstyle'];
+
         if (!empty($data['appstorelink'])) {
             $data['appstoreqrimage'] = $qrcode->generate_url_qr_code($data['appstorelink']);
         }
@@ -97,6 +102,59 @@ class overview_teacher implements renderable, templatable {
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
 
         $this->data = $data;
+    }
+
+    /**
+     * Build launch preview theme config for template.
+     *
+     * @return array
+     */
+    private function get_launch_theme_config(): array {
+        $mode = (string) get_config('mooduell', 'launchthememode');
+        $iscustom = ($mode === 'custom');
+
+        if (!$iscustom) {
+            return [
+                'launchthemecustom' => false,
+                'launchthemeinherit' => true,
+                'launchstyle' => '',
+            ];
+        }
+
+        $primary = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_primary'), '#007497');
+        $secondary = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_secondary'), '#ec8600');
+        $background = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_background'), '#001e2e');
+        $surface = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_surface'), '#002d40');
+        $text = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_text'), '#ffffff');
+        $textmuted = $this->normalize_hex_color((string) get_config('mooduell', 'launchcolor_textmuted'), '#b4c7d1');
+
+        $style = '--mooduell-launch-primary: ' . $primary . '; '
+            . '--mooduell-launch-secondary: ' . $secondary . '; '
+            . '--mooduell-launch-bg-base: ' . $background . '; '
+            . '--mooduell-launch-bg-surface: ' . $surface . '; '
+            . '--mooduell-launch-text: ' . $text . '; '
+            . '--mooduell-launch-text-muted: ' . $textmuted . ';';
+
+        return [
+            'launchthemecustom' => true,
+            'launchthemeinherit' => false,
+            'launchstyle' => $style,
+        ];
+    }
+
+    /**
+     * Validate and normalize hex colors from config.
+     *
+     * @param string $value
+     * @param string $default
+     * @return string
+     */
+    private function normalize_hex_color(string $value, string $default): string {
+        $color = trim($value);
+        if (preg_match('/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/', $color)) {
+            return $color;
+        }
+        return $default;
     }
 
     /**

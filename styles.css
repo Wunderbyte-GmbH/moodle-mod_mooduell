@@ -93,13 +93,28 @@
 
 #page-mod-mooduell-view .mooduell-launch-preview,
 .mooduell-launch-preview {
+    --mooduell-launch-primary: #007497;
+    --mooduell-launch-secondary: #ec8600;
+    --mooduell-launch-bg-base: #001e2e;
+    --mooduell-launch-bg-surface: #002d40;
+    --mooduell-launch-text: #ffffff;
+    --mooduell-launch-text-muted: #b4c7d1;
+    --mooduell-launch-glow: rgba(0, 116, 151, 0.25);
+    --mooduell-launch-glow-strong: rgba(0, 116, 151, 0.4);
     margin: 1rem 0 1.5rem;
-    background:
-        radial-gradient(ellipse at 35% 48%, rgba(0, 200, 255, 0.2) 0%, transparent 48%),
-        radial-gradient(ellipse at 80% 55%, rgba(0, 116, 151, 0.16) 0%, transparent 55%),
-        linear-gradient(160deg, #001e2e 0%, #002d40 45%, #001219 100%);
+    background: linear-gradient(160deg, var(--mooduell-launch-bg-base) 0%, var(--mooduell-launch-bg-surface) 45%, var(--mooduell-launch-bg-base) 100%);
     border-radius: 16px;
     padding: 1.5rem;
+}
+
+#page-mod-mooduell-view .mooduell-launch-preview.mooduell-launch-theme-inherit,
+.mooduell-launch-preview.mooduell-launch-theme-inherit {
+    --mooduell-launch-primary: var(--bs-primary, #0f6cbf);
+    --mooduell-launch-secondary: var(--bs-warning, #f0ad4e);
+    --mooduell-launch-bg-base: #0b2236;
+    --mooduell-launch-bg-surface: #12314a;
+    --mooduell-launch-text: #ffffff;
+    --mooduell-launch-text-muted: rgba(255, 255, 255, 0.78);
 }
 
 #page-mod-mooduell-view .mooduell-launch-stage,
@@ -126,9 +141,9 @@
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.08),
         0 0 0 3px #001e29,
-        0 0 0 5px rgba(0, 150, 190, 0.4),
+        0 0 0 5px var(--mooduell-launch-glow-strong),
         0 32px 80px rgba(0, 0, 0, 0.7),
-        0 0 120px rgba(0, 116, 151, 0.25);
+        0 0 120px var(--mooduell-launch-glow);
 }
 
 #page-mod-mooduell-view .mooduell-phone-shell::before,
@@ -172,8 +187,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #fff;
-    background: #1c5870;
+    color: var(--mooduell-launch-text);
+    background: var(--mooduell-launch-primary);
     padding: 0.5rem 1.1rem;
     font-size: 0.8rem;
     font-weight: 600;
@@ -197,7 +212,7 @@
     width: 360px;
     max-width: 100%;
     flex: 0 1 360px;
-    color: #fff;
+    color: var(--mooduell-launch-text);
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
@@ -224,7 +239,7 @@
 #page-mod-mooduell-view .mooduell-launch-tagline,
 .mooduell-launch-tagline {
     margin: -0.45rem 0 0;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.45);
     font-size: 0.68rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -243,7 +258,7 @@
 #page-mod-mooduell-view .mooduell-launch-text,
 .mooduell-launch-text {
     margin: 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--mooduell-launch-text-muted);
     font-size: 1rem;
     line-height: 1.45;
     max-width: 32ch;
@@ -266,7 +281,7 @@
 
 #page-mod-mooduell-view .mooduell-launch-features li,
 .mooduell-launch-features li {
-    color: rgba(255, 255, 255, 0.74);
+    color: var(--mooduell-launch-text-muted);
     font-size: 0.92rem;
     line-height: 1.42;
     position: relative;
@@ -294,10 +309,10 @@
 .mooduell-launch-buttons .btn-warning {
     border: none;
     border-radius: 10px;
-    color: #fff;
+    color: var(--mooduell-launch-text);
     font-size: 0.9rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #ec8600, #d67300);
+    background: var(--mooduell-launch-secondary);
     box-shadow: 0 4px 20px rgba(236, 134, 0, 0.35);
 }
 
@@ -305,10 +320,10 @@
 .mooduell-login-qr-button-wrap .btn-primary {
     border: none;
     border-radius: 10px;
-    color: #fff;
+    color: var(--mooduell-launch-text);
     font-size: 0.9rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #007497, #00546d);
+    background: var(--mooduell-launch-primary);
     box-shadow: 0 4px 20px rgba(0, 116, 151, 0.4);
 }
 

@@ -256,6 +256,65 @@ if ($ADMIN->fulltree) {
             PARAM_URL
         ));
 
+        $settings->add(new admin_setting_heading(
+            'mooduell/launchthemeheading',
+            get_string('launchthemesettings', 'mod_mooduell'),
+            get_string('launchthemesettings_desc', 'mod_mooduell')
+        ));
+
+        $settings->add(new admin_setting_configselect(
+            'mooduell/launchthememode',
+            get_string('launchthememode', 'mod_mooduell'),
+            get_string('launchthememode_desc', 'mod_mooduell'),
+            'inherit',
+            [
+                'inherit' => get_string('launchthememode_inherit', 'mod_mooduell'),
+                'custom' => get_string('launchthememode_custom', 'mod_mooduell'),
+            ]
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_primary',
+            get_string('launchcolor_primary', 'mod_mooduell'),
+            get_string('launchcolor_primary_desc', 'mod_mooduell'),
+            '#007497'
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_secondary',
+            get_string('launchcolor_secondary', 'mod_mooduell'),
+            get_string('launchcolor_secondary_desc', 'mod_mooduell'),
+            '#ec8600'
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_background',
+            get_string('launchcolor_background', 'mod_mooduell'),
+            get_string('launchcolor_background_desc', 'mod_mooduell'),
+            '#001e2e'
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_surface',
+            get_string('launchcolor_surface', 'mod_mooduell'),
+            get_string('launchcolor_surface_desc', 'mod_mooduell'),
+            '#002d40'
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_text',
+            get_string('launchcolor_text', 'mod_mooduell'),
+            get_string('launchcolor_text_desc', 'mod_mooduell'),
+            '#ffffff'
+        ));
+
+        $settings->add(new admin_setting_configcolourpicker(
+            'mooduell/launchcolor_textmuted',
+            get_string('launchcolor_textmuted', 'mod_mooduell'),
+            get_string('launchcolor_textmuted_desc', 'mod_mooduell'),
+            '#b4c7d1'
+        ));
+
         $settings->add(new admin_setting_configcheckbox(
             'mooduell/enablepush',
             get_string('enablepush', 'mod_mooduell'),
