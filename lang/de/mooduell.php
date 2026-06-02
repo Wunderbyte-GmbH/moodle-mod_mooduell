@@ -133,6 +133,7 @@ $string['launchthemesettings'] = 'Design der Launch-Vorschau';
 $string['launchthemesettings_desc'] = 'Farben des Launch-Vorschaublocks (Telefonrahmen und App-Links) für Studierende/Lehrende anpassen.';
 $string['launch_title'] = 'Fordere deine Kolleg*innen zu einem Quiz-Duell heraus.';
 $string['license_activated'] = 'PRO-Version wurde erfolgreich aktiviert.<br>(Läuft ab am: ';
+$string['selectcategorybelow'] = 'Wähle unten eine Kategorie aus.';
 $string['license_invalid'] = 'Ungültiger Lizenz-Schlüssel.';
 $string['license_overlimit_settings'] = 'Ihre {$a->product}-Lizenz ist gültig, kann aber derzeit nicht aktiviert werden, weil Ihre Plattform aktuell {$a->active} aktive Nutzerinnen und Nutzer für MooDuell hat und das Lizenzlimit bei {$a->limit} liegt.<br>Deshalb können keine neuen Spiele mehr erstellt werden und es können keine neuen MooDuell-Aktivitäten mehr angelegt werden.';
 $string['licensekey'] = 'PRO-Lizenz-Schlüssel';

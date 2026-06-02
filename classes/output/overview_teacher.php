@@ -32,6 +32,7 @@ use mod_mooduell\tables\table_games;
 use mod_mooduell\tables\table_highscores;
 use mod_mooduell\tables\table_questions;
 use moodle_url;
+use question_bank;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -100,8 +101,9 @@ class overview_teacher implements renderable, templatable {
         $data['categories'] = $mooduell->return_list_of_categories();
         $data['statistics'] = $data['haswunderbyte'] ? $mooduell->return_list_of_statistics_teacher() : null;
         $data['users_without_capability'] = $this->get_users_without_capability($mooduell);
-        $data['questionbankurl'] = $CFG->wwwroot . '/question/edit.php';
+        $data['questionediturl'] = $CFG->wwwroot . '/question/edit.php';
         $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
+        $data['questiontypes'] = $this->build_question_types();
 
         $this->data = $data;
     }
@@ -114,8 +116,6 @@ class overview_teacher implements renderable, templatable {
      * @return array
      */
     private function build_question_categories(mooduell $mooduell, array $categories): array {
-        global $CFG;
-
         $courseid = $mooduell->course->id;
 
         $modals = [];
@@ -133,6 +133,29 @@ class overview_teacher implements renderable, templatable {
         }
 
         return $modals;
+    }
+
+    /**
+     * Build supported question type choices.
+     *
+     * @return array
+     */
+    private function build_question_types(): array {
+        $allowedqtypes = ['multichoice', 'truefalse', 'numerical', 'ddwtos'];
+        $questiontypes = [];
+
+        foreach (question_bank::get_creatable_qtypes() as $qtypename => $qtype) {
+            if (!in_array($qtypename, $allowedqtypes, true)) {
+                continue;
+            }
+
+            $questiontypes[] = [
+                'name' => $qtypename,
+                'label' => $qtype->menu_name(),
+            ];
+        }
+
+        return $questiontypes;
     }
 
     /**

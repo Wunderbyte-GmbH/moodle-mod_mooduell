@@ -135,6 +135,7 @@ $string['launchthememode_inherit'] = 'Inherit Moodle theme palette';
 $string['launchthemesettings'] = 'Launch preview design';
 $string['launchthemesettings_desc'] = 'Customize the colors of the student/teacher launch preview block (phone frame and app links).';
 $string['launch_title'] = 'Challenge your colleagues to a quiz duel.';
+$string['selectcategorybelow'] = 'Select a category below.';
 $string['license_activated'] = 'PRO version activated successfully.<br>(Expires: ';
 $string['license_invalid'] = 'Invalid license key';
 $string['license_overlimit_settings'] = 'Your {$a->product} license is valid, but it cannot be activated because your platform currently has {$a->active} active users for MooDuell and the license limit is {$a->limit}.<br>Because of this, you can no longer create new games and you can no longer create new MooDuell activities.';
