@@ -106,20 +106,27 @@ class overview_teacher implements renderable, templatable {
         $data['sesskey'] = sesskey();
         $data['settingsurl'] = $CFG->wwwroot . '/question/banks.php?courseid=' . $mooduell->course->id;
         $data['activitysettingsurl'] = $CFG->wwwroot . '/course/modedit.php?update=' . $mooduell->cm->id;
-        $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
+        // Check 2 (superior): does this course have any user-created (standard) question bank?
+        // All qbank course modules are created with visible = 0 in Moodle 5, so we cannot use
+        // cm.visible. Instead we join the {qbank} table and check type = 'standard', which
+        // excludes the auto-generated system and preview banks (type = 'system'/'preview').
+        $hascourseqbank = $DB->record_exists_sql(
+            "SELECT cm.id FROM {course_modules} cm
+               JOIN {modules} m ON m.id = cm.module
+               JOIN {qbank} qb ON qb.id = cm.instance
+              WHERE m.name = 'qbank' AND cm.course = ? AND cm.deletioninprogress = 0 AND qb.type = 'standard'",
+            [$mooduell->course->id]
+        );
+
+        // Check 1 (secondary, only relevant if check 2 is true):
+        // does the MooDuell activity have categories assigned?
+        $data['questioncategories'] = $hascourseqbank
+            ? $this->build_question_categories($mooduell, $data['categories'])
+            : [];
         $data['hascategories'] = !empty($data['questioncategories']);
-        if (!$data['hascategories']) {
-            $coursecontext = \context_course::instance($mooduell->course->id);
-            $sql = 'SELECT COUNT(*) FROM {question_categories} qc
-                    JOIN {context} ctx ON ctx.id = qc.contextid
-                    WHERE ' . $DB->sql_like('ctx.path', ':path');
-            $hascoursequestioncategories = $DB->count_records_sql($sql, ['path' => $coursecontext->path . '/%']) > 0;
-            $data['nocategoriesbuthascoursecategories'] = $hascoursequestioncategories;
-            $data['nocoursequestioncategories'] = !$hascoursequestioncategories;
-        } else {
-            $data['nocategoriesbuthascoursecategories'] = false;
-            $data['nocoursequestioncategories'] = false;
-        }
+
+        $data['nocategoriesbuthascoursecategories'] = $hascourseqbank && !$data['hascategories'];
+        $data['nocoursequestioncategories'] = !$hascourseqbank;
         $data['questiontypes'] = $this->build_question_types();
 
         $this->data = $data;
