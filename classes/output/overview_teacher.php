@@ -104,7 +104,9 @@ class overview_teacher implements renderable, templatable {
         $data['questionnewurl'] = $CFG->wwwroot . '/question/bank/editquestion/question.php';
         $data['courseid'] = $mooduell->course->id;
         $data['sesskey'] = sesskey();
+        $data['settingsurl'] = $CFG->wwwroot . '/question/banks.php?courseid=' . $mooduell->course->id;
         $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
+        $data['hascategories'] = !empty($data['questioncategories']);
         $data['questiontypes'] = $this->build_question_types();
 
         $this->data = $data;

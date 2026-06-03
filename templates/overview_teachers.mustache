@@ -167,6 +167,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}} closebuttontitle {{/str}}"></button>
                         </div>
                         <div class="modal-body">
+                            {{#hascategories}}
                             <form class="d-grid gap-3" id="mooduell-question-create-form"
                                   data-questionnewurl="{{questionnewurl}}"
                                   data-courseid="{{courseid}}"
@@ -201,6 +202,11 @@
                                     </div>
                                 </div>
                             </form>
+                            {{/hascategories}}
+                            {{^hascategories}}
+                            <p class="text-muted">{{#str}} nocategoriesassigned, mod_mooduell {{/str}}</p>
+                            <a href="{{settingsurl}}" class="btn btn-primary">{{#str}} configurequestioncategories, mod_mooduell {{/str}}</a>
+                            {{/hascategories}}
                         </div>
                     </div>
                 </div>
