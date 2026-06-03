@@ -26,7 +26,7 @@
 $string['action'] = 'Aktion';
 $string['addInstance'] = 'Ein neues Spiel hinzufügen';
 $string['addanothercategory'] = 'Eine weitere Kategorie hinzufügen';
-$string['addquestionstocategory'] = 'Fragen zur Kategorie {$a} hinzufügen';
+$string['addquestionstocategory'] = 'Fragen zur Kategorie hinzufügen';
 $string['alternativelogo'] = 'Firmenlogo alternative';
 $string['alternativelogodesc'] = 'Firmenlogo Menu';
 $string['anonymous'] = 'Anonym';

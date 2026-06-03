@@ -126,7 +126,7 @@ class overview_teacher implements renderable, templatable {
             $categoryid = (int) $category['catid'];
             $contextid  = (int) $category['contextid'];
 
-            // Use the cmid of the question bank that owns this category's context
+            // Use the cmid of the question bank that owns this category's context,
             // so Moodle pre-selects the correct category in the question creation form.
             $catcmid = $defaultcmid;
             $context = \context::instance_by_id($contextid, IGNORE_MISSING);
@@ -136,11 +136,11 @@ class overview_teacher implements renderable, templatable {
 
             $modals[] = [
                 'categoryid' => $categoryid,
-                'contextid'  => $contextid,
-                'catname'    => $category['catname'],
-                'value'      => $categoryid . ',' . $contextid,
-                'courseid'   => $courseid,
-                'catcmid'    => $catcmid,
+                'contextid' => $contextid,
+                'catname' => $category['catname'],
+                'value' => $categoryid . ',' . $contextid,
+                'courseid' => $courseid,
+                'catcmid' => $catcmid,
             ];
         }
 

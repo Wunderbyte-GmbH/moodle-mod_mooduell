@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['action'] = 'Action';
 $string['addInstance'] = 'Add instance';
 $string['addanothercategory'] = 'Add another category';
-$string['addquestionstocategory'] = 'Add questions to category {$a}';
+$string['addquestionstocategory'] = 'Add questions to category';
 $string['alternativelogo'] = 'Alternative Companylogo';
 $string['alternativelogodesc'] = 'Companylogo Menu';
 $string['anonymous'] = 'Anonymous';
