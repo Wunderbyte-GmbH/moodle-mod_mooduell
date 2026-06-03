@@ -204,8 +204,14 @@
                             </form>
                             {{/hascategories}}
                             {{^hascategories}}
+                            {{#nocategoriesbuthascoursecategories}}
                             <p class="text-muted">{{#str}} nocategoriesassigned, mod_mooduell {{/str}}</p>
+                            <a href="{{activitysettingsurl}}" class="btn btn-primary">{{#str}} assignquestioncategories, mod_mooduell {{/str}}</a>
+                            {{/nocategoriesbuthascoursecategories}}
+                            {{#nocoursequestioncategories}}
+                            <p class="text-muted">{{#str}} nocoursequestioncategories, mod_mooduell {{/str}}</p>
                             <a href="{{settingsurl}}" class="btn btn-primary">{{#str}} configurequestioncategories, mod_mooduell {{/str}}</a>
+                            {{/nocoursequestioncategories}}
                             {{/hascategories}}
                         </div>
                     </div>

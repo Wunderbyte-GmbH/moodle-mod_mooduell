@@ -57,7 +57,7 @@ class overview_teacher implements renderable, templatable {
      * @param mooduell|null $mooduell The mooduell instance, can be null.
      */
     public function __construct(?mooduell $mooduell = null) {
-        global $CFG;
+        global $CFG, $DB;
 
         $data = [];
         $qrcode = new qr_code();
@@ -105,8 +105,21 @@ class overview_teacher implements renderable, templatable {
         $data['courseid'] = $mooduell->course->id;
         $data['sesskey'] = sesskey();
         $data['settingsurl'] = $CFG->wwwroot . '/question/banks.php?courseid=' . $mooduell->course->id;
+        $data['activitysettingsurl'] = $CFG->wwwroot . '/course/modedit.php?update=' . $mooduell->cm->id;
         $data['questioncategories'] = $this->build_question_categories($mooduell, $data['categories']);
         $data['hascategories'] = !empty($data['questioncategories']);
+        if (!$data['hascategories']) {
+            $coursecontext = \context_course::instance($mooduell->course->id);
+            $sql = 'SELECT COUNT(*) FROM {question_categories} qc
+                    JOIN {context} ctx ON ctx.id = qc.contextid
+                    WHERE ' . $DB->sql_like('ctx.path', ':path');
+            $hascoursequestioncategories = $DB->count_records_sql($sql, ['path' => $coursecontext->path . '/%']) > 0;
+            $data['nocategoriesbuthascoursecategories'] = $hascoursequestioncategories;
+            $data['nocoursequestioncategories'] = !$hascoursequestioncategories;
+        } else {
+            $data['nocategoriesbuthascoursecategories'] = false;
+            $data['nocoursequestioncategories'] = false;
+        }
         $data['questiontypes'] = $this->build_question_types();
 
         $this->data = $data;
