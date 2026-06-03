@@ -664,27 +664,36 @@ class mooduell {
         // Code for Moodle > 4.0.
         if ($CFG->version >= 2022041900) {
             $sqldata['select'] = "q.*, qc.contextid, qc.name as categoryname, qbe.questioncategoryid as category";
-            $sqldata['from'] = "{mooduell_categories} mc
-                           JOIN {question_categories} qc
-                             ON qc.id = mc.category
-                      LEFT JOIN {question_bank_entries} qbe
-                             ON qbe.questioncategoryid = qc.id
-                           JOIN (
-                                    SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
-                                      FROM {question_versions} qv1
-                                      JOIN (
-                                            SELECT questionbankentryid, max(version) maxversion
-                                              FROM {question_versions}
-                                          GROUP BY questionbankentryid
-                                            ) qv2
-                                         ON qv1.questionbankentryid = qv2.questionbankentryid
-                                        AND qv1.version = qv2.maxversion
-                                ) qv
-                             ON qbe.id = qv.questionbankentryid
-                           JOIN {question} q
-                             ON q.id = qv.questionid";
-            $sqldata['where'] = "mc.mooduellid = :mooduellid";
-            $sqldata['params'] = ['mooduellid' => $mooduellid];
+                        $sqldata['from'] = "{mooduell_categories} mc
+                                                     JOIN {question_categories} qc
+                                                         ON qc.id = mc.category
+                                            LEFT JOIN {question_bank_entries} qbe
+                                                         ON qbe.questioncategoryid = qc.id
+                                                     JOIN (
+                                                                        SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
+                                                                            FROM {question_versions} qv1
+                                                                            JOIN (
+                                                                                          SELECT qv.questionbankentryid,
+                                                                                              max(qv.version) maxversion
+                                                                                            FROM {question_versions} qv
+                                                                                            JOIN {question_bank_entries} qbe2
+                                                                                                ON qbe2.id = qv.questionbankentryid
+                                                                                            JOIN {question_categories} qc2
+                                                                                                ON qc2.id = qbe2.questioncategoryid
+                                                                                            JOIN {mooduell_categories} mc2
+                                                                                                ON mc2.category = qc2.id
+                                                                                         WHERE mc2.mooduellid = :mooduellid
+                                                                                    GROUP BY qv.questionbankentryid
+                                                                                        ) qv2
+                                                                                  ON qv1.questionbankentryid =
+                                                                                      qv2.questionbankentryid
+                                                                                AND qv1.version = qv2.maxversion
+                                                                ) qv
+                                                         ON qbe.id = qv.questionbankentryid
+                                                     JOIN {question} q
+                                                         ON q.id = qv.questionid";
+                        $sqldata['where'] = "mc.mooduellid = :mooduellid2";
+                        $sqldata['params'] = ['mooduellid' => $mooduellid, 'mooduellid2' => $mooduellid];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
@@ -743,11 +752,27 @@ class mooduell {
      * @return array
      * @throws dml_exception
      */
-    private function return_list_of_answers() {
+    private function return_list_of_answers(array $listofquestions = []) {
 
         global $DB, $CFG;
 
         $mooduellid = $this->cm->instance;
+
+        if (!empty($listofquestions)) {
+            $questionids = array_map(function ($question) {
+                return (int) $question->id;
+            }, $listofquestions);
+
+            [$insql, $params] = $DB->get_in_or_equal($questionids, SQL_PARAMS_NAMED, 'questionid');
+            $sql = "SELECT DISTINCT qa.*
+                      FROM {question_answers} qa
+                     WHERE qa.question $insql";
+
+            if (!$listofanswers = $DB->get_records_sql($sql, $params)) {
+                return [];
+            }
+            return $listofanswers;
+        }
 
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
