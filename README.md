@@ -26,22 +26,82 @@ In the App, no installation is necessary. Just login via your University of Vien
 Usage
 -----
 
-* Add the MooDuell Activity to an existing Moodle course.
-* As teacher, you can choose categories from your question bank to add questions.
-* For the plugin to work, you need at least 9 playable questions.
-* You can force anonomyous mode or different slightly different gameplays.
-* In Moodle, students can't play but they can check their basic statistics and see the highscores.
-* Teachers can change and add questions, delete games and do some basic editing.
+### For Teachers
 
-Supported Question types:
-a) Multiple choice with single right answer
-b) Multiple choice with multiple right answers
-c) True/False
+* **Add the MooDuell Activity** to an existing Moodle course.
+* **Create/Assign Questions**:
+  - Use the "Add questions to category" button in the Questions tab (Overview for Teachers)
+  - Select a question category and type
+  - The plugin will route you to Moodle's question creation page with pre-selected category
+  - Available question types: Multiple Choice (single/multiple), True/False, Numerical, Drag-and-Drop Word into Sentences
+* **Manage Settings**:
+  - Configure anonymous mode
+  - Adjust gameplay settings
+  - View and delete completed games
+  - Monitor student scores and highscores
+* **Minimum Requirement**: At least 9 playable questions per category for the activity to function
+
+### For Students
+
+* **In Moodle**: Can view basic statistics and see highscores
+* **In App**: Play quiz games directly (requires Univie MooDuell App)
+
+Supported Question Types
+------------------------
+
+- Multiple choice (single right answer)
+- Multiple choice (multiple right answers)
+- True/False
+- Numerical (numeric input)
+- Drag-and-Drop Word into Sentences
 
 Author
 ------
 
 The module has been written and is currently maintained by Wunderbyte GmbH <info@wunderbyte.at>
+
+Technical Architecture
+----------------------
+
+### Components
+
+1. **Moodle Plugin** (this repository)
+   - Server-side PHP implementation
+   - Web service API endpoints
+   - Question bank integration
+   - Manages games, scores, and user data
+   - Web interface for teachers and students (Moodle view)
+
+2. **Web Application** (`MooDuellWunderbyte`)
+   - Ionic/Angular frontend (Capacitor-based mobile wrapper)
+   - Communicates with plugin via Moodle webservices API
+   - Deployed to `/mod/mooduell/app/` directory in plugin
+   - Serves both web and mobile (iOS/Android via Capacitor)
+
+3. **Mobile Apps**
+   - **Official App**: Download from [App Store](https://apps.apple.com/at/app/univie-mooduell/id1496638765) / [Google Play](https://play.google.com/store/apps/details?id=at.wunderbyte.univiemooduell)
+   - Alternative Flutter implementation available (`MooDuellFlutter`)
+
+### Web App Deployment
+
+The web application is automatically built and embedded in the plugin. To rebuild/deploy:
+
+```bash
+cd ../MooDuellWunderbyte
+npm install
+npm run build:moodle
+npm run deploy:moodle-local
+```
+
+Then in Moodle: **Purge all caches** (Site administration → Cache → Purge all caches)
+
+### API Endpoints
+
+Web services are defined in `db/services.php`. Examples:
+- `mod_mooduell_start_attempt` — Begin a new game
+- `mod_mooduell_get_quiz_data` — Fetch quiz and questions
+- `mod_mooduell_answer_question` — Submit answer
+- `mod_mooduell_get_user_stats` — Fetch player statistics
 
 Useful links
 ------------

@@ -103,9 +103,10 @@ class qr_code {
      * Creates a one-click web launch URL.
      *
      * @param int|null $userid  Target user ID. Defaults to the currently logged-in user.
+     * @param int|null $cmid    Course module ID to pre-select in the app quiz slider.
      * @return string
      */
-    public function generate_web_launch_url(?int $userid = null): string {
+    public function generate_web_launch_url(?int $userid = null, ?int $cmid = null): string {
         global $CFG, $USER;
 
         $userid = $userid ?? $USER->id;
@@ -115,11 +116,16 @@ class qr_code {
         $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
         $baseurl = $CFG->wwwroot . '/mod/mooduell/app/frame.html';
 
-        $launchurl = new \moodle_url($baseurl, [
+        $params = [
             'source' => 'moodle',
             'moodleurl' => $CFG->wwwroot,
             'token' => $tokenobject->token,
-        ]);
+        ];
+        if ($cmid !== null) {
+            $params['cmid'] = $cmid;
+        }
+
+        $launchurl = new \moodle_url($baseurl, $params);
 
         return $launchurl->out(false);
     }
@@ -128,9 +134,10 @@ class qr_code {
      * Creates a one-click web app URL that points directly to index.html for iframe embedding.
      *
      * @param int|null $userid  Target user ID. Defaults to the currently logged-in user.
+     * @param int|null $cmid    Course module ID to pre-select in the app quiz slider.
      * @return string
      */
-    public function generate_web_app_launch_url(?int $userid = null): string {
+    public function generate_web_app_launch_url(?int $userid = null, ?int $cmid = null): string {
         global $CFG, $USER;
 
         $userid = $userid ?? $USER->id;
@@ -140,11 +147,16 @@ class qr_code {
         $tokenobject = manage_tokens::generate_token_for_user($userid, 'mod_mooduell_tokens', 300, true);
         $baseurl = $CFG->wwwroot . '/mod/mooduell/app/index.html';
 
-        $launchurl = new \moodle_url($baseurl, [
+        $params = [
             'source' => 'moodle',
             'moodleurl' => $CFG->wwwroot,
             'token' => $tokenobject->token,
-        ]);
+        ];
+        if ($cmid !== null) {
+            $params['cmid'] = $cmid;
+        }
+
+        $launchurl = new \moodle_url($baseurl, $params);
 
         return $launchurl->out(false);
     }
