@@ -58,6 +58,7 @@ $string['challengename:completiongamesplayed'] = 'Spielanzahl-Challenge';
 $string['challengename:completiongameswon'] = '"Gewonnene Spiele"-Challenge';
 $string['challengename:completionrightanswers'] = '"Richtige Antworten"-Challenge';
 $string['challengename:completionrightanswersperc'] = 'Prozentsatz-Challenge';
+$string['checklicensetask'] = 'MooDuell-Lizenz auf Gültigkeit prüfen';
 $string['clicktomoveon'] = 'Warte bis zum nächsten Klick';
 $string['close'] = 'Schließen';
 $string['companylogo'] = 'Firmenlogo';
@@ -137,12 +138,23 @@ $string['launchthemesettings_desc'] = 'Farben des Launch-Vorschaublocks (Telefon
 $string['license_activated'] = 'PRO-Version wurde erfolgreich aktiviert.<br>(Läuft ab am: ';
 $string['license_invalid'] = 'Ungültiger Lizenz-Schlüssel.';
 $string['license_overlimit_settings'] = 'Ihre {$a->product}-Lizenz ist gültig, kann aber derzeit nicht aktiviert werden, weil Ihre Plattform aktuell {$a->active} aktive Nutzerinnen und Nutzer für MooDuell hat und das Lizenzlimit bei {$a->limit} liegt.<br>Deshalb können keine neuen Spiele mehr erstellt werden und es können keine neuen MooDuell-Aktivitäten mehr angelegt werden.';
+$string['licenseexpired_message'] = 'Ihre MooDuell-{$a->product}-PRO-Lizenz ist am {$a->exptime} abgelaufen.
+
+Die PRO-Funktionen sind nicht mehr aktiv. Um sie weiterhin zu nutzen, erneuern Sie bitte Ihren Lizenz-Schlüssel in den MooDuell-Einstellungen:
+{$a->url}';
+$string['licenseexpired_subject'] = 'Ihre MooDuell-PRO-Lizenz ist abgelaufen';
+$string['licenseinvalid_message'] = 'Ihr MooDuell-PRO-Lizenz-Schlüssel konnte nicht überprüft werden, daher sind die PRO-Funktionen nicht mehr aktiv.
+
+Bitte überprüfen oder erneuern Sie Ihren Lizenz-Schlüssel in den MooDuell-Einstellungen:
+{$a->url}';
+$string['licenseinvalid_subject'] = 'Ihre MooDuell-PRO-Lizenz ist nicht mehr gültig';
 $string['licensekey'] = 'PRO-Lizenz-Schlüssel';
 $string['licensekeycfg'] = 'PRO-Version aktivieren';
 $string['licensekeycfgdesc'] = 'Mit einer PRO-Lizenz können Sie eine beliebige Anzahl von MooDuell Quizzes erstellen. Ausserdem ist es möglich die Anwendung mittels Theme an Ihr gewünschtes Design anzupassen.';
 $string['licensekeydesc'] = 'Laden Sie hier einen gültigen Schlüssel hoch, um die PRO-Version zu aktivieren.';
 $string['listofquestions'] = 'Alle Fragen im Quiz:';
 $string['login_qr_title'] = 'Login-QR-Code';
+$string['messageprovider:licenseexpired'] = 'Warnung über abgelaufene MooDuell-PRO-Lizenz';
 $string['messageprovider:status'] = 'Spiel Status Änderung';
 $string['modulename'] = 'MooDuell';
 $string['modulename_help'] = 'Das MooDuell Modul hilft dir eine Multiplayer Quiz Aktivität zu erstellen, die dann das Spielen mit der MooDuell App erlaubt.';
@@ -160,8 +172,8 @@ $string['mooduellname_help'] = 'Wähle einen Namen für Dein Spiel';
 $string['mooduellsettings'] = 'MooDuell Einstellungen';
 $string['nocategories'] = 'Es gibt noch keine Kategorien';
 $string['nocategoriesassigned'] = 'Dieser Aktivität sind noch keine Fragenkategorien zugewiesen.';
-$string['nocoursequestioncategories'] = 'Dieser Kurs hat noch keine Fragenkategorien oder Question Banks.';
 $string['nocountdown'] = 'Kein Countdown';
+$string['nocoursequestioncategories'] = 'Dieser Kurs hat noch keine Fragenkategorien oder Question Banks.';
 $string['noimage'] = 'Kein Bild';
 $string['nomessage'] = 'Es gibt keine Nachrichten.';
 $string['noopengames'] = 'Es gibt noch keine offenen Spiele.';

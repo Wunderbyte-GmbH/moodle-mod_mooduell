@@ -33,4 +33,12 @@ $tasks = [
         'dayofweek' => '*',
         'month' => '*',
     ],
+    ['classname' => 'mod_mooduell\task\check_license_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '7',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*',
+    ],
 ];

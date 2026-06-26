@@ -138,6 +138,8 @@ if ($ADMIN->fulltree) {
     );
     $licensekeysetting->set_updatedcallback(function () {
         cache_helper::purge_by_event('setbacklicenseaccesscountcache');
+        // A new key was entered: re-arm the one-time expiry notification sent by check_license_task.
+        unset_config('licenseexpirynotified', 'mooduell');
     });
     $settings->add($licensekeysetting);
 

@@ -204,6 +204,54 @@ pwIDAQAB
     }
 
     /**
+     * Determine the current state of the configured license key.
+     *
+     * This intentionally does NOT apply the PHPUnit/Behat "always PRO" override used by
+     * {@see self::pro_version_is_activated()}, nor does it consider the user limit (which has its
+     * own admin warning). It only reports whether the stored key is missing, valid, expired or
+     * unreadable, so the daily check task can warn admins exactly once when a sold license lapses.
+     *
+     * @return array {
+     *     'state'   => string 'nolicense'|'valid'|'expired'|'invalid',
+     *     'product' => string product identifier (empty unless valid/expired),
+     *     'exptime' => string expiration date as stored in the key (empty unless valid/expired),
+     * }
+     * @throws \dml_exception
+     */
+    public static function get_license_expiry_state(): array {
+        $result = [
+            'state' => 'nolicense',
+            'product' => '',
+            'exptime' => '',
+        ];
+
+        $pluginconfig = get_config('mooduell');
+        if (empty($pluginconfig->licensekey)) {
+            // No license key has ever been set, so there is nothing that could expire.
+            return $result;
+        }
+
+        $data = self::decryptlicensekey($pluginconfig->licensekey);
+
+        // A key is set but it cannot be decoded or names an unknown product: treat it as invalid.
+        if (
+            $data == []
+            || empty($data['exptime'])
+            || !isset($data['product'])
+            || !array_key_exists($data['product'], self::LICENSE_PRODUCT_LIMITS)
+        ) {
+            $result['state'] = 'invalid';
+            return $result;
+        }
+
+        $result['product'] = $data['product'];
+        $result['exptime'] = $data['exptime'];
+        $result['state'] = time() < strtotime($data['exptime']) ? 'valid' : 'expired';
+
+        return $result;
+    }
+
+    /**
      * Returns true when creating new games and activities must be blocked due to license limits.
      *
      * @return bool

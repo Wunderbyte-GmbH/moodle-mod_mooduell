@@ -1,3 +1,6 @@
+## Version 2.2.8 (2026062600)
+* Feature: Daily scheduled task that warns site admins (notification + email) once when the PRO license key has expired or become invalid (#135).
+
 ## Version 2.2.1 (2025090300)
 * Supports Moodle 5.0
 

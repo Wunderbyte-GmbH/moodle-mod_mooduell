@@ -28,4 +28,14 @@ defined('MOODLE_INTERNAL') || die();
 $messageproviders = [
 
         'status' => [],
+
+        // Sent to site admins (as a notification) when the configured PRO license key has expired
+        // or become invalid. The accompanying e-mail is sent directly by the check_license_task, so
+        // we disable the e-mail processor here to avoid notifying admins twice.
+        'licenseexpired' => [
+                'defaults' => [
+                        'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
+                        'email' => MESSAGE_DISALLOWED,
+                ],
+        ],
 ];

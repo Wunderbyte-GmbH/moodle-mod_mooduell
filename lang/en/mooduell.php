@@ -61,6 +61,7 @@ $string['challengename:completiongamesplayed'] = 'Number of games challenge';
 $string['challengename:completiongameswon'] = 'Number of games won challenge';
 $string['challengename:completionrightanswers'] = 'Number of right answers challenge';
 $string['challengename:completionrightanswersperc'] = 'Percentage challenge';
+$string['checklicensetask'] = 'Check MooDuell license validity';
 $string['clicktomoveon'] = 'Click to move on';
 $string['close'] = 'Close';
 $string['companylogo'] = 'Companylogo';
@@ -141,6 +142,16 @@ $string['launch_title'] = 'Challenge your colleagues to a quiz duel.';
 $string['license_activated'] = 'PRO version activated successfully.<br>(Expires: ';
 $string['license_invalid'] = 'Invalid license key';
 $string['license_overlimit_settings'] = 'Your {$a->product} license is valid, but it cannot be activated because your platform currently has {$a->active} active users for MooDuell and the license limit is {$a->limit}.<br>Because of this, you can no longer create new games and you can no longer create new MooDuell activities.';
+$string['licenseexpired_message'] = 'Your MooDuell {$a->product} PRO license expired on {$a->exptime}.
+
+The PRO features are no longer active. To keep using them, please renew your license key in the MooDuell settings:
+{$a->url}';
+$string['licenseexpired_subject'] = 'Your MooDuell PRO license has expired';
+$string['licenseinvalid_message'] = 'Your MooDuell PRO license key could not be validated, so the PRO features are no longer active.
+
+Please check or renew your license key in the MooDuell settings:
+{$a->url}';
+$string['licenseinvalid_subject'] = 'Your MooDuell PRO license is no longer valid';
 $string['licensekey'] = 'PRO license key';
 $string['licensekeycfg'] = 'Activate PRO version';
 $string['licensekeycfgdesc'] = 'With a PRO license you can create as many MooDuell Quizzes as you like. PRO license also allows you to customize our MooDuell-App using your own theme.';
@@ -151,6 +162,7 @@ $string['licenselimit_over_warning'] = 'You are currently at {$a->current} of {$
 $string['licenselimit_threshold_warning'] = 'You are currently at {$a->current} of {$a->limit} users for your MooDuell license ({$a->percentage}%).';
 $string['listofquestions'] = 'List of questions:';
 $string['login_qr_title'] = 'Login QR';
+$string['messageprovider:licenseexpired'] = 'MooDuell PRO license expiry warning';
 $string['messageprovider:status'] = 'Game status changes';
 $string['modulename'] = 'MooDuell';
 $string['modulename_help'] = 'The MooDuell module helps you to create multiplayer quiz activities which then can be played using the MooDuell App.';
