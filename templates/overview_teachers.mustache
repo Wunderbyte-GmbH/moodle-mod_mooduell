@@ -271,7 +271,9 @@
         const categoryVal = categorySelect.value;
         const selectedOption = categorySelect.options[categorySelect.selectedIndex];
         const qtypeInput = form.querySelector('[name="qtype"]:checked');
-        if (!qtypeInput) { return; }
+        if (!qtypeInput) {
+            return;
+        }
         const qtype = qtypeInput.value;
         const catid = categoryVal.split(',')[0];
         const cmid = (selectedOption && selectedOption.dataset.cmid) ? selectedOption.dataset.cmid : form.dataset.cmid;
@@ -279,6 +281,9 @@
         const sesskey = form.dataset.sesskey;
         const baseUrl = form.dataset.questionnewurl;
         const returnurl = '/question/edit.php?cmid=' + cmid + '&cat=' + encodeURIComponent(categoryVal) + '&qpage=0';
-        window.location.href = baseUrl + '?courseid=' + courseid + '&sesskey=' + sesskey + '&qtype=' + qtype + '&returnurl=' + encodeURIComponent(returnurl) + '&cmid=' + cmid + '&category=' + catid;
+        let url = baseUrl + '?courseid=' + courseid + '&sesskey=' + sesskey + '&qtype=' + qtype;
+        url += '&returnurl=' + encodeURIComponent(returnurl);
+        url += '&cmid=' + cmid + '&category=' + catid;
+        window.location.href = url;
     });
 {{/js}}
