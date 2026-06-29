@@ -110,8 +110,20 @@ class mod_mooduell_mod_form extends moodleform_mod {
             // Moodle 5.0 and later.
             $cats = [];
             $sharedbanks = question_bank_helper::get_activity_instances_with_shareable_questions([$COURSE->id]);
-            if (!empty($sharedbanks)) {
-                $arrayofcontexts = array_map(fn($a) => context::instance_by_id($a->contextid), $sharedbanks);
+            $arrayofcontexts = [];
+            foreach ($sharedbanks as $bank) {
+                // Resolve the owning course-module context of each shared question bank.
+                // Moodle 5.0/5.1 exposed a raw ->contextid; Moodle 5.2's typed formatted_bank
+                // exposes the course module as ->cminfo instead. Support both, and silently skip
+                // any bank we cannot resolve, so the settings form can never fatal.
+                if (!empty($bank->cminfo) && $bank->cminfo instanceof cm_info) {
+                    $arrayofcontexts[] = $bank->cminfo->context;
+                } else if (!empty($bank->contextid)) {
+                    $arrayofcontexts[] = context::instance_by_id($bank->contextid, IGNORE_MISSING);
+                }
+            }
+            $arrayofcontexts = array_filter($arrayofcontexts);
+            if (!empty($arrayofcontexts)) {
                 $cats = qbank_managecategories\helper::question_category_options($arrayofcontexts, false, 0, false);
             }
         } else if ($CFG->version >= 2022041900) {
