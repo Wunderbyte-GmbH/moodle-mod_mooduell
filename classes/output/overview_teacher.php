@@ -107,16 +107,29 @@ class overview_teacher implements renderable, templatable {
         $data['settingsurl'] = $CFG->wwwroot . '/question/banks.php?courseid=' . $mooduell->course->id;
         $data['activitysettingsurl'] = $CFG->wwwroot . '/course/modedit.php?update=' . $mooduell->cm->id;
         // Check 2 (superior): does this course have any user-created (standard) question bank?
-        // All qbank course modules are created with visible = 0 in Moodle 5, so we cannot use
-        // cm.visible. Instead we join the {qbank} table and check type = 'standard', which
-        // excludes the auto-generated system and preview banks (type = 'system'/'preview').
-        $hascourseqbank = $DB->record_exists_sql(
-            "SELECT cm.id FROM {course_modules} cm
-               JOIN {modules} m ON m.id = cm.module
-               JOIN {qbank} qb ON qb.id = cm.instance
-              WHERE m.name = 'qbank' AND cm.course = ? AND cm.deletioninprogress = 0 AND qb.type = 'standard'",
-            [$mooduell->course->id]
-        );
+        if ($CFG->version >= 2025040100) {
+            // Moodle 5.0+: question banks are 'qbank' activity modules. All qbank course modules
+            // are created with visible = 0, so we cannot use cm.visible. Instead we join the
+            // {qbank} table and check type = 'standard', which excludes the auto-generated system
+            // and preview banks (type = 'system'/'preview').
+            $hascourseqbank = $DB->record_exists_sql(
+                "SELECT cm.id FROM {course_modules} cm
+                   JOIN {modules} m ON m.id = cm.module
+                   JOIN {qbank} qb ON qb.id = cm.instance
+                  WHERE m.name = 'qbank' AND cm.course = ? AND cm.deletioninprogress = 0 AND qb.type = 'standard'",
+                [$mooduell->course->id]
+            );
+        } else {
+            // Moodle 4.x: there is no {qbank} module/table. Question categories live directly in
+            // the course context, so treat the course as having a bank when it has at least one
+            // real (non-top) question category there.
+            $coursecontext = \context_course::instance($mooduell->course->id);
+            $hascourseqbank = $DB->record_exists_select(
+                'question_categories',
+                'contextid = ? AND parent <> 0',
+                [$coursecontext->id]
+            );
+        }
 
         // Check 1 (secondary, only relevant if check 2 is true):
         // does the MooDuell activity have categories assigned?
