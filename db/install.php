@@ -28,32 +28,49 @@
  */
 function xmldb_mooduell_install() {
 
-    // On the installation we include new Profile fields to allow user suspension date stamps.
-    global $DB, $CFG;
-
-    require_once($CFG->libdir . '/testing/classes/util.php');
+    // On installation we add the "MooDuell Alias" custom user profile field, which lets users
+    // play under a nickname instead of their real name.
+    global $DB;
 
     if ($DB->record_exists('user_info_field', ['shortname' => 'mooduell_alias'])) {
         // The field already exists, so we do not need to create it again.
         return true;
     }
 
-    // First we need a test generator.
-    $testgenerator = testing_util::get_data_generator();
+    // Create (or reuse) the "Mooduell" profile field category. These values mirror exactly what
+    // the core data generator used to produce, so the field is identical to existing installs.
+    if (!$categoryid = $DB->get_field('user_info_category', 'id', ['name' => 'Mooduell'])) {
+        $category = new stdClass();
+        $category->name = 'Mooduell';
+        $category->sortorder = (int) $DB->get_field_sql('SELECT MAX(sortorder) FROM {user_info_category}') + 1;
+        $categoryid = $DB->insert_record('user_info_category', $category);
+    }
 
-    // Now we create a new category in the user profile customfields..
-    $cat = $testgenerator->create_custom_profile_field_category(['name' => 'Mooduell']);
-
-    // Now we create a user profile field.
-
-    $testgenerator->create_custom_profile_field([
-        'datatype' => 'text',
-        'shortname' => 'mooduell_alias',
-        'name' => 'MooDuell Alias',
-        'description' => 'An alias name for the users.',
-        'categoryid' => $cat->id,
-        'visible' => 0,
-    ]);
+    // Create the "MooDuell Alias" text profile field, hidden from everyone by default.
+    $field = new stdClass();
+    $field->shortname = 'mooduell_alias';
+    $field->name = 'MooDuell Alias';
+    $field->datatype = 'text';
+    $field->description = 'An alias name for the users.';
+    $field->descriptionformat = 0;
+    $field->categoryid = $categoryid;
+    $field->sortorder = (int) $DB->get_field_sql(
+        'SELECT MAX(sortorder) FROM {user_info_field} WHERE categoryid = ?',
+        [$categoryid]
+    ) + 1;
+    $field->required = 0;
+    $field->locked = 0;
+    $field->visible = 0; // PROFILE_VISIBLE_NONE: not shown to anybody.
+    $field->forceunique = 0;
+    $field->signup = 0;
+    $field->defaultdata = '';
+    $field->defaultdataformat = 0;
+    $field->param1 = 30; // Display size (text field default).
+    $field->param2 = 2048; // Maximum length (text field default).
+    $field->param3 = ''; // Not a password field.
+    $field->param4 = '';
+    $field->param5 = '';
+    $DB->insert_record('user_info_field', $field);
 
     return true;
 }
