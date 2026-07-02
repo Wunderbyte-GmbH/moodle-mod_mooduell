@@ -347,7 +347,7 @@ class mooduell {
 
         $questions = [];
         $listofquestions = $this->return_list_of_questions();
-        $listofanswers = $this->return_list_of_answers();
+        $listofanswers = $this->return_list_of_answers($listofquestions);
 
         foreach ($listofquestions as $entry) {
             $newquestion = new question_control($entry, $listofanswers);
@@ -673,9 +673,16 @@ class mooduell {
                                     SELECT qv1.questionbankentryid, qv1.questionid, qv1.version
                                       FROM {question_versions} qv1
                                       JOIN (
-                                            SELECT questionbankentryid, max(version) maxversion
-                                              FROM {question_versions}
-                                          GROUP BY questionbankentryid
+                                            SELECT qv.questionbankentryid, max(qv.version) maxversion
+                                              FROM {question_versions} qv
+                                              JOIN {question_bank_entries} qbe2
+                                                ON qbe2.id = qv.questionbankentryid
+                                              JOIN {question_categories} qc2
+                                                ON qc2.id = qbe2.questioncategoryid
+                                              JOIN {mooduell_categories} mc2
+                                                ON mc2.category = qc2.id
+                                             WHERE mc2.mooduellid = :mooduellid
+                                          GROUP BY qv.questionbankentryid
                                             ) qv2
                                          ON qv1.questionbankentryid = qv2.questionbankentryid
                                         AND qv1.version = qv2.maxversion
@@ -683,8 +690,8 @@ class mooduell {
                              ON qbe.id = qv.questionbankentryid
                            JOIN {question} q
                              ON q.id = qv.questionid";
-            $sqldata['where'] = "mc.mooduellid = :mooduellid";
-            $sqldata['params'] = ['mooduellid' => $mooduellid];
+            $sqldata['where'] = "mc.mooduellid = :mooduellid2";
+            $sqldata['params'] = ['mooduellid' => $mooduellid, 'mooduellid2' => $mooduellid];
         } else {
             // Code for Moodle < 4.0 .
             $sqldata['select'] = "q.*, qc.contextid, qc.name AS categoryname";
@@ -740,14 +747,27 @@ class mooduell {
 
     /**
      * Function to fetch all answers for this instance, but before running through instantiation.
+     *
+     * @param array $listofquestions optionally restrict to the answers of these question records (faster).
      * @return array
      * @throws dml_exception
      */
-    private function return_list_of_answers() {
+    private function return_list_of_answers(array $listofquestions = []) {
 
         global $DB, $CFG;
 
         $mooduellid = $this->cm->instance;
+
+        // If the caller already loaded the questions, fetch only their answers instead of joining
+        // through the whole instance's category tree again.
+        if (!empty($listofquestions)) {
+            $questionids = array_map(fn($question) => (int) $question->id, $listofquestions);
+            [$insql, $inparams] = $DB->get_in_or_equal($questionids, SQL_PARAMS_NAMED, 'questionid');
+            $sql = "SELECT DISTINCT qa.*
+                      FROM {question_answers} qa
+                     WHERE qa.question $insql";
+            return $DB->get_records_sql($sql, $inparams);
+        }
 
         // Code for Moodle > 4.0 .
         if ($CFG->version >= 2022041900) {
