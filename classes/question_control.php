@@ -423,6 +423,8 @@ class question_control {
 
         // Check for the correct Typ of the question. Should be called AFTER right number of answers.
         $this->check_for_right_type_of_question();
+        // Drag and drop into text: MooDuell needs exactly one choice per gap (no distractor words).
+        $this->check_for_ddwtos_choice_count();
 
         // Check for the right questiontext length.
         $this->check_for_right_length_of_questiontext();
@@ -536,6 +538,30 @@ class question_control {
         }
 
         return;
+    }
+
+    /**
+     * Drag and drop into text questions are played with the answers in order, one per gap: the app builds
+     * one drop slot per answer and validate_ddwtos_question() expects exactly that sequence. A question with
+     * more (or fewer) choices than [[n]] gaps cannot be played correctly, so it is flagged and stays out of games.
+     * @throws coding_exception
+     */
+    private function check_for_ddwtos_choice_count() {
+        if ($this->questiontype != 'ddwtos' || empty($this->answers)) {
+            return;
+        }
+        $gaps = preg_match_all('/\[\[\d+\]\]/', $this->questiontext);
+        $choices = count($this->answers);
+        if ($gaps !== $choices) {
+            $this->warnings[] = [
+                'message' => get_string('questionddwtoschoicesmismatch', 'mod_mooduell', (object) [
+                    'id' => $this->questionid,
+                    'choices' => $choices,
+                    'gaps' => $gaps,
+                ]),
+            ];
+            $this->status = get_string('notok', 'mod_mooduell');
+        }
     }
 
     /**

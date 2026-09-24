@@ -202,6 +202,7 @@ $string['qrdesc'] = "Um dich auf deinem Smartphone anzumelden, scanne einfach di
 $string['qrshare'] = "Alternativ kannst du den QR-Code auch direkt auf deinem Smartphone benutzen. Klicke dafür einfach den Code an und teile ihn mit deiner mooduell-App um dich anzumelden";
 $string['qrtitle'] = "Anleitung QR-Login:";
 $string['question'] = 'Frage';
+$string['questionddwtoschoicesmismatch'] = 'ID {$a->id}: Drag-and-Drop-Frage hat {$a->choices} Auswahlmöglichkeiten für {$a->gaps} Lücken. MooDuell kann nur Drag-and-Drop-Fragen spielen, bei denen jede Auswahlmöglichkeit genau eine Lücke füllt (keine Ablenkungswörter).';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Frage hat keine richtigen Antworten';
 $string['questionid'] = 'ID';
 $string['questionimage'] = 'Bild';

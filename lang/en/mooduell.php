@@ -244,6 +244,7 @@ $string['qrdesc'] = "To login on your Smartphone, scan this personal QR-Code wit
 $string['qrshare'] = 'You can also use this QR-Code directly from your Smartphone. To Login just touch the Code and share it to your mooduell App.';
 $string['qrtitle'] = "QR Login - How to:";
 $string['question'] = 'question';
+$string['questionddwtoschoicesmismatch'] = 'ID {$a->id}: Drag and drop question has {$a->choices} choices for {$a->gaps} gaps. MooDuell can only play drag and drop questions where every choice fills exactly one gap (no distractor words).';
 $string['questionhasnocorrectanswers'] = 'ID {$a}: Question has no correct answers';
 $string['questionid'] = 'ID';
 $string['questionimage'] = 'Image';
