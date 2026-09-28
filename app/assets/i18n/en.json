@@ -193,6 +193,7 @@
   "SCANAGAIN": "Repeat Scan",
   "SCANRESTART": "An error occured, please try again.",
   "QREXPIRED": "QR Code seems to be expired, please try again.",
+  "LAUNCHLINKEXPIRED": "This link has expired. Please open MooDuell from your Moodle course again.",
   "ANSWER": "answer",
   "CORRECTANSWERSARE": "Correct answers:",
   "TRUE": "True",

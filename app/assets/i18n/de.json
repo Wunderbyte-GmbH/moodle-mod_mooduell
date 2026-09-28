@@ -193,6 +193,7 @@
   "SCANAGAIN": "Erneut Scannen",
   "SCANRESTART": "Es ist ein Fehler aufgetreten, bitte versuchen Sie es erneut",
   "QREXPIRED": "Dieser QR Code is abgelaufen, bitte versuchen Sie es erneut",
+  "LAUNCHLINKEXPIRED": "Dieser Link ist abgelaufen. Bitte öffnen Sie MooDuell erneut aus Ihrem Moodle-Kurs.",
   "ANSWER": "Antwort",
   "CORRECTANSWERSARE": "Richtige Anworten:",
   "TRUE": "Wahr",
