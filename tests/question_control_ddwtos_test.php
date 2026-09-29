@@ -101,8 +101,11 @@ final class question_control_ddwtos_test extends advanced_testcase {
 
         $record = $this->create_question('ddwtos', 'fox');
         // Remove the distractors so the question has exactly one choice per gap.
-        $DB->delete_records_select('question_answers', "question = :q AND answer IN ('slow', 'dog', 'assiduous')",
-            ['q' => $record->id]);
+        $DB->delete_records_select(
+            'question_answers',
+            "question = :q AND answer IN ('slow', 'dog', 'assiduous')",
+            ['q' => $record->id]
+        );
         $this->assertSame(['quick', 'fox', 'lazy'], array_values($this->choices($record->id)));
 
         $question = new question_control($record);
